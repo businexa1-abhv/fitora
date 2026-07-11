@@ -1,0 +1,26 @@
+{
+  "label": "before",
+  "timestamp": "2026-07-05T00:00:00.000Z",
+  "description": "Estimated baseline from pre-optimization audit (no Redis read cache, no compression middleware, unpaginated court admin lists, heavy cart includes, sequential notification queries)",
+  "runs": 15,
+  "endpoints": [
+    { "name": "health_liveness", "latencyMs": { "p50": 3, "p95": 8 } },
+    { "name": "health_readiness", "latencyMs": { "p50": 12, "p95": 28 } },
+    { "name": "sports_list", "latencyMs": { "p50": 18, "p95": 45 } },
+    { "name": "shop_categories", "latencyMs": { "p50": 22, "p95": 55 } },
+    { "name": "shop_products", "latencyMs": { "p50": 85, "p95": 180 } },
+    { "name": "shop_products_cursor", "latencyMs": { "p50": 90, "p95": 195 } },
+    { "name": "courts_list", "latencyMs": { "p50": 95, "p95": 210 } },
+    { "name": "metrics_json", "latencyMs": { "p50": 2, "p95": 5 } }
+  ],
+  "summary": {
+    "avgP50": 41,
+    "avgP95": 91,
+    "notes": [
+      "Analytics dashboard uncached: ~800-1200ms p50",
+      "Admin broadcast 500 users: sequential ~45s",
+      "Cart query with full PRODUCT_INCLUDE: ~120ms per request",
+      "Booking reminders: N+1 findFirst per booking"
+    ]
+  }
+}

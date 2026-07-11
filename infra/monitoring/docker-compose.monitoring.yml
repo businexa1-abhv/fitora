@@ -1,0 +1,40 @@
+# Optional monitoring stack — run alongside production:
+# docker compose -f docker-compose.prod.yml -f infra/monitoring/docker-compose.monitoring.yml up -d
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: fitora-prometheus
+    restart: unless-stopped
+    profiles: ['monitoring']
+    volumes:
+      - ./infra/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - '9090:9090'
+    networks:
+      - fitora_internal
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: fitora-grafana
+    restart: unless-stopped
+    profiles: ['monitoring']
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-changeme}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - '3003:3000'
+    networks:
+      - fitora_internal
+
+networks:
+  fitora_internal:
+    external: true
+    name: fitora-prod_fitora_internal
+
+volumes:
+  prometheus_data:
+  grafana_data:

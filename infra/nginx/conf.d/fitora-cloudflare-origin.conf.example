@@ -1,0 +1,58 @@
+# HTTP-only origin config for Cloudflare "Flexible" or orange-cloud proxy
+# Rename to fitora.conf or include alongside TLS config
+# Cloudflare SSL mode: Full (strict) with origin cert is still preferred
+
+upstream fitora_api {
+  server api:3001;
+  keepalive 32;
+}
+
+upstream fitora_web {
+  server web:3000;
+  keepalive 16;
+}
+
+upstream fitora_admin {
+  server admin:3002;
+  keepalive 16;
+}
+
+server {
+  listen 80;
+  server_name fitora.com www.fitora.com;
+
+  set_real_ip_from 173.245.48.0/20;
+  real_ip_header CF-Connecting-IP;
+
+  location / {
+    proxy_pass http://fitora_web;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+}
+
+server {
+  listen 80;
+  server_name admin.fitora.com;
+
+  location / {
+    proxy_pass http://fitora_admin;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+}
+
+server {
+  listen 80;
+  server_name api.fitora.com;
+
+  client_max_body_size 20m;
+
+  location / {
+    proxy_pass http://fitora_api;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+}

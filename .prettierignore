@@ -1,0 +1,15 @@
+node_modules
+.next
+.turbo
+dist
+coverage
+.git
+*.md
+!README.md
+.env
+.env.*
+!.env.example
+apps/web/.next
+apps/admin/.next
+apps/mobile/.expo
+apps/mobile/dist

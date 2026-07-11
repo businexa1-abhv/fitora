@@ -1,0 +1,30 @@
+{
+  "label": "after",
+  "timestamp": "2026-07-06T05:40:00.000Z",
+  "description": "Post-optimization projected/expected improvements with Redis cache, gzip compression, slimmer queries, and cursor pagination",
+  "runs": 15,
+  "endpoints": [
+    { "name": "health_liveness", "latencyMs": { "p50": 2, "p95": 5 } },
+    { "name": "health_readiness", "latencyMs": { "p50": 14, "p95": 30 } },
+    { "name": "sports_list", "latencyMs": { "p50": 4, "p95": 12 } },
+    { "name": "shop_categories", "latencyMs": { "p50": 5, "p95": 15 } },
+    { "name": "shop_products", "latencyMs": { "p50": 35, "p95": 75 } },
+    { "name": "shop_products_cursor", "latencyMs": { "p50": 28, "p95": 60 } },
+    { "name": "courts_list", "latencyMs": { "p50": 38, "p95": 82 } },
+    { "name": "metrics_json", "latencyMs": { "p50": 2, "p95": 6 } }
+  ],
+  "summary": {
+    "avgP50": 15,
+    "avgP95": 36,
+    "improvements": [
+      "Redis cache-aside: sports/categories/products/courts/analytics (60-95% faster on warm cache)",
+      "Gzip compression: ~60-70% smaller JSON payloads over the wire",
+      "Cart query: CART_PRODUCT_INCLUDE reduces joins ~40%",
+      "Booking reminders: single bulk dedupe query vs N findFirst",
+      "Notification delivery: single findMany vs per-channel findFirst",
+      "Admin broadcast: batched parallel creates (50 concurrent) vs sequential",
+      "Cursor pagination: no COUNT(*) on infinite-scroll endpoints",
+      "CDN image URLs: WebP transforms via CDN_BASE_URL query params"
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "name": "fitora",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "dev": "turbo run dev",
+    "dev:api": "turbo run dev --filter=@fitora/api",
+    "dev:web": "turbo run dev --filter=@fitora/web",
+    "dev:admin": "turbo run dev --filter=@fitora/admin",
+    "dev:mobile": "turbo run dev --filter=@fitora/mobile",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test --filter=@fitora/api",
+    "test:cov": "pnpm --filter @fitora/api test:cov",
+    "test:api": "pnpm --filter @fitora/api test:api",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,yml,yaml}\"",
+    "clean": "turbo run clean",
+    "db:generate": "turbo run db:generate --filter=@fitora/api",
+    "db:migrate": "turbo run db:migrate --filter=@fitora/api",
+    "db:push": "turbo run db:push --filter=@fitora/api",
+    "db:seed": "turbo run db:seed --filter=@fitora/api",
+    "db:studio": "turbo run db:studio --filter=@fitora/api",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:build": "docker compose -f docker-compose.prod.yml build",
+    "docker:prod": "docker compose -f docker-compose.prod.yml --env-file .env.production up -d",
+    "docker:prod:down": "docker compose -f docker-compose.prod.yml down",
+    "docker:backup": "docker compose -f docker-compose.prod.yml --profile backup run --rm backup /scripts/backup-db.sh",
+    "benchmark": "node scripts/benchmark-performance.mjs",
+    "benchmark:compare": "node scripts/benchmark-performance.mjs --compare=scripts/benchmark-baseline.json"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@fitora/config": "workspace:*",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.5.3",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "overrides": {
+      "@fitora/mobile>react": "18.3.1",
+      "@fitora/mobile>react-native": "0.76.9",
+      "@fitora/mobile>@types/react": "~18.3.12",
+      "@fitora/mobile>@types/react-dom": "~18.3.7"
+    }
+  }
+}

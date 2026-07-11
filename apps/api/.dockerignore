@@ -1,0 +1,15 @@
+node_modules
+.git
+.github
+.turbo
+.next
+dist
+coverage
+*.md
+!README.md
+.env
+.env.*
+apps/web
+apps/admin
+apps/mobile
+docs

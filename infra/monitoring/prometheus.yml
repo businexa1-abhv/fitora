@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: fitora-api
+    metrics_path: /api/v1/health
+    static_configs:
+      - targets: ['api:3001']
+        labels:
+          service: fitora-api
+
+  - job_name: nginx
+    static_configs:
+      - targets: ['nginx:80']
+        labels:
+          service: nginx

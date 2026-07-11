@@ -1,0 +1,29 @@
+{
+  "name": "@fitora/config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    "./typescript/base.json": "./typescript/base.json",
+    "./typescript/nextjs.json": "./typescript/nextjs.json",
+    "./typescript/nestjs.json": "./typescript/nestjs.json",
+    "./typescript/react-native.json": "./typescript/react-native.json",
+    "./eslint/base": "./eslint/base.js",
+    "./eslint/next": "./eslint/next.js",
+    "./eslint/nest": "./eslint/nest.js",
+    "./eslint/react-native": "./eslint/react-native.js",
+    "./prettier": "./prettier.config.mjs"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@eslint/js": "^9.39.0",
+    "@next/eslint-plugin-next": "^15.5.20",
+    "eslint": "^9.39.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.2.0",
+    "typescript-eslint": "^8.32.0"
+  }
+}
