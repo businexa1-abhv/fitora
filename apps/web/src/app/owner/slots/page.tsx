@@ -17,7 +17,7 @@ export default function OwnerSlotsPage() {
     const token = getAccessToken();
     if (!token) return;
     getMyCourts(token)
-      .then(setCourts)
+      .then((res) => setCourts(res.items))
       .catch(() => setCourts([]))
       .finally(() => setLoading(false));
   }, []);
@@ -57,27 +57,29 @@ export default function OwnerSlotsPage() {
         {courts.map((court) => {
           const sport: SportType = (court.sportType as SportType | null) ?? SportType.OTHER;
           return (
-          <Link
-            key={court.id}
-            href={`/owner/courts/${court.id}/slots`}
-            className="card-hover rounded-2xl border border-border bg-card shadow-sm overflow-hidden block"
-          >
-            <div className={`h-16 bg-gradient-to-r ${SPORT_GRADIENTS[sport]} flex items-center px-5 gap-3`}>
-              <span className="text-2xl">{SPORT_EMOJI[sport]}</span>
-              <div className="text-white min-w-0">
-                <p className="font-bold truncate">{court.name}</p>
-                <p className="text-white/80 text-xs">{SPORT_LABELS[sport]}</p>
+            <Link
+              key={court.id}
+              href={`/owner/courts/${court.id}/slots`}
+              className="card-hover rounded-2xl border border-border bg-card shadow-sm overflow-hidden block"
+            >
+              <div
+                className={`h-16 bg-gradient-to-r ${SPORT_GRADIENTS[sport]} flex items-center px-5 gap-3`}
+              >
+                <span className="text-2xl">{SPORT_EMOJI[sport]}</span>
+                <div className="text-white min-w-0">
+                  <p className="font-bold truncate">{court.name}</p>
+                  <p className="text-white/80 text-xs">{SPORT_LABELS[sport]}</p>
+                </div>
               </div>
-            </div>
-            <div className="p-5">
-              <p className="text-sm text-muted">{court.city}</p>
-              <p className="text-sm font-semibold text-primary mt-2 flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                Manage slots →
-              </p>
-            </div>
-          </Link>
-        );
+              <div className="p-5">
+                <p className="text-sm text-muted">{court.city}</p>
+                <p className="text-sm font-semibold text-primary mt-2 flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  Manage slots →
+                </p>
+              </div>
+            </Link>
+          );
         })}
       </div>
     </div>

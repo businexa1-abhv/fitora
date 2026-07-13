@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#00b564"
+      "backgroundColor": "#ff6b35"
     },
     "ios": {
       "supportsTablet": true,
@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#00b564"
+        "backgroundColor": "#ff6b35"
       },
       "package": "com.fitora.app"
     },
@@ -29,7 +29,7 @@
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router", "expo-secure-store", "expo-notifications"],
+    "plugins": ["expo-router", "expo-secure-store", "expo-notifications", "expo-font"],
     "experiments": {
       "typedRoutes": true
     }

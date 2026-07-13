@@ -1,23 +1,25 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import {
   BookingStatus,
   CouponAppliesTo,
   CouponCodeType,
-  MembershipDuration,
+  type MembershipDuration,
   PaymentEntityType,
   PaymentStatus,
-  Prisma,
+  type Prisma,
   UserRole,
 } from '@prisma/client';
-import { AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { PaymentsService } from '../payments/payments.service';
-import { PrismaService } from '../prisma/prisma.module';
-import { CouponsService } from './coupons.service';
+import { type PrismaService } from '../prisma/prisma.module';
+import { type CouponsService } from './coupons.service';
 import {
   addMembershipDuration,
   DURATION_LABELS,
@@ -25,12 +27,12 @@ import {
   parsePlanBenefits,
 } from './constants/plan-benefits';
 import {
-  CreateMembershipPlanDto,
-  MembershipDashboardQueryDto,
-  PurchaseMembershipDto,
-  RenewMembershipDto,
-  UpdateMembershipPlanDto,
-  ValidateCouponDto,
+  type CreateMembershipPlanDto,
+  type MembershipDashboardQueryDto,
+  type PurchaseMembershipDto,
+  type RenewMembershipDto,
+  type UpdateMembershipPlanDto,
+  type ValidateCouponDto,
 } from './dto';
 
 const PLAN_INCLUDE = {
@@ -46,6 +48,7 @@ const PURCHASE_INCLUDE = {
 export class MembershipsService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
     private couponsService: CouponsService,
   ) {}
@@ -518,8 +521,7 @@ export class MembershipsService {
 
     return this.couponsService.validateForUser(dto.code, {
       userId,
-      appliesTo:
-        dto.appliesTo === 'BOOKING' ? CouponAppliesTo.BOOKING : CouponAppliesTo.MEMBERSHIP,
+      appliesTo: dto.appliesTo === 'BOOKING' ? CouponAppliesTo.BOOKING : CouponAppliesTo.MEMBERSHIP,
       orderAmount: dto.orderAmount,
       courtId: dto.courtId ?? plan?.courtId,
     });
@@ -608,9 +610,12 @@ export class MembershipsService {
     });
   }
 
-  private async countMembershipBookings(
-    purchase: { userId: string; startDate: Date | null; endDate: Date | null; plan: { courtId: string } },
-  ) {
+  private async countMembershipBookings(purchase: {
+    userId: string;
+    startDate: Date | null;
+    endDate: Date | null;
+    plan: { courtId: string };
+  }) {
     if (!purchase.startDate || !purchase.endDate) return 0;
 
     return this.prisma.booking.count({

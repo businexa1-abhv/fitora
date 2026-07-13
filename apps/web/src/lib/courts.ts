@@ -34,8 +34,12 @@ export function getCourt(id: string, token?: string) {
   return apiFetch<Court>(`/courts/${id}`, {}, token);
 }
 
-export function getMyCourts(token: string) {
-  return apiFetch<Court[]>('/courts/mine', {}, token);
+export function getMyCourts(token: string, page = 1, pageSize = 50) {
+  const query = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
+  return apiFetch<PaginatedResponse<Court>>(`/courts/mine?${query.toString()}`, {}, token);
 }
 
 export function createCourt(
@@ -49,11 +53,7 @@ export function createCourt(
     amenities?: string[];
   },
 ) {
-  return apiFetch<Court>(
-    '/courts',
-    { method: 'POST', body: JSON.stringify(data) },
-    token,
-  );
+  return apiFetch<Court>('/courts', { method: 'POST', body: JSON.stringify(data) }, token);
 }
 
 export function getCourtSlots(courtId: string, date: string) {
@@ -86,8 +86,10 @@ export function createBooking(token: string, slotId: string) {
   );
 }
 
-export function getMyBookings(token: string) {
-  return apiFetch<Booking[]>('/bookings/my', {}, token);
+export function getMyBookings(token: string, page = 1, status?: string) {
+  const query = new URLSearchParams({ page: String(page) });
+  if (status) query.set('status', status);
+  return apiFetch<PaginatedResponse<Booking>>(`/bookings/my?${query.toString()}`, {}, token);
 }
 
 export function getCourtBookings(token: string, courtId: string) {
@@ -124,11 +126,7 @@ export function getTrainers() {
 }
 
 export function approveCourt(token: string, courtId: string) {
-  return apiFetch<Court>(
-    `/courts/${courtId}/approve`,
-    { method: 'PATCH' },
-    token,
-  );
+  return apiFetch<Court>(`/courts/${courtId}/approve`, { method: 'PATCH' }, token);
 }
 
 export function getPendingCourts(token: string) {
@@ -186,11 +184,11 @@ export function enrollKidNew(
     emergencyPhone: string;
   },
 ) {
-  return apiFetch<{ enrollment: unknown; payment: import('@fitora/shared').PaymentOrder; fee: string }>(
-    '/training/enroll/new',
-    { method: 'POST', body: JSON.stringify(data) },
-    token,
-  );
+  return apiFetch<{
+    enrollment: unknown;
+    payment: import('@fitora/shared').PaymentOrder;
+    fee: string;
+  }>('/training/enroll/new', { method: 'POST', body: JSON.stringify(data) }, token);
 }
 
 export function getTrainerBatches(token: string) {

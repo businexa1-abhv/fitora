@@ -4,7 +4,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookingStatus, SPORT_LABELS, UserRole, type Booking, type SportType } from '@fitora/shared';
+import {
+  BookingStatus,
+  SPORT_LABELS,
+  UserRole,
+  type Booking,
+  type SportType,
+} from '@fitora/shared';
 import { Navbar } from '@/components/navbar';
 import { PageShell, formatDate, formatPrice, formatTime } from '@/components/app-header';
 import { FadeUp } from '@/components/motion';
@@ -33,7 +39,7 @@ export default function BookingsPage() {
     }
 
     getMyBookings(token)
-      .then(setBookings)
+      .then((res) => setBookings(res.items))
       .catch(() => setBookings([]))
       .finally(() => setLoading(false));
   }, [router]);
@@ -130,24 +136,32 @@ export default function BookingsPage() {
                         {booking.slot && (
                           <p className="text-sm mt-2 font-medium">
                             {formatDate(booking.slot.startTime)},{' '}
-                            {formatTime(booking.slot.startTime)} – {formatTime(booking.slot.endTime)}
+                            {formatTime(booking.slot.startTime)} –{' '}
+                            {formatTime(booking.slot.endTime)}
                           </p>
                         )}
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-xl font-extrabold text-primary">{formatPrice(booking.totalAmount)}</p>
+                      <p className="text-xl font-extrabold text-primary">
+                        {formatPrice(booking.totalAmount)}
+                      </p>
                       <span
                         className={`mt-2 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${
-                          STATUS_STYLES[booking.status as BookingStatus] ?? 'bg-gray-100 text-gray-600'
+                          STATUS_STYLES[booking.status as BookingStatus] ??
+                          'bg-gray-100 text-gray-600'
                         }`}
                       >
                         {booking.status.toLowerCase()}
                       </span>
                       {booking.checkInCode && (
                         <div className="mt-3 rounded-xl bg-primary-light border border-primary/20 px-3 py-2">
-                          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold">Check-in</p>
-                          <p className="font-mono font-bold text-primary text-sm">{booking.checkInCode}</p>
+                          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold">
+                            Check-in
+                          </p>
+                          <p className="font-mono font-bold text-primary text-sm">
+                            {booking.checkInCode}
+                          </p>
                         </div>
                       )}
                     </div>

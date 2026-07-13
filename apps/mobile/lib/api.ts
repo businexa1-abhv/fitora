@@ -1,10 +1,5 @@
 import type { AuthResponse } from '@fitora/shared';
-import {
-  clearAuthSession,
-  getAccessToken,
-  getRefreshToken,
-  saveAuthSession,
-} from './auth';
+import { clearAuthSession, getAccessToken, getRefreshToken, saveAuthSession } from './auth';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api/v1';
 
@@ -59,10 +54,18 @@ export async function apiFetch<T>(
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers,
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers,
+    });
+  } catch {
+    throw new ApiError(
+      `Cannot reach API at ${API_URL}. On a physical device, set EXPO_PUBLIC_API_URL to your computer's LAN IP (not localhost).`,
+      0,
+    );
+  }
 
   if (response.status === 401 && retry && !path.startsWith('/auth/')) {
     const newToken = await (refreshPromise ??= refreshAccessToken().finally(() => {

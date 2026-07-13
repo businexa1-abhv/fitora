@@ -7,25 +7,48 @@ import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { SportChip } from '@/components/sport-chip';
 import { FadeUp } from '@/components/motion';
-import { POPULAR_SPORTS, CITIES } from '@/lib/constants';
+import { POPULAR_SPORTS, POPULAR_CITIES } from '@/lib/constants';
 
 const FEATURES = [
-  { icon: '📅', title: 'Instant booking', desc: 'Pick a slot, pay, and get your check-in code in seconds.' },
+  {
+    icon: '📅',
+    title: 'Instant booking',
+    desc: 'Pick a slot, pay, and get your check-in code in seconds.',
+  },
   { icon: '🏅', title: 'Memberships', desc: 'Monthly & quarterly plans with exclusive discounts.' },
-  { icon: '👦', title: 'Kids coaching', desc: 'Enroll children, track attendance & progress digitally.' },
-  { icon: '🛒', title: 'Sports shop', desc: 'Gear, trophies & custom apparel — shop now.', href: '/shop' },
-  { icon: '🔧', title: 'Sports services', desc: 'Stringing, bat repair, grip replacement & equipment rental.', href: '/services' },
-  { icon: '👕', title: 'Custom printing', desc: 'Upload designs for team t-shirts & event apparel.', href: '/print' },
+  {
+    icon: '👦',
+    title: 'Kids coaching',
+    desc: 'Enroll children, track attendance & progress digitally.',
+  },
+  {
+    icon: '🛒',
+    title: 'Sports shop',
+    desc: 'Gear, trophies & custom apparel — shop now.',
+    href: '/shop',
+  },
+  {
+    icon: '🔧',
+    title: 'Sports services',
+    desc: 'Stringing, bat repair, grip replacement & equipment rental.',
+    href: '/services',
+  },
+  {
+    icon: '👕',
+    title: 'Custom printing',
+    desc: 'Upload designs for team t-shirts & event apparel.',
+    href: '/print',
+  },
 ];
 
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
+      <Navbar transparent />
+
       {/* Hero */}
       <section className="hero-mesh text-white relative overflow-hidden">
-        <Navbar transparent />
-
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 pb-20 sm:pt-16 sm:pb-28">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-[calc(var(--nav-height)+1.5rem)] pb-20 sm:pt-[calc(var(--nav-height)+3rem)] sm:pb-28">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <motion.p
@@ -56,8 +79,8 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: 0.25 }}
                 className="mt-6 text-lg text-white/75 max-w-lg leading-relaxed"
               >
-                {APP_NAME} is your one-stop platform to book courts, buy memberships,
-                and enroll in kids training — inspired by the best sports apps.
+                {APP_NAME} is your one-stop platform to book courts, buy memberships, and enroll in
+                kids training — inspired by the best sports apps.
               </motion.p>
 
               <motion.div
@@ -83,11 +106,17 @@ export default function HomePage() {
                 transition={{ delay: 0.6 }}
                 className="mt-10 flex items-center gap-6 text-sm text-white/70"
               >
-                <div><span className="text-2xl font-bold text-white block">500+</span> Venues</div>
+                <div>
+                  <span className="text-2xl font-bold text-white block">500+</span> Venues
+                </div>
                 <div className="w-px h-8 bg-white/20" />
-                <div><span className="text-2xl font-bold text-white block">50+</span> Cities</div>
+                <div>
+                  <span className="text-2xl font-bold text-white block">50+</span> Cities
+                </div>
                 <div className="w-px h-8 bg-white/20" />
-                <div><span className="text-2xl font-bold text-white block">10K+</span> Players</div>
+                <div>
+                  <span className="text-2xl font-bold text-white block">10K+</span> Players
+                </div>
               </motion.div>
             </div>
 
@@ -106,7 +135,9 @@ export default function HomePage() {
                   className={`${i % 2 === 1 ? 'mt-8' : ''}`}
                 >
                   <div className="rounded-2xl bg-white/15 backdrop-blur border border-white/20 p-6 text-center hover:bg-white/20 transition-colors">
-                    <span className="text-4xl">{POPULAR_SPORTS.indexOf(sport) >= 0 ? ['🏸', '⚽', '🏏', '🎾'][i] : '🏟️'}</span>
+                    <span className="text-4xl">
+                      {POPULAR_SPORTS.indexOf(sport) >= 0 ? ['🏸', '⚽', '🏏', '🎾'][i] : '🏟️'}
+                    </span>
                     <p className="mt-2 font-semibold">{SPORT_LABELS[sport]}</p>
                     <p className="text-xs text-white/60 mt-1">Book now</p>
                   </div>
@@ -119,7 +150,10 @@ export default function HomePage() {
         {/* Wave divider */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 80" fill="none" className="w-full">
-            <path d="M0 40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0V40Z" fill="var(--background)" />
+            <path
+              d="M0 40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0V40Z"
+              fill="var(--background)"
+            />
           </svg>
         </div>
       </section>
@@ -150,7 +184,7 @@ export default function HomePage() {
             <p className="text-muted text-sm mt-1">Sports complexes in popular locations</p>
           </FadeUp>
           <div className="mt-6 flex flex-wrap gap-2">
-            {CITIES.map((city, i) => (
+            {POPULAR_CITIES.map((city, i) => (
               <FadeUp key={city} delay={i * 0.05}>
                 <Link
                   href={`/courts?city=${encodeURIComponent(city)}`}
@@ -211,8 +245,13 @@ export default function HomePage() {
                   Join thousands of players booking courts and training sessions every day.
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-3">
-                  <Link href="/register" className="btn-white">Create free account</Link>
-                  <Link href="/courts" className="inline-flex items-center justify-center rounded-xl border-2 border-white/40 px-6 py-3 text-sm font-semibold hover:bg-white/10 transition-all">
+                  <Link href="/register" className="btn-white">
+                    Create free account
+                  </Link>
+                  <Link
+                    href="/courts"
+                    className="inline-flex items-center justify-center rounded-xl border-2 border-white/40 px-6 py-3 text-sm font-semibold hover:bg-white/10 transition-all"
+                  >
                     Browse venues
                   </Link>
                 </div>

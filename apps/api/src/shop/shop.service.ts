@@ -1,21 +1,23 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import {
   CouponAppliesTo,
   InventoryMovementType,
   PaymentEntityType,
   PaymentStatus,
-  Prisma,
+  type Prisma,
   ReviewTargetType,
   ShopOrderStatus,
   UserRole,
 } from '@prisma/client';
-import { AuthUserPayload } from '../common/decorators/current-user.decorator';
-import { CacheService } from '../common/redis/cache.service';
+import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { type CacheService } from '../common/redis/cache.service';
 import { CACHE_KEYS, CACHE_TTL } from '../common/redis/cache.constants';
 import { optimizeImageUrl } from '../common/utils/cdn.util';
 import {
@@ -23,25 +25,25 @@ import {
   decodeCursor,
   hashQueryParams,
 } from '../common/utils/cursor-pagination.util';
-import { CouponsService } from '../memberships/coupons.service';
-import { NotificationsService } from '../notifications/notifications.service';
+import { type CouponsService } from '../memberships/coupons.service';
+import { type NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
-import { PrismaService } from '../prisma/prisma.module';
-import { TenantsService } from '../tenants/tenants.service';
+import { type PrismaService } from '../prisma/prisma.module';
+import { type TenantsService } from '../tenants/tenants.service';
 import {
-  AddToCartDto,
-  AdjustInventoryDto,
-  CheckoutDto,
-  CreateCategoryDto,
-  CreateProductDto,
-  CreateReviewDto,
-  ProductImageDto,
-  ProductVariantDto,
-  UpdateCategoryDto,
-  UpdateOrderStatusDto,
-  UpdateProductDto,
-  UpdateVariantDto,
-  WishlistItemDto,
+  type AddToCartDto,
+  type AdjustInventoryDto,
+  type CheckoutDto,
+  type CreateCategoryDto,
+  type CreateProductDto,
+  type CreateReviewDto,
+  type ProductImageDto,
+  type ProductVariantDto,
+  type UpdateCategoryDto,
+  type UpdateOrderStatusDto,
+  type UpdateProductDto,
+  type UpdateVariantDto,
+  type WishlistItemDto,
 } from './dto/shop.dto';
 
 const PRODUCT_INCLUDE = {
@@ -90,6 +92,7 @@ function mapCategorySlugToLegacy(slug: string): string {
 export class ShopService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
     private couponsService: CouponsService,
     private notificationsService: NotificationsService,
@@ -108,7 +111,9 @@ export class ShopService {
         const categories = await this.prisma.productCategory.findMany({
           where: { tenantId, deletedAt: null, ...(activeOnly && { isActive: true }) },
           orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
-          include: { _count: { select: { products: { where: { deletedAt: null, isActive: true } } } } },
+          include: {
+            _count: { select: { products: { where: { deletedAt: null, isActive: true } } } },
+          },
         });
         return categories.map((c) => this.formatCategory(c));
       },
@@ -118,16 +123,18 @@ export class ShopService {
   async createCategory(dto: CreateCategoryDto) {
     const tenantId = await this.resolveShopTenantId(true);
     const slug = slugify(dto.name);
-    return this.prisma.productCategory.create({
-      data: {
-        tenantId,
-        name: dto.name,
-        slug,
-        description: dto.description,
-        imageUrl: dto.imageUrl,
-        sortOrder: dto.sortOrder ?? 0,
-      },
-    }).then((c) => this.formatCategory(c));
+    return this.prisma.productCategory
+      .create({
+        data: {
+          tenantId,
+          name: dto.name,
+          slug,
+          description: dto.description,
+          imageUrl: dto.imageUrl,
+          sortOrder: dto.sortOrder ?? 0,
+        },
+      })
+      .then((c) => this.formatCategory(c));
   }
 
   async updateCategory(id: string, dto: UpdateCategoryDto) {
@@ -299,9 +306,7 @@ export class ShopService {
     const baseSlug = slugify(dto.name);
     let slug = baseSlug;
     let suffix = 1;
-    while (
-      await this.prisma.product.findFirst({ where: { tenantId, slug, deletedAt: null } })
-    ) {
+    while (await this.prisma.product.findFirst({ where: { tenantId, slug, deletedAt: null } })) {
       slug = `${baseSlug}-${suffix++}`;
     }
 
@@ -504,8 +509,7 @@ export class ShopService {
       include: { items: true },
     });
     const cart =
-      cartRaw ??
-      (await this.prisma.cart.create({ data: { userId }, include: { items: true } }));
+      cartRaw ?? (await this.prisma.cart.create({ data: { userId }, include: { items: true } }));
 
     const existing = cart.items.find(
       (i) => i.productId === dto.productId && (i.variantId ?? null) === (dto.variantId ?? null),
@@ -621,8 +625,7 @@ export class ShopService {
 
     const wishlist = await this.getOrCreateWishlist(userId);
     const existing = wishlist.items.find(
-      (i) =>
-        i.productId === dto.productId && (i.variantId ?? null) === (dto.variantId ?? null),
+      (i) => i.productId === dto.productId && (i.variantId ?? null) === (dto.variantId ?? null),
     );
     if (!existing) {
       await this.prisma.wishlistItem.create({
@@ -1155,7 +1158,9 @@ export class ShopService {
     const fromContext = this.tenantsService.resolveTenantIdFromContext();
     if (fromContext) return fromContext;
     if (requireExplicit) {
-      throw new BadRequestException('Tenant context required (X-Tenant-Id or X-Tenant-Slug header)');
+      throw new BadRequestException(
+        'Tenant context required (X-Tenant-Id or X-Tenant-Slug header)',
+      );
     }
 
     const platform = await this.prisma.tenant.findFirst({
@@ -1261,9 +1266,7 @@ export class ShopService {
     };
   }
 
-  private formatProduct(
-    p: Prisma.ProductGetPayload<{ include: typeof PRODUCT_INCLUDE }>,
-  ) {
+  private formatProduct(p: Prisma.ProductGetPayload<{ include: typeof PRODUCT_INCLUDE }>) {
     const primaryImage = p.images.find((i) => i.isPrimary) ?? p.images[0];
     return {
       id: p.id,
@@ -1284,7 +1287,9 @@ export class ShopService {
       categoryDetail: this.formatCategory(p.category),
       sport: p.sport,
       sportType: p.sport?.slug?.toUpperCase().replace(/-/g, '_') ?? null,
-      images: p.images.map((i) => optimizeImageUrl(i.url, { width: 600, quality: 80, format: 'webp' }) ?? i.url),
+      images: p.images.map(
+        (i) => optimizeImageUrl(i.url, { width: 600, quality: 80, format: 'webp' }) ?? i.url,
+      ),
       imageDetails: p.images.map((i) => ({
         id: i.id,
         url: optimizeImageUrl(i.url, { width: 800, quality: 85, format: 'webp' }) ?? i.url,
@@ -1356,7 +1361,9 @@ export class ShopService {
         productId: item.productId,
         variantId: item.variantId,
         quantity: item.quantity,
-        product: this.formatProduct(item.product as Prisma.ProductGetPayload<{ include: typeof PRODUCT_INCLUDE }>),
+        product: this.formatProduct(
+          item.product as Prisma.ProductGetPayload<{ include: typeof PRODUCT_INCLUDE }>,
+        ),
         variant: item.variant ? this.formatVariant(item.variant as never) : null,
       })),
     };

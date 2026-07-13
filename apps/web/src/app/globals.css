@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f6f8;
-  --foreground: #0d1f17;
-  --primary: #00b564;
-  --primary-dark: #009652;
-  --primary-light: #e8faf1;
+  --background: #f8f6f4;
+  --foreground: #1a1410;
+  --primary: #ff6b35;
+  --primary-dark: #e55520;
+  --primary-light: #fff1eb;
   --primary-foreground: #ffffff;
-  --accent: #ff6b35;
-  --muted: #5c6b64;
-  --border: #e4ebe7;
+  --accent: #f59e0b;
+  --muted: #6b5f56;
+  --border: #ebe4e0;
   --card: #ffffff;
-  --hero-from: #00b564;
-  --hero-to: #00875a;
+  --hero-from: #ff6b35;
+  --hero-to: #d94e1f;
+  --nav-height: 4.25rem;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 12px 40px rgba(0, 181, 100, 0.12);
+  --shadow-lg: 0 12px 40px rgba(255, 107, 53, 0.14);
 }
 
 @theme inline {
@@ -64,6 +65,13 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + 0.5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -101,7 +109,7 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #eef2f0 25%, #f8faf9 50%, #eef2f0 75%);
+  background: linear-gradient(90deg, #f0ebe8 25%, #faf7f5 50%, #f0ebe8 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

@@ -1,11 +1,11 @@
 export const QUEUES = {
-  EMAIL: 'fitora:email',
-  SMS: 'fitora:sms',
-  PUSH: 'fitora:push',
-  SCHEDULED: 'fitora:scheduled',
-  REFUND: 'fitora:refund',
-  PAYMENT_RETRY: 'fitora:payment-retry',
-  DEAD_LETTER: 'fitora:dead-letter',
+  EMAIL: 'fitora-email',
+  SMS: 'fitora-sms',
+  PUSH: 'fitora-push',
+  SCHEDULED: 'fitora-scheduled',
+  REFUND: 'fitora-refund',
+  PAYMENT_RETRY: 'fitora-payment-retry',
+  DEAD_LETTER: 'fitora-dead-letter',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

@@ -29,12 +29,7 @@ export const POPULAR_SPORTS = [
   SportType.GYM,
 ];
 
-export const CITIES = [
-  'Bangalore',
-  'Mumbai',
-  'Delhi',
-  'Hyderabad',
-  'Chennai',
-  'Pune',
-  'Kochi',
-];
+export { INDIAN_CITIES, POPULAR_CITIES } from './indian-cities';
+
+/** @deprecated Prefer POPULAR_CITIES or INDIAN_CITIES */
+export const CITIES = ['Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Pune', 'Kochi'];

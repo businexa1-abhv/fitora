@@ -8,7 +8,7 @@ import { ROLE_LABELS, UserRole, type AuthUser } from '@fitora/shared';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { FadeUp } from '@/components/motion';
-import { clearAuthSession, getAccessToken, getStoredUser } from '@/lib/auth';
+import { getAccessToken, getStoredUser } from '@/lib/auth';
 
 const ROLE_ACTIONS: Record<UserRole, { title: string; items: string[] }> = {
   [UserRole.PLAYER]: {
@@ -17,7 +17,12 @@ const ROLE_ACTIONS: Record<UserRole, { title: string; items: string[] }> = {
   },
   [UserRole.COURT_OWNER]: {
     title: 'Court Owner',
-    items: ['Manage your courts', 'Configure slots and pricing', 'Create membership plans', 'View bookings'],
+    items: [
+      'Manage your courts',
+      'Configure slots and pricing',
+      'Create membership plans',
+      'View bookings',
+    ],
   },
   [UserRole.TRAINER]: {
     title: 'Trainer',
@@ -51,11 +56,6 @@ export default function DashboardPage() {
     setUser(storedUser);
   }, [router]);
 
-  function handleLogout() {
-    clearAuthSession();
-    router.push('/login');
-  }
-
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -75,9 +75,7 @@ export default function DashboardPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <p className="text-white/70 text-sm">Welcome back</p>
-            <h1 className="text-3xl sm:text-4xl font-extrabold mt-1">
-              Hello, {user.firstName} 👋
-            </h1>
+            <h1 className="text-3xl sm:text-4xl font-extrabold mt-1">Hello, {user.firstName} 👋</h1>
             <p className="text-white/75 mt-2">
               {ROLE_LABELS[primaryRole]} · {user.email}
             </p>
@@ -102,7 +100,10 @@ export default function DashboardPage() {
             <h2 className="text-lg font-bold">{actions.title} quick actions</h2>
             <ul className="mt-4 grid sm:grid-cols-2 gap-2">
               {actions.items.map((item) => (
-                <li key={item} className="flex items-center gap-2 text-sm text-muted p-2 rounded-lg hover:bg-primary-light hover:text-primary transition-colors">
+                <li
+                  key={item}
+                  className="flex items-center gap-2 text-sm text-muted p-2 rounded-lg hover:bg-primary-light hover:text-primary transition-colors"
+                >
                   <span className="h-2 w-2 rounded-full bg-primary shrink-0" />
                   {item}
                 </li>
@@ -114,56 +115,80 @@ export default function DashboardPage() {
         <div className="flex flex-wrap gap-3">
           {(user.roles.includes(UserRole.PLAYER) || user.roles.includes(UserRole.COURT_OWNER)) && (
             <>
-              <Link href="/courts" className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
+              <Link
+                href="/courts"
+                className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+              >
                 Browse courts
               </Link>
-              <Link href="/bookings" className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card">
+              <Link
+                href="/bookings"
+                className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card"
+              >
                 My bookings
               </Link>
-              <Link href="/memberships" className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card">
+              <Link
+                href="/memberships"
+                className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card"
+              >
                 Memberships
               </Link>
-              <Link href="/training" className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card">
+              <Link
+                href="/training"
+                className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card"
+              >
                 Kids training
               </Link>
-              <Link href="/shop" className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card">
+              <Link
+                href="/shop"
+                className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card"
+              >
                 Sports shop
               </Link>
             </>
           )}
           {user.roles.includes(UserRole.COURT_OWNER) && (
-            <Link href="/owner" className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
+            <Link
+              href="/owner"
+              className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+            >
               Owner dashboard
             </Link>
           )}
           {user.roles.includes(UserRole.TRAINER) && (
-            <Link href="/trainer" className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
+            <Link
+              href="/trainer"
+              className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+            >
               Trainer dashboard
             </Link>
           )}
-          {(user.roles.includes(UserRole.SERVICE_PROVIDER) || user.roles.includes(UserRole.PRINTER)) && (
-            <Link href="/provider" className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
+          {(user.roles.includes(UserRole.SERVICE_PROVIDER) ||
+            user.roles.includes(UserRole.PRINTER)) && (
+            <Link
+              href="/provider"
+              className="inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+            >
               {user.roles.includes(UserRole.PRINTER) ? 'Printer dashboard' : 'Provider dashboard'}
             </Link>
           )}
           {(user.roles.includes(UserRole.PLAYER) || user.roles.includes(UserRole.COURT_OWNER)) && (
             <>
-              <Link href="/services" className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card">
+              <Link
+                href="/services"
+                className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card"
+              >
                 Sports services
               </Link>
-              <Link href="/payments" className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card">
+              <Link
+                href="/payments"
+                className="inline-flex rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-card"
+              >
                 Payment history
               </Link>
             </>
           )}
         </div>
-
-        <button
-          onClick={handleLogout}
-          className="mt-8 text-sm text-muted hover:text-red-600 transition-colors"
-        >
-          Sign out
-        </button>
       </main>
 
       <Footer />

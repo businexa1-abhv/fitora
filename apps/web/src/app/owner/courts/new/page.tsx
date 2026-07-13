@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { SPORT_LABELS, SportType } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -10,7 +10,7 @@ import { buttonClassName, FormField, inputClassName } from '@/components/auth-la
 import { ApiError } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 import { createCourt } from '@/lib/courts';
-import { CITIES } from '@/lib/constants';
+import { CitySelect } from '@/components/city-select';
 
 export default function NewCourtPage() {
   const router = useRouter();
@@ -37,6 +37,11 @@ export default function NewCourtPage() {
       return;
     }
 
+    if (!form.city) {
+      setError('Please select a city');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -48,7 +53,10 @@ export default function NewCourtPage() {
         address: form.address,
         city: form.city,
         amenities: form.amenities
-          ? form.amenities.split(',').map((a) => a.trim()).filter(Boolean)
+          ? form.amenities
+              .split(',')
+              .map((a) => a.trim())
+              .filter(Boolean)
           : [],
       });
       router.push('/owner/courts');
@@ -61,7 +69,10 @@ export default function NewCourtPage() {
 
   return (
     <div className="max-w-lg">
-      <Link href="/owner/courts" className="inline-flex items-center gap-1 text-sm text-muted hover:text-primary mb-4">
+      <Link
+        href="/owner/courts"
+        className="inline-flex items-center gap-1 text-sm text-muted hover:text-primary mb-4"
+      >
         <ArrowLeft className="h-4 w-4" />
         Back to courts
       </Link>
@@ -119,20 +130,12 @@ export default function NewCourtPage() {
         </FormField>
 
         <FormField label="City" id="city">
-          <input
-            id="city"
-            required
-            list="cities"
-            placeholder="Bangalore"
-            className={inputClassName}
+          <CitySelect
             value={form.city}
-            onChange={(e) => update('city', e.target.value)}
+            onChange={(city) => update('city', city)}
+            placeholder="Search city in India…"
+            allowClear={false}
           />
-          <datalist id="cities">
-            {CITIES.map((c) => (
-              <option key={c} value={c} />
-            ))}
-          </datalist>
         </FormField>
 
         <FormField label="Description" id="description">

@@ -26,10 +26,10 @@ export default function OwnerTrainingPage() {
 
       try {
         const myCourts = await getMyCourts(token);
-        setCourts(myCourts);
+        setCourts(myCourts.items);
 
         const all: ProgramRow[] = [];
-        for (const court of myCourts) {
+        for (const court of myCourts.items) {
           try {
             const progs = await getTrainingPrograms(court.id);
             all.push(...progs.map((p) => ({ ...p, courtName: court.name })));
@@ -82,7 +82,9 @@ export default function OwnerTrainingPage() {
               Create first program
             </Link>
           ) : (
-            <Link href="/owner/courts/new" className="btn-primary">Add a court first</Link>
+            <Link href="/owner/courts/new" className="btn-primary">
+              Add a court first
+            </Link>
           )}
         </div>
       )}
@@ -99,11 +101,15 @@ export default function OwnerTrainingPage() {
                   {program.ageGroupLabel ? ` · ${program.ageGroupLabel}` : ''}
                 </p>
               </div>
-              <span className="text-sm font-bold text-primary">{formatCurrency(Number(program.fee))}</span>
+              <span className="text-sm font-bold text-primary">
+                {formatCurrency(Number(program.fee))}
+              </span>
             </div>
             {program.batches && program.batches.length > 0 && (
               <div className="mt-4 pt-4 border-t border-border">
-                <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Batches</p>
+                <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">
+                  Batches
+                </p>
                 <div className="space-y-2">
                   {program.batches.map((batch) => (
                     <div key={batch.id} className="flex justify-between text-sm">

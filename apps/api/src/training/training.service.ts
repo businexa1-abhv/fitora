@@ -1,35 +1,37 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import {
   EnrollmentStatus,
   PaymentEntityType,
   PaymentStatus,
-  Prisma,
+  type Prisma,
   UserRole,
 } from '@prisma/client';
 import { resolveSportId } from '../courts/utils/court.utils';
-import { AuthUserPayload } from '../common/decorators/current-user.decorator';
-import { NotificationsService } from '../notifications/notifications.service';
+import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { type NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
-import { PrismaService } from '../prisma/prisma.module';
+import { type PrismaService } from '../prisma/prisma.module';
 import { AGE_GROUP_PRESETS, ageGroupLabel, calculateAge } from './constants/age-groups';
 import {
-  AssignTrainerDto,
-  CreateBatchDto,
-  CreateKidDto,
-  CreateProgramDto,
-  CreateProgressReportDto,
-  EnrollKidDto,
-  EnrollWithKidDto,
-  MarkAttendanceDto,
-  MarkBatchAttendanceDto,
-  UpdateBatchDto,
-  UpdateKidDto,
-  UpdateProgramDto,
+  type AssignTrainerDto,
+  type CreateBatchDto,
+  type CreateKidDto,
+  type CreateProgramDto,
+  type CreateProgressReportDto,
+  type EnrollKidDto,
+  type EnrollWithKidDto,
+  type MarkAttendanceDto,
+  type MarkBatchAttendanceDto,
+  type UpdateBatchDto,
+  type UpdateKidDto,
+  type UpdateProgramDto,
   UpdateProgressReportDto,
 } from './dto/training.dto';
 
@@ -59,6 +61,7 @@ const ENROLLMENT_INCLUDE = {
 export class TrainingService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
     private notificationsService: NotificationsService,
   ) {}
@@ -97,13 +100,14 @@ export class TrainingService {
     const program = await this.getProgramEntity(programId);
     this.assertOwnerOrAdmin(program.court.ownerId, user);
 
-    const sportId = dto.sportId || dto.sportSlug || dto.sportType
-      ? await resolveSportId(this.prisma, {
-          sportId: dto.sportId,
-          sportSlug: dto.sportSlug,
-          sportType: dto.sportType,
-        })
-      : undefined;
+    const sportId =
+      dto.sportId || dto.sportSlug || dto.sportType
+        ? await resolveSportId(this.prisma, {
+            sportId: dto.sportId,
+            sportSlug: dto.sportSlug,
+            sportType: dto.sportType,
+          })
+        : undefined;
 
     const updated = await this.prisma.trainingProgram.update({
       where: { id: programId },
@@ -380,11 +384,7 @@ export class TrainingService {
 
   // ─── Attendance ─────────────────────────────────────────────────────────────
 
-  async markAttendance(
-    enrollmentId: string,
-    dto: MarkAttendanceDto,
-    user: AuthUserPayload,
-  ) {
+  async markAttendance(enrollmentId: string, dto: MarkAttendanceDto, user: AuthUserPayload) {
     const enrollment = await this.getEnrollmentEntity(enrollmentId);
     this.assertTrainerOfBatch(enrollment.batch.trainerId, user);
 
@@ -458,7 +458,12 @@ export class TrainingService {
     return {
       enrollmentId,
       records,
-      summary: { present, absent: total - present, total, rate: total ? Math.round((present / total) * 100) : 0 },
+      summary: {
+        present,
+        absent: total - present,
+        total,
+        rate: total ? Math.round((present / total) * 100) : 0,
+      },
     };
   }
 
@@ -487,14 +492,11 @@ export class TrainingService {
     });
 
     if (dto.publish) {
-      await this.notificationsService.notifyProgressReport(
-        enrollment.kid.parentId,
-        {
-          reportId: report.id,
-          kidName: `${enrollment.kid.firstName} ${enrollment.kid.lastName}`,
-          programName: enrollment.batch.program.name,
-        },
-      );
+      await this.notificationsService.notifyProgressReport(enrollment.kid.parentId, {
+        reportId: report.id,
+        kidName: `${enrollment.kid.firstName} ${enrollment.kid.lastName}`,
+        programName: enrollment.batch.program.name,
+      });
     }
 
     return this.formatProgressReport(report);
@@ -641,7 +643,9 @@ export class TrainingService {
         court: { select: { id: true, name: true } },
         batches: {
           where: { deletedAt: null },
-          include: { _count: { select: { enrollments: { where: { status: EnrollmentStatus.ACTIVE } } } } },
+          include: {
+            _count: { select: { enrollments: { where: { status: EnrollmentStatus.ACTIVE } } } },
+          },
         },
         _count: { select: { batches: true } },
       },
@@ -750,9 +754,10 @@ export class TrainingService {
     }
   }
 
-  private async validateBatchCapacity(
-    batch: { maxCapacity: number; _count: { enrollments: number } },
-  ) {
+  private async validateBatchCapacity(batch: {
+    maxCapacity: number;
+    _count: { enrollments: number };
+  }) {
     if (batch._count.enrollments >= batch.maxCapacity) {
       throw new BadRequestException('Batch is full');
     }

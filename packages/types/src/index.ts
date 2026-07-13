@@ -132,6 +132,11 @@ export interface AuthUser {
   firstName: string;
   lastName: string;
   roles: UserRole[];
+  phone?: string | null;
+  avatarUrl?: string | null;
+  emailVerified?: boolean;
+  phoneVerified?: boolean;
+  permissions?: string[];
 }
 
 export interface AuthTokens {
@@ -297,12 +302,7 @@ export interface PaymentReports {
 export type AnalyticsPeriod = 'daily' | 'monthly' | 'yearly';
 
 export type AnalyticsExportMetric =
-  | 'revenue'
-  | 'bookings'
-  | 'memberships'
-  | 'products'
-  | 'users'
-  | 'overview';
+  'revenue' | 'bookings' | 'memberships' | 'products' | 'users' | 'overview';
 
 export interface AnalyticsSeriesPoint {
   label: string;

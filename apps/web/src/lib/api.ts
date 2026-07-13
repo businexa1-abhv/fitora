@@ -71,7 +71,14 @@ export function register(payload: {
 }
 
 export function getMe(accessToken: string) {
-  return apiFetch<AuthUser>('/users/me', {}, accessToken);
+  return apiFetch<
+    AuthUser & {
+      phone?: string | null;
+      avatarUrl?: string | null;
+      emailVerified?: boolean;
+      phoneVerified?: boolean;
+    }
+  >('/users/me', {}, accessToken);
 }
 
 export function getUsers(accessToken: string) {

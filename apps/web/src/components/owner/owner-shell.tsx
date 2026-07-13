@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LogOut, Menu, X } from 'lucide-react';
+import { LogOut, X } from 'lucide-react';
 import { APP_NAME } from '@fitora/shared';
 import { OWNER_NAV } from '@/lib/owner-navigation';
 import { clearAuthSession, getStoredUser } from '@/lib/auth';
+import { PortalTopBar } from '@/components/portal-top-bar';
+import { UserAvatar } from '@/components/user-avatar';
 
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
@@ -70,11 +72,21 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         ))}
       </nav>
 
-      <div className="border-t border-border p-4">
+      <div className="border-t border-border p-4 space-y-3">
         {user && (
-          <p className="px-2 text-xs text-muted truncate mb-3">
-            {user.firstName} {user.lastName}
-          </p>
+          <Link
+            href="/account"
+            onClick={onNavigate}
+            className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-primary-light/50 transition-colors"
+          >
+            <UserAvatar user={user} size="sm" />
+            <div className="min-w-0">
+              <p className="text-sm font-semibold truncate">
+                {user.firstName} {user.lastName}
+              </p>
+              <p className="text-[11px] text-muted truncate">{user.email}</p>
+            </div>
+          </Link>
         )}
         <button
           onClick={logout}
@@ -90,6 +102,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function OwnerShell({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const user = getStoredUser();
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -99,13 +112,17 @@ export function OwnerShell({ children }: { children: React.ReactNode }) {
 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-72 flex flex-col bg-card shadow-xl">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          />
+          <aside className="absolute inset-y-0 left-0 w-72 flex flex-col bg-card shadow-2xl">
             <button
               onClick={() => setMobileOpen(false)}
-              className="absolute right-4 top-4 rounded-lg p-1.5 text-muted hover:bg-background"
+              className="absolute right-3 top-3 z-10 rounded-xl border border-border bg-background p-2 text-muted hover:text-foreground"
+              aria-label="Close menu"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
             <NavContent onNavigate={() => setMobileOpen(false)} />
           </aside>
@@ -113,22 +130,14 @@ export function OwnerShell({ children }: { children: React.ReactNode }) {
       )}
 
       <div className="flex flex-1 flex-col min-w-0">
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b border-border bg-card/95 backdrop-blur px-4 lg:px-6">
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="rounded-lg p-2 text-muted hover:bg-background lg:hidden"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          <Link href="/" className="text-sm text-muted hover:text-primary transition-colors lg:hidden">
-            ← Back to app
-          </Link>
-          <div className="hidden lg:block ml-auto">
-            <Link href="/" className="text-sm text-muted hover:text-primary transition-colors">
-              View consumer app →
-            </Link>
-          </div>
-        </header>
+        <PortalTopBar
+          title="Owner portal"
+          subtitle="Manage courts, bookings & revenue"
+          browseHref="/"
+          browseLabel="Browse Fitora"
+          user={user}
+          onOpenMenu={() => setMobileOpen(true)}
+        />
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>

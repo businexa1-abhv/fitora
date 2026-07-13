@@ -37,8 +37,24 @@ export default function LoginScreen() {
     setError(null);
     setLoading(true);
     try {
-      await sendOtp(phone, step === 'register' ? 'REGISTER' : 'LOGIN');
-      setStep(step === 'register' ? 'register' : 'otp');
+      const purpose = step === 'register' ? 'REGISTER' : 'LOGIN';
+      try {
+        await sendOtp(phone, purpose);
+        setStep(step === 'register' ? 'register' : 'otp');
+      } catch (err) {
+        // New phone → switch to registration OTP flow
+        if (
+          purpose === 'LOGIN' &&
+          err instanceof ApiError &&
+          (err.status === 401 || /no account/i.test(err.message))
+        ) {
+          await sendOtp(phone, 'REGISTER');
+          setStep('register');
+          setError('No account found. Enter the OTP and complete your profile.');
+          return;
+        }
+        throw err;
+      }
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to send OTP');
     } finally {
@@ -120,7 +136,11 @@ export default function LoginScreen() {
             editable={step === 'phone'}
             style={[
               styles.input,
-              { backgroundColor: colors.card, borderColor: colors.border, color: colors.foreground },
+              {
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+                color: colors.foreground,
+              },
             ]}
           />
 
@@ -136,7 +156,11 @@ export default function LoginScreen() {
                 maxLength={6}
                 style={[
                   styles.input,
-                  { backgroundColor: colors.card, borderColor: colors.border, color: colors.foreground },
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                    color: colors.foreground,
+                  },
                 ]}
               />
             </>
@@ -150,7 +174,11 @@ export default function LoginScreen() {
                 onChangeText={setFirstName}
                 style={[
                   styles.input,
-                  { backgroundColor: colors.card, borderColor: colors.border, color: colors.foreground },
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                    color: colors.foreground,
+                  },
                 ]}
               />
               <Text style={[styles.label, { color: colors.muted }]}>Last name</Text>
@@ -159,7 +187,11 @@ export default function LoginScreen() {
                 onChangeText={setLastName}
                 style={[
                   styles.input,
-                  { backgroundColor: colors.card, borderColor: colors.border, color: colors.foreground },
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                    color: colors.foreground,
+                  },
                 ]}
               />
               <Text style={[styles.label, { color: colors.muted }]}>Email</Text>
@@ -170,7 +202,11 @@ export default function LoginScreen() {
                 autoCapitalize="none"
                 style={[
                   styles.input,
-                  { backgroundColor: colors.card, borderColor: colors.border, color: colors.foreground },
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                    color: colors.foreground,
+                  },
                 ]}
               />
             </>
@@ -178,7 +214,12 @@ export default function LoginScreen() {
         </View>
 
         {step === 'phone' && (
-          <Button label={loading ? 'Sending…' : 'Send OTP'} fullWidth disabled={loading} onPress={handleSendOtp} />
+          <Button
+            label={loading ? 'Sending…' : 'Send OTP'}
+            fullWidth
+            disabled={loading}
+            onPress={handleSendOtp}
+          />
         )}
         {step === 'otp' && (
           <>

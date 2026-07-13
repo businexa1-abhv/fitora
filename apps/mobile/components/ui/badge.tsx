@@ -14,7 +14,7 @@ export function Badge({ label, variant = 'default' }: BadgeProps) {
 
   const variants: Record<BadgeVariant, { bg: string; text: string }> = {
     default: { bg: colors.mutedBg, text: colors.muted },
-    success: { bg: isDark ? '#0d2818' : '#e8faf1', text: colors.primary },
+    success: { bg: isDark ? '#0d2818' : '#e8faf1', text: isDark ? '#34d399' : '#059669' },
     warning: { bg: isDark ? '#2a2008' : '#fef3c7', text: colors.warning },
     danger: { bg: isDark ? '#2a1010' : '#fee2e2', text: colors.danger },
     primary: { bg: colors.primaryLight, text: colors.primary },

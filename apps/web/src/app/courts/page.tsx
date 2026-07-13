@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { SPORT_LABELS, SportType, type Court } from '@fitora/shared';
+import { SPORT_LABELS, type SportType, type Court } from '@fitora/shared';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { CourtCard, CourtCardSkeleton } from '@/components/court-card';
@@ -12,6 +12,7 @@ import { SportChip } from '@/components/sport-chip';
 import { FadeUp } from '@/components/motion';
 import { POPULAR_SPORTS } from '@/lib/constants';
 import { getCourts } from '@/lib/courts';
+import { CitySelect } from '@/components/city-select';
 
 function CourtsContent() {
   const searchParams = useSearchParams();
@@ -72,12 +73,11 @@ function CourtsContent() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <input
-              type="text"
-              placeholder="📍 City"
-              className="rounded-xl bg-white/95 text-foreground px-4 py-3 text-sm outline-none placeholder:text-muted"
+            <CitySelect
               value={city}
-              onChange={(e) => setCity(e.target.value)}
+              onChange={setCity}
+              placeholder="📍 Select city"
+              variant="hero"
             />
             <select
               className="rounded-xl bg-white/95 text-foreground px-4 py-3 text-sm outline-none"
@@ -86,7 +86,9 @@ function CourtsContent() {
             >
               <option value="">All sports</option>
               {Object.entries(SPORT_LABELS).map(([value, label]) => (
-                <option key={value} value={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </motion.div>
@@ -100,7 +102,9 @@ function CourtsContent() {
             type="button"
             onClick={() => setSportType('')}
             className={`shrink-0 flex flex-col items-center gap-2 p-4 rounded-2xl border-2 min-w-[100px] transition-all ${
-              !sportType ? 'border-primary bg-primary-light shadow-md' : 'border-transparent bg-card hover:shadow-md'
+              !sportType
+                ? 'border-primary bg-primary-light shadow-md'
+                : 'border-transparent bg-card hover:shadow-md'
             }`}
           >
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-2xl">
@@ -122,7 +126,9 @@ function CourtsContent() {
 
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-muted">
-            {loading ? 'Searching…' : `${courts.length} venue${courts.length !== 1 ? 's' : ''} found`}
+            {loading
+              ? 'Searching…'
+              : `${courts.length} venue${courts.length !== 1 ? 's' : ''} found`}
           </p>
           <Link href="/bookings" className="text-sm font-semibold text-primary hover:underline">
             My bookings →

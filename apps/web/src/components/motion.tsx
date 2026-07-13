@@ -39,10 +39,11 @@ export function FadeUp({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-40px' }}
+      viewport={{ once: true, margin: '-80px', amount: 0.2 }}
       custom={delay}
       variants={fadeUp}
       className={className}
+      style={{ willChange: 'opacity, transform' }}
     >
       {children}
     </motion.div>

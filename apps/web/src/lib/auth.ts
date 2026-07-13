@@ -12,6 +12,10 @@ export function saveAuthSession(response: AuthResponse) {
   localStorage.setItem(USER_KEY, JSON.stringify(response.user));
 }
 
+export function updateStoredUser(user: AuthUser) {
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
 export function clearAuthSession() {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -32,6 +36,11 @@ export function getStoredUser(): AuthUser | null {
   } catch {
     return null;
   }
+}
+
+export function getUserInitials(user: AuthUser | null | undefined): string {
+  if (!user) return '?';
+  return `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase() || '?';
 }
 
 export function getAdminAppUrl(): string {
