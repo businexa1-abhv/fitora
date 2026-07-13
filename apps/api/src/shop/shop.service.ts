@@ -17,7 +17,7 @@ import {
   UserRole,
 } from '@prisma/client';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
-import { type CacheService } from '../common/redis/cache.service';
+import { CacheService } from '../common/redis/cache.service';
 import { CACHE_KEYS, CACHE_TTL } from '../common/redis/cache.constants';
 import { optimizeImageUrl } from '../common/utils/cdn.util';
 import {
@@ -25,11 +25,11 @@ import {
   decodeCursor,
   hashQueryParams,
 } from '../common/utils/cursor-pagination.util';
-import { type CouponsService } from '../memberships/coupons.service';
-import { type NotificationsService } from '../notifications/notifications.service';
+import { CouponsService } from '../memberships/coupons.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
-import { type PrismaService } from '../prisma/prisma.module';
-import { type TenantsService } from '../tenants/tenants.service';
+import { PrismaService } from '../prisma/prisma.module';
+import { TenantsService } from '../tenants/tenants.service';
 import {
   type AddToCartDto,
   type AdjustInventoryDto,
@@ -91,13 +91,13 @@ function mapCategorySlugToLegacy(slug: string): string {
 @Injectable()
 export class ShopService {
   constructor(
-    private prisma: PrismaService,
+    @Inject(PrismaService) private prisma: PrismaService,
     @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
-    private couponsService: CouponsService,
-    private notificationsService: NotificationsService,
-    private cacheService: CacheService,
-    private tenantsService: TenantsService,
+    @Inject(CouponsService) private couponsService: CouponsService,
+    @Inject(NotificationsService) private notificationsService: NotificationsService,
+    @Inject(CacheService) private cacheService: CacheService,
+    @Inject(TenantsService) private tenantsService: TenantsService,
   ) {}
 
   // ─── Categories ─────────────────────────────────────────────────────────────

@@ -15,9 +15,9 @@ import {
 } from '@prisma/client';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { validateBase64Image, toDataUrl } from '../common/utils/image.util';
-import { type NotificationsService } from '../notifications/notifications.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
-import { type PrismaService } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.module';
 import { generatePrintOrderNumber, TSHIRT_COLORS, TSHIRT_SIZES } from './print.constants';
 import {
   type ApproveDesignDto,
@@ -42,10 +42,10 @@ const ORDER_INCLUDE = {
 @Injectable()
 export class PrintService {
   constructor(
-    private prisma: PrismaService,
+    @Inject(PrismaService) private prisma: PrismaService,
     @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
-    private notificationsService: NotificationsService,
+    @Inject(NotificationsService) private notificationsService: NotificationsService,
   ) {}
 
   getOptions() {

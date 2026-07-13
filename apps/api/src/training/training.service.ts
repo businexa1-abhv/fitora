@@ -15,9 +15,9 @@ import {
 } from '@prisma/client';
 import { resolveSportId } from '../courts/utils/court.utils';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
-import { type NotificationsService } from '../notifications/notifications.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
-import { type PrismaService } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.module';
 import { AGE_GROUP_PRESETS, ageGroupLabel, calculateAge } from './constants/age-groups';
 import {
   type AssignTrainerDto,
@@ -60,10 +60,10 @@ const ENROLLMENT_INCLUDE = {
 @Injectable()
 export class TrainingService {
   constructor(
-    private prisma: PrismaService,
+    @Inject(PrismaService) private prisma: PrismaService,
     @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
-    private notificationsService: NotificationsService,
+    @Inject(NotificationsService) private notificationsService: NotificationsService,
   ) {}
 
   // ─── Programs ───────────────────────────────────────────────────────────────

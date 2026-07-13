@@ -18,8 +18,8 @@ import {
 } from '@prisma/client';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { PaymentsService } from '../payments/payments.service';
-import { type PrismaService } from '../prisma/prisma.module';
-import { type CouponsService } from './coupons.service';
+import { PrismaService } from '../prisma/prisma.module';
+import { CouponsService } from './coupons.service';
 import {
   addMembershipDuration,
   DURATION_LABELS,
@@ -47,10 +47,10 @@ const PURCHASE_INCLUDE = {
 @Injectable()
 export class MembershipsService {
   constructor(
-    private prisma: PrismaService,
+    @Inject(PrismaService) private prisma: PrismaService,
     @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
-    private couponsService: CouponsService,
+    @Inject(CouponsService) private couponsService: CouponsService,
   ) {}
 
   // ─── Plans ──────────────────────────────────────────────────────────────────
