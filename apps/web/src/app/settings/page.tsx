@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -11,7 +13,7 @@ import { FadeUp } from '@/components/motion';
 import { clearAuthSession, getAccessToken, getStoredUser } from '@/lib/auth';
 import { apiFetch, ApiError } from '@/lib/api';
 
-export default function SettingsPage() {
+export default function SettingsPage(): React.JSX.Element {
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
   const [currentPassword, setCurrentPassword] = useState('');

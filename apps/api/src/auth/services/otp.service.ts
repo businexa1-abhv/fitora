@@ -17,6 +17,7 @@ import {
   OTP_EXPIRY_MINUTES,
   OTP_LENGTH,
   OTP_MAX_ATTEMPTS,
+  OTP_MAX_REQUESTS_PER_HOUR,
   OTP_RESEND_COOLDOWN_SECONDS,
 } from '../constants/auth.constants';
 
@@ -32,6 +33,7 @@ export class OtpService {
   async sendOtp(phone: string, purpose: OtpPurpose): Promise<{ message: string; expiresIn: number }> {
     const normalizedPhone = this.normalizePhone(phone);
 
+    await this.assertHourlyRateLimit(normalizedPhone);
     await this.assertResendCooldown(normalizedPhone, purpose);
     await this.invalidatePendingOtps(normalizedPhone, purpose);
 
@@ -56,12 +58,12 @@ export class OtpService {
     };
   }
 
-  async verifyOtp(phone: string, code: string, purpose: OtpPurpose): Promise<void> {
+  async verifyOtp(phone: string, code: string, purpose?: OtpPurpose): Promise<OtpPurpose> {
     const normalizedPhone = this.normalizePhone(phone);
     const record = await this.prisma.otpVerification.findFirst({
       where: {
         phone: normalizedPhone,
-        purpose,
+        ...(purpose ? { purpose } : {}),
         verifiedAt: null,
         expiresAt: { gt: new Date() },
       },
@@ -90,6 +92,8 @@ export class OtpService {
       where: { id: record.id },
       data: { verifiedAt: new Date() },
     });
+
+    return record.purpose;
   }
 
   async assertPhoneAvailable(phone: string): Promise<void> {
@@ -105,7 +109,10 @@ export class OtpService {
   async findUserByPhone(phone: string) {
     return this.prisma.user.findFirst({
       where: { phone: this.normalizePhone(phone), deletedAt: null, isActive: true },
-      include: { roles: { where: { deletedAt: null } } },
+      include: {
+        roles: { where: { deletedAt: null } },
+        playerProfile: { where: { deletedAt: null } },
+      },
     });
   }
 
@@ -114,13 +121,31 @@ export class OtpService {
     if (digits.length < 10 || digits.length > 15) {
       throw new BadRequestException('Invalid phone number format');
     }
-    return phone.startsWith('+') ? `+${digits}` : `+${digits}`;
+    // India default: 10-digit local → +91
+    if (digits.length === 10) {
+      return `+91${digits}`;
+    }
+    return `+${digits}`;
   }
 
   private generateOtpCode(): string {
     const max = 10 ** OTP_LENGTH;
     const num = crypto.randomInt(0, max);
     return num.toString().padStart(OTP_LENGTH, '0');
+  }
+
+  private async assertHourlyRateLimit(phone: string): Promise<void> {
+    const since = new Date(Date.now() - 60 * 60 * 1000);
+    const count = await this.prisma.otpVerification.count({
+      where: { phone, createdAt: { gte: since } },
+    });
+
+    if (count >= OTP_MAX_REQUESTS_PER_HOUR) {
+      throw new HttpException(
+        'Too many OTP requests. Please try again in an hour.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
   }
 
   private async assertResendCooldown(phone: string, purpose: OtpPurpose): Promise<void> {
@@ -148,23 +173,53 @@ export class OtpService {
   }
 
   private async dispatchOtp(phone: string, code: string): Promise<void> {
-    const mode = this.configService.get('OTP_MODE', 'mock');
+    const mode = this.configService.get<string>('OTP_MODE', 'mock');
 
     if (mode === 'mock') {
       this.logger.log(`[OTP MOCK] ${phone} → ${code}`);
       return;
     }
 
-    const apiKey = this.configService.get('MSG91_AUTH_KEY');
-    const templateId = this.configService.get('MSG91_OTP_TEMPLATE_ID');
+    const accountSid = this.configService.get<string>('TWILIO_ACCOUNT_SID');
+    const authToken = this.configService.get<string>('TWILIO_AUTH_TOKEN');
+    const fromNumber = this.configService.get<string>('TWILIO_FROM_NUMBER');
+    const messagingServiceSid = this.configService.get<string>('TWILIO_MESSAGING_SERVICE_SID');
 
-    if (!apiKey || !templateId) {
-      this.logger.warn('SMS provider not configured — falling back to mock OTP');
+    if (!accountSid || !authToken || (!fromNumber && !messagingServiceSid)) {
+      this.logger.warn('Twilio not configured — falling back to mock OTP');
       this.logger.log(`[OTP MOCK] ${phone} → ${code}`);
       return;
     }
 
-    // Production: integrate MSG91 / Twilio here
-    this.logger.log(`OTP dispatched to ${phone} via SMS provider`);
+    const body = new URLSearchParams({
+      To: phone,
+      Body: `Your FitOra verification code is ${code}. Valid for ${OTP_EXPIRY_MINUTES} minutes.`,
+    });
+    if (messagingServiceSid) {
+      body.set('MessagingServiceSid', messagingServiceSid);
+    } else if (fromNumber) {
+      body.set('From', fromNumber);
+    }
+
+    const credentials = Buffer.from(`${accountSid}:${authToken}`).toString('base64');
+    const response = await fetch(
+      `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${credentials}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body,
+      },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      this.logger.error(`Twilio OTP dispatch failed: ${errorText}`);
+      throw new HttpException('Failed to send OTP. Please try again.', HttpStatus.BAD_GATEWAY);
+    }
+
+    this.logger.log(`OTP dispatched to ${phone} via Twilio`);
   }
 }

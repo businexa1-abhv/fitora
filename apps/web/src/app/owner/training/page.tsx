@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { GraduationCap, Plus } from 'lucide-react';
@@ -14,7 +16,7 @@ interface ProgramRow extends TrainingProgram {
   courtName: string;
 }
 
-export default function OwnerTrainingPage() {
+export default function OwnerTrainingPage(): React.JSX.Element {
   const [programs, setPrograms] = useState<ProgramRow[]>([]);
   const [courts, setCourts] = useState<Court[]>([]);
   const [loading, setLoading] = useState(true);

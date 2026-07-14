@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import { LeaveRequestStatus, type LeaveRequest } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -8,7 +10,7 @@ import { getAccessToken } from '@/lib/auth';
 import { cancelLeaveRequest, createLeaveRequest, listLeaveRequests } from '@/lib/trainer';
 import { formatDate, todayString } from '@/lib/trainer-utils';
 
-export default function TrainerLeavePage() {
+export default function TrainerLeavePage(): React.JSX.Element {
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState(todayString());

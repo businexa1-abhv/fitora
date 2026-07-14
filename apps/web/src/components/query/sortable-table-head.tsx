@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 interface SortableThProps {
   label: string;
   field: string;
@@ -8,7 +10,7 @@ interface SortableThProps {
   onSort: (field: string) => void;
 }
 
-export function SortableTh({ label, field, sortBy, sortOrder, onSort }: SortableThProps) {
+export function SortableTh({ label, field, sortBy, sortOrder, onSort }: SortableThProps): React.JSX.Element {
   const active = sortBy === field;
   const arrow = active ? (sortOrder === 'asc' ? '↑' : '↓') : '↕';
 

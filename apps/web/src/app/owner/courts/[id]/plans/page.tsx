@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
@@ -11,7 +13,7 @@ import { ApiError } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 import { createMembershipPlan } from '@/lib/memberships';
 
-export default function CourtPlansPage() {
+export default function CourtPlansPage(): React.JSX.Element {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [error, setError] = useState('');

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -132,7 +134,7 @@ function ShopContent() {
   );
 }
 
-export default function ShopPage() {
+export default function ShopPage(): React.JSX.Element {
   return (
     <PageShell>
       <Navbar />

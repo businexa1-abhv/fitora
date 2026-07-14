@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -8,7 +10,7 @@ import { APP_NAME, type AuthUser } from '@fitora/shared';
 import { NotificationBell } from '@/components/notification-bell';
 import { UserMenu } from '@/components/user-menu';
 import { UserAvatar } from '@/components/user-avatar';
-import { clearAuthSession, getAccessToken, getStoredUser } from '@/lib/auth';
+import { AUTH_SESSION_CHANGED_EVENT, clearAuthSession, getStoredUser, getValidAccessToken } from '@/lib/auth';
 
 const NAV_LINKS = [
   { href: '/courts', label: 'Book' },
@@ -19,7 +21,7 @@ const NAV_LINKS = [
   { href: '/memberships', label: 'Memberships' },
 ];
 
-export function Navbar({ transparent = false }: { transparent?: boolean }) {
+export function Navbar({ transparent = false }: { transparent?: boolean }): React.JSX.Element {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -42,11 +44,17 @@ export function Navbar({ transparent = false }: { transparent?: boolean }) {
   }, [pathname]);
 
   useEffect(() => {
-    if (getAccessToken()) {
-      setUser(getStoredUser());
-    } else {
-      setUser(null);
+    function syncUser() {
+      if (getValidAccessToken()) {
+        setUser(getStoredUser());
+      } else {
+        setUser(null);
+      }
     }
+
+    syncUser();
+    window.addEventListener(AUTH_SESSION_CHANGED_EVENT, syncUser);
+    return () => window.removeEventListener(AUTH_SESSION_CHANGED_EVENT, syncUser);
   }, [pathname]);
 
   return (

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -9,7 +11,7 @@ import { getProviderDashboard } from '@/lib/marketplace';
 import { useAuthToken } from '@/hooks/use-auth-token';
 import { ClipboardList, CheckCircle, Wrench, Clock } from 'lucide-react';
 
-export default function ProviderDashboardPage() {
+export default function ProviderDashboardPage(): React.JSX.Element {
   const token = useAuthToken();
 
   const query = useQuery({

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { ExternalLink, Menu } from 'lucide-react';
 import type { AuthUser } from '@fitora/shared';
@@ -21,7 +23,7 @@ export function PortalTopBar({
   browseLabel = 'Browse Fitora',
   user,
   onOpenMenu,
-}: PortalTopBarProps) {
+}: PortalTopBarProps): React.JSX.Element {
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-card/90 backdrop-blur-md">
       <div className="flex h-14 items-center gap-3 px-4 lg:px-6">

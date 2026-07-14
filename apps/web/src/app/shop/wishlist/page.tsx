@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -9,7 +11,7 @@ import { PageShell, formatPrice } from '@/components/app-header';
 import { getAccessToken } from '@/lib/auth';
 import { addToCart, getWishlist, removeWishlistItem } from '@/lib/shop';
 
-export default function WishlistPage() {
+export default function WishlistPage(): React.JSX.Element {
   const router = useRouter();
   const [wishlist, setWishlist] = useState<Wishlist | null>(null);
   const [loading, setLoading] = useState(true);

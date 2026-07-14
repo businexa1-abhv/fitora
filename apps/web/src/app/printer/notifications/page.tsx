@@ -1,12 +1,14 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import type { NotificationItem } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
 import { getAccessToken } from '@/lib/auth';
 import { listNotifications, markAllNotificationsRead, markNotificationRead } from '@/lib/notifications';
 
-export default function PrinterNotificationsPage() {
+export default function PrinterNotificationsPage(): React.JSX.Element {
   const [items, setItems] = useState<NotificationItem[]>([]);
 
   async function load() {

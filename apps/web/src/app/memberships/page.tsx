@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -11,7 +13,7 @@ import { FadeUp } from '@/components/motion';
 import { getAccessToken } from '@/lib/auth';
 import { getMyMemberships } from '@/lib/courts';
 
-export default function MembershipsPage() {
+export default function MembershipsPage(): React.JSX.Element {
   const router = useRouter();
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [loading, setLoading] = useState(true);

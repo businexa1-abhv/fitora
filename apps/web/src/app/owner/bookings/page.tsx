@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
@@ -15,7 +17,7 @@ import { formatCurrency, formatTime } from '@/lib/owner-utils';
 
 const PAGE_SIZE = 20;
 
-export default function OwnerBookingsPage() {
+export default function OwnerBookingsPage(): React.JSX.Element {
   const token = useAuthToken();
   const [filter, setFilter] = useState('ALL');
   const [search, setSearch] = useState('');

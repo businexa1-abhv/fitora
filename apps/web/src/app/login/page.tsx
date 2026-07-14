@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
@@ -9,7 +11,7 @@ import { login } from '@/lib/api';
 import { ApiError } from '@/lib/api';
 import { getAdminAppUrl, saveAuthSession } from '@/lib/auth';
 
-export default function LoginPage() {
+export default function LoginPage(): React.JSX.Element {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

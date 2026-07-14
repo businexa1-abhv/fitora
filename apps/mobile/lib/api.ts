@@ -80,10 +80,14 @@ export async function apiFetch<T>(
   if (!response.ok) {
     let message = 'Something went wrong';
     try {
-      const body = await response.json();
-      message = body.message ?? body.error ?? message;
+      const body = (await response.json()) as {
+        message?: string | string[];
+        error?: string;
+      };
       if (Array.isArray(body.message)) {
         message = body.message.join(', ');
+      } else {
+        message = body.message ?? body.error ?? message;
       }
     } catch {
       message = response.statusText || message;

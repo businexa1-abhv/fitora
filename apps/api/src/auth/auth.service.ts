@@ -31,7 +31,10 @@ import { OtpService } from './services/otp.service';
 import { PasswordService } from './services/password.service';
 import { TokenService } from './services/token.service';
 
-type UserWithRoles = User & { roles: UserRoleAssignment[] };
+type UserWithRoles = User & {
+  roles: UserRoleAssignment[];
+  playerProfile?: { onboardingCompletedAt: Date | null } | null;
+};
 
 @Injectable()
 export class AuthService {
@@ -199,26 +202,37 @@ export class AuthService {
 
   async sendOtp(dto: SendOtpDto): Promise<{ message: string; expiresIn: number }> {
     const phone = this.otpService.normalizePhone(dto.phone);
+    let purpose = dto.purpose;
 
-    if (dto.purpose === OtpPurpose.LOGIN) {
+    if (!purpose) {
+      const user = await this.otpService.findUserByPhone(phone);
+      purpose = user ? OtpPurpose.LOGIN : OtpPurpose.REGISTER;
+    }
+
+    if (purpose === OtpPurpose.LOGIN) {
       const user = await this.otpService.findUserByPhone(phone);
       if (!user) {
         throw new UnauthorizedException('No account found for this phone number');
       }
     }
 
-    if (dto.purpose === OtpPurpose.REGISTER) {
+    if (purpose === OtpPurpose.REGISTER) {
       await this.otpService.assertPhoneAvailable(phone);
     }
 
-    return this.otpService.sendOtp(phone, dto.purpose);
+    return this.otpService.sendOtp(phone, purpose);
+  }
+
+  /** Player mobile auth: send OTP without requiring purpose */
+  async sendPlayerOtp(dto: { phone: string }): Promise<{ message: string; expiresIn: number }> {
+    return this.sendOtp({ phone: dto.phone });
   }
 
   async verifyOtp(dto: VerifyOtpDto): Promise<AuthResponseDto | MessageResponseDto> {
     const phone = this.otpService.normalizePhone(dto.phone);
-    await this.otpService.verifyOtp(phone, dto.otp, dto.purpose);
+    const purpose = await this.otpService.verifyOtp(phone, dto.otp, dto.purpose);
 
-    if (dto.purpose === OtpPurpose.VERIFY_PHONE) {
+    if (purpose === OtpPurpose.VERIFY_PHONE) {
       const user = await this.otpService.findUserByPhone(phone);
       if (user) {
         await this.prisma.user.update({
@@ -229,41 +243,94 @@ export class AuthService {
       return { message: 'Phone verified successfully' };
     }
 
-    if (dto.purpose === OtpPurpose.LOGIN) {
+    if (purpose === OtpPurpose.LOGIN) {
       const user = await this.otpService.findUserByPhone(phone);
       if (!user) {
         throw new UnauthorizedException('No account found for this phone number');
       }
-      return this.buildAuthResponse(user);
+      return this.buildAuthResponse(user, { deviceId: dto.deviceId });
     }
 
-    if (dto.purpose === OtpPurpose.REGISTER) {
-      if (!dto.email || !dto.firstName || !dto.lastName || !dto.role) {
-        throw new BadRequestException(
-          'email, firstName, lastName, and role are required for registration',
-        );
+    if (purpose === OtpPurpose.REGISTER) {
+      // Full registration payload provided (legacy / web)
+      if (dto.email && dto.firstName && dto.lastName && dto.role) {
+        this.assertRegisterableRole(dto.role);
+        await this.assertEmailAvailable(dto.email);
+        await this.otpService.assertPhoneAvailable(phone);
+
+        const user = await this.prisma.user.create({
+          data: {
+            email: dto.email.toLowerCase(),
+            phone,
+            firstName: dto.firstName,
+            lastName: dto.lastName,
+            phoneVerified: true,
+            roles: { create: { role: dto.role } },
+          },
+          include: {
+            roles: { where: { deletedAt: null } },
+            playerProfile: true,
+          },
+        });
+
+        return this.buildAuthResponse(user, { deviceId: dto.deviceId, isNewUser: true });
       }
 
-      this.assertRegisterableRole(dto.role);
-      await this.assertEmailAvailable(dto.email);
-      await this.otpService.assertPhoneAvailable(phone);
-
-      const user = await this.prisma.user.create({
-        data: {
-          email: dto.email.toLowerCase(),
-          phone,
-          firstName: dto.firstName,
-          lastName: dto.lastName,
-          phoneVerified: true,
-          roles: { create: { role: dto.role } },
-        },
-        include: { roles: { where: { deletedAt: null } } },
-      });
-
-      return this.buildAuthResponse(user);
+      // Player phone-first stub account — profile completed later
+      return this.createPlayerStub(phone, dto.deviceId);
     }
 
     throw new BadRequestException('Unsupported OTP purpose');
+  }
+
+  /** Player mobile auth: verify OTP and login or create stub player */
+  async verifyPlayerOtp(dto: {
+    phone: string;
+    otp: string;
+    deviceId?: string;
+  }): Promise<AuthResponseDto> {
+    const phone = this.otpService.normalizePhone(dto.phone);
+    const purpose = await this.otpService.verifyOtp(phone, dto.otp);
+
+    if (purpose === OtpPurpose.LOGIN) {
+      const user = await this.otpService.findUserByPhone(phone);
+      if (!user) {
+        throw new UnauthorizedException('No account found for this phone number');
+      }
+      await this.auditService.logAuthEvent(AuditAction.LOGIN, user.id, undefined);
+      return this.buildAuthResponse(user, { deviceId: dto.deviceId });
+    }
+
+    if (purpose === OtpPurpose.REGISTER) {
+      return this.createPlayerStub(phone, dto.deviceId);
+    }
+
+    throw new BadRequestException('Unsupported OTP purpose for player auth');
+  }
+
+  private async createPlayerStub(phone: string, deviceId?: string): Promise<AuthResponseDto> {
+    await this.otpService.assertPhoneAvailable(phone);
+    const digits = phone.replace(/\D/g, '');
+    const email = `u${digits}@users.fitora.app`;
+
+    const user = await this.prisma.user.create({
+      data: {
+        email,
+        phone,
+        firstName: 'Player',
+        lastName: '',
+        phoneVerified: true,
+        roles: { create: { role: UserRole.PLAYER } },
+        playerProfile: { create: {} },
+      },
+      include: {
+        roles: { where: { deletedAt: null } },
+        playerProfile: true,
+      },
+    });
+
+    await this.auditService.logAuthEvent(AuditAction.CREATE, user.id, undefined);
+    return this.buildAuthResponse(user, { deviceId, isNewUser: true });
   }
 
   async refresh(refreshToken: string): Promise<AuthResponseDto> {
@@ -305,7 +372,10 @@ export class AuthService {
   async getMe(userId: string): Promise<AuthResponseDto['user']> {
     const user = await this.prisma.user.findFirst({
       where: { id: userId, deletedAt: null, isActive: true },
-      include: { roles: { where: { deletedAt: null } } },
+      include: {
+        roles: { where: { deletedAt: null } },
+        playerProfile: { where: { deletedAt: null } },
+      },
     });
 
     if (!user) {
@@ -320,23 +390,38 @@ export class AuthService {
     return { roles: user.roles, permissions: user.permissions };
   }
 
-  private async buildAuthResponse(user: UserWithRoles): Promise<AuthResponseDto> {
+  private async buildAuthResponse(
+    user: UserWithRoles,
+    options?: { deviceId?: string; isNewUser?: boolean },
+  ): Promise<AuthResponseDto> {
     await this.prisma.user.update({
       where: { id: user.id },
       data: { lastLoginAt: new Date() },
     });
 
-    const tokens = await this.tokenService.issueTokenPair(user.id, user.email);
+    const tokens = await this.tokenService.issueTokenPair(user.id, user.email, {
+      deviceId: options?.deviceId,
+    });
+
+    // Ensure playerProfile is loaded for onboarding flag
+    let profile = user.playerProfile;
+    if (profile === undefined) {
+      profile = await this.prisma.playerProfile.findFirst({
+        where: { userId: user.id, deletedAt: null },
+      });
+    }
 
     return {
-      user: this.formatUser(user),
+      user: this.formatUser({ ...user, playerProfile: profile }),
       tokens,
+      isNewUser: options?.isNewUser,
     };
   }
 
   private formatUser(user: UserWithRoles): AuthResponseDto['user'] {
     const roles = user.roles.map((r) => r.role);
     const permissions = getPermissionsForRoles(roles as TypesUserRole[]);
+    const onboardingComplete = Boolean(user.playerProfile?.onboardingCompletedAt);
 
     return {
       id: user.id,
@@ -349,6 +434,7 @@ export class AuthService {
       avatarUrl: user.avatarUrl,
       emailVerified: user.emailVerified,
       phoneVerified: user.phoneVerified,
+      onboardingComplete,
     };
   }
 

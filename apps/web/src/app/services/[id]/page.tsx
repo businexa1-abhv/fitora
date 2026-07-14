@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useRouter, useParams } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -19,7 +21,7 @@ import { completePayment } from '@/lib/payments';
 import { bookService, getListing, getListingReviews } from '@/lib/marketplace';
 import { SERVICE_EMOJIS, SERVICE_GRADIENTS } from '@/lib/marketplace-constants';
 
-export default function ServiceDetailPage() {
+export default function ServiceDetailPage(): React.JSX.Element {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const [listing, setListing] = useState<ServiceListing | null>(null);

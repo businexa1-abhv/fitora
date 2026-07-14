@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -18,7 +20,7 @@ import { UserAvatar } from '@/components/user-avatar';
 import { clearAuthSession, getAccessToken, getStoredUser, updateStoredUser } from '@/lib/auth';
 import { getMe } from '@/lib/api';
 
-export function UserMenu({ light = false }: { light?: boolean }) {
+export function UserMenu({ light = false }: { light?: boolean }): React.JSX.Element | null {
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
   const [open, setOpen] = useState(false);

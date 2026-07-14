@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
@@ -16,7 +18,7 @@ const REGISTER_ROLES = [
   UserRole.PRINTER,
 ];
 
-export default function RegisterPage() {
+export default function RegisterPage(): React.JSX.Element {
   const router = useRouter();
   const [form, setForm] = useState({
     firstName: '',

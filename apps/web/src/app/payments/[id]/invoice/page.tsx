@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -9,7 +11,7 @@ import { PageShell, formatPrice } from '@/components/app-header';
 import { getAccessToken } from '@/lib/auth';
 import { getPaymentInvoice } from '@/lib/payment-history';
 
-export default function PaymentInvoicePage() {
+export default function PaymentInvoicePage(): React.JSX.Element {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [invoice, setInvoice] = useState<PaymentInvoice | null>(null);

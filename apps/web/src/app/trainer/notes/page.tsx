@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import type { TrainingBatch, TrainingNote } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -8,7 +10,7 @@ import { createTrainingNote, deleteTrainingNote, listTrainingNotes } from '@/lib
 import { formatDate, todayString } from '@/lib/trainer-utils';
 import { getTrainerBatches } from '@/lib/training';
 
-export default function TrainerNotesPage() {
+export default function TrainerNotesPage(): React.JSX.Element {
   const [notes, setNotes] = useState<TrainingNote[]>([]);
   const [batches, setBatches] = useState<TrainingBatch[]>([]);
   const [loading, setLoading] = useState(true);

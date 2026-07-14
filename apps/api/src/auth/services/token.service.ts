@@ -18,7 +18,11 @@ export class TokenService {
     private prisma: PrismaService,
   ) {}
 
-  async issueTokenPair(userId: string, email: string): Promise<TokenPair> {
+  async issueTokenPair(
+    userId: string,
+    email: string,
+    options?: { deviceId?: string },
+  ): Promise<TokenPair> {
     const payload: JwtPayload = { sub: userId, email };
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -32,7 +36,7 @@ export class TokenService {
       }),
     ]);
 
-    await this.storeRefreshToken(userId, refreshToken);
+    await this.storeRefreshToken(userId, refreshToken, options?.deviceId);
 
     return { accessToken, refreshToken };
   }
@@ -81,14 +85,23 @@ export class TokenService {
     });
   }
 
-  private async storeRefreshToken(userId: string, token: string): Promise<void> {
+  private async storeRefreshToken(
+    userId: string,
+    token: string,
+    deviceId?: string,
+  ): Promise<void> {
     const expiresIn = this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d');
     const days = parseInt(expiresIn.replace('d', ''), 10) || 7;
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + days);
 
     await this.prisma.refreshToken.create({
-      data: { userId, token: hashToken(token), expiresAt },
+      data: {
+        userId,
+        token: hashToken(token),
+        expiresAt,
+        deviceId: deviceId || null,
+      },
     });
   }
 }

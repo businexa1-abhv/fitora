@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -16,7 +18,7 @@ export function ServiceCard({
 }: {
   listing: ServiceListing;
   index?: number;
-}) {
+}): React.JSX.Element {
   const emoji = SERVICE_EMOJIS[listing.category as ServiceCategory] ?? '⚙️';
   const gradient = SERVICE_GRADIENTS[listing.category as ServiceCategory] ?? 'from-primary to-emerald-600';
 
@@ -68,7 +70,7 @@ export function ServiceCard({
   );
 }
 
-export function ServiceCardSkeleton() {
+export function ServiceCardSkeleton(): React.JSX.Element {
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden animate-pulse">
       <div className="h-28 bg-muted/30" />

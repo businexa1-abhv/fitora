@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { SPORT_LABELS, SportType } from '@fitora/shared';
@@ -14,7 +16,7 @@ interface SportChipProps {
   asLink?: boolean;
 }
 
-export function SportChip({ sport, index = 0, active, onClick, asLink = true }: SportChipProps) {
+export function SportChip({ sport, index = 0, active, onClick, asLink = true }: SportChipProps): React.JSX.Element {
   const gradient = SPORT_GRADIENTS[sport];
   const emoji = SPORT_EMOJI[sport];
   const label = SPORT_LABELS[sport];

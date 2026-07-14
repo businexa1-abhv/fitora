@@ -1,12 +1,14 @@
 'use client';
 
+import React from 'react';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { getAccessToken, getStoredUser } from '@/lib/auth';
 import { isServiceProvider } from '@/lib/provider-utils';
 
-export function ProviderAuthGuard({ children }: { children: React.ReactNode }) {
+export function ProviderAuthGuard({ children }: { children: React.ReactNode }): React.JSX.Element {
   const router = useRouter();
   const [ready, setReady] = useState(false);
 

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -9,7 +11,7 @@ import { getPrinterDashboard } from '@/lib/print';
 import { useAuthToken } from '@/hooks/use-auth-token';
 import { ClipboardList, Package, Truck, Palette } from 'lucide-react';
 
-export default function PrinterDashboardPage() {
+export default function PrinterDashboardPage(): React.JSX.Element {
   const token = useAuthToken();
 
   const query = useQuery({

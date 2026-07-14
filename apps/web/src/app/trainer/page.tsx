@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowUpRight, ClipboardCheck, FileBarChart, Users } from 'lucide-react';
@@ -9,7 +11,7 @@ import { QueryBoundary } from '@/components/query/query-boundary';
 import { getTrainerDashboard } from '@/lib/training';
 import { useAuthToken } from '@/hooks/use-auth-token';
 
-export default function TrainerDashboardPage() {
+export default function TrainerDashboardPage(): React.JSX.Element {
   const token = useAuthToken();
 
   const query = useQuery({

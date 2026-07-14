@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Clock, Plus } from 'lucide-react';
@@ -9,7 +11,7 @@ import { getAccessToken } from '@/lib/auth';
 import { getMyCourts } from '@/lib/courts';
 import { SPORT_EMOJI, SPORT_GRADIENTS } from '@/lib/constants';
 
-export default function OwnerSlotsPage() {
+export default function OwnerSlotsPage(): React.JSX.Element {
   const [courts, setCourts] = useState<Court[]>([]);
   const [loading, setLoading] = useState(true);
 

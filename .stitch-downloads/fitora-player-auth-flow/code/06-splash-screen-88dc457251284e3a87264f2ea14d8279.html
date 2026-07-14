@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Elevate Your Movement</title>
+<!-- Google Fonts: Lexend for headlines, Inter for body -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006e2f",
+                        "on-surface": "#251913",
+                        "surface-container-high": "#fce3d9",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#e0c0b1",
+                        "tertiary": "#006398",
+                        "on-secondary-fixed-variant": "#005321",
+                        "inverse-on-surface": "#ffede6",
+                        "tertiary-fixed": "#cde5ff",
+                        "surface-container": "#ffeae0",
+                        "primary-fixed-dim": "#ffb690",
+                        "surface-dim": "#edd5cb",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#6bff8f",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#584237",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#ffdbca",
+                        "tertiary-container": "#00a2f4",
+                        "surface-bright": "#fff8f6",
+                        "primary-container": "#f97316",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002109",
+                        "on-background": "#251913",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#582200",
+                        "outline": "#8c7164",
+                        "surface": "#fff8f6",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004b74",
+                        "on-secondary-container": "#007432",
+                        "on-primary-fixed": "#341100",
+                        "on-tertiary-fixed": "#001d32",
+                        "tertiary-fixed-dim": "#93ccff",
+                        "surface-container-highest": "#f6ded3",
+                        "on-tertiary-container": "#003554",
+                        "on-primary-fixed-variant": "#783200",
+                        "surface-tint": "#9d4300",
+                        "surface-container-low": "#fff1eb",
+                        "background": "#fff8f6",
+                        "surface-variant": "#f6ded3",
+                        "inverse-surface": "#3c2d26",
+                        "inverse-primary": "#ffb690",
+                        "primary": "#9d4300"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "section-gap": "48px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "display-lg": ["Lexend"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Lexend"],
+                        "title-lg": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+
+        @keyframes pulse-loader {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        .loader-dot {
+            animation: pulse-loader 1.4s infinite ease-in-out both;
+        }
+
+        .loader-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loader-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        /* Floating effect for background elements */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .animate-float {
+            animation: float-slow 6s ease-in-out infinite;
+        }
+
+        /* Fade in entrance */
+        .fade-in-up {
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Hero Content / Splash Screen -->
+<main class="relative flex-1 flex flex-col items-center justify-center px-margin-mobile text-center">
+<!-- Background Illustration Layer -->
+<!-- Note: No Shell (Nav) for Splash/Transactional screens per "The Destination Rule" -->
+<div class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center opacity-40 md:opacity-60 overflow-hidden">
+<div class="relative w-full h-full max-w-4xl animate-float">
+<img class="w-full h-full object-contain scale-110" data-alt="A highly detailed 3D abstract illustration for a fitness app. In the center, vibrant semi-transparent ribbons of orange and green twist elegantly through space. On these ribbons, stylized 3D athletes are depicted in motion: a runner in green sprinting, a cyclist in orange pedaling up a curve, and a tennis player in green lunging for a shot. The lighting is soft and studio-quality, casting gentle shadows against a clean, pristine white background, evoking a modern, premium Material Design 3 aesthetic that is both energetic and minimalist." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGDQze-hd1Q1tJhEcHOQggxCHk59o4g3A1htpTZ8qnkeVvl7fEdfvd0Gb-ZYP7sgzAfuCU5Nq8bkvUIXAd36W0PcFAZHIkKMBiedwg4iXX1YmtbK9fzTO1fo4YbzpWt2ZW-zrh8rTPe2W6FyC2XhdWovo4HV3CQIqodDknm0-9DYUx3d7sl4x8DechONfnEe04xU8-boZFZAYxSqKKbGriXMpKbXpVYMOEUr_XMgCllMQLd1yY1h5_"/>
+</div>
+</div>
+<!-- Foreground Identity -->
+<section class="relative z-10 flex flex-col items-center max-w-md w-full fade-in-up">
+<!-- Logo Section -->
+<div class="mb-stack-lg drop-shadow-sm">
+<img alt="FitOra Brand Logo" class="w-32 h-32 md:w-40 md:h-40 rounded-md object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMF4c6R7fFM6kdZFJ5Mk4o5ZtnMArRXj3prUQKl6Bf1F2ZdlwWn_K9XmtIXZFvqioVmheTEWwniVKFCuCh43htrghwzNt1SialbfV4SwzSEiIsQpb9mo9UXag2-29iuJ3huJkLWxy7TY1gcoASMvsePvNosWmSbAZRZ5xXGm_H5AWATFn-g6uG21gZ1oC1xaDFI9KwxIYw2Ii_gHDoYK7TIsGXO49ngJNvvyMrZrzS3KkrEkAfsFK7"/>
+</div>
+<!-- Branding -->
+<div class="space-y-unit">
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary tracking-tight">
+                    FitOra
+                </h1>
+<p class="font-headline-md text-headline-md text-on-surface-variant opacity-90 max-w-[280px] mx-auto leading-tight">
+                    One App for Everything Sports
+                </p>
+</div>
+<!-- Visual Separator / Tagline Accent -->
+<div class="mt-section-gap mb-stack-md flex items-center gap-2">
+<span class="h-[1px] w-8 bg-outline-variant"></span>
+<span class="font-label-lg text-label-lg text-outline uppercase tracking-widest">Elevate Your Movement</span>
+<span class="h-[1px] w-8 bg-outline-variant"></span>
+</div>
+</section>
+<!-- Loading State -->
+<div class="absolute bottom-16 left-0 right-0 flex flex-col items-center justify-center gap-stack-md z-10">
+<div class="flex items-center gap-2">
+<div class="loader-dot w-2 h-2 rounded-full bg-primary"></div>
+<div class="loader-dot w-2 h-2 rounded-full bg-primary-container"></div>
+<div class="loader-dot w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant/60 animate-pulse">
+                Synchronizing performance data...
+            </p>
+</div>
+</main>
+<!-- Overlay Effects -->
+<div class="fixed inset-0 pointer-events-none z-50">
+<!-- Subtle Vignette -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
+<!-- Grain Texture Overlay (CSS Pattern) -->
+<div class="absolute inset-0 opacity-[0.03]" style="background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');"></div>
+</div>
+<script>
+        // Micro-interaction: Subtle parallax on mouse move for desktop
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) / 50;
+            const moveY = (e.clientY - window.innerHeight / 2) / 50;
+            const bg = document.querySelector('.animate-float');
+            if(bg) {
+                bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+
+        // Simulate a transition to login or home after 4 seconds
+        setTimeout(() => {
+            console.log('Redirecting to dashboard or login...');
+            // In a real app: window.location.href = '/login';
+        }, 4000);
+    </script>
+</body></html>

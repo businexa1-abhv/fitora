@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 import { IndianRupee, TrendingUp, CalendarDays, BadgeCheck } from 'lucide-react';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -9,7 +11,7 @@ import { getOwnerDashboard } from '@/lib/owner-analytics';
 import { useAuthToken } from '@/hooks/use-auth-token';
 import { formatCurrency } from '@/lib/owner-utils';
 
-export default function OwnerRevenuePage() {
+export default function OwnerRevenuePage(): React.JSX.Element {
   const token = useAuthToken();
 
   const query = useQuery({

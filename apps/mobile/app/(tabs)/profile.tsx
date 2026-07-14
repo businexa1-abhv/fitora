@@ -7,7 +7,6 @@ import { formatCurrency } from '@fitora/shared';
 import { useTheme } from '@/providers/theme-provider';
 import { useAuth } from '@/providers/auth-provider';
 import { getUserInitials } from '@/lib/auth';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getMyBookings } from '@/lib/courts';
 import { getMyMemberships } from '@/lib/memberships';
@@ -20,21 +19,25 @@ interface MenuItem {
   label: string;
   subtitle: string;
   href: '/membership' | '/services' | '/wallet' | '/notifications' | '/notification-settings' | '/training' | '/store' | '/bookings';
+  danger?: boolean;
 }
 
-const MENU: MenuItem[] = [
-  { icon: 'calendar', label: 'My bookings', subtitle: 'View upcoming & past', href: '/bookings' },
-  { icon: 'ribbon', label: 'Memberships', subtitle: 'Plans & subscriptions', href: '/membership' },
-  { icon: 'school', label: 'Kids training', subtitle: 'Programs & enrollments', href: '/training' },
-  { icon: 'bag-handle', label: 'Orders', subtitle: 'Store purchases', href: '/store' },
-  { icon: 'construct', label: 'Services', subtitle: 'Stringing, repair & print', href: '/services' },
-  { icon: 'wallet', label: 'Wallet', subtitle: 'Balance & transactions', href: '/wallet' },
-  { icon: 'notifications', label: 'Notifications', subtitle: 'Alerts & updates', href: '/notifications' },
-  { icon: 'options', label: 'Notification settings', subtitle: 'Email, SMS & push', href: '/notification-settings' },
+const MENU_GROUPS: MenuItem[][] = [
+  [
+    { icon: 'calendar-outline', label: 'My Bookings', subtitle: 'View upcoming & past', href: '/bookings' },
+    { icon: 'card-outline', label: 'My Memberships', subtitle: 'Plans & subscriptions', href: '/membership' },
+    { icon: 'school-outline', label: 'Kids Profiles', subtitle: 'Programs & enrollments', href: '/training' },
+    { icon: 'cube-outline', label: 'My Orders', subtitle: 'Store purchases', href: '/store' },
+    { icon: 'wallet-outline', label: 'Wallet & Payments', subtitle: 'Balance & transactions', href: '/wallet' },
+  ],
+  [
+    { icon: 'notifications-outline', label: 'Notification Settings', subtitle: 'Email, SMS & push', href: '/notification-settings' },
+    { icon: 'help-circle-outline', label: 'Help & Support', subtitle: 'FAQs & contact us', href: '/notifications' },
+  ],
 ];
 
 export default function ProfileScreen() {
-  const { colors, isDark, toggleDark, mode, setMode } = useTheme();
+  const { colors, isDark, toggleDark } = useTheme();
   const { user, token, signOut } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -63,19 +66,14 @@ export default function ProfileScreen() {
     enabled: !!token,
   });
 
-  const menu = MENU.map((item) =>
-    item.href === '/notifications' && unreadQuery.data
-      ? { ...item, badge: String(unreadQuery.data.count) }
-      : item,
-  );
-
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={{ paddingBottom: insets.bottom + Spacing.xxxl }}
+      contentContainerStyle={{ paddingBottom: insets.bottom + 80 }}
       showsVerticalScrollIndicator={false}
     >
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.lg }]}>
+      {/* Profile Header */}
+      <View style={[styles.profileHeader, { paddingTop: insets.top + Spacing.lg, backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <View style={[styles.avatar, { backgroundColor: colors.primary }]}>
           <Text style={[styles.avatarText, { color: colors.primaryForeground }]}>
             {getUserInitials(user)}
@@ -83,163 +81,139 @@ export default function ProfileScreen() {
         </View>
         <View style={styles.profileInfo}>
           <Text style={[styles.name, { color: colors.foreground }]}>
-            {user ? `${user.firstName} ${user.lastName}` : 'Player'}
+            {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Player'}
           </Text>
-          <Text style={[styles.email, { color: colors.muted }]}>{user?.email ?? '—'}</Text>
+          <View style={styles.roleRow}>
+            <View style={[styles.roleBadge, { borderColor: colors.primary }]}>
+              <Text style={[styles.roleText, { color: colors.primary }]}>Player</Text>
+            </View>
+            <Text style={[styles.location, { color: colors.muted }]}>📍 Hyderabad</Text>
+          </View>
         </View>
-        <Pressable
-          onPress={toggleDark}
-          style={[styles.themeBtn, { backgroundColor: colors.card, borderColor: colors.border }]}
-        >
-          <Ionicons name={isDark ? 'sunny' : 'moon'} size={20} color={colors.foreground} />
+        <Pressable onPress={toggleDark} style={[styles.iconBtn, { backgroundColor: colors.background, borderColor: colors.border }]}>
+          <Ionicons name={isDark ? 'sunny' : 'moon'} size={18} color={colors.foreground} />
         </Pressable>
       </View>
 
+      {/* Sports Passport card */}
       <View style={styles.content}>
-        <Card style={styles.statsCard}>
-          <StatItem label="Bookings" value={String(bookingsQuery.data?.total ?? 0)} colors={colors} />
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-          <StatItem
-            label="Memberships"
-            value={String(membershipsQuery.data?.length ?? 0)}
-            colors={colors}
-          />
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-          <StatItem
-            label="Wallet"
-            value={formatCurrency(walletQuery.data?.balance ?? 0)}
-            colors={colors}
-          />
-        </Card>
-
-        <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Account</Text>
-        <Card padded={false}>
-          {menu.map((item, i) => (
-            <Pressable
-              key={item.label}
-              onPress={() => router.push(item.href)}
-              style={({ pressed }) => [
-                styles.menuItem,
-                i < menu.length - 1 && { borderBottomWidth: 1, borderBottomColor: colors.border },
-                pressed && { backgroundColor: colors.mutedBg },
-              ]}
-            >
-              <View style={[styles.menuIcon, { backgroundColor: colors.primaryLight }]}>
-                <Ionicons name={item.icon} size={20} color={colors.primary} />
-              </View>
-              <View style={styles.menuContent}>
-                <Text style={[styles.menuLabel, { color: colors.foreground }]}>{item.label}</Text>
-                <Text style={[styles.menuSub, { color: colors.muted }]}>{item.subtitle}</Text>
-              </View>
-              {'badge' in item && item.badge && Number(item.badge) > 0 && (
-                <View style={[styles.badge, { backgroundColor: colors.accent }]}>
-                  <Text style={styles.badgeText}>{item.badge}</Text>
-                </View>
-              )}
-              <Ionicons name="chevron-forward" size={18} color={colors.muted} />
-            </Pressable>
-          ))}
-        </Card>
-
-        <View style={styles.appearance}>
-          <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Appearance</Text>
-          <Card>
-            <Text style={[styles.appearanceLabel, { color: colors.muted }]}>
-              Theme: {mode === 'system' ? 'System' : isDark ? 'Dark' : 'Light'}
-            </Text>
-            <View style={styles.themeRow}>
-              <Button label="Light" variant={!isDark ? 'primary' : 'outline'} size="sm" onPress={() => setMode('light')} />
-              <Button label="Dark" variant={isDark ? 'primary' : 'outline'} size="sm" onPress={() => setMode('dark')} />
-              <Button label="System" variant={mode === 'system' ? 'primary' : 'outline'} size="sm" onPress={() => setMode('system')} />
+        <View style={[styles.passportCard, { backgroundColor: colors.primaryLight, borderColor: colors.primary }]}>
+          <Text style={[styles.passportTitle, { color: colors.primary }]}>🏆 Sports Passport</Text>
+          <View style={styles.passportStats}>
+            <View style={styles.passportStat}>
+              <Text style={[styles.passportStatVal, { color: colors.foreground }]}>
+                {bookingsQuery.data?.total ?? 0}
+              </Text>
+              <Text style={[styles.passportStatLabel, { color: colors.muted }]}>Courts Booked</Text>
             </View>
-          </Card>
+            <View style={[styles.passportDivider, { backgroundColor: colors.primary }]} />
+            <View style={styles.passportStat}>
+              <Text style={[styles.passportStatVal, { color: colors.foreground }]}>
+                {membershipsQuery.data?.length ?? 0}
+              </Text>
+              <Text style={[styles.passportStatLabel, { color: colors.muted }]}>Memberships</Text>
+            </View>
+            <View style={[styles.passportDivider, { backgroundColor: colors.primary }]} />
+            <View style={styles.passportStat}>
+              <Text style={[styles.passportStatVal, { color: colors.foreground }]}>
+                {formatCurrency(walletQuery.data?.balance ?? 0)}
+              </Text>
+              <Text style={[styles.passportStatLabel, { color: colors.muted }]}>Wallet</Text>
+            </View>
+          </View>
         </View>
 
-        <Button label="Sign out" variant="outline" fullWidth style={{ marginTop: Spacing.lg }} onPress={signOut} />
+        {/* Menu groups */}
+        {MENU_GROUPS.map((group, gi) => (
+          <View key={gi} style={[styles.menuGroup, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            {group.map((item, i) => (
+              <Pressable
+                key={item.label}
+                onPress={() => router.push(item.href)}
+                style={({ pressed }) => [
+                  styles.menuItem,
+                  i < group.length - 1 && { borderBottomWidth: 1, borderBottomColor: colors.border },
+                  pressed && { backgroundColor: colors.mutedBg },
+                ]}
+              >
+                <View style={[styles.menuIconBox, { backgroundColor: colors.primaryLight }]}>
+                  <Ionicons name={item.icon} size={18} color={colors.primary} />
+                </View>
+                <View style={styles.menuContent}>
+                  <Text style={[styles.menuLabel, { color: colors.foreground }]}>{item.label}</Text>
+                  <Text style={[styles.menuSub, { color: colors.muted }]}>{item.subtitle}</Text>
+                </View>
+                {item.href === '/notifications' && (unreadQuery.data?.count ?? 0) > 0 && (
+                  <View style={[styles.badge, { backgroundColor: colors.accent }]}>
+                    <Text style={styles.badgeText}>{unreadQuery.data!.count}</Text>
+                  </View>
+                )}
+                <Ionicons name="chevron-forward" size={16} color={colors.muted} />
+              </Pressable>
+            ))}
+          </View>
+        ))}
+
+        {/* Refer a Friend banner */}
+        <View style={[styles.referBanner, { backgroundColor: '#FEF3C7', borderColor: '#F59E0B' }]}>
+          <Text style={[styles.referTitle, { color: '#92400E' }]}>🎁 Refer a Friend</Text>
+          <Text style={[styles.referSub, { color: '#78350F' }]}>Earn ₹100 per referral</Text>
+          <Pressable style={[styles.referBtn, { backgroundColor: colors.primary }]}>
+            <Text style={styles.referBtnText}>Refer Now</Text>
+          </Pressable>
+        </View>
+
+        <Button label="Sign out" variant="outline" fullWidth style={{ marginTop: Spacing.md }} onPress={signOut} />
       </View>
     </ScrollView>
   );
 }
 
-function StatItem({
-  label,
-  value,
-  colors,
-}: {
-  label: string;
-  value: string;
-  colors: { foreground: string; muted: string };
-}) {
-  return (
-    <View style={styles.stat}>
-      <Text style={[styles.statValue, { color: colors.foreground }]}>{value}</Text>
-      <Text style={[styles.statLabel, { color: colors.muted }]}>{label}</Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: {
+  profileHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
     paddingHorizontal: Spacing.lg,
-    paddingBottom: Spacing.xl,
+    paddingBottom: Spacing.lg,
+    borderBottomWidth: 1,
+    marginBottom: Spacing.lg,
   },
-  avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: Radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: { fontSize: FontSize.lg, fontWeight: '800' },
+  avatar: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  avatarText: { fontSize: FontSize.xl, fontWeight: '800' },
   profileInfo: { flex: 1 },
   name: { fontSize: FontSize.xl, fontWeight: '800' },
-  email: { fontSize: FontSize.sm, marginTop: 2 },
-  themeBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: Radius.md,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  roleRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginTop: 4 },
+  roleBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: Radius.full, borderWidth: 1 },
+  roleText: { fontSize: FontSize.xs, fontWeight: '700' },
+  location: { fontSize: FontSize.xs },
+  iconBtn: { width: 36, height: 36, borderRadius: Radius.md, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   content: { paddingHorizontal: Spacing.lg },
-  statsCard: { flexDirection: 'row', marginBottom: Spacing.xl },
-  stat: { flex: 1, alignItems: 'center' },
-  statValue: { fontSize: FontSize.xl, fontWeight: '800' },
-  statLabel: { fontSize: FontSize.xs, marginTop: 2, fontWeight: '600' },
-  divider: { width: 1, height: '100%' },
-  sectionTitle: { fontSize: FontSize.lg, fontWeight: '800', marginBottom: Spacing.md },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    padding: Spacing.lg,
-  },
-  menuIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: Radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
+  // Passport card
+  passportCard: { borderRadius: Radius.lg, borderWidth: 1.5, padding: Spacing.lg, marginBottom: Spacing.lg },
+  passportTitle: { fontSize: FontSize.md, fontWeight: '800', marginBottom: Spacing.md },
+  passportStats: { flexDirection: 'row', alignItems: 'center' },
+  passportStat: { flex: 1, alignItems: 'center' },
+  passportStatVal: { fontSize: FontSize.xl, fontWeight: '800' },
+  passportStatLabel: { fontSize: FontSize.xs, fontWeight: '600', marginTop: 2, textAlign: 'center' },
+  passportDivider: { width: 1, height: 40, opacity: 0.3 },
+
+  // Menu
+  menuGroup: { borderRadius: Radius.lg, borderWidth: 1, overflow: 'hidden', marginBottom: Spacing.md },
+  menuItem: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, padding: Spacing.lg },
+  menuIconBox: { width: 36, height: 36, borderRadius: Radius.md, alignItems: 'center', justifyContent: 'center' },
   menuContent: { flex: 1 },
-  menuLabel: { fontSize: FontSize.md, fontWeight: '700' },
-  menuSub: { fontSize: FontSize.sm, marginTop: 1 },
-  badge: {
-    minWidth: 20,
-    height: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 6,
-    marginRight: Spacing.xs,
-  },
+  menuLabel: { fontSize: FontSize.md, fontWeight: '600' },
+  menuSub: { fontSize: FontSize.xs, marginTop: 1 },
+  badge: { minWidth: 20, height: 20, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6 },
   badgeText: { color: '#fff', fontSize: FontSize.xs, fontWeight: '800' },
-  appearance: { marginTop: Spacing.xl },
-  appearanceLabel: { fontSize: FontSize.sm, marginBottom: Spacing.md },
-  themeRow: { flexDirection: 'row', gap: Spacing.sm },
+
+  // Refer
+  referBanner: { borderRadius: Radius.lg, borderWidth: 1, padding: Spacing.lg, marginBottom: Spacing.md, flexDirection: 'row', alignItems: 'center', gap: Spacing.md },
+  referTitle: { fontSize: FontSize.md, fontWeight: '800', flex: 1 },
+  referSub: { fontSize: FontSize.xs },
+  referBtn: { paddingHorizontal: Spacing.md, paddingVertical: 8, borderRadius: Radius.md },
+  referBtnText: { color: '#fff', fontSize: FontSize.sm, fontWeight: '700' },
 });

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Image from 'next/image';
 import type { AuthUser } from '@fitora/shared';
 import { getUserInitials } from '@/lib/auth';
@@ -12,7 +14,7 @@ export function UserAvatar({
   user: AuthUser | null | undefined;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-}) {
+}): React.JSX.Element {
   const px = size === 'lg' ? 64 : size === 'sm' ? 32 : 36;
   const sizeClass =
     size === 'lg' ? 'h-16 w-16 text-xl' : size === 'sm' ? 'h-8 w-8 text-xs' : 'h-9 w-9 text-sm';

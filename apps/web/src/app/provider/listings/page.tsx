@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { FormEvent, useEffect, useState } from 'react';
 import { SERVICE_CATEGORY_LABELS, ServiceCategory, type ServiceListing } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -7,7 +9,7 @@ import { getAccessToken } from '@/lib/auth';
 import { createListing, getMyListings } from '@/lib/marketplace';
 import { MARKETPLACE_CATEGORIES } from '@/lib/marketplace-constants';
 
-export default function ProviderListingsPage() {
+export default function ProviderListingsPage(): React.JSX.Element {
   const [listings, setListings] = useState<ServiceListing[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({

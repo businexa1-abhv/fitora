@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { PrintOrderStatus, type PrintOrder } from '@fitora/shared';
@@ -8,7 +10,7 @@ import { QueryBoundary } from '@/components/query/query-boundary';
 import { getPrinterOrders, updatePrintOrderStatus } from '@/lib/print';
 import { useAuthToken } from '@/hooks/use-auth-token';
 
-export default function PrinterOrdersPage() {
+export default function PrinterOrdersPage(): React.JSX.Element {
   const token = useAuthToken();
   const queryClient = useQueryClient();
   const [proofUrls, setProofUrls] = useState<Record<string, string>>({});

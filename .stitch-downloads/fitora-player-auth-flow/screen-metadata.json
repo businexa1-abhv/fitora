@@ -1,0 +1,305 @@
+{
+  "count": 31,
+  "requested": [
+    {
+      "id": "18d4ebe91a9541518e579dd7e6a78070",
+      "resourceName": "projects/5652553660313852668/screens/18d4ebe91a9541518e579dd7e6a78070",
+      "title": "Notification Permissions",
+      "prompt": "Screen 7: Notification Permission.\nFeatures:\n- Headline: 'Stay in the loop'\n- Graphic illustration suggesting notifications.\n- List of benefits: Booking reminders, Game invitations, Tournament updates, Membership renewal, Coaching updates.\n- Primary button: 'Allow Notifications' (Orange).\n- Secondary button: 'Skip for now'.\n- Progress indicator at the top showing Step 3 of 3.",
+      "width": "940",
+      "height": "2224",
+      "type": "figaro_agent",
+      "screenshotName": "projects/5652553660313852668/screens/18d4ebe91a9541518e579dd7e6a78070/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLumiP1WmPp1y8APyDxuDHv5RnPPAdEtk6D_jSmTYCDcEAnJ7SLHwHgqrrrofHSFgjfH73v1SfNR9GNEO1-UpFc3rybSmj2MoI9RgTQDTstr_icwe3VL4RA_pun3VTkgO6PZkq4U9ICrmaYKuPf4WxYpnvJlLLlnej1It_NFLiv3J3OpNvg4uzxR6XpSQv8QzQ3TzTE4wgy8OKih0_kyUQCm-sBnwTqGXX7rIU7RV5UlaJLuNOVmC4jd7Jw",
+      "htmlName": "projects/5652553660313852668/screens/18d4ebe91a9541518e579dd7e6a78070/fileEntries/html",
+      "htmlUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1Njg3YjkzM2I2NTEwMzM4NDdlMDY4MTBkZTlhEgsSBxCHm8G2zhAYAZIBIwoKcHJvamVjdF9pZBIVQhM1NjUyNTUzNjYwMzEzODUyNjY4&filename=&opi=89354086"
+    },
+    {
+      "id": "5545865d0f4643728845756663ebd7e3",
+      "resourceName": "projects/5652553660313852668/screens/5545865d0f4643728845756663ebd7e3",
+      "title": "Profile Setup",
+      "prompt": "Screen 5: New Player Profile Setup.\nFeatures:\n- Headline: 'Complete your profile'\n- Circular profile photo uploader placeholder with 'camera' icon.\n- Form fields: First Name, Last Name, Gender (segmented picker), Date of Birth, City (autocomplete).\n- Primary button: 'Continue' (Orange).\n- Progress indicator at the top showing Step 1 of 3.",
+      "width": "780",
+      "height": "2340",
+      "type": "figaro_agent",
+      "screenshotName": "projects/5652553660313852668/screens/5545865d0f4643728845756663ebd7e3/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLvrJaxxeHxK5BZ27aU2ZaxmmiaQVXQeM9KOOW5dVXiJMqSfwqTwnqHno-5cr-0iUkWBX8GxxAvMTGbcWaSs0svFDIba4QjfzPL4GN3pSoy6t4KksDgNHyffdQh7RbYyTuc3mjoTZvTas9kSGnOFy_3k57VP9Xz_ep4Nvf2rXVGPM2WSr2L8QMVWx7cSD1hhoXmeBOhVBTQ86S004aXolSOzjSWd_RZQvRR2lLympS4LrqGP9hy_XXRoEwM",
+      "htmlName": "projects/5652553660313852668/screens/5545865d0f4643728845756663ebd7e3/fileEntries/html",
+      "htmlUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1Njg3YjhjNzFkNzkwMjA3OWQ2ZWRmMDcwNGFjEgsSBxCHm8G2zhAYAZIBIwoKcHJvamVjdF9pZBIVQhM1NjUyNTUzNjYwMzEzODUyNjY4&filename=&opi=89354086"
+    },
+    {
+      "id": "5efc5312106d409c8955380cf82ac416",
+      "resourceName": "projects/5652553660313852668/screens/5efc5312106d409c8955380cf82ac416",
+      "title": "Sports Selection",
+      "prompt": "Screen 6: Select Favourite Sports.\nFeatures:\n- Headline: 'What do you love to play?'\n- Grid of interactive cards for sports: Badminton, Cricket, Football, Tennis, Swimming, Basketball, Volleyball, Running, Cycling, Gym, Yoga.\n- Use sports icons from {{DATA:IMAGE:IMAGE_5}}.\n- Multiple selection enabled with checkmark overlays.\n- Primary button: 'Continue' (Orange).\n- Progress indicator at the top showing Step 2 of 3.",
+      "width": "780",
+      "height": "3316",
+      "type": "figaro_agent",
+      "screenshotName": "projects/5652553660313852668/screens/5efc5312106d409c8955380cf82ac416/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLul2tpTBsimBSo0t0f2E9HAyqZwNulxs4vvVKsZeiiV40dRobhFECVnDzYvu9pFOZzMz3GiovMA6Tp0sArOH7p230LIOz2lC-81d8TFsbxI60BWnckC9yATIMjIirfRi8uWDsVvSD7JRSGmM7aIhNTVbhz_1Q3Bee5UM2wVOJ6cko4aky2rxXDgVvuyvGzFHgccdBkhIv2nW3Y_eOLuYbhyC02afxe4s2Ko2DD6vjyehascg0QThmwnJw",
+      "htmlName": "projects/5652553660313852668/screens/5efc5312106d409c8955380cf82ac416/fileEntries/html",
+      "htmlUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1Njg3YjliNTg3ZTYwNDMxMTcwYjBlMWMwNjA4EgsSBxCHm8G2zhAYAZIBIwoKcHJvamVjdF9pZBIVQhM1NjUyNTUzNjYwMzEzODUyNjY4&filename=&opi=89354086"
+    },
+    {
+      "id": "615ac13fdde046f3896c90ffc4b29546",
+      "resourceName": "projects/5652553660313852668/screens/615ac13fdde046f3896c90ffc4b29546",
+      "title": "Set of 10 modern 3D sports icons for badminton, cricket, football, tennis, swimming, basketball, volleyball, running, cycling, yoga. Each icon in a rounded card style, vibrant colors, premium Material Design 3 feel. High quality, consistent style.",
+      "prompt": "Set of 10 modern 3D sports icons for badminton, cricket, football, tennis, swimming, basketball, volleyball, running, cycling, yoga. Each icon in a rounded card style, vibrant colors, premium Material Design 3 feel. High quality, consistent style.",
+      "width": "1024",
+      "height": "1024",
+      "type": "interactive_ui_controller",
+      "screenshotName": "projects/5652553660313852668/screens/615ac13fdde046f3896c90ffc4b29546/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLsWOIEuKAIBpsMAeBnfn6uHjLxlfWddJddtfrRNXRN64HWuNhZEArDIkGRJRIbNAygtochgYDe64kiq05fGJujsNkQ1q6ngf7o6U_JhRuHbXEgSrtRkKZzaX0Ds1HV-vnI7bPTW6XXF-fpWSj6RJl5Tn5Dep--4105HVszOD_NNqMPC42hKMgAl8Ct77HLl_SzzXdjDO1bQoY9zItNdLhErrliKiPjlcbMJqGpK8aiBlOGQtHskyg4gUPc",
+      "htmlName": "",
+      "htmlUrl": ""
+    },
+    {
+      "id": "82b69692dd694b7fb19b3224f3200382",
+      "resourceName": "projects/5652553660313852668/screens/82b69692dd694b7fb19b3224f3200382",
+      "title": "FitOra Brand Logo",
+      "prompt": "FitOra - One App for Everything Sports. Modern, vibrant, athletic, orange #F97316. Premium Material Design 3 style.. Design context: - Primary color: #f97316\n- Font: lexend\n- Mode: light\n- Roundness: rounded-md\n. The logo should be visually consistent with these brand tokens.",
+      "width": "1024",
+      "height": "1024",
+      "type": "interactive_ui_controller",
+      "screenshotName": "projects/5652553660313852668/screens/82b69692dd694b7fb19b3224f3200382/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLuvyDIVhe9m9OKYjkgYU-ouD38r_4Oddm7_Rrz_OSUh3m6BGDFLAFAO8yeHPiDp--inpNTaCpHOLrfhTut81ljQJIBYKkqPQgYeeGGebLcdeNahZPqV3i_1EJXCdeH_QzYqHfaTdVWlx_j4eKDz1sNjss1LO7nBaV8DgsSJKm_-8LPY6SVvc-4OEfZw0jgOvdoxCyFyiHoEGBKiWqwMC0zhkeWLlSvHN519Hb8y_tfDI2XTWdwZgyQZag",
+      "htmlName": "",
+      "htmlUrl": ""
+    },
+    {
+      "id": "61d5e39ee52d4471a1400763e3ad50d6",
+      "resourceName": "projects/5652553660313852668/screens/61d5e39ee52d4471a1400763e3ad50d6",
+      "title": "Welcome Screen",
+      "prompt": "Screen 2: Welcome Screen for FitOra.\nFeatures:\n- Large hero illustration {{DATA:IMAGE:IMAGE_4}} at the top.\n- Welcome headline: 'Ready to Play?'\n- Subtext: 'Join the ultimate sports community and start booking today.'\n- Buttons: \n  1. Primary: 'Continue with Mobile Number' (Orange)\n  2. Secondary: 'Continue with Google' (White with icon)\n  3. Secondary: 'Continue with Apple' (Black with icon)\n- Footer: Terms & Privacy policy links.\n- Material 3 cards and buttons.",
+      "width": "780",
+      "height": "1792",
+      "type": "figaro_agent",
+      "screenshotName": "projects/5652553660313852668/screens/61d5e39ee52d4471a1400763e3ad50d6/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLvuvZLdeYyJOMSSSjJnpv2idgJt9m4KdMtcEJcb6E2gVQNOWM5ljheNQzBVr4YrB7DJULkAncOR4B-Fb_09D8fPTD_laDBtomNpx4H6yd_iC00JGuQ-TRmzDqiTYWGOaYPZA1pZwGG_sPtDOmh9v-uOHPGFt8kGCsREQ_wum_vdCW0ATrGy0pymvuAUfn0zgtIVXH8JtoKaiRl5VTxwospV2hoFb9e7AfYVBEwS-XiUUwuPSo7jiVQSDo4",
+      "htmlName": "projects/5652553660313852668/screens/61d5e39ee52d4471a1400763e3ad50d6/fileEntries/html",
+      "htmlUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1Njg3Yjg0ZDk3NzkwN2M0ZDk2MzkzMzhkYzU2EgsSBxCHm8G2zhAYAZIBIwoKcHJvamVjdF9pZBIVQhM1NjUyNTUzNjYwMzEzODUyNjY4&filename=&opi=89354086"
+    },
+    {
+      "id": "87ec9207d93a4239a6cced408fe808be",
+      "resourceName": "projects/5652553660313852668/screens/87ec9207d93a4239a6cced408fe808be",
+      "title": "Modern minimalist 3D sports illustration for a fitness app splash screen. Dynamic abstract shapes suggesting motion, athletes, and sports equipment (ball, racket). Vibrant orange and green accents on a clean light background. Premium, energetic, high-end design.",
+      "prompt": "Modern minimalist 3D sports illustration for a fitness app splash screen. Dynamic abstract shapes suggesting motion, athletes, and sports equipment (ball, racket). Vibrant orange and green accents on a clean light background. Premium, energetic, high-end design.",
+      "width": "768",
+      "height": "1376",
+      "type": "interactive_ui_controller",
+      "screenshotName": "projects/5652553660313852668/screens/87ec9207d93a4239a6cced408fe808be/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLvkxwzjdaeLP0RWmIF8hTJsQ32OIdRt2I8Atf7Did-zViT8T1hJTT23cKA8I8Cy2CBA00Jr4rfJ_k403OQ10_e2OvZmDI5CrGp6MVfN_02hs4oCP_HDEVrx9jM5EQv08oCyH-7Bx0_5FQncX3GQrUgQHdzlozx42oGxZ8QLbr8x-oI5jFNAvKOIKhR8bqIHNx9de6vq4Zii7rSqhvuk6u9HsLqnRYQ3Bqeh6fK9w_UO-0johnMICBHiRg",
+      "htmlName": "",
+      "htmlUrl": ""
+    },
+    {
+      "id": "f60f911792dc4b469652cfae271fe5da",
+      "resourceName": "projects/5652553660313852668/screens/f60f911792dc4b469652cfae271fe5da",
+      "title": "Hero illustration for a sports app welcome screen. A diverse group of active people playing various sports (badminton, football, running, tennis) together. Energetic, friendly, premium vector style with clean lines and vibrant colors. Material Design 3 aesthetic.",
+      "prompt": "Hero illustration for a sports app welcome screen. A diverse group of active people playing various sports (badminton, football, running, tennis) together. Energetic, friendly, premium vector style with clean lines and vibrant colors. Material Design 3 aesthetic.",
+      "width": "896",
+      "height": "1200",
+      "type": "interactive_ui_controller",
+      "screenshotName": "projects/5652553660313852668/screens/f60f911792dc4b469652cfae271fe5da/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLtLgbGbIcgQ2mpc3lOTS-UV3qG0xyk5LToNS8OB-ZsL13JxROGLTnoOJ9FvWb-pjrFDNGGFfbq5e1uNSBG6Sr7DbfRk1ZLXjiFL_GEyfJnuysNoX9Do0RKkHA3-bMAWOHJDiyp3EHNt3JO_Jjcp18phNPFWQDt0X5j5shnKqRQgUdHLNrienDNavXK7Uesy98EZGVDZjyqjAu8MWi-ptjconGU3oTmhFSlliQJAPphpKhwk_rsPoBKLXrs",
+      "htmlName": "",
+      "htmlUrl": ""
+    },
+    {
+      "id": "02b035f9e8aa4fc88d260f3954cb3f04",
+      "resourceName": "projects/5652553660313852668/screens/02b035f9e8aa4fc88d260f3954cb3f04",
+      "title": "Mobile Number Screen",
+      "prompt": "Screen 3: Mobile Number Screen.\nFeatures:\n- Headline: 'What\\'s your number?'\n- Subtext: 'We\\'ll send a code to verify your account.'\n- Input field: Country selector (+91 default) and mobile number input.\n- Primary button: 'Send OTP' (Orange).\n- Numeric keypad UI simulated at the bottom.\n- Helpful validation message: 'Standard rates apply.'\n- Clean Material 3 inputs.",
+      "width": "780",
+      "height": "1768",
+      "type": "figaro_agent",
+      "screenshotName": "projects/5652553660313852668/screens/02b035f9e8aa4fc88d260f3954cb3f04/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLtreKSphbZys2rEYrn3oRmiQ2iOsYZqGoVj64kUUy03CED9Sru2OQYBNSGj-7_ClGXjeoSYjDXgHlQ5Y-rYhMI0RGqunoX4Anbf-cLFqN_siV0IwC2Nf_LjiKU8ExpssYWtcDw9za4_FS_ynWBPkycENMznVIJGzjWUSj82YLgAuDHwe7eoPdqxCIyjQGuv05SW9Li1opMMsOkeAyU48-Rfh__qrHGmktp3FRL4Lumj9NL_5y8FnpFXfaA",
+      "htmlName": "projects/5652553660313852668/screens/02b035f9e8aa4fc88d260f3954cb3f04/fileEntries/html",
+      "htmlUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1Njg3YjhkYjEwNDYwMzM4NGU0NDVlMGIzYmM5EgsSBxCHm8G2zhAYAZIBIwoKcHJvamVjdF9pZBIVQhM1NjUyNTUzNjYwMzEzODUyNjY4&filename=&opi=89354086"
+    },
+    {
+      "id": "a5b16b2e21aa4b08b35581ec8a63e310",
+      "resourceName": "projects/5652553660313852668/screens/a5b16b2e21aa4b08b35581ec8a63e310",
+      "title": "OTP Verification Screen",
+      "prompt": "Screen 4: OTP Verification Screen.\nFeatures:\n- Headline: 'Verify your number'\n- Subtext: 'Enter the 6-digit code sent to +91 98765 43210'\n- Six discrete OTP input boxes with auto-focus styling.\n- Countdown timer: 'Resend code in 0:45'\n- Links: 'Change number' or 'Resend OTP' (disabled during countdown).\n- Primary button: 'Verify' (Orange).\n- Success checkmark animation placeholder (CSS).",
+      "width": "780",
+      "height": "1768",
+      "type": "figaro_agent",
+      "screenshotName": "projects/5652553660313852668/screens/a5b16b2e21aa4b08b35581ec8a63e310/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLv7urspTXMtdVP42YM5dd5Z-dYRNZwN6x43Vku7sZ-P9QDNvrS65Ptnr36XVknqNNujsdRQ4KWgs8CCAVsNcINdgCiU1UCxMOGoC-9NgPvWi8p16cvRAT4IQVYLENYWo6asyUo5IXCAxU_CgilrN3u-dJ4Dpau7m-b-kI5gCbaHWwuA9CFwp8fEKjKBCqraeN8jYqABofXdmnmIRVWqQaMv6T4RQwP5ZoglozP873QccjyH3vAY9USbHg",
+      "htmlName": "projects/5652553660313852668/screens/a5b16b2e21aa4b08b35581ec8a63e310/fileEntries/html",
+      "htmlUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1Njg3Yjg2ZGMyNzUwN2M0ZDk2MzkzMzhkYzU2EgsSBxCHm8G2zhAYAZIBIwoKcHJvamVjdF9pZBIVQhM1NjUyNTUzNjYwMzEzODUyNjY4&filename=&opi=89354086"
+    },
+    {
+      "id": "88dc457251284e3a87264f2ea14d8279",
+      "resourceName": "projects/5652553660313852668/screens/88dc457251284e3a87264f2ea14d8279",
+      "title": "Splash Screen",
+      "prompt": "Screen 1: Splash Screen for FitOra. \nFeatures:\n- Center-aligned FitOra logo {{DATA:IMAGE:IMAGE_6}}\n- Tagline 'One App for Everything Sports'\n- Background illustration {{DATA:IMAGE:IMAGE_3}}\n- A subtle CSS-based pulse loading animation at the bottom.\n- Use Lexend font.\n- Premium Material Design 3 aesthetic.\n## Available Images\nYou MUST include the following images in this design. You must reference them\nby putting their exact placeholder IDs in `src` attributes or CSS\n`background-image` rules. Do NOT use external URLs or generate new\nplaceholders. Preserve these IDs exactly as written. Read each image's\nDescription to understand its subject, intended section, and visual role.\n\n- {{DATA:IMAGE:IMAGE_6}}\n  Alt Text: FitOra Brand Logo\n  Description: FitOra - One App for Everything Sports. Modern, vibrant, athletic, orange #F97316. Premium Material Design 3 style.. Design context: - Primary color: #f97316\n- Font: lexend\n- Mode: light\n- Roundness: rounded-md\n. The logo should be visually consistent with these brand tokens.\n  Dimensions: 1024x1024\n  Aspect Ratio: 1.00\n",
+      "width": "780",
+      "height": "1768",
+      "type": "figaro_agent",
+      "screenshotName": "projects/5652553660313852668/screens/88dc457251284e3a87264f2ea14d8279/fileEntries/screenshot",
+      "screenshotUrl": "https://lh3.googleusercontent.com/aida/AP1WRLuxiD1byIsRP5FqTMlU0bUsDPJAyZL1-Y7B-fV016b0qgQyQQMMN-MuhGEF4u1dLuxm4bthPpTvL2ua-FflV_BCij54wnPHYnVO3mhChUjtytCZapv_Tf0Q-1_K-eLUUl9-Md0Bch1C8VRDWa-FlJOurQYYQDgr8QR-c2WS38ug3N8SlGlTnQD0E4vHaeE8kphLk63ADYqB7B-21JLvUxOz0mr3HVjhhwq-uW3mEdLT823GlSA7Pfw21Ko",
+      "htmlName": "projects/5652553660313852668/screens/88dc457251284e3a87264f2ea14d8279/fileEntries/html",
+      "htmlUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1Njg3YjgwZDg5NWYwN2M0YzNiZjY3Mzc0NGY0EgsSBxCHm8G2zhAYAZIBIwoKcHJvamVjdF9pZBIVQhM1NjUyNTUzNjYwMzEzODUyNjY4&filename=&opi=89354086"
+    }
+  ],
+  "allIds": [
+    {
+      "id": "8abbe70f7d9d4348b40518567b393893",
+      "title": "Venue Discovery - Mobile",
+      "hasHtml": true
+    },
+    {
+      "id": "3470632a807c4859bf9fa89826b3ea69",
+      "title": "Player Dashboard - Desktop",
+      "hasHtml": true
+    },
+    {
+      "id": "5839f01fc2044f3fa352b4b11501e14f",
+      "title": "FitOra Logo",
+      "hasHtml": false
+    },
+    {
+      "id": "18d4ebe91a9541518e579dd7e6a78070",
+      "title": "Notification Permissions",
+      "hasHtml": true
+    },
+    {
+      "id": "13aa66be22d34efb9f584de05995416e",
+      "title": "Player Dashboard - Mobile",
+      "hasHtml": true
+    },
+    {
+      "id": "e2a495b0dadd498880ff226edd3db599",
+      "title": "Shader",
+      "hasHtml": true
+    },
+    {
+      "id": "89da5008c6f948c6a76e762ac1befa5d",
+      "title": "Academies - Mobile",
+      "hasHtml": true
+    },
+    {
+      "id": "7cdea5e174f04f388b81a208956eae2d",
+      "title": "Refined Notification Permissions Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "5545865d0f4643728845756663ebd7e3",
+      "title": "Profile Setup",
+      "hasHtml": true
+    },
+    {
+      "id": "372fc185a9b641d3a68e3723be4f9402",
+      "title": "FitOra Homepage - Mobile",
+      "hasHtml": true
+    },
+    {
+      "id": "5efc5312106d409c8955380cf82ac416",
+      "title": "Sports Selection",
+      "hasHtml": true
+    },
+    {
+      "id": "56cd3ebb09b74f7eb09fcd142a437251",
+      "title": "Refined Sports Selection Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "615ac13fdde046f3896c90ffc4b29546",
+      "title": "Set of 10 modern 3D sports icons for badminton, cricket, football, tennis, swimming, basketball, volleyball, running, cy",
+      "hasHtml": false
+    },
+    {
+      "id": "c79227211e994ec19617ba7a153b0b79",
+      "title": "A premium, high-resolution lifestyle photograph for a sports app. A group of diverse young adults in stylish athletic ge",
+      "hasHtml": false
+    },
+    {
+      "id": "1f18e177946040dd8bb3584c74699436",
+      "title": "Venue Discovery - Desktop",
+      "hasHtml": true
+    },
+    {
+      "id": "82b69692dd694b7fb19b3224f3200382",
+      "title": "FitOra Brand Logo",
+      "hasHtml": false
+    },
+    {
+      "id": "559f420e52ed4ea6be5576c513edf46c",
+      "title": "Refined Profile Setup Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "ba7946c5d44446f0b5fa26aae06de213",
+      "title": "Academies - Desktop",
+      "hasHtml": true
+    },
+    {
+      "id": "5f072521ed67496b910fcf855b5754a3",
+      "title": "Refined Welcome Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "61d5e39ee52d4471a1400763e3ad50d6",
+      "title": "Welcome Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "87ec9207d93a4239a6cced408fe808be",
+      "title": "Modern minimalist 3D sports illustration for a fitness app splash screen. Dynamic abstract shapes suggesting motion, ath",
+      "hasHtml": false
+    },
+    {
+      "id": "f60f911792dc4b469652cfae271fe5da",
+      "title": "Hero illustration for a sports app welcome screen. A diverse group of active people playing various sports (badminton, f",
+      "hasHtml": false
+    },
+    {
+      "id": "3c10102c55a641bc9ff3a4bef76dfe5f",
+      "title": "A high-quality, professional close-up photograph of a modern tennis racket and a neon green tennis ball resting on a hig",
+      "hasHtml": false
+    },
+    {
+      "id": "02b035f9e8aa4fc88d260f3954cb3f04",
+      "title": "Mobile Number Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "954412704bb24a938731efb0a5ed5ad1",
+      "title": "FitOra Homepage - Desktop",
+      "hasHtml": true
+    },
+    {
+      "id": "a5b16b2e21aa4b08b35581ec8a63e310",
+      "title": "OTP Verification Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "5f26546a1ede413f89b134c9bacaac83",
+      "title": "Refined Splash Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "c40347aa0a324552bd9676b15eaa688f",
+      "title": "Venue Detail - Mobile",
+      "hasHtml": true
+    },
+    {
+      "id": "88dc457251284e3a87264f2ea14d8279",
+      "title": "Splash Screen",
+      "hasHtml": true
+    },
+    {
+      "id": "6c32ea580a9649bcba50db4406c82a84",
+      "title": "Venue Detail - Desktop",
+      "hasHtml": true
+    },
+    {
+      "id": "571f61c473114fa48ccdc4d3c9a058e5",
+      "title": "Refined Mobile Number Screen",
+      "hasHtml": true
+    }
+  ]
+}

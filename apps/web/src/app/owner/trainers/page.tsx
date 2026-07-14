@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import { UserCog, Mail } from 'lucide-react';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -16,7 +18,7 @@ const ASSIGNED_BATCHES: Record<string, string[]> = {
   // Populated when API supports trainer-batch assignments
 };
 
-export default function OwnerTrainersPage() {
+export default function OwnerTrainersPage(): React.JSX.Element {
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [loading, setLoading] = useState(true);
 

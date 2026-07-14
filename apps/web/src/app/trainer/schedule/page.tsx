@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import { CalendarDays, MapPin } from 'lucide-react';
 import type { TrainerScheduleItem } from '@fitora/shared';
@@ -8,7 +10,7 @@ import { getAccessToken } from '@/lib/auth';
 import { getTrainerSchedule } from '@/lib/trainer';
 import { formatDate } from '@/lib/trainer-utils';
 
-export default function TrainerSchedulePage() {
+export default function TrainerSchedulePage(): React.JSX.Element {
   const [items, setItems] = useState<TrainerScheduleItem[]>([]);
   const [loading, setLoading] = useState(true);
 

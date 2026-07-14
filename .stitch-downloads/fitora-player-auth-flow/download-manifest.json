@@ -1,0 +1,157 @@
+{
+  "project": {
+    "title": "FitOra Player Authentication Flow",
+    "id": "5652553660313852668",
+    "url": "https://stitch.withgoogle.com/projects/5652553660313852668"
+  },
+  "items": [
+    {
+      "number": "01",
+      "title": "Design System",
+      "id": "asset-stub-assets_957b7f82f51144f4b8f91ef607b181bf",
+      "files": {
+        "markdown": ".stitch-downloads/fitora-player-auth-flow/design-system-957b7f82f51144f4b8f91ef607b181bf.md",
+        "tokens": ".stitch-downloads/fitora-player-auth-flow/design-system-957b7f82f51144f4b8f91ef607b181bf.tokens.json"
+      }
+    },
+    {
+      "number": "02",
+      "title": "FitOra Brand Logo",
+      "id": "82b69692dd694b7fb19b3224f3200382",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/02-fitora-brand-logo-82b69692dd694b7fb19b3224f3200382.png"
+      },
+      "resourceName": "projects/5652553660313852668/screens/82b69692dd694b7fb19b3224f3200382",
+      "width": "1024",
+      "height": "1024",
+      "stitchTitle": "FitOra Brand Logo"
+    },
+    {
+      "number": "03",
+      "title": "Splash Illustration 3D Sports",
+      "id": "87ec9207d93a4239a6cced408fe808be",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/03-splash-illustration-3d-sports-87ec9207d93a4239a6cced408fe808be.png"
+      },
+      "resourceName": "projects/5652553660313852668/screens/87ec9207d93a4239a6cced408fe808be",
+      "width": "768",
+      "height": "1376",
+      "stitchTitle": "Modern minimalist 3D sports illustration for a fitness app splash screen. Dynamic abstract shapes suggesting motion, athletes, and sports equipment (ball, racket). Vibrant orange and green accents on a clean light background. Premium, energetic, high-end design."
+    },
+    {
+      "number": "04",
+      "title": "3D Sports Icons Set",
+      "id": "615ac13fdde046f3896c90ffc4b29546",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/04-3d-sports-icons-set-615ac13fdde046f3896c90ffc4b29546.png"
+      },
+      "resourceName": "projects/5652553660313852668/screens/615ac13fdde046f3896c90ffc4b29546",
+      "width": "1024",
+      "height": "1024",
+      "stitchTitle": "Set of 10 modern 3D sports icons for badminton, cricket, football, tennis, swimming, basketball, volleyball, running, cycling, yoga. Each icon in a rounded card style, vibrant colors, premium Material Design 3 feel. High quality, consistent style."
+    },
+    {
+      "number": "05",
+      "title": "Welcome Hero Illustration",
+      "id": "f60f911792dc4b469652cfae271fe5da",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/05-welcome-hero-illustration-f60f911792dc4b469652cfae271fe5da.png"
+      },
+      "resourceName": "projects/5652553660313852668/screens/f60f911792dc4b469652cfae271fe5da",
+      "width": "896",
+      "height": "1200",
+      "stitchTitle": "Hero illustration for a sports app welcome screen. A diverse group of active people playing various sports (badminton, football, running, tennis) together. Energetic, friendly, premium vector style with clean lines and vibrant colors. Material Design 3 aesthetic."
+    },
+    {
+      "number": "06",
+      "title": "Splash Screen",
+      "id": "88dc457251284e3a87264f2ea14d8279",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/06-splash-screen-88dc457251284e3a87264f2ea14d8279.png",
+        "html": ".stitch-downloads/fitora-player-auth-flow/code/06-splash-screen-88dc457251284e3a87264f2ea14d8279.html"
+      },
+      "resourceName": "projects/5652553660313852668/screens/88dc457251284e3a87264f2ea14d8279",
+      "width": "780",
+      "height": "1768",
+      "stitchTitle": "Splash Screen"
+    },
+    {
+      "number": "07",
+      "title": "Mobile Number Screen",
+      "id": "02b035f9e8aa4fc88d260f3954cb3f04",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/07-mobile-number-screen-02b035f9e8aa4fc88d260f3954cb3f04.png",
+        "html": ".stitch-downloads/fitora-player-auth-flow/code/07-mobile-number-screen-02b035f9e8aa4fc88d260f3954cb3f04.html"
+      },
+      "resourceName": "projects/5652553660313852668/screens/02b035f9e8aa4fc88d260f3954cb3f04",
+      "width": "780",
+      "height": "1768",
+      "stitchTitle": "Mobile Number Screen"
+    },
+    {
+      "number": "08",
+      "title": "Welcome Screen",
+      "id": "61d5e39ee52d4471a1400763e3ad50d6",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/08-welcome-screen-61d5e39ee52d4471a1400763e3ad50d6.png",
+        "html": ".stitch-downloads/fitora-player-auth-flow/code/08-welcome-screen-61d5e39ee52d4471a1400763e3ad50d6.html"
+      },
+      "resourceName": "projects/5652553660313852668/screens/61d5e39ee52d4471a1400763e3ad50d6",
+      "width": "780",
+      "height": "1792",
+      "stitchTitle": "Welcome Screen"
+    },
+    {
+      "number": "09",
+      "title": "OTP Verification Screen",
+      "id": "a5b16b2e21aa4b08b35581ec8a63e310",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/09-otp-verification-screen-a5b16b2e21aa4b08b35581ec8a63e310.png",
+        "html": ".stitch-downloads/fitora-player-auth-flow/code/09-otp-verification-screen-a5b16b2e21aa4b08b35581ec8a63e310.html"
+      },
+      "resourceName": "projects/5652553660313852668/screens/a5b16b2e21aa4b08b35581ec8a63e310",
+      "width": "780",
+      "height": "1768",
+      "stitchTitle": "OTP Verification Screen"
+    },
+    {
+      "number": "10",
+      "title": "Profile Setup",
+      "id": "5545865d0f4643728845756663ebd7e3",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/10-profile-setup-5545865d0f4643728845756663ebd7e3.png",
+        "html": ".stitch-downloads/fitora-player-auth-flow/code/10-profile-setup-5545865d0f4643728845756663ebd7e3.html"
+      },
+      "resourceName": "projects/5652553660313852668/screens/5545865d0f4643728845756663ebd7e3",
+      "width": "780",
+      "height": "2340",
+      "stitchTitle": "Profile Setup"
+    },
+    {
+      "number": "11",
+      "title": "Sports Selection",
+      "id": "5efc5312106d409c8955380cf82ac416",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/11-sports-selection-5efc5312106d409c8955380cf82ac416.png",
+        "html": ".stitch-downloads/fitora-player-auth-flow/code/11-sports-selection-5efc5312106d409c8955380cf82ac416.html"
+      },
+      "resourceName": "projects/5652553660313852668/screens/5efc5312106d409c8955380cf82ac416",
+      "width": "780",
+      "height": "3316",
+      "stitchTitle": "Sports Selection"
+    },
+    {
+      "number": "12",
+      "title": "Notification Permissions",
+      "id": "18d4ebe91a9541518e579dd7e6a78070",
+      "files": {
+        "image": ".stitch-downloads/fitora-player-auth-flow/images/12-notification-permissions-18d4ebe91a9541518e579dd7e6a78070.png",
+        "html": ".stitch-downloads/fitora-player-auth-flow/code/12-notification-permissions-18d4ebe91a9541518e579dd7e6a78070.html"
+      },
+      "resourceName": "projects/5652553660313852668/screens/18d4ebe91a9541518e579dd7e6a78070",
+      "width": "940",
+      "height": "2224",
+      "stitchTitle": "Notification Permissions"
+    }
+  ]
+}

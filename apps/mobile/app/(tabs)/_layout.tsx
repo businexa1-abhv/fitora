@@ -44,33 +44,43 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
+        name="explore"
         options={{
-          title: 'Search',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="search" focused={focused} color={color} />,
+          title: 'Explore',
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="compass" focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="training"
+        name="play"
         options={{
-          title: 'Training',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="school" focused={focused} color={color} />,
+          title: 'Play',
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="football" focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="store"
         options={{
           title: 'Store',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="bag-handle" focused={focused} color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="bag-handle" focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="person" focused={focused} color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="person" focused={focused} color={color} />
+          ),
         }}
       />
+      <Tabs.Screen name="search" options={{ href: null }} />
+      <Tabs.Screen name="training" options={{ href: null }} />
     </Tabs>
   );
 }

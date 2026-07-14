@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
@@ -12,7 +14,7 @@ import { getAccessToken } from '@/lib/auth';
 import { createCourt } from '@/lib/courts';
 import { CitySelect } from '@/components/city-select';
 
-export default function NewCourtPage() {
+export default function NewCourtPage(): React.JSX.Element {
   const router = useRouter();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

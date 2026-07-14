@@ -23,7 +23,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>): React.JSX.Element {
   return (
     <html lang="en">
       <body className={`${jakarta.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>

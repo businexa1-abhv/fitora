@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import { EnrollmentStatus, type TrainingBatch } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -8,7 +10,7 @@ import { getBatchAttendanceForDate } from '@/lib/trainer';
 import { todayString } from '@/lib/trainer-utils';
 import { getTrainerBatches, markBatchAttendance } from '@/lib/training';
 
-export default function TrainerAttendancePage() {
+export default function TrainerAttendancePage(): React.JSX.Element {
   const [batches, setBatches] = useState<TrainingBatch[]>([]);
   const [date, setDate] = useState(todayString());
   const [loading, setLoading] = useState(true);

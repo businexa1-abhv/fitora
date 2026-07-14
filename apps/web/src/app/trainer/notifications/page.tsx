@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import type { NotificationItem } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -11,7 +13,7 @@ import {
 } from '@/lib/notifications';
 import { formatDate } from '@/lib/trainer-utils';
 
-export default function TrainerNotificationsPage() {
+export default function TrainerNotificationsPage(): React.JSX.Element {
   const [items, setItems] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(true);
 

@@ -22,6 +22,7 @@ import { WalletModule } from './wallet/wallet.module';
 import { QueueModule } from './queue/queue.module';
 import { AiModule } from './ai/ai.module';
 import { TenantsModule } from './tenants/tenants.module';
+import { PlayersModule } from './players/players.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TenantsModule } from './tenants/tenants.module';
     PrismaModule,
     TenantsModule,
     AuthModule,
+    PlayersModule,
     UsersModule,
     HealthModule,
     PaymentsModule,

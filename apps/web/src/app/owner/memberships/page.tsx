@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BadgeCheck, Building2, Plus, Tag, Users } from 'lucide-react';
@@ -18,7 +20,7 @@ import { formatCurrency } from '@/lib/owner-utils';
 
 type Tab = 'overview' | 'plans' | 'coupons';
 
-export default function OwnerMembershipsPage() {
+export default function OwnerMembershipsPage(): React.JSX.Element {
   const [tab, setTab] = useState<Tab>('overview');
   const [dashboard, setDashboard] = useState<MembershipDashboard | null>(null);
   const [plans, setPlans] = useState<MembershipPlan[]>([]);

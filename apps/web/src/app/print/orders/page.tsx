@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { PrintOrderStatus, PRINT_ORDER_STATUS_LABELS, type PrintOrder } from '@fitora/shared';
@@ -17,7 +19,7 @@ const STATUS_COLORS: Record<string, string> = {
   CANCELLED: 'bg-red-100 text-red-800',
 };
 
-export default function PrintOrdersPage() {
+export default function PrintOrdersPage(): React.JSX.Element {
   const [orders, setOrders] = useState<PrintOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [rejectReason, setRejectReason] = useState<Record<string, string>>({});

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,7 +25,7 @@ const STATUS_COLORS: Record<string, string> = {
   PARTIALLY_REFUNDED: 'bg-orange-100 text-orange-800',
 };
 
-export default function PaymentHistoryPage() {
+export default function PaymentHistoryPage(): React.JSX.Element {
   const router = useRouter();
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(true);

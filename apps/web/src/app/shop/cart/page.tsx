@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,7 +14,7 @@ import { getAccessToken } from '@/lib/auth';
 import { getCart, removeCartItem, updateCartItem } from '@/lib/shop';
 import { productEmoji } from '@/lib/shop-constants';
 
-export default function CartPage() {
+export default function CartPage(): React.JSX.Element {
   const router = useRouter();
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);

@@ -1,12 +1,14 @@
 'use client';
 
+import React from 'react';
+
 import { FormEvent, useEffect, useState } from 'react';
 import type { PrintListing } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
 import { getAccessToken } from '@/lib/auth';
 import { createPrintListing, getMyPrintListings } from '@/lib/print';
 
-export default function PrinterListingsPage() {
+export default function PrinterListingsPage(): React.JSX.Element {
   const [listings, setListings] = useState<PrintListing[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ title: '', description: '', price: '', city: '', minQuantity: '1', turnaroundDays: '5' });

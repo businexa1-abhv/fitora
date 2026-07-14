@@ -137,6 +137,7 @@ export interface AuthUser {
   emailVerified?: boolean;
   phoneVerified?: boolean;
   permissions?: string[];
+  onboardingComplete?: boolean;
 }
 
 export interface AuthTokens {
@@ -147,6 +148,7 @@ export interface AuthTokens {
 export interface AuthResponse {
   user: AuthUser;
   tokens: AuthTokens;
+  isNewUser?: boolean;
 }
 
 export const APP_NAME = 'Fitora';

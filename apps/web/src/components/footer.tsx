@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { APP_NAME } from '@fitora/shared';
 
-export function Footer() {
+export function Footer(): React.JSX.Element {
   return (
     <footer className="bg-foreground text-white/80 mt-auto">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">

@@ -1,22 +1,47 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Bell } from 'lucide-react';
-import { getAccessToken } from '@/lib/auth';
+import { ApiError } from '@/lib/api';
+import { clearAuthSession, getValidAccessToken } from '@/lib/auth';
 import { getUnreadNotificationCount } from '@/lib/notifications';
 
-export function NotificationBell({ light = false }: { light?: boolean }) {
+export function NotificationBell({ light = false }: { light?: boolean }): React.JSX.Element {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const token = getAccessToken();
-    if (!token) return;
-    getUnreadNotificationCount(token)
-      .then((r) => setCount(r.count))
-      .catch(() => setCount(0));
+    let polling = true;
+
+    async function loadUnreadCount() {
+      const token = getValidAccessToken();
+      if (!token) {
+        setCount(0);
+        polling = false;
+        return;
+      }
+
+      try {
+        const result = await getUnreadNotificationCount(token);
+        setCount(result.count);
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 401) {
+          clearAuthSession();
+          polling = false;
+        }
+        setCount(0);
+      }
+    }
+
+    void loadUnreadCount();
     const interval = setInterval(() => {
-      getUnreadNotificationCount(token).then((r) => setCount(r.count)).catch(() => {});
+      if (!polling) {
+        clearInterval(interval);
+        return;
+      }
+      void loadUnreadCount();
     }, 60000);
     return () => clearInterval(interval);
   }, []);

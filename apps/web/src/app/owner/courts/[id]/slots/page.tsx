@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useParams, useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -18,7 +20,7 @@ function todayString() {
   return new Date().toISOString().split('T')[0];
 }
 
-export default function ManageCourtSlotsPage() {
+export default function ManageCourtSlotsPage(): React.JSX.Element {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [court, setCourt] = useState<Court | null>(null);

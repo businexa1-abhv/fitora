@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -19,7 +21,7 @@ import { getOwnerDashboard } from '@/lib/owner-analytics';
 import { useAuthToken } from '@/hooks/use-auth-token';
 import { formatCurrency } from '@/lib/owner-utils';
 
-export default function OwnerDashboardPage() {
+export default function OwnerDashboardPage(): React.JSX.Element {
   const user = getStoredUser();
   const token = useAuthToken();
 

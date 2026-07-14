@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import { EnrollmentStatus, type TrainingBatch } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -7,7 +9,7 @@ import { getAccessToken } from '@/lib/auth';
 import { createProgressReport, getTrainerBatches, publishProgressReport } from '@/lib/training';
 import { todayString } from '@/lib/trainer-utils';
 
-export default function TrainerProgressPage() {
+export default function TrainerProgressPage(): React.JSX.Element {
   const [batches, setBatches] = useState<TrainingBatch[]>([]);
   const [enrollmentId, setEnrollmentId] = useState('');
   const [periodStart, setPeriodStart] = useState('');

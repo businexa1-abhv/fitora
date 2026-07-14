@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -25,7 +27,7 @@ const STATUS_STYLES: Record<BookingStatus, string> = {
   [BookingStatus.COMPLETED]: 'bg-slate-100 text-slate-600',
 };
 
-export default function BookingsPage() {
+export default function BookingsPage(): React.JSX.Element {
   const router = useRouter();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);

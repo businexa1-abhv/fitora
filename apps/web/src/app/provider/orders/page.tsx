@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ServiceOrderStatus, type ServiceOrder } from '@fitora/shared';
@@ -8,7 +10,7 @@ import { QueryBoundary } from '@/components/query/query-boundary';
 import { getProviderOrders, updateOrderStatus } from '@/lib/marketplace';
 import { useAuthToken } from '@/hooks/use-auth-token';
 
-export default function ProviderOrdersPage() {
+export default function ProviderOrdersPage(): React.JSX.Element {
   const token = useAuthToken();
   const queryClient = useQueryClient();
   const [tracking, setTracking] = useState<Record<string, string>>({});

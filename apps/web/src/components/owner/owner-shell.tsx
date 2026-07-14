@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -100,7 +102,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-export function OwnerShell({ children }: { children: React.ReactNode }) {
+export function OwnerShell({ children }: { children: React.ReactNode }): React.JSX.Element {
   const [mobileOpen, setMobileOpen] = useState(false);
   const user = getStoredUser();
 

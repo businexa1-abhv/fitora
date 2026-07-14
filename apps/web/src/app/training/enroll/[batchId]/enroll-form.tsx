@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -11,7 +13,7 @@ import { getAccessToken, getStoredUser } from '@/lib/auth';
 import { enrollKidNew } from '@/lib/training';
 import { completePayment } from '@/lib/payments';
 
-export default function EnrollForm() {
+export default function EnrollForm(): React.JSX.Element {
   const { batchId } = useParams<{ batchId: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();

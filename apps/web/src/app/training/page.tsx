@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -10,7 +12,7 @@ import { FadeUp } from '@/components/motion';
 import { SPORT_EMOJI, SPORT_GRADIENTS } from '@/lib/constants';
 import { getTrainingPrograms } from '@/lib/courts';
 
-export default function TrainingPage() {
+export default function TrainingPage(): React.JSX.Element {
   const [programs, setPrograms] = useState<TrainingProgram[]>([]);
   const [loading, setLoading] = useState(true);
 

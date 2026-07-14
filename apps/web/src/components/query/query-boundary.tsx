@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 interface QueryBoundaryProps {
   isLoading: boolean;
   isError: boolean;
@@ -8,7 +10,7 @@ interface QueryBoundaryProps {
   children: React.ReactNode;
 }
 
-export function QueryBoundary({ isLoading, isError, error, onRetry, children }: QueryBoundaryProps) {
+export function QueryBoundary({ isLoading, isError, error, onRetry, children }: QueryBoundaryProps): React.JSX.Element {
   if (isLoading) {
     return (
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

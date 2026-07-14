@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -9,7 +11,7 @@ import { PageShell, formatPrice } from '@/components/app-header';
 import { FadeUp } from '@/components/motion';
 import { getPrintListings } from '@/lib/print';
 
-export default function PrintShopPage() {
+export default function PrintShopPage(): React.JSX.Element {
   const [listings, setListings] = useState<PrintListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');

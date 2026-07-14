@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 interface DataPaginationProps {
   page: number;
   totalPages: number;
@@ -7,7 +9,7 @@ interface DataPaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export function DataPagination({ page, totalPages, total, onPageChange }: DataPaginationProps) {
+export function DataPagination({ page, totalPages, total, onPageChange }: DataPaginationProps): React.JSX.Element | null {
   if (totalPages <= 1) return null;
 
   return (

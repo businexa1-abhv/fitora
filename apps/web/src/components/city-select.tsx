@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { ChevronsUpDown, MapPin, Search, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -22,7 +24,7 @@ export function CitySelect({
   allowClear = true,
   className = '',
   variant = 'default',
-}: CitySelectProps) {
+}: CitySelectProps): React.JSX.Element {
   const listId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);

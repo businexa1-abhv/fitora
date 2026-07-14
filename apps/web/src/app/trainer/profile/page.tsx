@@ -1,12 +1,14 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import type { TrainerProfileView } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
 import { getAccessToken } from '@/lib/auth';
 import { getTrainerProfile, updateTrainerProfile } from '@/lib/trainer';
 
-export default function TrainerProfilePage() {
+export default function TrainerProfilePage(): React.JSX.Element {
   const [profile, setProfile] = useState<TrainerProfileView | null>(null);
   const [bio, setBio] = useState('');
   const [yearsExperience, setYearsExperience] = useState('');

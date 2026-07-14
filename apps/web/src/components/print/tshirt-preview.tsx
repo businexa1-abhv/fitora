@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 interface TshirtPreviewProps {
   designUrl?: string | null;
   colorHex?: string;
@@ -7,7 +9,7 @@ interface TshirtPreviewProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export function TshirtPreview({ designUrl, colorHex = '#FFFFFF', customText, size = 'md' }: TshirtPreviewProps) {
+export function TshirtPreview({ designUrl, colorHex = '#FFFFFF', customText, size = 'md' }: TshirtPreviewProps): React.JSX.Element {
   const dims = { sm: 'w-40 h-48', md: 'w-56 h-64', lg: 'w-72 h-80' }[size];
 
   return (

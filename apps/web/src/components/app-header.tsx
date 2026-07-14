@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
@@ -12,7 +14,7 @@ export function AppHeader({
   children?: React.ReactNode;
   backHref?: string;
   title?: string;
-}) {
+}): React.JSX.Element {
   return (
     <>
       <Navbar />
@@ -44,7 +46,7 @@ export function AppHeader({
   );
 }
 
-export function formatTime(iso: string) {
+export function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('en-IN', {
     hour: '2-digit',
     minute: '2-digit',
@@ -52,7 +54,7 @@ export function formatTime(iso: string) {
   });
 }
 
-export function formatDate(iso: string) {
+export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-IN', {
     weekday: 'short',
     day: 'numeric',
@@ -61,7 +63,7 @@ export function formatDate(iso: string) {
   });
 }
 
-export function formatPrice(amount: string | number) {
+export function formatPrice(amount: string | number): string {
   const value = typeof amount === 'string' ? parseFloat(amount) : amount;
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -70,7 +72,7 @@ export function formatPrice(amount: string | number) {
   }).format(value);
 }
 
-export function PageShell({ children }: { children: React.ReactNode }) {
+export function PageShell({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
     <div className="min-h-screen flex flex-col">
       {children}

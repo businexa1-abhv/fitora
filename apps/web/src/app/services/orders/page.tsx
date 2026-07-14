@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -27,7 +29,7 @@ const STATUS_COLORS: Record<string, string> = {
   REJECTED: 'bg-red-100 text-red-800',
 };
 
-export default function ServiceOrdersPage() {
+export default function ServiceOrdersPage(): React.JSX.Element {
   const router = useRouter();
   const [orders, setOrders] = useState<ServiceOrder[]>([]);
   const [loading, setLoading] = useState(true);

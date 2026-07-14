@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -15,7 +17,7 @@ import { completePayment } from '@/lib/payments';
 import { colorHex } from '@/lib/printer-utils';
 import { fileToBase64, getPrintListing, placePrintOrder, uploadDesign } from '@/lib/print';
 
-export default function PrintOrderPage() {
+export default function PrintOrderPage(): React.JSX.Element {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);

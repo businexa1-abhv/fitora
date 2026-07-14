@@ -9,21 +9,63 @@ import { ThemeProvider, useTheme } from '@/providers/theme-provider';
 import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { parseDeepLink } from '@/lib/push';
+import { isLocationDone, isNotificationsDone } from '@/lib/onboarding';
+
+const ONBOARDING_ROUTES = new Set([
+  'profile',
+  'sports',
+  'notifications',
+  'location',
+  'welcome',
+  'mobile',
+  'otp',
+]);
 
 function AuthGate({ children }: { children: React.ReactNode }) {
-  const { isLoading, isAuthenticated } = useAuth();
+  const { isLoading, isAuthenticated, user } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
-    const inAuth = segments[0] === '(auth)';
-    if (!isAuthenticated && !inAuth) {
-      router.replace('/(auth)/login');
-    } else if (isAuthenticated && inAuth) {
-      router.replace('/(tabs)');
+
+    const root = segments[0] as string | undefined;
+    const leaf = segments[1] as string | undefined;
+    const inAuth = root === '(auth)';
+    const onSplash = !root || root === 'index';
+
+    async function route() {
+      if (onSplash) return;
+
+      if (!isAuthenticated) {
+        if (!inAuth) {
+          const locationDone = await isLocationDone();
+          router.replace(locationDone ? '/(auth)/welcome' : '/(auth)/location');
+        }
+        return;
+      }
+
+      const needsOnboarding = user?.onboardingComplete === false;
+      if (needsOnboarding) {
+        const onOnboarding =
+          inAuth && typeof leaf === 'string' && ONBOARDING_ROUTES.has(leaf);
+        if (!onOnboarding) {
+          router.replace('/(auth)/profile');
+        }
+        return;
+      }
+
+      if (inAuth) {
+        const notificationsDone = await isNotificationsDone();
+        if (!notificationsDone && leaf !== 'notifications') {
+          // Allow completed users who skipped notifications storage — go home
+        }
+        router.replace('/(tabs)');
+      }
     }
-  }, [isAuthenticated, isLoading, segments, router]);
+
+    void route();
+  }, [isAuthenticated, isLoading, segments, router, user?.onboardingComplete]);
 
   useEffect(() => {
     function handleUrl(event: { url: string }) {

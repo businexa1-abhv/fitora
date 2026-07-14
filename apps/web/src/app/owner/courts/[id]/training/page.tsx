@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
@@ -11,7 +13,7 @@ import { ApiError } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 import { createTrainingBatch, createTrainingProgram, getTrainers } from '@/lib/courts';
 
-export default function CourtTrainingPage() {
+export default function CourtTrainingPage(): React.JSX.Element {
   const { id: courtId } = useParams<{ id: string }>();
   const router = useRouter();
   const [trainers, setTrainers] = useState<{ id: string; firstName: string; lastName: string }[]>([]);

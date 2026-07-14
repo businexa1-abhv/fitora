@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -129,7 +131,7 @@ function ServicesContent() {
   );
 }
 
-export default function ServicesPage() {
+export default function ServicesPage(): React.JSX.Element {
   return (
     <PageShell>
       <Navbar />

@@ -31,6 +31,8 @@ import {
   RegisterWithOtpDto,
   ResetPasswordDto,
   SendOtpDto,
+  PlayerSendOtpDto,
+  PlayerVerifyOtpDto,
   VerifyOtpDto,
 } from './dto';
 
@@ -99,6 +101,15 @@ export class AuthController {
   }
 
   @Public()
+  @Post('send-otp')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Send OTP (player auth alias)' })
+  @ApiResponse({ status: 200, type: OtpSentResponseDto })
+  sendOtpAlias(@Body() dto: PlayerSendOtpDto) {
+    return this.authService.sendPlayerOtp(dto);
+  }
+
+  @Public()
   @Post('otp/verify')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -109,6 +120,15 @@ export class AuthController {
   @ApiResponse({ status: 200, type: AuthResponseDto })
   verifyOtp(@Body() dto: VerifyOtpDto) {
     return this.authService.verifyOtp(dto);
+  }
+
+  @Public()
+  @Post('verify-otp')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Verify OTP (player auth alias) — returns tokens + user' })
+  @ApiResponse({ status: 200, type: AuthResponseDto })
+  verifyOtpAlias(@Body() dto: PlayerVerifyOtpDto) {
+    return this.authService.verifyPlayerOtp(dto);
   }
 
   @Public()

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -11,7 +13,7 @@ import { FadeUp } from '@/components/motion';
 import { getAccessToken } from '@/lib/auth';
 import { getEnrollmentAttendance, getParentDashboard } from '@/lib/training';
 
-export default function MyKidsPage() {
+export default function MyKidsPage(): React.JSX.Element {
   const router = useRouter();
   const [dashboard, setDashboard] = useState<ParentDashboard | null>(null);
   const [loading, setLoading] = useState(true);

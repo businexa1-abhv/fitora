@@ -1,11 +1,13 @@
 'use client';
 
+import React from 'react';
+
 import { useState } from 'react';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
 import { FormField, inputClassName, buttonClassName } from '@/components/auth-layout';
 import { getStoredUser } from '@/lib/auth';
 
-export default function OwnerSettingsPage() {
+export default function OwnerSettingsPage(): React.JSX.Element {
   const user = getStoredUser();
   const [saved, setSaved] = useState(false);
 

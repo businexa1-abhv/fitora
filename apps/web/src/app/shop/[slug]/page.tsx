@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,7 +14,7 @@ import { getAccessToken } from '@/lib/auth';
 import { addToCart, getProduct } from '@/lib/shop';
 import { productEmoji, productGradient } from '@/lib/shop-constants';
 
-export default function ProductDetailPage() {
+export default function ProductDetailPage(): React.JSX.Element {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);

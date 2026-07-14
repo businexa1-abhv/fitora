@@ -48,6 +48,9 @@ export class AuthUserDto {
 
   @ApiProperty()
   phoneVerified: boolean;
+
+  @ApiProperty({ description: 'True when player onboarding profile + sports are complete' })
+  onboardingComplete: boolean;
 }
 
 export class AuthResponseDto {
@@ -56,6 +59,12 @@ export class AuthResponseDto {
 
   @ApiProperty({ type: AuthTokensDto })
   tokens: AuthTokensDto;
+
+  @ApiProperty({
+    required: false,
+    description: 'True when the account was created during this verification',
+  })
+  isNewUser?: boolean;
 }
 
 export class PermissionsResponseDto {

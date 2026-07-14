@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -12,7 +14,7 @@ import { getAccessToken, getStoredUser } from '@/lib/auth';
 import { completePayment } from '@/lib/payments';
 import { checkout, getCart, validateShopCoupon } from '@/lib/shop';
 
-export default function CheckoutPage() {
+export default function CheckoutPage(): React.JSX.Element {
   const router = useRouter();
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);

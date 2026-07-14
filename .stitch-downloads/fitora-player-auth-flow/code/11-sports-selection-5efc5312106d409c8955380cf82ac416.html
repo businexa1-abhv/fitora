@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Select Your Sports</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Include Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#006e2f",
+                    "on-surface": "#251913",
+                    "surface-container-high": "#fce3d9",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e0c0b1",
+                    "tertiary": "#006398",
+                    "on-secondary-fixed-variant": "#005321",
+                    "inverse-on-surface": "#ffede6",
+                    "tertiary-fixed": "#cde5ff",
+                    "surface-container": "#ffeae0",
+                    "primary-fixed-dim": "#ffb690",
+                    "surface-dim": "#edd5cb",
+                    "secondary-fixed-dim": "#4ae176",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#6bff8f",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#584237",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#ffdbca",
+                    "tertiary-container": "#00a2f4",
+                    "surface-bright": "#fff8f6",
+                    "primary-container": "#f97316",
+                    "secondary-container": "#6bff8f",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#002109",
+                    "on-background": "#251913",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#582200",
+                    "outline": "#8c7164",
+                    "surface": "#fff8f6",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#004b74",
+                    "on-secondary-container": "#007432",
+                    "on-primary-fixed": "#341100",
+                    "on-tertiary-fixed": "#001d32",
+                    "tertiary-fixed-dim": "#93ccff",
+                    "surface-container-highest": "#f6ded3",
+                    "on-tertiary-container": "#003554",
+                    "on-primary-fixed-variant": "#783200",
+                    "surface-tint": "#9d4300",
+                    "surface-container-low": "#fff1eb",
+                    "background": "#fff8f6",
+                    "surface-variant": "#f6ded3",
+                    "inverse-surface": "#3c2d26",
+                    "inverse-primary": "#ffb690",
+                    "primary": "#9d4300"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "section-gap": "48px",
+                    "stack-sm": "8px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Lexend"],
+                    "headline-md": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "title-lg": ["Lexend"],
+                    "headline-lg-mobile": ["Lexend"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sport-card-selected {
+            border: 2px solid #f97316 !important;
+            background-color: #ffeae0 !important;
+        }
+        .sport-card-selected .check-overlay {
+            opacity: 1 !important;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col">
+<!-- Top App Bar (Transactional variant: No main nav) -->
+<header class="w-full sticky top-0 z-50 bg-background flex items-center justify-between px-margin-mobile h-16 max-w-7xl mx-auto">
+<button class="text-primary hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">FitOra</span>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</header>
+<main class="flex-grow max-w-7xl mx-auto w-full px-margin-mobile pt-stack-sm pb-section-gap overflow-y-auto hide-scrollbar">
+<!-- Progress Indicator -->
+<div class="mb-stack-lg">
+<div class="flex justify-between items-center mb-unit">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Onboarding</span>
+<span class="font-label-md text-label-md text-primary font-bold">Step 2 of 3</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-500 ease-out" style="width: 66.6%;"></div>
+</div>
+</div>
+<!-- Headline -->
+<div class="mb-section-gap">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-unit">What do you love to play?</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Select your favorite sports to personalize your activity feed and discover local matches.</p>
+</div>
+<!-- Sports Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-gutter mb-section-gap">
+<!-- Sport Card Item -->
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Badminton featuring a racket and shuttlecock against a soft teal background, premium gloss finish, sports-centric professional aesthetic for a fitness app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_Eaukrdu6hI6g0lZt2bTQc9nPh1ifyk3EkUyt7CITKcr7XVc18vuj8-Zhju_5oyE4Nk8CgLJUuPRdLH_yb-oUnMs7MdE0tmBfQF-Im12bTBWOhGYCc-J4DTLZfINCHWGWGR7NDZ-9nmUmHBzUFlpiPh5BQwSqdwDAiGXD31NrOHHIqXAMKdXutdSWSVfp2f3mFfXcHbML-FvyIlo5jHb1mraz9Ad8orijXo4Lj6663Ugwds_DgVr6"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Badminton</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Cricket featuring a red leather ball and a light-wood cricket bat against a vibrant yellow background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd52w9u_MSgfLVgAwqksULFipVgJH6dJvCMkkfk7T3Th7uGYo2xsWkBffx0POeOlQGcloJTZz5YWyp9tlrh-dPWNt_xGNxJTyP7223QP6qZqr1V6_94K4KA5idcYtwD2fYgwTs_MdArAGQH76aLR4Ilb7tB_HE3kgJ8kzdePChC-M-ENiZ_H1Yj1qY2JL3RPJK4OxRcHRqYmjfO1RhQopygrPNtYY7LCmw3KzfIXgCFcbCqdH6acwm"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Cricket</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Football featuring a classic black and white soccer ball against a fresh green background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCfbU4dYac-lfwgVJoPAF5duqipkVQV9MCC82adjdMzwVdTgVmHG2IxCwIt1gyfZbiLr7bQ031vBy9VAVIGg3vMBAi6M879lk_LFST9zPb5xiV00r_aXcMUIQkgBkKROOS3syskt2zuAp3v8NnJVn3zj5SNeFbiVYZ7HDpiXvttfwf2t-HfGty5k6aT4Dp9tqvSEJujaNcUPAdJjop_Nw9k7FcK1fHlQR4M96Wz6NnCbJxEORDEV_X"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Football</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Tennis featuring a yellow ball and a purple racket against a soft purple background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXQZj3cTlvA6e7lEGkHwKvcmxiRvSe1bQkyqOScBk9X1B1Am_eJs9-cTsAUmEKv2IeJu_BoaiYKS3aO41KjWvbZ7RPl8AqD79Wr2FyVRKrVA9UlB8qlF4Fex3pzS07I08wBl2TKMCqj3DYANbdWQNWYxKdRNvEtmJqWgO4CkJqcXT01_Yjv3HSGC0MercN2DI7eZvxQ7P1UdeEm2PdUj6w8lF33G266t_FXl83S54hQ6LkcF1Qpg0P"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Tennis</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Swimming featuring blue goggles over stylised water waves against a light blue background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwwKKuG9SPNtZP1VtUb8WdhKHawMK5xSxtcGLdDuh_-SzIxS8gGYvBDvINZ27c0X6csKC55cURXnRxYJP69TiR99pXG87_b-md3NYeNWWvHXJtL742fDuERK8Ol1iKmYwhpkGZvJed7I7D4AI1SvBQ836HZaGYZknTc0aW02UNzSDT2Nq0503YniReXput2pNUU3HUSAUPxXZcmSnM0N8T7vMs_G82CCQe_yszq6mY1lkAu_RPv467"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Swimming</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Basketball featuring a ball entering a hoop against a vibrant orange background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-b8VPRDyAXtxvknurAQNxcAn6r6Hm4IXhuI_P4nEkVHz6OrPFgHI5Ggnc-oCy56aPiLjk6G1n26dduxDUCEWUoXKhgGE1w4xymKfE8Obm7ihYqMWlbWsXo6JI8rbjBjL0yqJ895LIBTjSoYFz_4gx1TgCOH2WlKxWJaOYoqoi33zWOqUG5afAzT5CcCH26GB2PWYy4a091D7p46Rzn2NEWCvMjmybKA0YmloaE-o2V8_YtOGx26IB"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Basketball</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Volleyball featuring a pink and yellow striped ball against a vibrant pink background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJjYIRzRttxVqqsIZUNOa2PfBC8YKXiHNwoI6LvzPf18Um5kMDOgdvrhNq4luzQyV46zwwQmoTRWuKc7jwek3JGmZsxzEOUmgA2O98RdLUxnqj5tGyetSbofDMSI27Hr7ijW__I6Dby3kgumdVGdOzoxdeYIUM7HDWZAi040lBWQSQz-ZDWOmouGX-4-1XeqCmHyqkogqI0S3HgP2xCdnMfNmILjiDyQD4J8MwxEHBWJSpfj1RjU7c"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Volleyball</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Running featuring a red sneaker on a track against a dark grey background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiwm1CQHrhk2l2CihvILXZOzWxdE_KU6LkiiVYd5s4uB895J481QD6fKhBdFtTt91pQkBJvU2IBgOuhHmUyRFmSacgAX5MKg30J8XtCq4rGuWUgpOx18B6LvA9CfFoAVb5QOx1S0_9_4Iy4OTczXUr-0fX4AJPmwz6LQAX2UDgDKp7nBPlj6aPm5MUtYlvMgkEduC14JcmbA_Z-SQU1iuYn0irStvSG3h9Xyp2_FL0Zdru238uMm1k"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Running</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Cycling featuring a green helmet and gear against a lime green background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhjSOGhXUPtwevSatY6sgWQvmKttogpmf6vXF92W15XpMjudYCRfGV9jsYsSS34GQ6e5PxDeESmoo6Vl261giydy7LjInkxBvKe1hkv-DYvgx_L3dwitRR7_spKGn31diqy3vzswAXdOV2OrnCeEI1_wU0gKiSldIxIvC0t9yUy2HOp7tds0b9v5cD4lh5pGmXrQLDGGyL2tsfxvcLfBpRfqXbl_B77vQUWshV-gnT5XyhO5zjE_-l"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Cycling</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<span class="material-symbols-outlined text-primary text-[48px]" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Gym</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95" onclick="toggleSelection(this)">
+<div class="w-full aspect-square rounded-lg mb-stack-sm overflow-hidden flex items-center justify-center bg-surface-variant/30">
+<img class="w-20 h-20 object-contain" data-alt="A stylized 3D app icon for Yoga featuring a person in a lotus pose against a soft indigo background, premium gloss finish, sports-centric professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7LSGc0VnT_B3i4Xvd_uja4TUa0AI3fe_A65vaLvdE-hUXZGQJ2_gwyFYztIBXsQZO14tFV1qqbZUeqYUIhn9s7ojQo7DEZq3dWm8_uVLgdQOGk0IUJQVPu8HMS50-6v0oVkSqwYH43wLNnza5__O64yRx9l0de47rsnUJM5xtC7QP9yC6L1EkwezPrScPNthFPmbI8LZYebZiI48kAGrhxMNwo-uMz2hlyto5obmeu2ijEIkg6N-Q"/>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface">Yoga</span>
+<div class="check-overlay opacity-0 absolute top-2 right-2 bg-primary text-on-primary rounded-full p-0.5 transition-opacity duration-200">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+</div>
+</main>
+<!-- Fixed Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-md p-margin-mobile flex justify-center z-50">
+<button class="w-full max-w-md bg-primary-container text-on-primary-container font-label-lg text-label-lg h-14 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center uppercase tracking-widest font-bold">
+            Continue
+        </button>
+</footer>
+<script>
+        function toggleSelection(el) {
+            el.classList.toggle('sport-card-selected');
+            // Micro-interaction: quick haptic feel
+            el.classList.add('scale-95');
+            setTimeout(() => el.classList.remove('scale-95'), 100);
+        }
+    </script>
+</body></html>

@@ -8,7 +8,7 @@ interface OwnerStatCardProps {
   trend?: 'up' | 'down' | 'neutral';
 }
 
-export function OwnerStatCard({ label, value, change, icon: Icon, trend = 'neutral' }: OwnerStatCardProps) {
+export function OwnerStatCard({ label, value, change, icon: Icon, trend = 'neutral' }: OwnerStatCardProps): React.JSX.Element {
   return (
     <div className="card-hover rounded-2xl border border-border bg-card p-5 shadow-sm">
       <div className="flex items-start justify-between">

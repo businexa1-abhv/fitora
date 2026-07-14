@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { SPORT_LABELS, SportType, type Court } from '@fitora/shared';
@@ -12,7 +14,7 @@ interface CourtCardProps {
   index?: number;
 }
 
-export function CourtCard({ court, index = 0 }: CourtCardProps) {
+export function CourtCard({ court, index = 0 }: CourtCardProps): React.JSX.Element {
   const sport: SportType = (court.sportType as SportType | null) ?? SportType.OTHER;
   const gradient = SPORT_GRADIENTS[sport] ?? SPORT_GRADIENTS[SportType.OTHER];
   const emoji = SPORT_EMOJI[sport] ?? '🏟️';
@@ -83,7 +85,7 @@ export function CourtCard({ court, index = 0 }: CourtCardProps) {
   );
 }
 
-export function CourtCardSkeleton() {
+export function CourtCardSkeleton(): React.JSX.Element {
   return (
     <div className="rounded-2xl bg-card border border-border overflow-hidden">
       <div className="h-36 skeleton" />

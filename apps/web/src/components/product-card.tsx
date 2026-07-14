@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { CATEGORY_LABELS, type Product, type ProductCategory, type SportType } from '@fitora/shared';
@@ -8,7 +10,7 @@ import { OptimizedImage } from '@/components/optimized-image';
 import { scaleIn } from '@/components/motion';
 import { productEmoji, productGradient } from '@/lib/shop-constants';
 
-export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
+export function ProductCard({ product, index = 0 }: { product: Product; index?: number }): React.JSX.Element {
   const emoji = productEmoji(
     product.category as ProductCategory,
     product.sportType as SportType | undefined,
@@ -87,6 +89,6 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
   );
 }
 
-export function ProductCardSkeleton() {
+export function ProductCardSkeleton(): React.JSX.Element {
   return <div className="h-72 rounded-2xl skeleton" />;
 }

@@ -9,8 +9,7 @@ import {
   getStoredUser,
   saveAuthSession,
 } from '@/lib/auth';
-import { logout as logoutApi, logoutAll } from '@/lib/auth-api';
-import { registerForPushNotifications } from '@/lib/push';
+import { getMe, logout as logoutApi, logoutAll } from '@/lib/auth-api';
 
 interface AuthContextValue {
   user: AuthUser | null;
@@ -38,8 +37,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ]);
         setUser(storedUser);
         setToken(accessToken);
+
         if (accessToken) {
-          registerForPushNotifications(accessToken).catch(() => undefined);
+          try {
+            const me = await getMe(accessToken);
+            setUser(me);
+            const refresh = await getRefreshToken();
+            if (refresh) {
+              await saveAuthSession({
+                user: me,
+                tokens: { accessToken, refreshToken: refresh },
+              });
+            }
+          } catch {
+            // keep cached user if offline
+          }
         }
       } finally {
         setIsLoading(false);
@@ -52,7 +64,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await saveAuthSession(response);
     setUser(response.user);
     setToken(response.tokens.accessToken);
-    await registerForPushNotifications(response.tokens.accessToken).catch(() => undefined);
   }, []);
 
   const signOut = useCallback(async () => {
@@ -70,10 +81,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const refreshUser = useCallback(async () => {
-    const storedUser = await getStoredUser();
     const accessToken = await getAccessToken();
-    setUser(storedUser);
-    setToken(accessToken);
+    if (!accessToken) {
+      setUser(null);
+      setToken(null);
+      return;
+    }
+    try {
+      const me = await getMe(accessToken);
+      const refresh = await getRefreshToken();
+      if (refresh) {
+        await saveAuthSession({
+          user: me,
+          tokens: { accessToken, refreshToken: refresh },
+        });
+      }
+      setUser(me);
+      setToken(accessToken);
+    } catch {
+      const storedUser = await getStoredUser();
+      setUser(storedUser);
+      setToken(accessToken);
+    }
   }, []);
 
   const value = useMemo(

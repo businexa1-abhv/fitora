@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,7 +13,7 @@ import { FadeUp } from '@/components/motion';
 import { getAccessToken, getStoredUser, updateStoredUser } from '@/lib/auth';
 import { getMe } from '@/lib/api';
 
-export default function AccountPage() {
+export default function AccountPage(): React.JSX.Element {
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);

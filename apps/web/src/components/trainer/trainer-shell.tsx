@@ -1,13 +1,16 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LogOut, X } from 'lucide-react';
 import { APP_NAME } from '@fitora/shared';
 import { TRAINER_NAV } from '@/lib/trainer-navigation';
-import { clearAuthSession, getAccessToken, getStoredUser } from '@/lib/auth';
+import { clearAuthSession, getStoredUser, getValidAccessToken } from '@/lib/auth';
 import { getUnreadNotificationCount } from '@/lib/notifications';
+import { ApiError } from '@/lib/api';
 import { PortalTopBar } from '@/components/portal-top-bar';
 import { UserAvatar } from '@/components/user-avatar';
 
@@ -107,17 +110,20 @@ function NavContent({ onNavigate, unreadCount }: { onNavigate?: () => void; unre
   );
 }
 
-export function TrainerShell({ children }: { children: React.ReactNode }) {
+export function TrainerShell({ children }: { children: React.ReactNode }): React.JSX.Element {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const user = getStoredUser();
 
   useEffect(() => {
-    const token = getAccessToken();
+    const token = getValidAccessToken();
     if (!token) return;
     getUnreadNotificationCount(token)
       .then((r) => setUnreadCount(r.count))
-      .catch(() => setUnreadCount(0));
+      .catch((error) => {
+        if (error instanceof ApiError && error.status === 401) clearAuthSession();
+        setUnreadCount(0);
+      });
   }, []);
 
   return (

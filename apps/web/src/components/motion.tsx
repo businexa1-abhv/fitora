@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { motion, type Variants } from 'framer-motion';
 import { type ReactNode } from 'react';
 
@@ -34,7 +36,7 @@ export function FadeUp({
   children: ReactNode;
   delay?: number;
   className?: string;
-}) {
+}): React.JSX.Element {
   return (
     <motion.div
       initial="hidden"
@@ -60,7 +62,7 @@ export function MotionDiv({
   className?: string;
   variants?: Variants;
   custom?: number;
-}) {
+}): React.JSX.Element {
   return (
     <motion.div
       initial="hidden"

@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useMutation } from '@tanstack/react-query';
 import { Download, FileText, Loader2 } from 'lucide-react';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -45,7 +47,7 @@ const REPORTS = [
   },
 ] as const;
 
-export default function OwnerReportsPage() {
+export default function OwnerReportsPage(): React.JSX.Element {
   const token = useAuthToken();
 
   const exportMutation = useMutation({

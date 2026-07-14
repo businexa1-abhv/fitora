@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -9,7 +11,7 @@ import { PageShell } from '@/components/app-header';
 import { getAccessToken } from '@/lib/auth';
 import { getNotificationPreferences, updateNotificationPreferences } from '@/lib/notifications';
 
-export default function NotificationSettingsPage() {
+export default function NotificationSettingsPage(): React.JSX.Element {
   const router = useRouter();
   const [prefs, setPrefs] = useState<NotificationPreferences | null>(null);
   const [saving, setSaving] = useState(false);

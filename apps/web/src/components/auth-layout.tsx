@@ -8,7 +8,7 @@ interface AuthLayoutProps {
   footer: React.ReactNode;
 }
 
-export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProps) {
+export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProps): React.JSX.Element {
   return (
     <div className="min-h-screen flex">
       {/* Left brand panel — hidden on mobile */}
@@ -72,7 +72,7 @@ export function FormField({
   label: string;
   id: string;
   children: React.ReactNode;
-}) {
+}): React.JSX.Element {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-semibold mb-2">

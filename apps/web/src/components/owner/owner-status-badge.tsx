@@ -11,7 +11,7 @@ const STATUS_STYLES: Record<string, string> = {
   EXPIRED: 'bg-slate-100 text-slate-600',
 };
 
-export function OwnerStatusBadge({ status }: { status: string }) {
+export function OwnerStatusBadge({ status }: { status: string }): React.JSX.Element {
   const style = STATUS_STYLES[status] ?? 'bg-slate-100 text-slate-600';
   return (
     <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${style}`}>

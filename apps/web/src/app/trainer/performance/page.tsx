@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect, useState } from 'react';
 import { Star, TrendingUp } from 'lucide-react';
 import type { TrainerPerformance } from '@fitora/shared';
@@ -8,7 +10,7 @@ import { OwnerStatCard } from '@/components/owner/owner-stat-card';
 import { getAccessToken } from '@/lib/auth';
 import { getTrainerPerformance } from '@/lib/trainer';
 
-export default function TrainerPerformancePage() {
+export default function TrainerPerformancePage(): React.JSX.Element {
   const [performance, setPerformance] = useState<TrainerPerformance | null>(null);
   const [loading, setLoading] = useState(true);
 
