@@ -1,7 +1,13 @@
-import { Injectable, Logger, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common';
-import { type ConfigService } from '@nestjs/config';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  type OnModuleDestroy,
+  type OnModuleInit,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { type Job, type JobsOptions, Queue, Worker } from 'bullmq';
-import { type RedisService } from '../common/redis/redis.service';
+import { RedisService } from '../common/redis/redis.service';
 import {
   ALL_WORKER_QUEUES,
   CRON_PATTERNS,
@@ -23,7 +29,9 @@ export class QueueManagerService implements OnModuleInit, OnModuleDestroy {
   private handlers = new Map<string, QueueJobHandler>();
 
   constructor(
+    @Inject(RedisService)
     private redisService: RedisService,
+    @Inject(ConfigService)
     private configService: ConfigService,
   ) {}
 

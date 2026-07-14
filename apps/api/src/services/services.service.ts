@@ -16,9 +16,9 @@ import {
   UserRole,
 } from '@prisma/client';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
-import { type NotificationsService } from '../notifications/notifications.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
-import { type PrismaService } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.module';
 import { generateServiceOrderNumber } from './services.constants';
 import {
   type BookServiceDto,
@@ -42,9 +42,11 @@ const ORDER_INCLUDE = {
 @Injectable()
 export class ServicesService {
   constructor(
+    @Inject(PrismaService)
     private prisma: PrismaService,
     @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
+    @Inject(NotificationsService)
     private notificationsService: NotificationsService,
   ) {}
 

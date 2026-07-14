@@ -15,10 +15,10 @@ import {
   type Prisma,
   UserRole,
 } from '@prisma/client';
-import { type PrismaService } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.module';
 import { PaymentsService } from '../payments/payments.service';
 import { MembershipsService } from '../memberships/memberships.service';
-import { type NotificationsService } from '../notifications/notifications.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { buildCursorPaginatedResult, decodeCursor } from '../common/utils/cursor-pagination.util';
 import { BOOKING_LOCK_TTL_MINUTES } from './constants/refund-rules';
@@ -53,11 +53,13 @@ const BOOKING_INCLUDE = {
 @Injectable()
 export class BookingsService {
   constructor(
+    @Inject(PrismaService)
     private prisma: PrismaService,
     @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
     @Inject(forwardRef(() => MembershipsService))
     private membershipsService: MembershipsService,
+    @Inject(NotificationsService)
     private notificationsService: NotificationsService,
   ) {}
 
