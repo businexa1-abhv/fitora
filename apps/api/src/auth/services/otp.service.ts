@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   Logger,
   HttpException,
@@ -11,10 +12,10 @@ import {
 import { type OtpPurpose } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import * as crypto from 'crypto';
-import { type CacheService } from '../../common/redis/cache.service';
-import { type RateLimitService } from '../../common/redis/rate-limit.service';
-import { type SmsProvider } from '../../notifications/providers/sms.provider';
-import { type PrismaService } from '../../prisma/prisma.module';
+import { CacheService } from '../../common/redis/cache.service';
+import { RateLimitService } from '../../common/redis/rate-limit.service';
+import { SmsProvider } from '../../notifications/providers/sms.provider';
+import { PrismaService } from '../../prisma/prisma.module';
 import {
   BCRYPT_ROUNDS,
   OTP_EXPIRY_MINUTES,
@@ -37,9 +38,13 @@ export class OtpService {
   private readonly logger = new Logger(OtpService.name);
 
   constructor(
+    @Inject(PrismaService)
     private prisma: PrismaService,
+    @Inject(CacheService)
     private cacheService: CacheService,
+    @Inject(RateLimitService)
     private rateLimitService: RateLimitService,
+    @Inject(SmsProvider)
     private smsProvider: SmsProvider,
   ) {}
 

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -13,8 +14,8 @@ import {
   type UserRoleAssignment,
 } from '@prisma/client';
 import { getPermissionsForRoles, type UserRole as TypesUserRole } from '@fitora/types';
-import { type PrismaService } from '../prisma/prisma.module';
-import { type TenantsService } from '../tenants/tenants.service';
+import { PrismaService } from '../prisma/prisma.module';
+import { TenantsService } from '../tenants/tenants.service';
 import { REGISTERABLE_ROLES } from './constants/auth.constants';
 import {
   type AuthResponseDto,
@@ -33,23 +34,30 @@ import {
   type VerifyMobileOtpDto,
   type VerifyOtpDto,
 } from './dto';
-import { type AuditService } from './services/audit.service';
-import { type GoogleAuthService } from './services/google-auth.service';
-import { type OtpService } from './services/otp.service';
-import { type PasswordService } from './services/password.service';
-import { type TokenService } from './services/token.service';
+import { AuditService } from './services/audit.service';
+import { GoogleAuthService } from './services/google-auth.service';
+import { OtpService } from './services/otp.service';
+import { PasswordService } from './services/password.service';
+import { TokenService } from './services/token.service';
 
 type UserWithRoles = User & { roles: UserRoleAssignment[] };
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(PrismaService)
     private prisma: PrismaService,
+    @Inject(TokenService)
     private tokenService: TokenService,
+    @Inject(OtpService)
     private otpService: OtpService,
+    @Inject(PasswordService)
     private passwordService: PasswordService,
+    @Inject(GoogleAuthService)
     private googleAuthService: GoogleAuthService,
+    @Inject(AuditService)
     private auditService: AuditService,
+    @Inject(TenantsService)
     private tenantsService: TenantsService,
   ) {}
 

@@ -1,10 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { type ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { getPermissionsForRoles, type UserRole as TypesUserRole } from '@fitora/types';
 import { type UserRole } from '@prisma/client';
-import { type PrismaService } from '../../prisma/prisma.module';
+import { PrismaService } from '../../prisma/prisma.module';
 
 interface JwtPayload {
   sub: string;
@@ -20,7 +20,9 @@ interface JwtPayload {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
+    @Inject(ConfigService)
     configService: ConfigService,
+    @Inject(PrismaService)
     private prisma: PrismaService,
   ) {
     super({

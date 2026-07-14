@@ -1,9 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { type JwtService } from '@nestjs/jwt';
-import { type ConfigService } from '@nestjs/config';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { type PrismaService } from '../../prisma/prisma.module';
+import { PrismaService } from '../../prisma/prisma.module';
 import { hashToken } from '../../common/utils/token-hash.util';
 import { type TokenPair } from '../interfaces/auth-user.interface';
 
@@ -47,8 +47,11 @@ interface RefreshSessionResult {
 @Injectable()
 export class TokenService {
   constructor(
+    @Inject(JwtService)
     private jwtService: JwtService,
+    @Inject(ConfigService)
     private configService: ConfigService,
+    @Inject(PrismaService)
     private prisma: PrismaService,
   ) {}
 
