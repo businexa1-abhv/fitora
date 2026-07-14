@@ -6,9 +6,8 @@ describe('validateEnv', () => {
     JWT_SECRET: 'test-jwt-secret-minimum-32-characters-long',
     JWT_REFRESH_SECRET: 'test-refresh-secret-minimum-32-chars',
     PAYMENT_MODE: 'mock',
-    OTP_MODE: 'mock',
+    OTP_PROVIDER: 'console',
     EMAIL_MODE: 'mock',
-    SMS_MODE: 'mock',
     PUSH_MODE: 'mock',
     NODE_ENV: 'development',
   };
@@ -27,9 +26,11 @@ describe('validateEnv', () => {
         JWT_SECRET: 'too-short',
         REDIS_URL: 'redis://localhost:6379',
         SWAGGER_ENABLED: 'false',
-        OTP_MODE: 'live',
+        OTP_PROVIDER: 'msg91',
+        MSG91_AUTH_KEY: 'msg91-key',
+        MSG91_OTP_TEMPLATE_ID: 'msg91-template',
         EMAIL_MODE: 'live',
-        SMS_MODE: 'live',
+        PUSH_MODE: 'live',
       }),
     ).toThrow(/JWT_SECRET/);
   });

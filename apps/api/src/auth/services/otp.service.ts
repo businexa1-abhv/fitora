@@ -14,7 +14,7 @@ import * as bcrypt from 'bcryptjs';
 import * as crypto from 'crypto';
 import { CacheService } from '../../common/redis/cache.service';
 import { RateLimitService } from '../../common/redis/rate-limit.service';
-import { SmsProvider } from '../../notifications/providers/sms.provider';
+import { SMS_PROVIDER, type SmsProvider } from '../../notifications/providers/sms.provider';
 import { PrismaService } from '../../prisma/prisma.module';
 import {
   BCRYPT_ROUNDS,
@@ -44,7 +44,7 @@ export class OtpService {
     private cacheService: CacheService,
     @Inject(RateLimitService)
     private rateLimitService: RateLimitService,
-    @Inject(SmsProvider)
+    @Inject(SMS_PROVIDER)
     private smsProvider: SmsProvider,
   ) {}
 
@@ -212,6 +212,7 @@ export class OtpService {
     const sent = await this.smsProvider.send(
       phone,
       `Your FitOra verification code is ${code}. It expires in ${OTP_EXPIRY_MINUTES} minutes.`,
+      { otpCode: code, expiresInMinutes: OTP_EXPIRY_MINUTES },
     );
 
     if (!sent) {

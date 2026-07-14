@@ -5,7 +5,7 @@ import { OtpService } from './otp.service';
 import { PrismaService } from '../../prisma/prisma.module';
 import { CacheService } from '../../common/redis/cache.service';
 import { RateLimitService } from '../../common/redis/rate-limit.service';
-import { SmsProvider } from '../../notifications/providers/sms.provider';
+import { SMS_PROVIDER } from '../../notifications/providers/sms.provider';
 
 jest.mock('bcryptjs');
 
@@ -70,7 +70,7 @@ describe('OtpService', () => {
         { provide: PrismaService, useValue: prisma },
         { provide: CacheService, useValue: cache },
         { provide: RateLimitService, useValue: rateLimit },
-        { provide: SmsProvider, useValue: smsProvider },
+        { provide: SMS_PROVIDER, useValue: smsProvider },
       ],
     }).compile();
 
@@ -107,12 +107,17 @@ describe('OtpService', () => {
     const result = await service.sendOtp('+919876543210', OtpPurpose.LOGIN);
     expect(result.message).toBeDefined();
     expect(result.expiresIn).toBeGreaterThan(0);
+    expect(result).not.toHaveProperty('otp');
     expect(cache.set).toHaveBeenCalledWith(
       'auth:otp:LOGIN:+919876543210',
       expect.objectContaining({ codeHash: 'hash', attempts: 0 }),
       300,
     );
-    expect(smsProvider.send).toHaveBeenCalled();
+    expect(smsProvider.send).toHaveBeenCalledWith(
+      '+919876543210',
+      expect.stringContaining('Your FitOra verification code is'),
+      { otpCode: expect.any(String), expiresInMinutes: 5 },
+    );
   });
 
   it('assertPhoneAvailable rejects taken phone', async () => {

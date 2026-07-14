@@ -1,22 +1,22 @@
-import { Inject, Injectable, Logger, OnModuleInit, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, Logger, type OnModuleInit, forwardRef } from '@nestjs/common';
 import { PaymentStatus } from '@prisma/client';
-import { AnalyticsService } from '../analytics/analytics.service';
+import { type AnalyticsService } from '../analytics/analytics.service';
 import { AnalyticsPeriod } from '../analytics/analytics.constants';
-import { RedisService } from '../common/redis/redis.service';
+import { type RedisService } from '../common/redis/redis.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { EmailProvider } from '../notifications/providers/email.provider';
-import { PushProvider } from '../notifications/providers/push.provider';
-import { SmsProvider } from '../notifications/providers/sms.provider';
+import { type EmailProvider } from '../notifications/providers/email.provider';
+import { type PushProvider } from '../notifications/providers/push.provider';
+import { SMS_PROVIDER, type SmsProvider } from '../notifications/providers/sms.provider';
 import { PaymentsService } from '../payments/payments.service';
-import { PrismaService } from '../prisma/prisma.module';
+import { type PrismaService } from '../prisma/prisma.module';
 import {
   CHANNEL_JOB_OPTIONS,
   QUEUES,
   REFUND_JOB_OPTIONS,
   SCHEDULED_JOBS,
-  ScheduledJobName,
+  type ScheduledJobName,
 } from './queue.constants';
-import { QueueManagerService } from './queue-manager.service';
+import { type QueueManagerService } from './queue-manager.service';
 import type {
   EmailJobData,
   PaymentRetryJobData,
@@ -33,6 +33,7 @@ export class QueueJobsService implements OnModuleInit {
   constructor(
     private queueManager: QueueManagerService,
     private emailProvider: EmailProvider,
+    @Inject(SMS_PROVIDER)
     private smsProvider: SmsProvider,
     private pushProvider: PushProvider,
     @Inject(forwardRef(() => NotificationsService))

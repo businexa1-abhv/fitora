@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 const modeSchema = z.enum(['mock', 'live']).default('mock');
+const otpProviderSchema = z.enum(['console', 'msg91', 'twilio']).default('console');
 
 export const envSchema = z
   .object({
@@ -27,14 +28,22 @@ export const envSchema = z
     RAZORPAY_KEY_SECRET: z.string().optional(),
     RAZORPAY_WEBHOOK_SECRET: z.string().optional(),
 
-    OTP_MODE: modeSchema,
+    OTP_PROVIDER: otpProviderSchema,
     EMAIL_MODE: modeSchema,
-    SMS_MODE: modeSchema,
     PUSH_MODE: modeSchema,
     AI_MODE: modeSchema,
     OPENAI_API_KEY: z.string().optional(),
     OPENAI_MODEL: z.string().default('gpt-4o-mini'),
     OPENAI_MAX_TOKENS: z.coerce.number().int().positive().default(2048),
+
+    MSG91_AUTH_KEY: z.string().optional(),
+    MSG91_OTP_TEMPLATE_ID: z.string().optional(),
+    MSG91_SENDER_ID: z.string().optional(),
+    MSG91_NOTIFY_TEMPLATE_ID: z.string().optional(),
+    TWILIO_ACCOUNT_SID: z.string().optional(),
+    TWILIO_AUTH_TOKEN: z.string().optional(),
+    TWILIO_FROM_NUMBER: z.string().optional(),
+    TWILIO_MESSAGING_SERVICE_SID: z.string().optional(),
 
     SWAGGER_ENABLED: z
       .enum(['true', 'false'])
@@ -80,10 +89,17 @@ export const envSchema = z
           message: 'SWAGGER_ENABLED must be false in production',
         });
       }
-      if (env.OTP_MODE === 'mock' || env.EMAIL_MODE === 'mock' || env.SMS_MODE === 'mock') {
+      if (env.OTP_PROVIDER === 'console') {
         ctx.addIssue({
           code: 'custom',
-          path: ['OTP_MODE'],
+          path: ['OTP_PROVIDER'],
+          message: 'Console OTP provider is not allowed in production',
+        });
+      }
+      if (env.EMAIL_MODE === 'mock' || env.PUSH_MODE === 'mock') {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['EMAIL_MODE'],
           message: 'Mock notification modes are not allowed in production',
         });
       }
@@ -119,6 +135,30 @@ export const envSchema = z
           code: 'custom',
           path: ['OPENAI_API_KEY'],
           message: 'OPENAI_API_KEY is required when AI_MODE is live',
+        });
+      }
+    }
+
+    if (isProd && env.OTP_PROVIDER === 'msg91') {
+      if (!env.MSG91_AUTH_KEY || !env.MSG91_OTP_TEMPLATE_ID) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['MSG91_AUTH_KEY'],
+          message: 'MSG91 credentials and OTP template are required when OTP_PROVIDER=msg91',
+        });
+      }
+    }
+
+    if (isProd && env.OTP_PROVIDER === 'twilio') {
+      if (
+        !env.TWILIO_ACCOUNT_SID ||
+        !env.TWILIO_AUTH_TOKEN ||
+        (!env.TWILIO_FROM_NUMBER && !env.TWILIO_MESSAGING_SERVICE_SID)
+      ) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['TWILIO_ACCOUNT_SID'],
+          message: 'Twilio credentials and sender are required when OTP_PROVIDER=twilio',
         });
       }
     }

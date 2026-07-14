@@ -14,7 +14,7 @@ import { PasswordService } from './services/password.service';
 import { GoogleAuthService } from './services/google-auth.service';
 import { AuditService } from './services/audit.service';
 import { AuthRateLimitMiddleware } from './middleware/auth-rate-limit.middleware';
-import { SmsProvider } from '../notifications/providers/sms.provider';
+import { smsProviderProviders } from '../notifications/providers/sms.provider';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'jwt' }), JwtModule.register({})],
@@ -26,7 +26,7 @@ import { SmsProvider } from '../notifications/providers/sms.provider';
     PasswordService,
     GoogleAuthService,
     AuditService,
-    SmsProvider,
+    ...smsProviderProviders,
     JwtStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
