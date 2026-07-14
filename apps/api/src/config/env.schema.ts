@@ -17,7 +17,7 @@ export const envSchema = z
     JWT_SECRET: z.string().min(1),
     JWT_EXPIRES_IN: z.string().default('15m'),
     JWT_REFRESH_SECRET: z.string().min(1),
-    JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
+    JWT_REFRESH_EXPIRES_IN: z.string().default('30d'),
 
     CORS_ORIGINS: z.string().default('http://localhost:3000,http://localhost:3002'),
     FRONTEND_URL: z.string().url().optional(),

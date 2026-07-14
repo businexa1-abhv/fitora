@@ -1,6 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PasswordService } from './password.service';
 import { TokenService } from './token.service';
@@ -8,11 +7,24 @@ import { PrismaService } from '../../prisma/prisma.module';
 
 jest.mock('bcryptjs');
 
+interface MockPrisma {
+  user: {
+    findFirst: jest.Mock;
+    findUnique: jest.Mock;
+    update: jest.Mock;
+  };
+  passwordResetToken: {
+    updateMany: jest.Mock;
+    create: jest.Mock;
+    findMany: jest.Mock;
+    update: jest.Mock;
+  };
+  $transaction: jest.Mock;
+}
+
 describe('PasswordService', () => {
   let service: PasswordService;
-  let prisma: jest.Mocked<
-    Pick<PrismaService, 'user' | 'passwordResetToken' | '$transaction'>
-  >;
+  let prisma: MockPrisma;
   let tokenService: jest.Mocked<Pick<TokenService, 'revokeAllUserTokens'>>;
 
   beforeEach(async () => {
@@ -25,9 +37,7 @@ describe('PasswordService', () => {
         update: jest.fn(),
       },
       $transaction: jest.fn(),
-    } as unknown as jest.Mocked<
-      Pick<PrismaService, 'user' | 'passwordResetToken' | '$transaction'>
-    >;
+    };
 
     tokenService = { revokeAllUserTokens: jest.fn() };
 

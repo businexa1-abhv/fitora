@@ -5,31 +5,39 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuditAction, OtpPurpose, User, UserRole, UserRoleAssignment } from '@prisma/client';
-import { getPermissionsForRoles, Permission, UserRole as TypesUserRole } from '@fitora/types';
-import { PrismaService } from '../prisma/prisma.module';
-import { TenantsService } from '../tenants/tenants.service';
+import {
+  AuditAction,
+  OtpPurpose,
+  type User,
+  UserRole,
+  type UserRoleAssignment,
+} from '@prisma/client';
+import { getPermissionsForRoles, type UserRole as TypesUserRole } from '@fitora/types';
+import { type PrismaService } from '../prisma/prisma.module';
+import { type TenantsService } from '../tenants/tenants.service';
 import { REGISTERABLE_ROLES } from './constants/auth.constants';
 import {
-  AuthResponseDto,
-  ChangePasswordDto,
-  ForgotPasswordDto,
-  GoogleLoginDto,
-  LoginDto,
-  MessageResponseDto,
-  PermissionsResponseDto,
-  RegisterDto,
-  RegisterWithOtpDto,
-  ResetPasswordDto,
-  SendOtpDto,
-  VerifyOtpDto,
+  type AuthResponseDto,
+  type ChangePasswordDto,
+  type ForgotPasswordDto,
+  type GoogleLoginDto,
+  type LoginDto,
+  type MessageResponseDto,
+  type PermissionsResponseDto,
+  type RegisterDto,
+  type RegisterWithOtpDto,
+  type ResetPasswordDto,
+  type SendMobileOtpDto,
+  type SendOtpDto,
+  type SessionAuthResponseDto,
+  type VerifyMobileOtpDto,
+  type VerifyOtpDto,
 } from './dto';
-import { AuthenticatedUser } from './interfaces/auth-user.interface';
-import { AuditService } from './services/audit.service';
-import { GoogleAuthService } from './services/google-auth.service';
-import { OtpService } from './services/otp.service';
-import { PasswordService } from './services/password.service';
-import { TokenService } from './services/token.service';
+import { type AuditService } from './services/audit.service';
+import { type GoogleAuthService } from './services/google-auth.service';
+import { type OtpService } from './services/otp.service';
+import { type PasswordService } from './services/password.service';
+import { type TokenService } from './services/token.service';
 
 type UserWithRoles = User & { roles: UserRoleAssignment[] };
 
@@ -132,10 +140,13 @@ export class AuthService {
     }
 
     await this.auditService.logAuthEvent(AuditAction.LOGIN, user.id, meta);
-    return this.buildAuthResponse(user);
+    return this.buildAuthResponse(user, meta);
   }
 
-  async loginWithPhone(dto: { phone: string; otp: string }, meta?: AuthMeta): Promise<AuthResponseDto> {
+  async loginWithPhone(
+    dto: { phone: string; otp: string },
+    meta?: AuthMeta,
+  ): Promise<AuthResponseDto> {
     const phone = this.otpService.normalizePhone(dto.phone);
     await this.otpService.verifyOtp(phone, dto.otp, OtpPurpose.LOGIN);
 
@@ -146,7 +157,7 @@ export class AuthService {
     }
 
     await this.auditService.logAuthEvent(AuditAction.LOGIN, user.id, meta);
-    return this.buildAuthResponse(user);
+    return this.buildAuthResponse(user, meta);
   }
 
   async loginWithGoogle(dto: GoogleLoginDto, meta?: AuthMeta): Promise<AuthResponseDto> {
@@ -194,7 +205,55 @@ export class AuthService {
     }
 
     await this.auditService.logAuthEvent(AuditAction.LOGIN, user.id, meta);
-    return this.buildAuthResponse(user);
+    return this.buildAuthResponse(user, meta);
+  }
+
+  async sendMobileOtp(dto: SendMobileOtpDto): Promise<{ message: string; expiresIn: number }> {
+    const phone = this.otpService.composePhone(dto.countryCode, dto.mobileNumber);
+    return this.otpService.sendOtp(phone, OtpPurpose.LOGIN);
+  }
+
+  async verifyMobileOtp(dto: VerifyMobileOtpDto, meta?: AuthMeta): Promise<SessionAuthResponseDto> {
+    const phone = this.otpService.composePhone(dto.countryCode, dto.mobileNumber);
+    await this.otpService.verifyOtp(phone, dto.otp, OtpPurpose.LOGIN);
+
+    let user = await this.otpService.findUserByPhone(phone);
+    if (!user) {
+      const name = this.splitName(dto.name);
+      user = await this.prisma.user.create({
+        data: {
+          email: this.buildPhoneEmail(phone),
+          phone,
+          firstName: name.firstName,
+          lastName: name.lastName,
+          avatarUrl: dto.profileImage,
+          phoneVerified: true,
+          roles: { create: { role: UserRole.PLAYER } },
+        },
+        include: { roles: { where: { deletedAt: null } } },
+      });
+    } else if (!user.phoneVerified) {
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { phoneVerified: true },
+        include: { roles: { where: { deletedAt: null } } },
+      });
+    }
+
+    if (!user.isActive) {
+      throw new UnauthorizedException('Account is inactive');
+    }
+
+    await this.auditService.logAuthEvent(AuditAction.LOGIN, user.id, meta);
+
+    return this.buildSessionAuthResponse(user, {
+      ...meta,
+      deviceId: dto.deviceId,
+      deviceName: dto.deviceName,
+      platform: dto.platform,
+      os: dto.os,
+      appVersion: dto.appVersion,
+    });
   }
 
   async sendOtp(dto: SendOtpDto): Promise<{ message: string; expiresIn: number }> {
@@ -266,22 +325,27 @@ export class AuthService {
     throw new BadRequestException('Unsupported OTP purpose');
   }
 
-  async refresh(refreshToken: string): Promise<AuthResponseDto> {
-    const { userId } = await this.tokenService.rotateRefreshToken(refreshToken);
+  async refresh(refreshToken: string, meta?: AuthMeta): Promise<AuthResponseDto> {
+    const result = await this.tokenService.refreshSession(refreshToken, meta);
 
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      include: { roles: { where: { deletedAt: null } } },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-
-    return this.buildAuthResponse(user);
+    return {
+      user: this.formatUser(result.user as UserWithRoles),
+      tokens: result.tokens,
+    };
   }
 
-  async logout(refreshToken: string, meta?: AuthMeta): Promise<void> {
+  async refreshMobile(refreshToken: string, meta?: AuthMeta): Promise<SessionAuthResponseDto> {
+    const result = await this.tokenService.refreshSession(refreshToken, meta);
+
+    return {
+      accessToken: result.tokens.accessToken,
+      refreshToken: result.tokens.refreshToken,
+      expiresIn: result.expiresIn,
+      user: this.formatUser(result.user as UserWithRoles),
+    };
+  }
+
+  async logout(refreshToken: string, _meta?: AuthMeta): Promise<void> {
     await this.tokenService.revokeRefreshToken(refreshToken);
   }
 
@@ -320,17 +384,32 @@ export class AuthService {
     return { roles: user.roles, permissions: user.permissions };
   }
 
-  private async buildAuthResponse(user: UserWithRoles): Promise<AuthResponseDto> {
+  private async buildAuthResponse(user: UserWithRoles, meta?: AuthMeta): Promise<AuthResponseDto> {
     await this.prisma.user.update({
       where: { id: user.id },
       data: { lastLoginAt: new Date() },
     });
 
-    const tokens = await this.tokenService.issueTokenPair(user.id, user.email);
+    const roles = user.roles.map((r) => r.role);
+    const tokens = await this.tokenService.issueTokenPair(user.id, user.email, roles, meta);
 
     return {
       user: this.formatUser(user),
       tokens,
+    };
+  }
+
+  private async buildSessionAuthResponse(
+    user: UserWithRoles,
+    meta?: AuthMeta,
+  ): Promise<SessionAuthResponseDto> {
+    const response = await this.buildAuthResponse(user, meta);
+
+    return {
+      accessToken: response.tokens.accessToken,
+      refreshToken: response.tokens.refreshToken,
+      expiresIn: this.tokenService.getAccessTokenExpiresInSeconds(),
+      user: response.user,
     };
   }
 
@@ -358,6 +437,22 @@ export class AuthService {
     }
   }
 
+  private buildPhoneEmail(phone: string): string {
+    return `phone.${phone.replace(/\D/g, '')}@fitora.local`;
+  }
+
+  private splitName(name?: string): { firstName: string; lastName: string } {
+    const parts = name?.trim().split(/\s+/).filter(Boolean) ?? [];
+    if (parts.length === 0) {
+      return { firstName: 'Player', lastName: '' };
+    }
+
+    return {
+      firstName: parts[0],
+      lastName: parts.slice(1).join(' '),
+    };
+  }
+
   private async assertEmailAvailable(email: string): Promise<void> {
     const existing = await this.prisma.user.findFirst({
       where: { email: email.toLowerCase(), deletedAt: null },
@@ -372,4 +467,9 @@ export class AuthService {
 export interface AuthMeta {
   ipAddress?: string;
   userAgent?: string;
+  deviceId?: string;
+  deviceName?: string;
+  platform?: string;
+  os?: string;
+  appVersion?: string;
 }

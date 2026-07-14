@@ -1,43 +1,35 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Req,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { Request } from 'express';
-import { CurrentUser, Public, AuthUserPayload } from '../common/decorators';
-import { AuthService } from './auth.service';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { type Request } from 'express';
+import { CurrentUser, Public, type AuthUserPayload } from '../common/decorators';
+import { type AuthService } from './auth.service';
 import {
   AuthResponseDto,
-  ChangePasswordDto,
-  ForgotPasswordDto,
-  GoogleLoginDto,
-  LoginDto,
+  type ChangePasswordDto,
+  type ForgotPasswordDto,
+  type GoogleLoginDto,
+  type LoginDto,
   MessageResponseDto,
   OtpSentResponseDto,
   PermissionsResponseDto,
-  PhoneLoginDto,
-  RefreshTokenDto,
-  RegisterDto,
-  RegisterWithOtpDto,
-  ResetPasswordDto,
-  SendOtpDto,
-  VerifyOtpDto,
+  type PhoneLoginDto,
+  type RefreshTokenDto,
+  type RegisterDto,
+  type RegisterWithOtpDto,
+  type ResetPasswordDto,
+  type SendMobileOtpDto,
+  type SendOtpDto,
+  SessionAuthResponseDto,
+  type VerifyMobileOtpDto,
+  type VerifyOtpDto,
 } from './dto';
 
 function extractMeta(req: Request) {
+  const userAgent = req.headers['user-agent'];
+
   return {
     ipAddress: req.ip,
-    userAgent: req.headers['user-agent'],
+    userAgent: Array.isArray(userAgent) ? userAgent.join(', ') : userAgent,
   };
 }
 
@@ -99,6 +91,15 @@ export class AuthController {
   }
 
   @Public()
+  @Post('send-otp')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Send login OTP to a player mobile number' })
+  @ApiResponse({ status: 200, type: OtpSentResponseDto })
+  sendMobileOtp(@Body() dto: SendMobileOtpDto) {
+    return this.authService.sendMobileOtp(dto);
+  }
+
+  @Public()
   @Post('otp/verify')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -112,12 +113,30 @@ export class AuthController {
   }
 
   @Public()
+  @Post('verify-otp')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Verify player OTP and create a device session' })
+  @ApiResponse({ status: 200, type: SessionAuthResponseDto })
+  verifyMobileOtp(@Body() dto: VerifyMobileOtpDto, @Req() req: Request) {
+    return this.authService.verifyMobileOtp(dto, extractMeta(req));
+  }
+
+  @Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Refresh access token using refresh token' })
   @ApiResponse({ status: 200, type: AuthResponseDto })
-  refresh(@Body() dto: RefreshTokenDto) {
-    return this.authService.refresh(dto.refreshToken);
+  refresh(@Body() dto: RefreshTokenDto, @Req() req: Request) {
+    return this.authService.refresh(dto.refreshToken, extractMeta(req));
+  }
+
+  @Public()
+  @Post('refresh-token')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Rotate refresh token and return a new mobile token pair' })
+  @ApiResponse({ status: 200, type: SessionAuthResponseDto })
+  refreshMobile(@Body() dto: RefreshTokenDto, @Req() req: Request) {
+    return this.authService.refreshMobile(dto.refreshToken, extractMeta(req));
   }
 
   @Public()
@@ -133,6 +152,14 @@ export class AuthController {
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Logout from all devices (revoke all refresh tokens)' })
   logoutAll(@CurrentUser() user: AuthUserPayload, @Req() req: Request) {
+    return this.authService.logoutAll(user.id, extractMeta(req));
+  }
+
+  @Post('logout-all')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Logout from all devices (alias for logout/all)' })
+  logoutAllAlias(@CurrentUser() user: AuthUserPayload, @Req() req: Request) {
     return this.authService.logoutAll(user.id, extractMeta(req));
   }
 

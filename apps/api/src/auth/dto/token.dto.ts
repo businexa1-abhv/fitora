@@ -58,6 +58,20 @@ export class AuthResponseDto {
   tokens: AuthTokensDto;
 }
 
+export class SessionAuthResponseDto {
+  @ApiProperty()
+  accessToken: string;
+
+  @ApiProperty()
+  refreshToken: string;
+
+  @ApiProperty({ example: 900, description: 'Access token expiry in seconds' })
+  expiresIn: number;
+
+  @ApiProperty({ type: AuthUserDto })
+  user: AuthUserDto;
+}
+
 export class PermissionsResponseDto {
   @ApiProperty({ enum: Permission, isArray: true })
   permissions: Permission[];

@@ -1,9 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import {
-  BadRequestException,
-  ConflictException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Test, type TestingModule } from '@nestjs/testing';
+import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { AuditAction, OtpPurpose, UserRole } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { TokenService } from './services/token.service';
@@ -12,29 +8,46 @@ import { PasswordService } from './services/password.service';
 import { GoogleAuthService } from './services/google-auth.service';
 import { AuditService } from './services/audit.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { TenantsService } from '../tenants/tenants.service';
+
+interface MockPrisma {
+  user: {
+    findFirst: jest.Mock;
+    findUnique: jest.Mock;
+    create: jest.Mock;
+    update: jest.Mock;
+  };
+}
+
+interface MockOtpService {
+  normalizePhone: jest.Mock;
+  composePhone: jest.Mock;
+  assertPhoneAvailable: jest.Mock;
+  verifyOtp: jest.Mock;
+  findUserByPhone: jest.Mock;
+  sendOtp: jest.Mock;
+}
+
+interface MockTokenService {
+  issueTokenPair: jest.Mock;
+  rotateRefreshToken: jest.Mock;
+  refreshSession: jest.Mock;
+  revokeRefreshToken: jest.Mock;
+  revokeAllUserTokens: jest.Mock;
+  getAccessTokenExpiresInSeconds: jest.Mock;
+}
 
 describe('AuthService (extended)', () => {
   let service: AuthService;
-  let prisma: jest.Mocked<Pick<PrismaService, 'user'>>;
-  let otpService: jest.Mocked<
-    Pick<
-      OtpService,
-      | 'normalizePhone'
-      | 'assertPhoneAvailable'
-      | 'verifyOtp'
-      | 'findUserByPhone'
-      | 'sendOtp'
-    >
-  >;
+  let prisma: MockPrisma;
+  let otpService: MockOtpService;
   let passwordService: jest.Mocked<
     Pick<
       PasswordService,
       'hashPassword' | 'verifyPassword' | 'requestReset' | 'resetPassword' | 'changePassword'
     >
   >;
-  let tokenService: jest.Mocked<
-    Pick<TokenService, 'issueTokenPair' | 'rotateRefreshToken' | 'revokeRefreshToken' | 'revokeAllUserTokens'>
-  >;
+  let tokenService: MockTokenService;
   let googleAuthService: jest.Mocked<Pick<GoogleAuthService, 'verifyIdToken'>>;
   let auditService: jest.Mocked<Pick<AuditService, 'logAuthEvent'>>;
 
@@ -76,10 +89,13 @@ describe('AuthService (extended)', () => {
         create: jest.fn(),
         update: jest.fn(),
       },
-    } as unknown as typeof prisma;
+    };
 
     otpService = {
       normalizePhone: jest.fn((p: string) => (p.startsWith('+') ? p : `+91${p}`)),
+      composePhone: jest.fn(
+        (countryCode: string, mobileNumber: string) => `${countryCode}${mobileNumber}`,
+      ),
       assertPhoneAvailable: jest.fn(),
       verifyOtp: jest.fn(),
       findUserByPhone: jest.fn(),
@@ -96,9 +112,19 @@ describe('AuthService (extended)', () => {
 
     tokenService = {
       issueTokenPair: jest.fn().mockResolvedValue({ accessToken: 'at', refreshToken: 'rt' }),
-      rotateRefreshToken: jest.fn().mockResolvedValue({ userId: 'user-1', email: 'player@example.com' }),
+      rotateRefreshToken: jest
+        .fn()
+        .mockResolvedValue({ userId: 'user-1', email: 'player@example.com' }),
+      refreshSession: jest.fn().mockResolvedValue({
+        userId: 'user-1',
+        email: 'player@example.com',
+        user: mockUser,
+        tokens: { accessToken: 'at', refreshToken: 'rt' },
+        expiresIn: 900,
+      }),
       revokeRefreshToken: jest.fn(),
       revokeAllUserTokens: jest.fn(),
+      getAccessTokenExpiresInSeconds: jest.fn().mockReturnValue(900),
     };
 
     googleAuthService = {
@@ -123,6 +149,7 @@ describe('AuthService (extended)', () => {
         { provide: PasswordService, useValue: passwordService },
         { provide: GoogleAuthService, useValue: googleAuthService },
         { provide: AuditService, useValue: auditService },
+        { provide: TenantsService, useValue: { createForCourtOwner: jest.fn() } },
       ],
     }).compile();
 

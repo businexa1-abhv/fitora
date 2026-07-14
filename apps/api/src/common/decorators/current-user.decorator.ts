@@ -1,9 +1,11 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
-import { Permission } from '@fitora/types';
+import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
+import { type UserRole } from '@prisma/client';
+import { type Permission } from '@fitora/types';
 
 export interface AuthUserPayload {
   id: string;
+  sessionId?: string;
+  deviceId?: string;
   email: string;
   firstName?: string;
   lastName?: string;

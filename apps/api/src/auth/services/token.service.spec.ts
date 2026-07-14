@@ -1,7 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException } from '@nestjs/common';
+import { UserRole } from '@prisma/client';
 import { createHash } from 'crypto';
 import { TokenService } from './token.service';
 import { PrismaService } from '../../prisma/prisma.module';
@@ -10,20 +11,41 @@ function hashToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
 }
 
+interface MockPrisma {
+  $transaction: jest.Mock;
+  refreshToken: {
+    create: jest.Mock;
+    findUnique: jest.Mock;
+    update: jest.Mock;
+    updateMany: jest.Mock;
+  };
+  userSession: {
+    upsert: jest.Mock;
+    update: jest.Mock;
+    updateMany: jest.Mock;
+  };
+}
+
 describe('TokenService', () => {
   let service: TokenService;
-  let prisma: jest.Mocked<Pick<PrismaService, 'refreshToken'>>;
+  let prisma: MockPrisma;
   let jwtService: jest.Mocked<Pick<JwtService, 'signAsync'>>;
 
   beforeEach(async () => {
     prisma = {
+      $transaction: jest.fn((ops: Promise<unknown>[]) => Promise.all(ops)),
       refreshToken: {
         create: jest.fn(),
         findUnique: jest.fn(),
         update: jest.fn(),
         updateMany: jest.fn(),
       },
-    } as unknown as jest.Mocked<Pick<PrismaService, 'refreshToken'>>;
+      userSession: {
+        upsert: jest.fn(),
+        update: jest.fn(),
+        updateMany: jest.fn(),
+      },
+    };
 
     jwtService = {
       signAsync: jest
@@ -56,8 +78,17 @@ describe('TokenService', () => {
 
   it('issues access and refresh tokens', async () => {
     prisma.refreshToken.create.mockResolvedValue({} as never);
+    prisma.userSession.upsert.mockResolvedValue({
+      id: 'session-1',
+      deviceId: 'device-1',
+      accessTokenVersion: 1,
+    });
+    prisma.userSession.update.mockResolvedValue({} as never);
 
-    const tokens = await service.issueTokenPair('user-1', 'test@example.com');
+    const tokens = await service.issueTokenPair('user-1', 'test@example.com', [UserRole.PLAYER], {
+      deviceId: 'device-1',
+      platform: 'ios',
+    });
 
     expect(tokens).toEqual({
       accessToken: 'access-token',
@@ -67,6 +98,8 @@ describe('TokenService', () => {
       expect.objectContaining({
         data: expect.objectContaining({
           userId: 'user-1',
+          sessionId: 'session-1',
+          deviceId: 'device-1',
           token: hashToken('refresh-token'),
         }),
       }),
@@ -78,9 +111,12 @@ describe('TokenService', () => {
       id: 'rt-1',
       token: hashToken('old-token'),
       userId: 'user-1',
+      sessionId: null,
+      deviceId: null,
       expiresAt: new Date(Date.now() - 1000),
       revokedAt: null,
       createdAt: new Date(),
+      session: null,
       user: {
         id: 'user-1',
         email: 'test@example.com',
@@ -90,8 +126,6 @@ describe('TokenService', () => {
       },
     } as never);
 
-    await expect(service.rotateRefreshToken('old-token')).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(service.rotateRefreshToken('old-token')).rejects.toThrow(UnauthorizedException);
   });
 });
