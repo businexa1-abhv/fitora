@@ -8,7 +8,7 @@ import { BookingsService } from './bookings.service';
 @Module({
   imports: [
     forwardRef(() => PaymentsModule),
-    MembershipsModule,
+    forwardRef(() => MembershipsModule),
     NotificationsModule,
   ],
   controllers: [BookingsController],

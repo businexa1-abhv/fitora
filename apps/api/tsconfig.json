@@ -1,12 +1,10 @@
 {
   "extends": "@fitora/config/typescript/nestjs.json",
   "compilerOptions": {
-    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "outDir": "./dist"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "src/marketplace"]
