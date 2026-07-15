@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Admin - Enterprise Platform Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "surface-container": "#ffeae0",
+                        "on-tertiary-container": "#003554",
+                        "surface-variant": "#f6ded3",
+                        "tertiary-container": "#00a2f4",
+                        "inverse-on-surface": "#ffede6",
+                        "tertiary-fixed-dim": "#93ccff",
+                        "on-primary-container": "#582200",
+                        "secondary": "#006e2f",
+                        "on-surface": "#251913",
+                        "on-tertiary-fixed-variant": "#004b74",
+                        "surface-container-low": "#fff1eb",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#f6ded3",
+                        "tertiary-fixed": "#cde5ff",
+                        "tertiary": "#006398",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#9d4300",
+                        "surface": "#fff8f6",
+                        "primary": "#9d4300",
+                        "inverse-surface": "#3c2d26",
+                        "background": "#fff8f6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#007432",
+                        "on-secondary-fixed-variant": "#005321",
+                        "outline": "#8c7164",
+                        "on-surface-variant": "#584237",
+                        "inverse-primary": "#ffb690",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-tertiary-fixed": "#001d32",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#fce3d9",
+                        "secondary-fixed": "#6bff8f",
+                        "primary-fixed-dim": "#ffb690",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#783200",
+                        "primary-fixed": "#ffdbca",
+                        "surface-bright": "#fff8f6",
+                        "primary-container": "#f97316",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary-fixed": "#002109",
+                        "on-primary-fixed": "#341100",
+                        "surface-dim": "#edd5cb",
+                        "outline-variant": "#e0c0b1",
+                        "on-background": "#251913"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "section-gap": "48px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Lexend"],
+                        "title-lg": ["Lexend"],
+                        "body-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-md": ["Lexend"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fff8f6;
+            color: #251913;
+            font-family: 'Inter', sans-serif;
+        }
+        .lexend { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(140, 113, 100, 0.1);
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #e0c0b1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased overflow-hidden">
+<!-- Sidebar Navigation (JSON Anchor: SideNavBar) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface dark:bg-surface-dim shadow-sm dark:shadow-none flex flex-col h-full py-8 px-4 z-50">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed leading-none">ProMarket</h1>
+<p class="text-on-surface-variant opacity-70 font-body-md text-body-md">Enterprise Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Active: Overview -->
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg transition-colors text-primary font-bold border-r-4 border-primary dark:text-primary-fixed-dim dark:border-primary-fixed-dim hover:bg-surface-container-high duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Overview</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Management</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-body-md text-body-md">CMS</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-primary-container rounded-2xl text-white">
+<p class="font-label-lg text-label-lg mb-2 opacity-90">Daily Summary Ready</p>
+<button class="w-full py-2 bg-white text-primary font-bold rounded-lg hover:bg-surface-bright transition-all active:scale-95">
+                Export Report
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex flex-col h-screen overflow-hidden">
+<!-- Top Navigation (JSON Anchor: TopNavBar) -->
+<header class="h-16 sticky top-0 right-0 w-full z-40 bg-surface dark:bg-surface-dim flex items-center justify-between px-margin-desktop shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-label-lg focus-within:ring-2 focus-within:ring-primary transition-all outline-none" placeholder="Search platform metrics..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant opacity-30 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="font-label-lg text-label-lg leading-none">Super Admin</p>
+<p class="text-xs text-on-surface-variant opacity-70">Admin Access</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-container object-cover" data-alt="A professional headshot of a female executive in a modern business environment. The lighting is soft and natural, emphasizing a high-end corporate aesthetic with a blurred tech office background. The colors are muted slates and crisp whites with a high-energy orange highlight that matches the brand identity." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-margin-desktop custom-scroll space-y-8 pb-12">
+<!-- Page Header -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface lexend">Platform Overview</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant opacity-80">Strategic insights and operational performance for FitOra India.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-primary font-bold text-label-lg flex items-center gap-2 hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-base">calendar_today</span>
+                        Last 30 Days
+                    </button>
+<button class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-label-lg flex items-center gap-2 hover:opacity-90 shadow-sm transition-all active:scale-95">
+<span class="material-symbols-outlined text-base">file_download</span>
+                        Full Data Export
+                    </button>
+</div>
+</section>
+<!-- Strategic KPIs: Bento Grid -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] shadow-sm border border-outline-variant flex flex-col justify-between hover:border-primary transition-all group">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 rounded-xl bg-primary-container/10 flex items-center justify-center text-primary group-hover:bg-primary-container group-hover:text-white transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<span class="text-secondary font-bold text-label-md flex items-center gap-1">+12.4% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Total Revenue</p>
+<p class="font-display-lg text-display-lg-mobile lg:text-[40px] text-on-surface lexend">₹42.8M</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] shadow-sm border border-outline-variant flex flex-col justify-between hover:border-primary transition-all group">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container/10 flex items-center justify-center text-tertiary group-hover:bg-tertiary-container group-hover:text-white transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<span class="text-secondary font-bold text-label-md flex items-center gap-1">+5.2% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Monthly Active Owners</p>
+<p class="font-display-lg text-display-lg-mobile lg:text-[40px] text-on-surface lexend">1,248</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] shadow-sm border border-outline-variant flex flex-col justify-between hover:border-primary transition-all group">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/20 flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">book_online</span>
+</div>
+<span class="text-secondary font-bold text-label-md flex items-center gap-1">+28.1% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Total Bookings</p>
+<p class="font-display-lg text-display-lg-mobile lg:text-[40px] text-on-surface lexend">34.2k</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] shadow-sm border border-outline-variant flex flex-col justify-between hover:border-primary transition-all group">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 rounded-xl bg-primary-container/10 flex items-center justify-center text-primary group-hover:bg-primary-container group-hover:text-white transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">insights</span>
+</div>
+<span class="text-secondary font-bold text-label-md flex items-center gap-1">+18.5% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Commission Growth</p>
+<p class="font-display-lg text-display-lg-mobile lg:text-[40px] text-on-surface lexend">₹12.4M</p>
+</div>
+</div>
+</section>
+<!-- Revenue Charts and Distribution Map -->
+<section class="grid grid-cols-1 xl:grid-cols-3 gap-gutter">
+<!-- Revenue Multi-Series Chart -->
+<div class="xl:col-span-2 bg-surface-container-lowest p-stack-lg rounded-[24px] border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface lexend">Revenue Analytics</h3>
+<p class="text-body-md text-on-surface-variant">Comparison between Commission and Subscription trends</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span>
+<span class="text-xs font-bold text-on-surface-variant">Commission</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-tertiary-container"></span>
+<span class="text-xs font-bold text-on-surface-variant">Subscription</span>
+</div>
+</div>
+</div>
+<div class="chart-container flex items-end justify-between gap-4 px-4 pb-2">
+<!-- Simulated Chart Bars/Lines with Animation -->
+<div class="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 60%;"></div>
+<div class="bg-tertiary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 45%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">JAN</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 75%;"></div>
+<div class="bg-tertiary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 50%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">FEB</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 65%;"></div>
+<div class="bg-tertiary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 60%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">MAR</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 90%;"></div>
+<div class="bg-tertiary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 70%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">APR</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 85%;"></div>
+<div class="bg-tertiary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 65%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">MAY</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 100%;"></div>
+<div class="bg-tertiary-container w-1/2 rounded-t-md hover:opacity-80 transition-all" style="height: 75%;"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">JUN</span>
+</div>
+</div>
+</div>
+<!-- Venue Map Distribution -->
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] border border-outline-variant shadow-sm flex flex-col h-full overflow-hidden relative">
+<div class="mb-4">
+<h3 class="font-title-lg text-title-lg text-on-surface lexend">Geographical Distribution</h3>
+<p class="text-body-md text-on-surface-variant">Active venues across major cities in India</p>
+</div>
+<div class="flex-1 rounded-2xl overflow-hidden relative border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-location="India" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<!-- Simulated Hotspots -->
+<div class="absolute top-[40%] left-[30%] w-4 h-4 bg-primary-container rounded-full animate-ping"></div>
+<div class="absolute top-[40%] left-[30%] w-4 h-4 bg-primary-container rounded-full border-2 border-white"></div>
+<div class="absolute bottom-[30%] right-[35%] w-4 h-4 bg-primary-container rounded-full animate-ping" style="animation-delay: 1s;"></div>
+<div class="absolute bottom-[30%] right-[35%] w-4 h-4 bg-primary-container rounded-full border-2 border-white"></div>
+<div class="absolute top-[60%] left-[45%] w-6 h-6 bg-secondary rounded-full opacity-30 animate-pulse"></div>
+<div class="absolute top-[60%] left-[45%] w-3 h-3 bg-secondary rounded-full border-2 border-white"></div>
+<div class="absolute bottom-4 left-4 glass-card p-3 rounded-xl border border-white/40 shadow-lg">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-xs font-bold">84% Capacity</span>
+</div>
+<p class="text-[10px] text-on-surface-variant">Mumbai Hub Active</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Operational Alerts & Lists -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Pending KYC -->
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] border border-outline-variant shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<h3 class="font-title-lg text-title-lg text-on-surface lexend">Pending KYC</h3>
+<span class="bg-error-container text-error px-2 py-0.5 rounded-full text-xs font-bold">12 New</span>
+</div>
+<button class="text-primary font-bold text-label-md hover:underline transition-all">View All</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer border border-transparent hover:border-outline-variant">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-bold text-on-surface-variant">JS</div>
+<div>
+<p class="font-label-lg text-label-lg">Jungle Studio &amp; Gym</p>
+<p class="text-xs text-on-surface-variant">Submited 2h ago • Bangalore</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-40">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer border border-transparent hover:border-outline-variant">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-bold text-on-surface-variant">PF</div>
+<div>
+<p class="font-label-lg text-label-lg">Power Fitness Elite</p>
+<p class="text-xs text-on-surface-variant">Submited 5h ago • Pune</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-40">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer border border-transparent hover:border-outline-variant">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-bold text-on-surface-variant">ZV</div>
+<div>
+<p class="font-label-lg text-label-lg">Zen Vibes Yoga Center</p>
+<p class="text-xs text-on-surface-variant">Submited 8h ago • Delhi</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-40">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Escalated Tickets -->
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] border border-outline-variant shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<h3 class="font-title-lg text-title-lg text-on-surface lexend">Escalated Tickets</h3>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full text-xs font-bold">4 Open</span>
+</div>
+<button class="text-primary font-bold text-label-md hover:underline transition-all">Support Queue</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-3 rounded-xl bg-error-container/20 border border-error/10">
+<span class="material-symbols-outlined text-error mt-1">warning</span>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<p class="font-label-lg text-label-lg font-bold">Payment Failure #8921</p>
+<span class="text-[10px] text-error font-bold uppercase tracking-widest">Urgent</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-1">Owner unable to withdraw revenue since last Friday...</p>
+<div class="mt-2 flex items-center gap-2">
+<div class="flex -space-x-2">
+<div class="w-5 h-5 rounded-full border border-white bg-slate-300"></div>
+<div class="w-5 h-5 rounded-full border border-white bg-slate-400"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant">Assigned to Financial Ops</span>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-4 p-3 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer border border-transparent hover:border-outline-variant">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant mt-1">contact_support</span>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<p class="font-label-lg text-label-lg">App Sync Issue #8930</p>
+<span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Normal</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-1">Multiple users reporting booking errors in Jaipur...</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action Button (Optional Contextual Activity) -->
+<!-- Suppressed based on "Strategic Overview" intent favoring content over quick actions -->
+<script>
+        // Micro-interactions and subtle effects
+        document.querySelectorAll('.group').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                // Subtle lift or border change logic if needed beyond Tailwind
+            });
+        });
+
+        // Initialize any specific dashboard behaviors
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('FitOra Enterprise Admin Dashboard Initialized');
+        });
+    </script>
+</body></html>

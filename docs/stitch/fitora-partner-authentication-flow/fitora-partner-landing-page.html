@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Partner | Grow Your Sports Venue</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Lexend:wght@300;400;500;600&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Lexend:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#33302f",
+                    "on-error-container": "#93000a",
+                    "surface-tonal": "#F1F5F9",
+                    "primary-fixed-dim": "#ffb690",
+                    "inverse-primary": "#ffb690",
+                    "on-primary-fixed": "#341100",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "outline": "#8c7164",
+                    "surface-variant": "#e8e1df",
+                    "primary": "#9d4300",
+                    "surface-container-highest": "#e8e1df",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#e0c0b1",
+                    "on-secondary-container": "#00714e",
+                    "on-background": "#1d1b1a",
+                    "background": "#fff8f6",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f6efed",
+                    "on-primary-fixed-variant": "#783200",
+                    "surface-dim": "#dfd9d7",
+                    "on-secondary-fixed": "#002114",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-surface-variant": "#584237",
+                    "surface-container-low": "#f9f2f0",
+                    "tertiary": "#565e74",
+                    "on-tertiary-fixed": "#131b2e",
+                    "primary-container": "#f97316",
+                    "surface-tint": "#9d4300",
+                    "surface": "#fff8f6",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#005137",
+                    "brand-accent": "#FF6B35",
+                    "secondary-fixed": "#85f8c4",
+                    "surface-container-high": "#ede7e5",
+                    "surface-container": "#f3ecea",
+                    "primary-fixed": "#ffdbca",
+                    "danger-red": "#DC2626",
+                    "on-tertiary-container": "#2a3246",
+                    "secondary-fixed-dim": "#68dba9",
+                    "secondary": "#006c4a",
+                    "on-surface": "#1d1b1a",
+                    "tertiary-fixed": "#dae2fd",
+                    "tertiary-container": "#929ab2",
+                    "warning-amber": "#D97706",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#82f5c1",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "on-primary-container": "#582200"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "80px",
+                    "base": "4px",
+                    "margin-mobile": "20px",
+                    "gutter-mobile": "16px",
+                    "gutter-desktop": "24px",
+                    "section-gap": "120px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Lexend"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-glass {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hero-gradient {
+            background: linear-gradient(to right, rgba(29, 27, 26, 0.9) 0%, rgba(29, 27, 26, 0.4) 100%);
+        }
+        .bento-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-8px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 z-50 w-full bg-surface/80 nav-glass border-b border-outline-variant/10">
+<nav class="flex justify-between items-center h-20 px-margin-desktop max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-display-lg text-[24px] font-extrabold text-primary tracking-tighter" href="#">FitOra Partner</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-brand-accent transition-colors duration-200" href="#benefits">Benefits</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-brand-accent transition-colors duration-200" href="#pricing">Pricing</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-brand-accent transition-colors duration-200" href="#faq">FAQ</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-md text-label-md text-primary font-semibold hover:underline transition-all active:scale-95">Partner Login</button>
+<button class="bg-primary-container text-on-primary-container px-6 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">Apply Now</button>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center pt-20 overflow-hidden">
+<div class="absolute inset-0 z-0" data-alt="A cinematic, high-angle shot of a premium, brightly lit indoor multi-sports arena featuring polished wooden basketball courts and vibrant blue tennis surfaces. The lighting is dramatic, highlighting the sleek architectural lines and the premium athletic atmosphere. The color palette is dominated by professional greys, crisp whites, and the signature FitOra orange glow. The mood is energetic, professional, and institutional." style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg')">
+<div class="absolute inset-0 hero-gradient"></div>
+</div>
+<div class="relative z-10 px-margin-desktop max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-gutter-desktop items-center">
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-primary uppercase tracking-widest">Global Partner Network</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-white leading-tight">Grow Your Sports Business with <span class="text-brand-accent">FitOra</span></h1>
+<p class="font-body-lg text-body-lg text-white/80 max-w-lg">The all-in-one venue management platform designed to maximize your court utilization, automate administrative tasks, and provide deep operational insights.</p>
+<div class="flex flex-col sm:flex-row gap-4 pt-4">
+<button class="h-14 px-8 bg-brand-accent text-white rounded-lg font-bold text-lg hover:bg-primary transition-colors active:scale-95">Partner with Us</button>
+<button class="h-14 px-8 bg-white/10 border border-white/20 text-white rounded-lg font-bold text-lg hover:bg-white/20 transition-colors backdrop-blur-sm">View Demo</button>
+</div>
+<div class="flex items-center gap-6 pt-6">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-surface bg-surface-variant flex items-center justify-center text-xs font-bold">JD</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface bg-primary-container flex items-center justify-center text-xs font-bold text-white">MK</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface bg-tertiary flex items-center justify-center text-xs font-bold text-white">AS</div>
+</div>
+<p class="text-white/60 text-label-md font-label-md">Joined by <span class="text-white font-bold tracking-wider">2,400+</span> venue owners worldwide</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Benefits Bento Grid -->
+<section class="py-section-gap px-margin-desktop max-w-7xl mx-auto" id="benefits">
+<div class="text-center mb-16 space-y-4">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Engineered for Operational Excellence</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto">Stop managing spreadsheets and start managing growth with tools built specifically for the sports facility industry.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-desktop">
+<!-- Benefit 1 -->
+<div class="bento-card p-8 bg-surface-container-low rounded-xl border border-outline-variant/10 flex flex-col gap-6">
+<div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]">visibility</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md mb-2">Increased Visibility</h3>
+<p class="text-on-surface-variant text-body-md">Put your venue in front of thousands of active athletes searching for courts in your area daily.</p>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<span class="text-primary font-bold flex items-center gap-2">Up to 45% more bookings <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+</div>
+<!-- Benefit 2 -->
+<div class="bento-card p-8 bg-primary-container text-white rounded-xl flex flex-col gap-6 shadow-xl shadow-primary-container/20">
+<div class="w-12 h-12 rounded-lg bg-white/20 text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]">event_available</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md mb-2 text-white">Automated Booking</h3>
+<p class="text-white/90 text-body-md">Real-time availability sync and instant payments. Say goodbye to double bookings and manual coordination.</p>
+</div>
+<div class="mt-auto pt-6 border-t border-white/20">
+<span class="text-white font-bold flex items-center gap-2">24/7 Availability <span class="material-symbols-outlined text-sm">schedule</span></span>
+</div>
+</div>
+<!-- Benefit 3 -->
+<div class="bento-card p-8 bg-surface-container-low rounded-xl border border-outline-variant/10 flex flex-col gap-6">
+<div class="w-12 h-12 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]">monitoring</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md mb-2">Revenue Insights</h3>
+<p class="text-on-surface-variant text-body-md">Detailed analytics on peak hours, customer retention, and financial performance at your fingertips.</p>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<span class="text-secondary font-bold flex items-center gap-2">Verified Growth <span class="material-symbols-outlined text-sm">verified</span></span>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-section-gap bg-surface-container">
+<div class="px-margin-desktop max-w-7xl mx-auto">
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div class="space-y-12">
+<h2 class="font-headline-lg text-headline-lg">Simple Onboarding. Powerful Results.</h2>
+<div class="space-y-8">
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">1</div>
+<div class="space-y-1">
+<h4 class="font-headline-md text-[20px]">Register Your Venue</h4>
+<p class="text-on-surface-variant">Tell us about your facility, location, and the sports you support. It takes less than 5 minutes.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">2</div>
+<div class="space-y-1">
+<h4 class="font-headline-md text-[20px]">Verification Process</h4>
+<p class="text-on-surface-variant">Our team ensures all partners meet our premium quality standards for athletes.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">3</div>
+<div class="space-y-1">
+<h4 class="font-headline-md text-[20px]">Start Hosting</h4>
+<p class="text-on-surface-variant">Go live on the FitOra app and watch your venue fill up with active members.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative rounded-2xl overflow-hidden shadow-2xl border border-outline-variant/30 aspect-[4/3]" data-alt="A bright, modern UI dashboard for venue management being displayed on a sleek tablet. The dashboard shows vibrant colorful data charts, a calendar grid filled with booking blocks, and a sidebar with icons like revenue, schedule, and venue settings. The setting is a clean, minimalist administrative office overlooking a high-end tennis court at dusk. High-key lighting with orange and slate accents." style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg')">
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-section-gap px-margin-desktop max-w-7xl mx-auto" id="pricing">
+<div class="text-center mb-16 space-y-4">
+<h2 class="font-headline-lg text-headline-lg">Transparent Pricing for Every Scale</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto">No upfront costs. We only win when you grow. Choose the plan that aligns with your business goals.</p>
+</div>
+<div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+<!-- Standard Plan -->
+<div class="p-10 bg-white border border-outline-variant/20 rounded-2xl space-y-8 hover:border-primary/30 transition-colors">
+<div class="space-y-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Growth Tier</span>
+<h3 class="font-headline-md text-headline-md">Commission-Based</h3>
+<p class="text-on-surface-variant">Perfect for single venues looking to fill vacant hours.</p>
+</div>
+<div class="py-4">
+<span class="text-display-lg text-primary">8%</span>
+<span class="text-on-surface-variant font-body-md">/per booking</span>
+</div>
+<ul class="space-y-4 text-on-surface-variant">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">check_circle</span> Unlimited bookings</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">check_circle</span> Standard listing placement</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">check_circle</span> Basic revenue reporting</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">check_circle</span> 24/7 automated scheduling</li>
+</ul>
+<button class="w-full py-4 border-2 border-primary text-primary font-bold rounded-lg hover:bg-primary/5 transition-all">Get Started</button>
+</div>
+<!-- Enterprise Plan -->
+<div class="p-10 bg-inverse-surface text-white rounded-2xl space-y-8 relative overflow-hidden">
+<div class="absolute top-6 right-6 px-3 py-1 bg-brand-accent text-white text-[10px] font-bold uppercase tracking-widest rounded">Popular</div>
+<div class="space-y-2">
+<span class="text-label-sm font-label-sm text-white/60 uppercase tracking-widest">Enterprise Tier</span>
+<h3 class="font-headline-md text-headline-md">Custom Solutions</h3>
+<p class="text-white/70">For multi-venue operations and massive athletic complexes.</p>
+</div>
+<div class="py-4">
+<span class="text-display-lg text-brand-accent">Custom</span>
+</div>
+<ul class="space-y-4 text-white/80">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-brand-accent">verified</span> Featured listing status</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-brand-accent">verified</span> Dedicated account manager</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-brand-accent">verified</span> Custom API integrations</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-brand-accent">verified</span> Multi-site management portal</li>
+</ul>
+<button class="w-full py-4 bg-brand-accent text-white font-bold rounded-lg hover:opacity-90 transition-all">Contact Sales</button>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-section-gap bg-surface-container-low" id="faq">
+<div class="px-margin-desktop max-w-3xl mx-auto space-y-8">
+<h2 class="font-headline-lg text-headline-lg text-center mb-12">Frequently Asked Questions</h2>
+<div class="space-y-4">
+<!-- Accordion Item 1 -->
+<details class="group bg-white border border-outline-variant/10 rounded-xl overflow-hidden" open="">
+<summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+<span class="font-headline-md text-[18px]">How long does the verification process take?</span>
+<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant border-t border-outline-variant/5 pt-4">
+                            Most venues are verified and ready to host within 48-72 business hours. Our team reviews your facility details and safety standards to ensure the best experience for our athletes.
+                        </div>
+</details>
+<!-- Accordion Item 2 -->
+<details class="group bg-white border border-outline-variant/10 rounded-xl overflow-hidden">
+<summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+<span class="font-headline-md text-[18px]">Do I need special hardware to manage bookings?</span>
+<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant border-t border-outline-variant/5 pt-4">
+                            No special hardware is required. You can manage everything through our web portal or mobile app on any smartphone, tablet, or computer with an internet connection.
+                        </div>
+</details>
+<!-- Accordion Item 3 -->
+<details class="group bg-white border border-outline-variant/10 rounded-xl overflow-hidden">
+<summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+<span class="font-headline-md text-[18px]">When and how do I receive my payments?</span>
+<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant border-t border-outline-variant/5 pt-4">
+                            Payments are processed instantly upon booking. Funds are typically disbursed to your linked business bank account every Friday for the preceding week's earnings.
+                        </div>
+</details>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-section-gap px-margin-desktop text-center">
+<div class="max-w-4xl mx-auto bg-primary text-white rounded-3xl p- section-gap/2 overflow-hidden relative" style="padding: 100px 40px;">
+<!-- Atmospheric background element -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-accent/20 rounded-full -ml-48 -mb-48 blur-3xl"></div>
+<div class="relative z-10 space-y-8">
+<h2 class="font-display-lg text-display-lg">Ready to Modernize Your Venue?</h2>
+<p class="text-white/80 text-body-lg max-w-xl mx-auto">Join the future of sports venue management today and start seeing the difference in your revenue.</p>
+<div class="flex flex-col sm:flex-row justify-center gap-4">
+<button class="h-16 px-12 bg-white text-primary font-bold text-xl rounded-xl hover:bg-white/90 transition-all active:scale-95 shadow-xl shadow-black/10">Start Your Application</button>
+</div>
+<p class="text-white/60 text-label-md">No credit card required to apply.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Section -->
+<footer class="bg-surface-container-low border-t border-outline-variant/20 pt-section-gap pb-12">
+<div class="max-w-7xl mx-auto px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop">
+<div class="col-span-1 md:col-span-1 space-y-6">
+<a class="font-display-lg text-[28px] font-extrabold text-primary tracking-tighter" href="#">FitOra Partner</a>
+<p class="text-on-surface-variant text-body-md">Empowering sports venue owners to reach their full potential through digital innovation.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-sm">public</span></a>
+<a class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-sm">share</span></a>
+<a class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-sm">mail</span></a>
+</div>
+</div>
+<div class="space-y-6">
+<h5 class="font-bold uppercase tracking-widest text-label-sm text-on-surface">Platform</h5>
+<ul class="space-y-4 text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Benefits</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Case Studies</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Docs</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h5 class="font-bold uppercase tracking-widest text-label-sm text-on-surface">Company</h5>
+<ul class="space-y-4 text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">About</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Support</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legal</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h5 class="font-bold uppercase tracking-widest text-label-sm text-on-surface">Legal</h5>
+<ul class="space-y-4 text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Cookie Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-margin-desktop mt-20 pt-8 border-t border-outline-variant/10 text-center md:text-left text-on-surface-variant text-label-md">
+<p>© 2024 FitOra Partner. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple scroll reveal interaction
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700');
+            observer.observe(card);
+        });
+    </script>
+</body></html>

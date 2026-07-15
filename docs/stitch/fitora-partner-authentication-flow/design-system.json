@@ -1,0 +1,1370 @@
+{
+  "createTime": "2026-07-14T00:58:17.445004Z",
+  "designTheme": {
+    "bodyFont": "INTER",
+    "bodyFontFamily": "Inter",
+    "colorMode": "LIGHT",
+    "colorVariant": "FIDELITY",
+    "customColor": "#f97316",
+    "designMd": "---\nname: FitOra\ncolors:\n  surface: '#fff8f6'\n  surface-dim: '#edd5cb'\n  surface-bright: '#fff8f6'\n  surface-container-lowest: '#ffffff'\n  surface-container-low: '#fff1eb'\n  surface-container: '#ffeae0'\n  surface-container-high: '#fce3d9'\n  surface-container-highest: '#f6ded3'\n  on-surface: '#251913'\n  on-surface-variant: '#584237'\n  inverse-surface: '#3c2d26'\n  inverse-on-surface: '#ffede6'\n  outline: '#8c7164'\n  outline-variant: '#e0c0b1'\n  surface-tint: '#9d4300'\n  primary: '#9d4300'\n  on-primary: '#ffffff'\n  primary-container: '#f97316'\n  on-primary-container: '#582200'\n  inverse-primary: '#ffb690'\n  secondary: '#006e2f'\n  on-secondary: '#ffffff'\n  secondary-container: '#6bff8f'\n  on-secondary-container: '#007432'\n  tertiary: '#006398'\n  on-tertiary: '#ffffff'\n  tertiary-container: '#00a2f4'\n  on-tertiary-container: '#003554'\n  error: '#ba1a1a'\n  on-error: '#ffffff'\n  error-container: '#ffdad6'\n  on-error-container: '#93000a'\n  primary-fixed: '#ffdbca'\n  primary-fixed-dim: '#ffb690'\n  on-primary-fixed: '#341100'\n  on-primary-fixed-variant: '#783200'\n  secondary-fixed: '#6bff8f'\n  secondary-fixed-dim: '#4ae176'\n  on-secondary-fixed: '#002109'\n  on-secondary-fixed-variant: '#005321'\n  tertiary-fixed: '#cde5ff'\n  tertiary-fixed-dim: '#93ccff'\n  on-tertiary-fixed: '#001d32'\n  on-tertiary-fixed-variant: '#004b74'\n  background: '#fff8f6'\n  on-background: '#251913'\n  surface-variant: '#f6ded3'\ntypography:\n  display-lg:\n    fontFamily: Lexend\n    fontSize: 57px\n    fontWeight: '700'\n    lineHeight: 64px\n    letterSpacing: -0.02em\n  display-lg-mobile:\n    fontFamily: Lexend\n    fontSize: 40px\n    fontWeight: '700'\n    lineHeight: 48px\n    letterSpacing: -0.02em\n  headline-lg:\n    fontFamily: Lexend\n    fontSize: 32px\n    fontWeight: '600'\n    lineHeight: 40px\n  headline-lg-mobile:\n    fontFamily: Lexend\n    fontSize: 28px\n    fontWeight: '600'\n    lineHeight: 36px\n  headline-md:\n    fontFamily: Lexend\n    fontSize: 28px\n    fontWeight: '600'\n    lineHeight: 36px\n  title-lg:\n    fontFamily: Lexend\n    fontSize: 22px\n    fontWeight: '500'\n    lineHeight: 28px\n  body-lg:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: '400'\n    lineHeight: 24px\n  body-md:\n    fontFamily: Inter\n    fontSize: 14px\n    fontWeight: '400'\n    lineHeight: 20px\n  label-lg:\n    fontFamily: Inter\n    fontSize: 14px\n    fontWeight: '600'\n    lineHeight: 20px\n    letterSpacing: 0.1px\n  label-md:\n    fontFamily: Inter\n    fontSize: 12px\n    fontWeight: '500'\n    lineHeight: 16px\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  unit: 4px\n  margin-mobile: 16px\n  margin-desktop: 32px\n  gutter: 16px\n  stack-sm: 8px\n  stack-md: 16px\n  stack-lg: 24px\n  section-gap: 48px\n---\n\n## Brand & Style\nThe design system for this product is built on the principles of **Google Material Design 3**, modified with a premium, high-energy sports aesthetic. It targets a fitness-conscious community, blending professional performance tracking with social connectivity. The visual narrative balances the \"human\" aspect of community with the \"precision\" of athletic data.\n\nThe style is characterized by **Modern Minimalist Athletics**: high-clarity layouts, expansive whitespace, and large, interactive surfaces. It avoids unnecessary clutter, allowing vibrant action photography and performance metrics to lead the experience. The emotional response is intended to be motivating, optimistic, and highly accessible, ensuring that users of all fitness levels feel welcome and empowered.\n\n## Colors\nThe color palette utilizes high-energy saturation to drive action. **#F97316 (Primary Orange)** is the core driver for primary CTAs and active states, signaling energy and movement. **#22C55E (Secondary Green)** is reserved for success states, goal completion, and health-positive indicators.\n\nThe background system uses a cool-toned neutral **#F8FAFC** to maintain a clean, \"gym-fresh\" feel, preventing the interface from feeling heavy. This design system supports both light and dark modes by mapping these tokens to their respective tonal equivalents\u2014maintaining the same primary and secondary hues but shifting surface containers to deep slates and charcoal for low-light workout sessions.\n\n## Typography\nThe typography strategy pairings prioritize readability and athletic character. **Lexend** is chosen for all headings and display text due to its expanded glyphs and rhythmic spacing, which facilitates fast reading\u2014ideal for users checking stats mid-workout.\n\n**Inter** provides a systematic and neutral foundation for body text and data-heavy labels, ensuring maximum legibility across dense performance metrics. Font weights are used purposefully: Semibold and Bold for motivation and navigation, and Regular for instructional content. To maintain accessibility, the minimum body size is 14px, and line heights are generously scaled for mobile consumption.\n\n## Layout & Spacing\nThis design system employs a **Fluid Grid** model based on an 8px base unit (4px for micro-adjustments). Layouts are constructed using a 4-column structure for mobile and a 12-column structure for desktop.\n\nSpacing follows a \"rhythmic stack\" philosophy where related fitness metrics are grouped with 8px gaps, while distinct content sections are separated by 48px to allow the UI to breathe. Safe margins are strictly enforced at 16px on mobile to ensure touch targets remain clear of the screen edges. Cards and containers use internal padding of 20px or 24px to emphasize the \"premium\" feel through generous negative space.\n\n## Elevation & Depth\nIn alignment with Material Design 3, elevation is primarily expressed through **Tonal Layers** rather than heavy shadows. Different levels of depth are created by shifting the background color of surfaces.\n\n- **Level 0 (Base):** #F8FAFC (Standard background).\n- **Level 1 (Cards):** Surface color with a subtle 1px border (#CBD5E1) or a very soft, high-diffusion ambient shadow (0px 2px 8px, 4% opacity).\n- **Level 2 (Active/Modals):** Tonal shift to #FFFFFF (or deeper slates in dark mode) with a distinct secondary shadow to indicate interaction capability.\n\nThe use of \"Ghost Borders\" (low-contrast outlines) is preferred for card-based layouts to keep the interface looking modern and crisp without the visual weight of traditional skeuomorphic shadows.\n\n## Shapes\nThe shape language is defined as **Rounded**, leaning towards a friendly and approachable feel. This softens the \"industrial\" nature of typical sports apps.\n\nPrimary containers and fitness cards utilize the `rounded-lg` (16px) or `rounded-xl` (24px) settings to create a distinctive, modern \"bubble\" aesthetic that feels tactile and safe. Buttons and input fields follow the standard `rounded-md` (8px) logic for clear affordance, while specific \"Social\" elements or \"Progress Pills\" may use full rounding (pill-shaped) to distinguish them from functional layout components.\n\n## Components\nConsistent component behavior is vital for a performance-driven app:\n\n- **Buttons:** Primary CTAs use the #F97316 background with white text and `rounded-md`. Text is uppercase `label-lg` to evoke a \"jersey\" or \"stadium\" feel.\n- **Cards:** Large-format cards with 24px corner radius. They should feature subtle internal gradients or background images with a 40% black overlay to ensure typography remains accessible.\n- **Chips:** Used for \"Sport Types\" (e.g., # Running, # Yoga). These are pill-shaped with #F1F5F9 backgrounds and 12px `label-md` text.\n- **Input Fields:** Outlined style with 8px corner radius. Focused state transitions the border to Primary Orange with a 2px stroke width.\n- **Progress Rings:** Use #22C55E (Green) for completion. Rings should have rounded caps to match the overall shape language.\n- **Lists:** High-density list items for workout logs should use 16px vertical padding and a bottom-border separator of #F1F5F9 for clean scanning.",
+    "font": "LEXEND",
+    "headlineFont": "LEXEND",
+    "headlineFontFamily": "Lexend",
+    "labelFont": "INTER",
+    "labelFontFamily": "Inter",
+    "namedColors": {
+      "background": "#fff8f6",
+      "error": "#ba1a1a",
+      "error_container": "#ffdad6",
+      "inverse_on_surface": "#ffede6",
+      "inverse_primary": "#ffb690",
+      "inverse_surface": "#3c2d26",
+      "on_background": "#251913",
+      "on_error": "#ffffff",
+      "on_error_container": "#93000a",
+      "on_primary": "#ffffff",
+      "on_primary_container": "#582200",
+      "on_primary_fixed": "#341100",
+      "on_primary_fixed_variant": "#783200",
+      "on_secondary": "#ffffff",
+      "on_secondary_container": "#007432",
+      "on_secondary_fixed": "#002109",
+      "on_secondary_fixed_variant": "#005321",
+      "on_surface": "#251913",
+      "on_surface_variant": "#584237",
+      "on_tertiary": "#ffffff",
+      "on_tertiary_container": "#003554",
+      "on_tertiary_fixed": "#001d32",
+      "on_tertiary_fixed_variant": "#004b74",
+      "outline": "#8c7164",
+      "outline_variant": "#e0c0b1",
+      "primary": "#9d4300",
+      "primary_container": "#f97316",
+      "primary_fixed": "#ffdbca",
+      "primary_fixed_dim": "#ffb690",
+      "secondary": "#006e2f",
+      "secondary_container": "#6bff8f",
+      "secondary_fixed": "#6bff8f",
+      "secondary_fixed_dim": "#4ae176",
+      "surface": "#fff8f6",
+      "surface_bright": "#fff8f6",
+      "surface_container": "#ffeae0",
+      "surface_container_high": "#fce3d9",
+      "surface_container_highest": "#f6ded3",
+      "surface_container_low": "#fff1eb",
+      "surface_container_lowest": "#ffffff",
+      "surface_dim": "#edd5cb",
+      "surface_tint": "#9d4300",
+      "surface_variant": "#f6ded3",
+      "tertiary": "#006398",
+      "tertiary_container": "#00a2f4",
+      "tertiary_fixed": "#cde5ff",
+      "tertiary_fixed_dim": "#93ccff"
+    },
+    "overridePrimaryColor": "#f97316",
+    "overrideSecondaryColor": "#22c55e",
+    "roundness": "ROUND_EIGHT",
+    "spacing": {
+      "gutter": "16px",
+      "margin-desktop": "32px",
+      "margin-mobile": "16px",
+      "section-gap": "48px",
+      "stack-lg": "24px",
+      "stack-md": "16px",
+      "stack-sm": "8px",
+      "unit": "4px"
+    },
+    "spacingScale": 2,
+    "typography": {
+      "body-lg": {
+        "fontFamily": "Inter",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "24px"
+      },
+      "body-md": {
+        "fontFamily": "Inter",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "20px"
+      },
+      "display-lg": {
+        "fontFamily": "Lexend",
+        "fontSize": "57px",
+        "fontWeight": "700",
+        "letterSpacing": "-0.02em",
+        "lineHeight": "64px"
+      },
+      "display-lg-mobile": {
+        "fontFamily": "Lexend",
+        "fontSize": "40px",
+        "fontWeight": "700",
+        "letterSpacing": "-0.02em",
+        "lineHeight": "48px"
+      },
+      "headline-lg": {
+        "fontFamily": "Lexend",
+        "fontSize": "32px",
+        "fontWeight": "600",
+        "lineHeight": "40px"
+      },
+      "headline-lg-mobile": {
+        "fontFamily": "Lexend",
+        "fontSize": "28px",
+        "fontWeight": "600",
+        "lineHeight": "36px"
+      },
+      "headline-md": {
+        "fontFamily": "Lexend",
+        "fontSize": "28px",
+        "fontWeight": "600",
+        "lineHeight": "36px"
+      },
+      "label-lg": {
+        "fontFamily": "Inter",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "letterSpacing": "0.1px",
+        "lineHeight": "20px"
+      },
+      "label-md": {
+        "fontFamily": "Inter",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "lineHeight": "16px"
+      },
+      "title-lg": {
+        "fontFamily": "Lexend",
+        "fontSize": "22px",
+        "fontWeight": "500",
+        "lineHeight": "28px"
+      }
+    }
+  },
+  "deviceType": "MOBILE",
+  "metadata": {
+    "userRole": "OWNER"
+  },
+  "name": "projects/5652553660313852668",
+  "origin": "STITCH",
+  "projectType": "TEXT_TO_UI_PRO",
+  "screenInstances": [
+    {
+      "height": 1836,
+      "id": "0056dbf88e9d48adb0bc61db392a4e13",
+      "sourceScreen": "projects/5652553660313852668/screens/0056dbf88e9d48adb0bc61db392a4e13",
+      "width": 390,
+      "x": 6780,
+      "y": 1914
+    },
+    {
+      "height": 884,
+      "id": "01674c9b65194b1f9b2467231f7747f0",
+      "sourceScreen": "projects/5652553660313852668/screens/01674c9b65194b1f9b2467231f7747f0",
+      "width": 390,
+      "x": 1030,
+      "y": 69383
+    },
+    {
+      "height": 884,
+      "id": "021d200bdca34944bd71f379ea36d00f",
+      "sourceScreen": "projects/5652553660313852668/screens/021d200bdca34944bd71f379ea36d00f",
+      "width": 390,
+      "x": 1362,
+      "y": 31514
+    },
+    {
+      "height": 884,
+      "id": "02b035f9e8aa4fc88d260f3954cb3f04",
+      "sourceScreen": "projects/5652553660313852668/screens/02b035f9e8aa4fc88d260f3954cb3f04",
+      "width": 390,
+      "x": 4690
+    },
+    {
+      "height": 1106,
+      "id": "07d45fe4a39142238ed1eb8147e460dd",
+      "sourceScreen": "projects/5652553660313852668/screens/07d45fe4a39142238ed1eb8147e460dd",
+      "width": 390,
+      "y": 20685
+    },
+    {
+      "height": 2118,
+      "id": "0c200226ba634a56975fe3356d33df3f",
+      "sourceScreen": "projects/5652553660313852668/screens/0c200226ba634a56975fe3356d33df3f",
+      "width": 390,
+      "x": 1478,
+      "y": 7153
+    },
+    {
+      "height": 1220,
+      "id": "0c4def10921a4554a14959a19ad748ab",
+      "sourceScreen": "projects/5652553660313852668/screens/0c4def10921a4554a14959a19ad748ab",
+      "width": 390,
+      "x": 2386,
+      "y": 26334
+    },
+    {
+      "height": 964,
+      "id": "0c930f7e20df4a0f83e552c97d5b204d",
+      "sourceScreen": "projects/5652553660313852668/screens/0c930f7e20df4a0f83e552c97d5b204d",
+      "width": 390,
+      "x": 454,
+      "y": 60698
+    },
+    {
+      "height": 2101,
+      "id": "0cc7fe3caee14a5c870b6980d64373b9",
+      "sourceScreen": "projects/5652553660313852668/screens/0cc7fe3caee14a5c870b6980d64373b9",
+      "width": 390,
+      "x": 454,
+      "y": 22906
+    },
+    {
+      "height": 884,
+      "id": "10c86b789a654169978db90de8a471f7",
+      "sourceScreen": "projects/5652553660313852668/screens/10c86b789a654169978db90de8a471f7",
+      "width": 390,
+      "x": 908,
+      "y": 59145
+    },
+    {
+      "height": 1802,
+      "id": "119c53493ee34010ae4c55c11c17d442",
+      "sourceScreen": "projects/5652553660313852668/screens/119c53493ee34010ae4c55c11c17d442",
+      "width": 390,
+      "x": 2176
+    },
+    {
+      "height": 1574,
+      "id": "128b95e875f6426d915319b08107f8e8",
+      "sourceScreen": "projects/5652553660313852668/screens/128b95e875f6426d915319b08107f8e8",
+      "width": 390,
+      "x": 454,
+      "y": 31514
+    },
+    {
+      "height": 1290,
+      "id": "13aa66be22d34efb9f584de05995416e",
+      "sourceScreen": "projects/5652553660313852668/screens/13aa66be22d34efb9f584de05995416e",
+      "width": 390,
+      "x": 8338,
+      "y": 3667
+    },
+    {
+      "height": 1998,
+      "id": "13dc192380c3471b8a1d9e9bd47f147d",
+      "sourceScreen": "projects/5652553660313852668/screens/13dc192380c3471b8a1d9e9bd47f147d",
+      "width": 390,
+      "x": 454,
+      "y": 52077
+    },
+    {
+      "height": 1329,
+      "id": "153ef56265e84d5f94bb5e65ce379be6",
+      "sourceScreen": "projects/5652553660313852668/screens/153ef56265e84d5f94bb5e65ce379be6",
+      "width": 390,
+      "x": 1478,
+      "y": 57445
+    },
+    {
+      "height": 1304,
+      "id": "173ef53f6af74079855f39735d7a5eb9",
+      "sourceScreen": "projects/5652553660313852668/screens/173ef53f6af74079855f39735d7a5eb9",
+      "width": 390,
+      "x": 454,
+      "y": 62030
+    },
+    {
+      "height": 1112,
+      "id": "18d4ebe91a9541518e579dd7e6a78070",
+      "sourceScreen": "projects/5652553660313852668/screens/18d4ebe91a9541518e579dd7e6a78070",
+      "width": 390,
+      "x": 6960
+    },
+    {
+      "height": 1328,
+      "id": "19761a87d7f7457a8ace325d52887e76",
+      "sourceScreen": "projects/5652553660313852668/screens/19761a87d7f7457a8ace325d52887e76",
+      "width": 390,
+      "x": 1024,
+      "y": 19101
+    },
+    {
+      "height": 390,
+      "id": "1e743d5e50bd4fb5a64d0a3af03b3bed",
+      "sourceScreen": "projects/5652553660313852668/screens/1e743d5e50bd4fb5a64d0a3af03b3bed",
+      "width": 390,
+      "x": 1484,
+      "y": 69383
+    },
+    {
+      "height": 1459,
+      "id": "1f18e177946040dd8bb3584c74699436",
+      "sourceScreen": "projects/5652553660313852668/screens/1f18e177946040dd8bb3584c74699436",
+      "width": 1280,
+      "x": 2054,
+      "y": 3667
+    },
+    {
+      "height": 2475,
+      "id": "205f2f202f764a9bb854bcecf3e2c367",
+      "sourceScreen": "projects/5652553660313852668/screens/205f2f202f764a9bb854bcecf3e2c367",
+      "width": 390,
+      "x": 1362,
+      "y": 62030
+    },
+    {
+      "height": 1967,
+      "id": "214d9f3739544a8bb5579aa9dcf05dca",
+      "sourceScreen": "projects/5652553660313852668/screens/214d9f3739544a8bb5579aa9dcf05dca",
+      "width": 1280,
+      "x": 7744,
+      "y": 38598
+    },
+    {
+      "height": 1745,
+      "id": "22df3c8b95fb4c07b2c04170d2246979",
+      "sourceScreen": "projects/5652553660313852668/screens/22df3c8b95fb4c07b2c04170d2246979",
+      "width": 390,
+      "x": 908,
+      "y": 29165
+    },
+    {
+      "height": 884,
+      "id": "27b0ed14f4444ffa904787f7db12ca1e",
+      "sourceScreen": "projects/5652553660313852668/screens/27b0ed14f4444ffa904787f7db12ca1e",
+      "width": 390,
+      "x": 2630
+    },
+    {
+      "height": 2093,
+      "id": "288a0951306148c1be23e9adca8a444b",
+      "sourceScreen": "projects/5652553660313852668/screens/288a0951306148c1be23e9adca8a444b",
+      "width": 390,
+      "y": 29165
+    },
+    {
+      "height": 915,
+      "id": "2ce46a9ddfac45fc9a6d31a4b63c915a",
+      "sourceScreen": "projects/5652553660313852668/screens/2ce46a9ddfac45fc9a6d31a4b63c915a",
+      "width": 390,
+      "x": 3026,
+      "y": 1914
+    },
+    {
+      "height": 1464,
+      "id": "30a3d89fa4ca4c1f8fbd42aafd1611c4",
+      "sourceScreen": "projects/5652553660313852668/screens/30a3d89fa4ca4c1f8fbd42aafd1611c4",
+      "width": 390,
+      "x": 908,
+      "y": 9526
+    },
+    {
+      "height": 1685,
+      "id": "325de0e556514c8c8100519e87094fac",
+      "sourceScreen": "projects/5652553660313852668/screens/325de0e556514c8c8100519e87094fac",
+      "width": 1280,
+      "x": 2368,
+      "y": 38598
+    },
+    {
+      "height": 2342,
+      "id": "33050b9d5a8c40eb94eae46a1240d352",
+      "sourceScreen": "projects/5652553660313852668/screens/33050b9d5a8c40eb94eae46a1240d352",
+      "width": 390,
+      "x": 1362,
+      "y": 15695
+    },
+    {
+      "height": 1316,
+      "id": "3470632a807c4859bf9fa89826b3ea69",
+      "sourceScreen": "projects/5652553660313852668/screens/3470632a807c4859bf9fa89826b3ea69",
+      "width": 1280,
+      "x": 5650,
+      "y": 3667
+    },
+    {
+      "height": 1076,
+      "id": "35c73e653291483fa722fd34a85d9184",
+      "sourceScreen": "projects/5652553660313852668/screens/35c73e653291483fa722fd34a85d9184",
+      "width": 390,
+      "y": 60698
+    },
+    {
+      "height": 1527,
+      "id": "36ded5912460454d8a6a38480f68a7ab",
+      "sourceScreen": "projects/5652553660313852668/screens/36ded5912460454d8a6a38480f68a7ab",
+      "width": 390,
+      "x": 1798,
+      "y": 35028
+    },
+    {
+      "height": 1790,
+      "id": "3716d56df77b4d4f96362dd4dbfff531",
+      "sourceScreen": "projects/5652553660313852668/screens/3716d56df77b4d4f96362dd4dbfff531",
+      "width": 390,
+      "x": 7234,
+      "y": 1914
+    },
+    {
+      "height": 1716,
+      "id": "372fc185a9b641d3a68e3723be4f9402",
+      "sourceScreen": "projects/5652553660313852668/screens/372fc185a9b641d3a68e3723be4f9402",
+      "width": 390,
+      "x": 1600,
+      "y": 3667
+    },
+    {
+      "height": 1332,
+      "id": "39b0c5ec04ef4d73b86f534453106937",
+      "sourceScreen": "projects/5652553660313852668/screens/39b0c5ec04ef4d73b86f534453106937",
+      "width": 390,
+      "x": 1932,
+      "y": 12738
+    },
+    {
+      "height": 3172,
+      "id": "3a526f89731f436d9f5d519df7b46a31",
+      "sourceScreen": "projects/5652553660313852668/screens/3a526f89731f436d9f5d519df7b46a31",
+      "width": 1280,
+      "x": 2252,
+      "y": 22906
+    },
+    {
+      "height": 1965,
+      "id": "3b33039c1fc242d5b87c7dc3da09011c",
+      "sourceScreen": "projects/5652553660313852668/screens/3b33039c1fc242d5b87c7dc3da09011c",
+      "width": 1280,
+      "x": 454,
+      "y": 20685
+    },
+    {
+      "height": 1024,
+      "id": "3b3342b3933e44aeb47dcf4c1088d225",
+      "sourceScreen": "projects/5652553660313852668/screens/3b3342b3933e44aeb47dcf4c1088d225",
+      "width": 1280,
+      "x": 4032,
+      "y": 36811
+    },
+    {
+      "height": 1325,
+      "id": "3badd8389b8a4d23aa359e63fc97c3de",
+      "sourceScreen": "projects/5652553660313852668/screens/3badd8389b8a4d23aa359e63fc97c3de",
+      "width": 390,
+      "x": 2118,
+      "y": 1914
+    },
+    {
+      "height": 343,
+      "id": "3c10102c55a641bc9ff3a4bef76dfe5f",
+      "sourceScreen": "projects/5652553660313852668/screens/3c10102c55a641bc9ff3a4bef76dfe5f",
+      "width": 512,
+      "x": -396,
+      "y": 1914
+    },
+    {
+      "height": 1966,
+      "id": "3cd7d6859fb5407f81660f7a3514221e",
+      "sourceScreen": "projects/5652553660313852668/screens/3cd7d6859fb5407f81660f7a3514221e",
+      "width": 390,
+      "y": 15695
+    },
+    {
+      "height": 2526,
+      "id": "3e5a888161e24a6f8de3a2eaea46a0b5",
+      "sourceScreen": "projects/5652553660313852668/screens/3e5a888161e24a6f8de3a2eaea46a0b5",
+      "width": 390,
+      "x": 2724,
+      "y": 9526
+    },
+    {
+      "height": 390,
+      "id": "3f94248c58354ba79473009ce675e4da",
+      "sourceScreen": "projects/5652553660313852668/screens/3f94248c58354ba79473009ce675e4da",
+      "width": 390,
+      "x": 576,
+      "y": 69383
+    },
+    {
+      "height": 1936,
+      "id": "4083596fec8e43b184150a6ca2f2cb4b",
+      "sourceScreen": "projects/5652553660313852668/screens/4083596fec8e43b184150a6ca2f2cb4b",
+      "width": 1280,
+      "x": 3712,
+      "y": 38598
+    },
+    {
+      "height": 600,
+      "id": "40fa84cac3f94619a673bea5da66badd",
+      "sourceScreen": "projects/5652553660313852668/screens/40fa84cac3f94619a673bea5da66badd",
+      "width": 600,
+      "y": 11882
+    },
+    {
+      "height": 1428,
+      "id": "4107a40a8d7b4c8b9f2f8b0800c51708",
+      "sourceScreen": "projects/5652553660313852668/screens/4107a40a8d7b4c8b9f2f8b0800c51708",
+      "width": 390,
+      "x": 1024,
+      "y": 57445
+    },
+    {
+      "height": 3188,
+      "id": "43ce237482d24c1c981b5b3c013f480d",
+      "sourceScreen": "projects/5652553660313852668/screens/43ce237482d24c1c981b5b3c013f480d",
+      "width": 390,
+      "y": 31514
+    },
+    {
+      "height": 1024,
+      "id": "4629411bf0f54b3dbbb968f60677f53e",
+      "sourceScreen": "projects/5652553660313852668/screens/4629411bf0f54b3dbbb968f60677f53e",
+      "width": 1280,
+      "x": 1798,
+      "y": 20685
+    },
+    {
+      "height": 1107,
+      "hidden": true,
+      "id": "4741dfc6-2164-450a-b682-bdba72abe422",
+      "sourceScreen": "projects/5652553660313852668/screens/5888518655557684247",
+      "type": "SCREEN_INSTANCE",
+      "width": 512,
+      "y": 38598
+    },
+    {
+      "height": 3322,
+      "id": "4913cc813a914ebb9e34038ce5580f61",
+      "sourceScreen": "projects/5652553660313852668/screens/4913cc813a914ebb9e34038ce5580f61",
+      "width": 390,
+      "x": 6326,
+      "y": 1914
+    },
+    {
+      "height": 884,
+      "id": "498d66dcd38d4cb1bebb3cf82dadc7ee",
+      "sourceScreen": "projects/5652553660313852668/screens/498d66dcd38d4cb1bebb3cf82dadc7ee",
+      "width": 390,
+      "x": 1478,
+      "y": 26334
+    },
+    {
+      "height": 1351,
+      "id": "498f883896754bdd9c99a010a0be1cad",
+      "sourceScreen": "projects/5652553660313852668/screens/498f883896754bdd9c99a010a0be1cad",
+      "width": 390,
+      "x": 1932,
+      "y": 7153
+    },
+    {
+      "height": 1394,
+      "id": "4a51cf85730f4181bf4e55eaac07056b",
+      "sourceScreen": "projects/5652553660313852668/screens/4a51cf85730f4181bf4e55eaac07056b",
+      "width": 390,
+      "x": 1664,
+      "y": 1914
+    },
+    {
+      "height": 2088,
+      "id": "4cb7b95b965c41b8bec5ccc466e4e266",
+      "sourceScreen": "projects/5652553660313852668/screens/4cb7b95b965c41b8bec5ccc466e4e266",
+      "width": 390,
+      "x": 1816,
+      "y": 29165
+    },
+    {
+      "height": 3214,
+      "id": "5025b1fe037a403bb18234c0463dbad4",
+      "sourceScreen": "projects/5652553660313852668/screens/5025b1fe037a403bb18234c0463dbad4",
+      "width": 390,
+      "x": 1816,
+      "y": 9526
+    },
+    {
+      "height": 1729,
+      "id": "54ec32e074bb4aec97d96fa46b016f68",
+      "sourceScreen": "projects/5652553660313852668/screens/54ec32e074bb4aec97d96fa46b016f68",
+      "width": 390,
+      "x": 1362,
+      "y": 29165
+    },
+    {
+      "height": 1404,
+      "id": "55096ec6dc3e418284d06d732e7ac5a4",
+      "sourceScreen": "projects/5652553660313852668/screens/55096ec6dc3e418284d06d732e7ac5a4",
+      "width": 390,
+      "x": 1932,
+      "y": 57445
+    },
+    {
+      "height": 884,
+      "id": "5515ee73482e4bbeb5c9aa1b80677d76",
+      "sourceScreen": "projects/5652553660313852668/screens/5515ee73482e4bbeb5c9aa1b80677d76",
+      "width": 390,
+      "x": 1024,
+      "y": 26334
+    },
+    {
+      "height": 1170,
+      "id": "5545865d0f4643728845756663ebd7e3",
+      "sourceScreen": "projects/5652553660313852668/screens/5545865d0f4643728845756663ebd7e3",
+      "width": 390,
+      "x": 6052
+    },
+    {
+      "height": 1217,
+      "id": "559f420e52ed4ea6be5576c513edf46c",
+      "sourceScreen": "projects/5652553660313852668/screens/559f420e52ed4ea6be5576c513edf46c",
+      "width": 390,
+      "x": 1210,
+      "y": 1914
+    },
+    {
+      "height": 1448,
+      "id": "56928f2d66d94b2dadb0dc0444218566",
+      "sourceScreen": "projects/5652553660313852668/screens/56928f2d66d94b2dadb0dc0444218566",
+      "width": 1280,
+      "x": 908,
+      "y": 22906
+    },
+    {
+      "height": 1497,
+      "id": "56cd3ebb09b74f7eb09fcd142a437251",
+      "sourceScreen": "projects/5652553660313852668/screens/56cd3ebb09b74f7eb09fcd142a437251",
+      "width": 390,
+      "x": 5872,
+      "y": 1914
+    },
+    {
+      "height": 1352,
+      "id": "56d4f61c3e4c445c8b87db34d65aa89f",
+      "sourceScreen": "projects/5652553660313852668/screens/56d4f61c3e4c445c8b87db34d65aa89f",
+      "width": 390,
+      "y": 65060
+    },
+    {
+      "height": 1236,
+      "id": "571d82cc17904d6c9817825b2eeab40e",
+      "sourceScreen": "projects/5652553660313852668/screens/571d82cc17904d6c9817825b2eeab40e",
+      "width": 390,
+      "x": 908,
+      "y": 52077
+    },
+    {
+      "height": 884,
+      "id": "571f61c473114fa48ccdc4d3c9a058e5",
+      "sourceScreen": "projects/5652553660313852668/screens/571f61c473114fa48ccdc4d3c9a058e5",
+      "width": 390,
+      "x": 4510,
+      "y": 1914
+    },
+    {
+      "height": 2165,
+      "id": "5785e3ecdf354880b16011885c38e4c2",
+      "sourceScreen": "projects/5652553660313852668/screens/5785e3ecdf354880b16011885c38e4c2",
+      "width": 1280,
+      "x": 5056,
+      "y": 38598
+    },
+    {
+      "height": 2100,
+      "id": "57e0ed63215845c3a67b025cb80bd8a5",
+      "sourceScreen": "projects/5652553660313852668/screens/57e0ed63215845c3a67b025cb80bd8a5",
+      "width": 390,
+      "x": 1362,
+      "y": 9526
+    },
+    {
+      "height": 512,
+      "id": "5839f01fc2044f3fa352b4b11501e14f",
+      "sourceScreen": "projects/5652553660313852668/screens/5839f01fc2044f3fa352b4b11501e14f",
+      "width": 512,
+      "y": 3667
+    },
+    {
+      "height": 884,
+      "id": "5a66fc0690254f0a9e8b698fcd694a62",
+      "sourceScreen": "projects/5652553660313852668/screens/5a66fc0690254f0a9e8b698fcd694a62",
+      "width": 390,
+      "x": 1362,
+      "y": 59145
+    },
+    {
+      "height": 1107,
+      "id": "5c3bc47b-e54d-4ec3-955f-7df9ab056af8",
+      "sourceScreen": "projects/5652553660313852668/screens/17674837042531466795",
+      "type": "SCREEN_INSTANCE",
+      "width": 512,
+      "y": 69383
+    },
+    {
+      "height": 1658,
+      "id": "5efc5312106d409c8955380cf82ac416",
+      "sourceScreen": "projects/5652553660313852668/screens/5efc5312106d409c8955380cf82ac416",
+      "width": 390,
+      "x": 6506
+    },
+    {
+      "height": 896,
+      "id": "5f072521ed67496b910fcf855b5754a3",
+      "sourceScreen": "projects/5652553660313852668/screens/5f072521ed67496b910fcf855b5754a3",
+      "width": 390,
+      "x": 756,
+      "y": 1914
+    },
+    {
+      "height": 884,
+      "id": "5f26546a1ede413f89b134c9bacaac83",
+      "sourceScreen": "projects/5652553660313852668/screens/5f26546a1ede413f89b134c9bacaac83",
+      "width": 390,
+      "x": 4964,
+      "y": 1914
+    },
+    {
+      "height": 512,
+      "id": "615ac13fdde046f3896c90ffc4b29546",
+      "sourceScreen": "projects/5652553660313852668/screens/615ac13fdde046f3896c90ffc4b29546",
+      "width": 512,
+      "x": 3084
+    },
+    {
+      "height": 896,
+      "id": "61d5e39ee52d4471a1400763e3ad50d6",
+      "sourceScreen": "projects/5652553660313852668/screens/61d5e39ee52d4471a1400763e3ad50d6",
+      "width": 390,
+      "x": 5144
+    },
+    {
+      "height": 1135,
+      "id": "61da43d0e235437fa5601b3fb5bd75a2",
+      "sourceScreen": "projects/5652553660313852668/screens/61da43d0e235437fa5601b3fb5bd75a2",
+      "width": 390,
+      "x": 2572,
+      "y": 1914
+    },
+    {
+      "height": 1214,
+      "id": "6540b24ce9e2463a8fb0e2f918641b1c",
+      "sourceScreen": "projects/5652553660313852668/screens/6540b24ce9e2463a8fb0e2f918641b1c",
+      "width": 390,
+      "x": 454,
+      "y": 15695
+    },
+    {
+      "height": 1024,
+      "id": "6b536723f0ed46f4845a85e5f5e493fc",
+      "sourceScreen": "projects/5652553660313852668/screens/6b536723f0ed46f4845a85e5f5e493fc",
+      "width": 1280,
+      "y": 36811
+    },
+    {
+      "height": 2266,
+      "id": "6c32ea580a9649bcba50db4406c82a84",
+      "sourceScreen": "projects/5652553660313852668/screens/6c32ea580a9649bcba50db4406c82a84",
+      "width": 1280,
+      "x": 6994,
+      "y": 3667
+    },
+    {
+      "height": 1268,
+      "id": "7b476d3f4ccc47ff9738f704e4058160",
+      "sourceScreen": "projects/5652553660313852668/screens/7b476d3f4ccc47ff9738f704e4058160",
+      "width": 390,
+      "x": 4166,
+      "y": 19101
+    },
+    {
+      "height": 2701,
+      "id": "7bb9663dd58f476f93844fb047c092ab",
+      "sourceScreen": "projects/5652553660313852668/screens/7bb9663dd58f476f93844fb047c092ab",
+      "width": 390,
+      "x": 1478,
+      "y": 12738
+    },
+    {
+      "height": 1072,
+      "id": "7cdea5e174f04f388b81a208956eae2d",
+      "sourceScreen": "projects/5652553660313852668/screens/7cdea5e174f04f388b81a208956eae2d",
+      "width": 390,
+      "x": 5418,
+      "y": 1914
+    },
+    {
+      "height": 1107,
+      "id": "7df590e0-6ab3-4e38-a6c6-89ea8aa43305",
+      "sourceScreen": "projects/5652553660313852668/screens/2219181462809450882",
+      "type": "SCREEN_INSTANCE",
+      "width": 512,
+      "y": 27872
+    },
+    {
+      "height": 1331,
+      "id": "823f8afae26e4589bb7f67b22f9710a1",
+      "sourceScreen": "projects/5652553660313852668/screens/823f8afae26e4589bb7f67b22f9710a1",
+      "width": 390,
+      "y": 35028
+    },
+    {
+      "height": 512,
+      "id": "82b69692dd694b7fb19b3224f3200382",
+      "sourceScreen": "projects/5652553660313852668/screens/82b69692dd694b7fb19b3224f3200382",
+      "width": 512,
+      "x": 1024
+    },
+    {
+      "height": 1773,
+      "id": "85c62dbf450c4145ac49554a3e8376b3",
+      "sourceScreen": "projects/5652553660313852668/screens/85c62dbf450c4145ac49554a3e8376b3",
+      "width": 390,
+      "y": 50048
+    },
+    {
+      "height": 1005,
+      "id": "8720ed7ada96438cb6b1f773be1f68b3",
+      "sourceScreen": "projects/5652553660313852668/screens/8720ed7ada96438cb6b1f773be1f68b3",
+      "width": 390,
+      "x": 2270,
+      "y": 9526
+    },
+    {
+      "height": 917,
+      "id": "87ec9207d93a4239a6cced408fe808be",
+      "sourceScreen": "projects/5652553660313852668/screens/87ec9207d93a4239a6cced408fe808be",
+      "width": 512,
+      "x": 1600
+    },
+    {
+      "height": 884,
+      "id": "88dc457251284e3a87264f2ea14d8279",
+      "sourceScreen": "projects/5652553660313852668/screens/88dc457251284e3a87264f2ea14d8279",
+      "width": 390,
+      "x": 4236
+    },
+    {
+      "height": 2512,
+      "id": "899bd6bf775c442faadc8f111fa08829",
+      "sourceScreen": "projects/5652553660313852668/screens/899bd6bf775c442faadc8f111fa08829",
+      "width": 390,
+      "y": 62030
+    },
+    {
+      "height": 1506,
+      "id": "89da5008c6f948c6a76e762ac1befa5d",
+      "sourceScreen": "projects/5652553660313852668/screens/89da5008c6f948c6a76e762ac1befa5d",
+      "width": 390,
+      "x": 10136,
+      "y": 3667
+    },
+    {
+      "height": 884,
+      "id": "8a950d37c44343ae851b995a86f3d39d",
+      "sourceScreen": "projects/5652553660313852668/screens/8a950d37c44343ae851b995a86f3d39d",
+      "width": 390,
+      "x": 454,
+      "y": 29165
+    },
+    {
+      "height": 1742,
+      "id": "8abbe70f7d9d4348b40518567b393893",
+      "sourceScreen": "projects/5652553660313852668/screens/8abbe70f7d9d4348b40518567b393893",
+      "width": 390,
+      "x": 4742,
+      "y": 3667
+    },
+    {
+      "height": 2328,
+      "id": "8cfb172b72a642c2b447c21a45ac753e",
+      "sourceScreen": "projects/5652553660313852668/screens/8cfb172b72a642c2b447c21a45ac753e",
+      "width": 390,
+      "x": 1024,
+      "y": 12738
+    },
+    {
+      "height": 3230,
+      "id": "954412704bb24a938731efb0a5ed5ad1",
+      "sourceScreen": "projects/5652553660313852668/screens/954412704bb24a938731efb0a5ed5ad1",
+      "width": 1280,
+      "x": 3398,
+      "y": 3667
+    },
+    {
+      "height": 2459,
+      "id": "976b0b213af4484ebea63bc1f2183052",
+      "sourceScreen": "projects/5652553660313852668/screens/976b0b213af4484ebea63bc1f2183052",
+      "width": 390,
+      "x": 454,
+      "y": 66668
+    },
+    {
+      "height": 2094,
+      "id": "99254b600f144885973adede67f7bf17",
+      "sourceScreen": "projects/5652553660313852668/screens/99254b600f144885973adede67f7bf17",
+      "width": 390,
+      "x": 1024,
+      "y": 7153
+    },
+    {
+      "height": 2393,
+      "id": "994a70bcf9ea4009819a9c7c2db6708b",
+      "sourceScreen": "projects/5652553660313852668/screens/994a70bcf9ea4009819a9c7c2db6708b",
+      "width": 390,
+      "x": 7688,
+      "y": 1914
+    },
+    {
+      "height": 1088,
+      "id": "9b06290499f44f73819253642669d51b",
+      "sourceScreen": "projects/5652553660313852668/screens/9b06290499f44f73819253642669d51b",
+      "width": 1280,
+      "x": 1344,
+      "y": 36811
+    },
+    {
+      "height": 1282,
+      "id": "9dea272c518c47b7bb637ab9f3cda24e",
+      "sourceScreen": "projects/5652553660313852668/screens/9dea272c518c47b7bb637ab9f3cda24e",
+      "width": 390,
+      "x": 1932,
+      "y": 26334
+    },
+    {
+      "height": 1024,
+      "id": "a3d7e08b3db745969889053b07f727d6",
+      "sourceScreen": "projects/5652553660313852668/screens/a3d7e08b3db745969889053b07f727d6",
+      "width": 1280,
+      "x": 2252,
+      "y": 44037
+    },
+    {
+      "height": 884,
+      "id": "a5b16b2e21aa4b08b35581ec8a63e310",
+      "sourceScreen": "projects/5652553660313852668/screens/a5b16b2e21aa4b08b35581ec8a63e310",
+      "width": 390,
+      "x": 5598
+    },
+    {
+      "height": 1303,
+      "id": "a5e4bba64638488caa372b202d981136",
+      "sourceScreen": "projects/5652553660313852668/screens/a5e4bba64638488caa372b202d981136",
+      "width": 390,
+      "x": 3748,
+      "y": 7153
+    },
+    {
+      "height": 2187,
+      "id": "ad8bdb3b55f34fac8863749e4e382856",
+      "sourceScreen": "projects/5652553660313852668/screens/ad8bdb3b55f34fac8863749e4e382856",
+      "width": 390,
+      "y": 22906
+    },
+    {
+      "height": 1854,
+      "id": "af2cd22085104cf286d21c357e6029cb",
+      "sourceScreen": "projects/5652553660313852668/screens/af2cd22085104cf286d21c357e6029cb",
+      "width": 390,
+      "y": 66668
+    },
+    {
+      "height": 540,
+      "id": "assets_092e9af3e7954e67bbe18bfae488f6c4",
+      "sourceAsset": "assets/092e9af3e7954e67bbe18bfae488f6c4",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "y": 57445
+    },
+    {
+      "height": 540,
+      "id": "assets_39395750da25469c8b1cb28eea5d575d",
+      "sourceAsset": "assets/39395750da25469c8b1cb28eea5d575d",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "x": 576,
+      "y": 3667
+    },
+    {
+      "height": 540,
+      "id": "assets_558877cddea6496cb9fbf8c2b6ca468e",
+      "sourceAsset": "assets/558877cddea6496cb9fbf8c2b6ca468e",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "y": 7153
+    },
+    {
+      "height": 540,
+      "id": "assets_65d2a14abe854e08a1760756da848504",
+      "sourceAsset": "assets/65d2a14abe854e08a1760756da848504",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "y": 38598
+    },
+    {
+      "height": 540,
+      "id": "assets_7dcba592a60a4593aebd29417383ea43",
+      "sourceAsset": "assets/7dcba592a60a4593aebd29417383ea43",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "y": 55107
+    },
+    {
+      "height": 540,
+      "id": "assets_957b7f82f51144f4b8f91ef607b181bf",
+      "sourceAsset": "assets/957b7f82f51144f4b8f91ef607b181bf",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960
+    },
+    {
+      "height": 540,
+      "id": "assets_bb7bf12268274a7ba3195351866f9627",
+      "sourceAsset": "assets/bb7bf12268274a7ba3195351866f9627",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "y": 26334
+    },
+    {
+      "height": 540,
+      "id": "assets_e8f63ab1d2f84377b22507fe6ad6b8d9",
+      "sourceAsset": "assets/e8f63ab1d2f84377b22507fe6ad6b8d9",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "y": 12738
+    },
+    {
+      "height": 540,
+      "id": "assets_f721632b37874f83923bddfe8e0c55fb",
+      "sourceAsset": "assets/f721632b37874f83923bddfe8e0c55fb",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "y": 19101
+    },
+    {
+      "height": 1842,
+      "id": "b1674c5f086d4d37b8d55f3b5a0acee4",
+      "sourceScreen": "projects/5652553660313852668/screens/b1674c5f086d4d37b8d55f3b5a0acee4",
+      "width": 390,
+      "x": 908,
+      "y": 66668
+    },
+    {
+      "height": 1423,
+      "id": "b1b57de1a8a644dd83acba0795e0fab1",
+      "sourceScreen": "projects/5652553660313852668/screens/b1b57de1a8a644dd83acba0795e0fab1",
+      "width": 390,
+      "x": 4202,
+      "y": 7153
+    },
+    {
+      "height": 2480,
+      "id": "b4b07fa2a8994f18865352b9852267fa",
+      "sourceScreen": "projects/5652553660313852668/screens/b4b07fa2a8994f18865352b9852267fa",
+      "width": 390,
+      "x": 3632,
+      "y": 9526
+    },
+    {
+      "height": 2519,
+      "id": "ba7946c5d44446f0b5fa26aae06de213",
+      "sourceScreen": "projects/5652553660313852668/screens/ba7946c5d44446f0b5fa26aae06de213",
+      "width": 1280,
+      "x": 8792,
+      "y": 3667
+    },
+    {
+      "height": 1128,
+      "id": "bad4a9b7818f4df19461c0245d623c25",
+      "sourceScreen": "projects/5652553660313852668/screens/bad4a9b7818f4df19461c0245d623c25",
+      "width": 1280,
+      "x": 2822,
+      "y": 19101
+    },
+    {
+      "height": 1024,
+      "id": "bd3aab58ab5a42a185c13683b1e4ecbb",
+      "sourceScreen": "projects/5652553660313852668/screens/bd3aab58ab5a42a185c13683b1e4ecbb",
+      "width": 1280,
+      "x": 454,
+      "y": 35028
+    },
+    {
+      "height": 5183,
+      "id": "bd41e155475b46bbb63c5441e0c723f3",
+      "sourceScreen": "projects/5652553660313852668/screens/bd41e155475b46bbb63c5441e0c723f3",
+      "width": 1280,
+      "x": 1024,
+      "y": 38598
+    },
+    {
+      "height": 2853,
+      "id": "bf10328c682b4c1dafa69215334dc53d",
+      "sourceScreen": "projects/5652553660313852668/screens/bf10328c682b4c1dafa69215334dc53d",
+      "width": 390,
+      "x": 908,
+      "y": 31514
+    },
+    {
+      "height": 2412,
+      "id": "bf38b53454cd44bc9c6bcfee2caad22a",
+      "sourceScreen": "projects/5652553660313852668/screens/bf38b53454cd44bc9c6bcfee2caad22a",
+      "width": 1280,
+      "x": 6400,
+      "y": 38598
+    },
+    {
+      "height": 1423,
+      "id": "c24dac9b44bb4d8f94e099e3a83dea23",
+      "sourceScreen": "projects/5652553660313852668/screens/c24dac9b44bb4d8f94e099e3a83dea23",
+      "width": 390,
+      "x": 2840,
+      "y": 7153
+    },
+    {
+      "height": 1297,
+      "id": "c29ed80358cf43cfb78e91d08e526b22",
+      "sourceScreen": "projects/5652553660313852668/screens/c29ed80358cf43cfb78e91d08e526b22",
+      "width": 390,
+      "y": 59145
+    },
+    {
+      "height": 884,
+      "id": "c2a01c4b100a4e2da57fa463395e0b1a",
+      "sourceScreen": "projects/5652553660313852668/screens/c2a01c4b100a4e2da57fa463395e0b1a",
+      "width": 390,
+      "x": 454,
+      "y": 59145
+    },
+    {
+      "height": 1532,
+      "id": "c40347aa0a324552bd9676b15eaa688f",
+      "sourceScreen": "projects/5652553660313852668/screens/c40347aa0a324552bd9676b15eaa688f",
+      "width": 390,
+      "x": 5196,
+      "y": 3667
+    },
+    {
+      "height": 343,
+      "id": "c79227211e994ec19617ba7a153b0b79",
+      "sourceScreen": "projects/5652553660313852668/screens/c79227211e994ec19617ba7a153b0b79",
+      "width": 512,
+      "x": 180,
+      "y": 1914
+    },
+    {
+      "height": 5755,
+      "id": "cba04bf9a9554f36ad149779292fa257",
+      "sourceScreen": "projects/5652553660313852668/screens/cba04bf9a9554f36ad149779292fa257",
+      "width": 1280,
+      "y": 44037
+    },
+    {
+      "height": 1496,
+      "id": "cc4c6a1aa6f04aa5a3a71c03afad4f86",
+      "sourceScreen": "projects/5652553660313852668/screens/cc4c6a1aa6f04aa5a3a71c03afad4f86",
+      "width": 390,
+      "x": 454,
+      "y": 9526
+    },
+    {
+      "height": 512,
+      "id": "cd307c0f6a74472f8d0aaa907b995bb4",
+      "sourceScreen": "projects/5652553660313852668/screens/cd307c0f6a74472f8d0aaa907b995bb4",
+      "width": 512,
+      "x": 3480,
+      "y": 1914
+    },
+    {
+      "height": 1393,
+      "id": "cfa2bd779f4a4b6d8cb7e45529f8fefc",
+      "sourceScreen": "projects/5652553660313852668/screens/cfa2bd779f4a4b6d8cb7e45529f8fefc",
+      "width": 390,
+      "x": 2386,
+      "y": 7153
+    },
+    {
+      "height": 2774,
+      "id": "d42c724d807d48b4adc0a379b420063f",
+      "sourceScreen": "projects/5652553660313852668/screens/d42c724d807d48b4adc0a379b420063f",
+      "width": 390,
+      "y": 52077
+    },
+    {
+      "height": 1531,
+      "id": "d42d3a8eec174e919f3f8e1e3e9c9119",
+      "sourceScreen": "projects/5652553660313852668/screens/d42d3a8eec174e919f3f8e1e3e9c9119",
+      "width": 1280,
+      "x": 2688,
+      "y": 36811
+    },
+    {
+      "height": 1669,
+      "id": "d4bdf75b32994fe59e7aa8182524f5c6",
+      "sourceScreen": "projects/5652553660313852668/screens/d4bdf75b32994fe59e7aa8182524f5c6",
+      "width": 1280,
+      "x": 9088,
+      "y": 38598
+    },
+    {
+      "height": 2094,
+      "id": "db8e39bd6a8a4b388fe0b51bf4fe20c7",
+      "sourceScreen": "projects/5652553660313852668/screens/db8e39bd6a8a4b388fe0b51bf4fe20c7",
+      "width": 390,
+      "x": 3294,
+      "y": 7153
+    },
+    {
+      "height": 1343,
+      "id": "dd9827a0fea8411898ef9f7b6f9b9a94",
+      "sourceScreen": "projects/5652553660313852668/screens/dd9827a0fea8411898ef9f7b6f9b9a94",
+      "width": 1280,
+      "x": 1932,
+      "y": 55107
+    },
+    {
+      "height": 2079,
+      "id": "deecd02161aa4689a30aa2d9fad1194f",
+      "sourceScreen": "projects/5652553660313852668/screens/deecd02161aa4689a30aa2d9fad1194f",
+      "width": 390,
+      "x": 1798,
+      "y": 44037
+    },
+    {
+      "height": 2082,
+      "id": "deed37593a8249fa9831fcf3e3b8f101",
+      "sourceScreen": "projects/5652553660313852668/screens/deed37593a8249fa9831fcf3e3b8f101",
+      "width": 390,
+      "x": 1478,
+      "y": 55107
+    },
+    {
+      "height": 2774,
+      "id": "defac54868f3484db28869b958b0dfb9",
+      "sourceScreen": "projects/5652553660313852668/screens/defac54868f3484db28869b958b0dfb9",
+      "width": 390,
+      "x": 908,
+      "y": 62030
+    },
+    {
+      "height": 390,
+      "id": "e2a495b0dadd498880ff226edd3db599",
+      "sourceScreen": "projects/5652553660313852668/screens/e2a495b0dadd498880ff226edd3db599",
+      "width": 390,
+      "x": -660,
+      "y": 1914
+    },
+    {
+      "height": 1376,
+      "id": "e2ffed102c024d848bb3c6b97a0d5ae2",
+      "sourceScreen": "projects/5652553660313852668/screens/e2ffed102c024d848bb3c6b97a0d5ae2",
+      "width": 390,
+      "x": 454,
+      "y": 50048
+    },
+    {
+      "height": 1700,
+      "id": "e39d3bca21f14b7dbfe61b8c20e90df7",
+      "sourceScreen": "projects/5652553660313852668/screens/e39d3bca21f14b7dbfe61b8c20e90df7",
+      "width": 390,
+      "y": 9526
+    },
+    {
+      "height": 884,
+      "id": "e4303f5dc17b485692993832a43ac8be",
+      "sourceScreen": "projects/5652553660313852668/screens/e4303f5dc17b485692993832a43ac8be",
+      "width": 390,
+      "x": 1938,
+      "y": 69383
+    },
+    {
+      "height": 1514,
+      "id": "e9085549e93842339ebe7d56e8dba7d1",
+      "sourceScreen": "projects/5652553660313852668/screens/e9085549e93842339ebe7d56e8dba7d1",
+      "width": 1280,
+      "x": 10432,
+      "y": 38598
+    },
+    {
+      "height": 1587,
+      "id": "ee0513a822a5474b8e772ee2e6e1d1d9",
+      "sourceScreen": "projects/5652553660313852668/screens/ee0513a822a5474b8e772ee2e6e1d1d9",
+      "width": 390,
+      "x": 4056,
+      "y": 1914
+    },
+    {
+      "height": 2138,
+      "id": "ee42d11a53154c25939e70617a647c16",
+      "sourceScreen": "projects/5652553660313852668/screens/ee42d11a53154c25939e70617a647c16",
+      "width": 390,
+      "x": 4656,
+      "y": 7153
+    },
+    {
+      "height": 2250,
+      "id": "f154c3366ba24fb798f5b24791d2a145",
+      "sourceScreen": "projects/5652553660313852668/screens/f154c3366ba24fb798f5b24791d2a145",
+      "width": 390,
+      "x": 1344,
+      "y": 44037
+    },
+    {
+      "height": 1576,
+      "id": "f290b2e174a845b4a73535949d066b29",
+      "sourceScreen": "projects/5652553660313852668/screens/f290b2e174a845b4a73535949d066b29",
+      "width": 390,
+      "x": 1024,
+      "y": 55107
+    },
+    {
+      "height": 3150,
+      "id": "f2e0c453e64a494ab204be3ca282e5f7",
+      "sourceScreen": "projects/5652553660313852668/screens/f2e0c453e64a494ab204be3ca282e5f7",
+      "width": 390,
+      "x": 908,
+      "y": 15695
+    },
+    {
+      "height": 2489,
+      "id": "f4804c9b948c419da9096a17f5fae8d7",
+      "sourceScreen": "projects/5652553660313852668/screens/f4804c9b948c419da9096a17f5fae8d7",
+      "width": 390,
+      "x": 3178,
+      "y": 9526
+    },
+    {
+      "height": 686,
+      "id": "f60f911792dc4b469652cfae271fe5da",
+      "sourceScreen": "projects/5652553660313852668/screens/f60f911792dc4b469652cfae271fe5da",
+      "width": 512,
+      "x": 3660
+    },
+    {
+      "height": 1024,
+      "id": "f6d368e99d6e42bea7d49b4391652b22",
+      "sourceScreen": "projects/5652553660313852668/screens/f6d368e99d6e42bea7d49b4391652b22",
+      "width": 1280,
+      "x": 1478,
+      "y": 19101
+    },
+    {
+      "height": 939,
+      "id": "f9155d63c78349e38e4fd3009e421815",
+      "sourceScreen": "projects/5652553660313852668/screens/f9155d63c78349e38e4fd3009e421815",
+      "width": 390,
+      "x": 2252,
+      "y": 35028
+    },
+    {
+      "height": 1444,
+      "id": "fbb27b55bd5e495289a550c664dc58c9",
+      "sourceScreen": "projects/5652553660313852668/screens/fbb27b55bd5e495289a550c664dc58c9",
+      "width": 390,
+      "x": 2386,
+      "y": 57445
+    }
+  ],
+  "thumbnailScreenshot": {
+    "downloadUrl": "https://lh3.googleusercontent.com/aida/AP1WRLvkxwzjdaeLP0RWmIF8hTJsQ32OIdRt2I8Atf7Did-zViT8T1hJTT23cKA8I8Cy2CBA00Jr4rfJ_k403OQ10_e2OvZmDI5CrGp6MVfN_02hs4oCP_HDEVrx9jM5EQv08oCyH-7Bx0_5FQncX3GQrUgQHdzlozx42oGxZ8QLbr8x-oI5jFNAvKOIKhR8bqIHNx9de6vq4Zii7rSqhvuk6u9HsLqnRYQ3Bqeh6fK9w_UO-0johnMICBHiRg",
+    "name": "projects/5652553660313852668/screens/87ec9207d93a4239a6cced408fe808be/fileEntries/screenshot"
+  },
+  "title": "FitOra Player Authentication Flow",
+  "updateTime": "2026-07-15T09:23:36.538753Z",
+  "visibility": "PRIVATE"
+}

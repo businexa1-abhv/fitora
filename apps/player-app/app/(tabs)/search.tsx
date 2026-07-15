@@ -4,11 +4,11 @@ import { useMemo, useState } from 'react';
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SPORT_LABELS, type SportType } from '@fitora/shared';
-import { CourtCard } from '@/components/court-card';
+import { VenueCard } from '@/components/venue-card';
 import { QueryState } from '@/components/query-state';
 import { useTheme } from '@/providers/theme-provider';
 import { CITIES, POPULAR_SPORTS, SPORT_EMOJI } from '@/lib/constants';
-import { getCourts } from '@/lib/courts';
+import { getVenues } from '@/lib/venues';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 export default function SearchScreen() {
@@ -18,17 +18,17 @@ export default function SearchScreen() {
   const [sport, setSport] = useState<SportType | null>(POPULAR_SPORTS[0] ?? null);
   const [city, setCity] = useState<string | null>('Hyderabad');
 
-  const courtsQuery = useQuery({
-    queryKey: ['courts', 'search', query, sport, city],
+  const venuesQuery = useQuery({
+    queryKey: ['venues', 'search', query, sport, city],
     queryFn: () =>
-      getCourts({
+      getVenues({
         search: query.trim() || undefined,
         sportType: sport ?? undefined,
         city: city ?? undefined,
       }),
   });
 
-  const results = useMemo(() => courtsQuery.data?.items ?? [], [courtsQuery.data]);
+  const results = useMemo(() => venuesQuery.data?.items ?? [], [venuesQuery.data]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -131,10 +131,10 @@ export default function SearchScreen() {
             <View style={styles.sectionHeader}>
               <View>
                 <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
-                  Nearby Courts
+                  Nearby Venues
                 </Text>
                 <Text style={[styles.resultCount, { color: colors.muted }]}>
-                  {courtsQuery.data?.total ?? results.length} premium venues found
+                  {venuesQuery.data?.total ?? results.length} venues found
                 </Text>
               </View>
             </View>
@@ -142,10 +142,10 @@ export default function SearchScreen() {
         }
         ListEmptyComponent={
           <QueryState
-            isLoading={courtsQuery.isLoading}
-            isError={courtsQuery.isError}
-            error={courtsQuery.error as Error}
-            onRetry={() => courtsQuery.refetch()}
+            isLoading={venuesQuery.isLoading}
+            isError={venuesQuery.isError}
+            error={venuesQuery.error as Error}
+            onRetry={() => venuesQuery.refetch()}
           >
             <View style={styles.empty}>
               <View style={[styles.emptyIcon, { backgroundColor: colors.mutedBg }]}>
@@ -153,19 +153,19 @@ export default function SearchScreen() {
               </View>
               <Text style={[styles.emptyTitle, { color: colors.foreground }]}>No venues found</Text>
               <Text style={[styles.emptyText, { color: colors.muted }]}>
-                Try another sport, city, or court name.
+                Try another sport, city, or venue name.
               </Text>
             </View>
           </QueryState>
         }
         renderItem={({ item }) => (
           <QueryState
-            isLoading={courtsQuery.isLoading}
-            isError={courtsQuery.isError}
-            error={courtsQuery.error as Error}
-            onRetry={() => courtsQuery.refetch()}
+            isLoading={venuesQuery.isLoading}
+            isError={venuesQuery.isError}
+            error={venuesQuery.error as Error}
+            onRetry={() => venuesQuery.refetch()}
           >
-            <CourtCard court={item} priceFrom={499} />
+            <VenueCard venue={item} />
           </QueryState>
         )}
       />

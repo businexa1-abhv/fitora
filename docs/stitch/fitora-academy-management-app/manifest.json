@@ -1,0 +1,40 @@
+{
+  "project": {
+    "title": "FitOra Academy Management App",
+    "id": "7326153259200245460"
+  },
+  "screens": [
+    {
+      "title": "Design System",
+      "id": "asset-stub-assets_271b013a2be8490b9a15186d514425fa",
+      "html": null,
+      "screenshot": null,
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "meta": "design-system.json"
+    },
+    {
+      "title": "Owner Login",
+      "id": "24f087d55e18418f8ce47153927301c6",
+      "html": "owner-login.html",
+      "screenshot": "owner-login.png"
+    },
+    {
+      "title": "Welcome to FitOra Owner",
+      "id": "73f3cba098a743f69f2072b4faf61102",
+      "html": "welcome-to-fitora-owner.html",
+      "screenshot": "welcome-to-fitora-owner.png"
+    },
+    {
+      "title": "Court Inventory & Status",
+      "id": "8586acb54a57409bbbda0819aaeba8f7",
+      "html": "court-inventory-status.html",
+      "screenshot": "court-inventory-status.png"
+    },
+    {
+      "title": "Venue Executive Dashboard",
+      "id": "76f59adf85ec4f43b240efa842c6bc2e",
+      "html": "venue-executive-dashboard.html",
+      "screenshot": "venue-executive-dashboard.png"
+    }
+  ]
+}

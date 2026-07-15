@@ -1,0 +1,32 @@
+{
+  "project": {
+    "title": "FitOra Player Authentication Flow",
+    "id": "5652553660313852668"
+  },
+  "screens": [
+    {
+      "title": "Admin Dashboard - Overview",
+      "id": "6b536723f0ed46f4845a85e5f5e493fc",
+      "html": "admin-dashboard-overview.html",
+      "screenshot": "admin-dashboard-overview.png"
+    },
+    {
+      "title": "Owner Management - Verification Hub",
+      "id": "9b06290499f44f73819253642669d51b",
+      "html": "owner-management-verification-hub.html",
+      "screenshot": "owner-management-verification-hub.png"
+    },
+    {
+      "title": "Platform Revenue & Settlements",
+      "id": "d42d3a8eec174e919f3f8e1e3e9c9119",
+      "html": "platform-revenue-settlements.html",
+      "screenshot": "platform-revenue-settlements.png"
+    },
+    {
+      "title": "Platform CMS & Global Config",
+      "id": "3b3342b3933e44aeb47dcf4c1088d225",
+      "html": "platform-cms-global-config.html",
+      "screenshot": "platform-cms-global-config.png"
+    }
+  ]
+}

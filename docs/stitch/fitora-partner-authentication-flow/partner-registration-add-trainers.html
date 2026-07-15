@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Partner - Trainer Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@300;400;500;600&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lexend:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .trainer-card-shadow {
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
+        }
+        .step-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom scrollbar for better UI */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff8f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e0c0b1;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#f97316",
+                        "on-secondary-container": "#00714e",
+                        "background": "#fff8f6",
+                        "error": "#ba1a1a",
+                        "tertiary": "#565e74",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-secondary-fixed": "#002114",
+                        "on-error": "#ffffff",
+                        "warning-amber": "#D97706",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1d1b1a",
+                        "secondary-container": "#82f5c1",
+                        "on-primary-fixed-variant": "#783200",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#68dba9",
+                        "inverse-on-surface": "#f6efed",
+                        "on-primary-fixed": "#341100",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-surface-variant": "#584237",
+                        "surface-bright": "#fff8f6",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#582200",
+                        "surface": "#fff8f6",
+                        "danger-red": "#DC2626",
+                        "primary-fixed": "#ffdbca",
+                        "surface-container": "#f3ecea",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#929ab2",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#ffb690",
+                        "on-secondary-fixed-variant": "#005137",
+                        "surface-variant": "#e8e1df",
+                        "surface-container-highest": "#e8e1df",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "brand-accent": "#FF6B35",
+                        "surface-tonal": "#F1F5F9",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "secondary-fixed": "#85f8c4",
+                        "surface-dim": "#dfd9d7",
+                        "surface-container-low": "#f9f2f0",
+                        "primary-fixed-dim": "#ffb690",
+                        "outline-variant": "#e0c0b1",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#ede7e5",
+                        "primary": "#9d4300",
+                        "on-surface": "#1d1b1a",
+                        "on-tertiary-container": "#2a3246",
+                        "secondary": "#006c4a",
+                        "outline": "#8c7164",
+                        "surface-tint": "#9d4300",
+                        "inverse-surface": "#33302f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "section-gap": "120px",
+                        "margin-mobile": "20px",
+                        "gutter-mobile": "16px",
+                        "gutter-desktop": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Lexend"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Lexend"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="w-full top-0 bg-surface dark:bg-surface-dim shadow-sm z-50">
+<nav class="flex justify-between items-center h-16 px-margin-desktop max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="font-display-lg text-[24px] font-extrabold text-primary dark:text-primary-fixed-dim tracking-tight">FitOra Partner</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:bg-surface-tonal p-2 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary-fixed-dim flex items-center justify-center text-on-primary-fixed font-bold text-xs">JD</div>
+</div>
+</nav>
+</header>
+<main class="flex-grow flex max-w-7xl mx-auto w-full px-margin-desktop py-10 gap-gutter-desktop">
+<!-- SideNavBar / Progress Tracker -->
+<aside class="hidden md:flex flex-col gap-4 w-64 p-6 bg-surface-container rounded-xl h-fit sticky top-24">
+<div class="mb-4">
+<h2 class="font-headline-md text-primary text-lg">Partner Registration</h2>
+<p class="font-label-sm text-on-surface-variant">Step 2.6 of 4</p>
+</div>
+<nav class="flex flex-col gap-2">
+<div class="text-on-surface-variant p-3 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="business">business</span>
+<span class="font-label-md">Business Info</span>
+</div>
+<div class="bg-primary-container text-on-primary-container font-bold rounded-lg p-3 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="stadium">stadium</span>
+<span class="font-label-md">Venue Details</span>
+</div>
+<!-- Sub-steps indicator -->
+<div class="ml-9 flex flex-col gap-2 border-l-2 border-primary-container/30 py-2">
+<div class="pl-4 text-on-surface-variant font-label-sm opacity-70">General Info</div>
+<div class="pl-4 text-on-primary-container font-bold font-label-sm">Trainer Onboarding</div>
+<div class="pl-4 text-on-surface-variant font-label-sm opacity-70">Facilities</div>
+</div>
+<div class="text-on-surface-variant p-3 flex items-center gap-3 opacity-50">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-label-md">Operational Hours</span>
+</div>
+<div class="text-on-surface-variant p-3 flex items-center gap-3 opacity-50">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+<span class="font-label-md">Review</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<section class="flex-1 max-w-3xl">
+<div class="mb-8">
+<h1 class="font-headline-lg text-on-surface mb-2">Trainer Onboarding</h1>
+<p class="font-body-lg text-on-surface-variant">Register the professionals who will be managing sessions and training at your venue. Verified trainers build customer trust.</p>
+</div>
+<!-- Trainer Forms Container -->
+<div class="space-y-8" id="trainer-forms-container">
+<!-- Trainer Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-8 trainer-card-shadow relative group">
+<div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-danger-red hover:bg-error-container/20 p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Profile Pic Section -->
+<div class="md:col-span-3 flex flex-col items-center gap-4">
+<div class="w-32 h-32 rounded-full bg-surface-container border-2 border-dashed border-outline flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:bg-surface-variant transition-colors relative">
+<span class="material-symbols-outlined text-outline text-3xl mb-1" data-icon="add_a_photo">add_a_photo</span>
+<span class="font-label-sm text-outline text-[10px] text-center px-2">Upload Photo (Optional)</span>
+</div>
+<p class="font-label-sm text-on-surface-variant text-center">JPG, PNG up to 2MB</p>
+</div>
+<!-- Form Fields Section -->
+<div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Full Name -->
+<div class="md:col-span-2">
+<label class="font-label-md text-on-surface-variant mb-2 block">Full Name</label>
+<input class="w-full bg-surface border-outline-variant rounded-lg p-3 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all" placeholder="e.g. Rahul Sharma" type="text"/>
+</div>
+<!-- Specialization -->
+<div>
+<label class="font-label-md text-on-surface-variant mb-2 block">Specialization (Sport)</label>
+<select class="w-full bg-surface border-outline-variant rounded-lg p-3 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all appearance-none">
+<option value="">Select Sport</option>
+<option value="cricket">Cricket</option>
+<option value="football">Football</option>
+<option value="badminton">Badminton</option>
+<option value="swimming">Swimming</option>
+<option value="tennis">Tennis</option>
+</select>
+</div>
+<!-- Experience -->
+<div>
+<label class="font-label-md text-on-surface-variant mb-2 block">Years of Experience</label>
+<input class="w-full bg-surface border-outline-variant rounded-lg p-3 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all" placeholder="e.g. 5" type="number"/>
+</div>
+<!-- Mobile Number -->
+<div>
+<label class="font-label-md text-on-surface-variant mb-2 block">Mobile Number</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-md">+91</span>
+<input class="w-full bg-surface border-outline-variant rounded-lg p-3 pl-12 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all" placeholder="00000 00000" type="tel"/>
+</div>
+</div>
+<!-- Aadhaar (Security Context) -->
+<div>
+<label class="font-label-md text-on-surface-variant mb-2 block flex items-center gap-1">
+                                    Aadhaar Number
+                                    <span class="material-symbols-outlined text-[14px] text-on-secondary-container" data-icon="verified_user">verified_user</span>
+</label>
+<div class="relative">
+<input class="w-full bg-surface border-outline-variant rounded-lg p-3 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all tracking-widest" id="aadhaar-1" placeholder="XXXX XXXX XXXX" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary" onclick="togglePassword('aadhaar-1')" type="button">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-1">Data is encrypted and stored securely.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Add More Button -->
+<button class="w-full mt-8 py-4 border-2 border-dashed border-primary/30 rounded-xl flex items-center justify-center gap-2 text-primary font-bold hover:bg-primary-fixed/20 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                Add Another Trainer
+            </button>
+<!-- Bottom Action Navigation -->
+<div class="mt-12 pt-8 border-t border-outline-variant/20 flex justify-between items-center">
+<button class="px-8 py-3 text-on-surface-variant font-bold hover:bg-surface-variant rounded-lg transition-all">
+                    Back
+                </button>
+<div class="flex gap-4">
+<button class="px-8 py-3 text-primary font-bold hover:bg-primary-fixed/30 rounded-lg transition-all">
+                        Skip for Now
+                    </button>
+<button class="px-10 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg shadow-lg hover:shadow-primary-container/20 hover:-translate-y-0.5 active:scale-95 transition-all">
+                        Save & Continue
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant/20 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop px-margin-desktop max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<span class="font-display-lg text-display-lg font-extrabold text-primary dark:text-primary-fixed-dim">FitOra Partner</span>
+<p class="font-body-md text-on-surface-variant mt-4">Empowering sports venue owners with institutional-grade management tools.</p>
+</div>
+<div>
+<h4 class="font-bold text-on-surface mb-6">Quick Links</h4>
+<ul class="flex flex-col gap-3 font-body-md text-on-surface-variant">
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">About</a></li>
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">Support</a></li>
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">Legal</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-on-surface mb-6">Support</h4>
+<ul class="flex flex-col gap-3 font-body-md text-on-surface-variant">
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">Partner Help Center</a></li>
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">Technical Support</a></li>
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">API Documentation</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-on-surface mb-6">Policy</h4>
+<ul class="flex flex-col gap-3 font-body-md text-on-surface-variant">
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">Privacy Policy</a></li>
+<li class="hover:text-brand-accent transition-colors duration-200"><a href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-margin-desktop mt-20 pt-8 border-t border-outline-variant/10 text-center font-label-md text-on-surface-variant/60">
+            © 2024 FitOra Partner. All rights reserved.
+        </div>
+</footer>
+<script>
+        function togglePassword(id) {
+            const el = document.getElementById(id);
+            const btn = el.nextElementSibling.querySelector('.material-symbols-outlined');
+            if (el.type === "password") {
+                el.type = "text";
+                btn.innerText = "visibility_off";
+            } else {
+                el.type = "password";
+                btn.innerText = "visibility";
+            }
+        }
+
+        // Simple animation for new trainer cards (simulated)
+        const addBtn = document.querySelector('button[data-icon="add_circle"]').parentElement;
+        const container = document.getElementById('trainer-forms-container');
+
+        addBtn.addEventListener('click', () => {
+            const newCard = container.children[0].cloneNode(true);
+            const inputs = newCard.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.value = '';
+                if(input.id) input.id = 'aadhaar-' + (container.children.length + 1);
+            });
+            const visibilityBtn = newCard.querySelector('button[onclick]');
+            if(visibilityBtn) {
+                visibilityBtn.setAttribute('onclick', `togglePassword('aadhaar-${container.children.length + 1}')`);
+            }
+            
+            newCard.style.opacity = '0';
+            newCard.style.transform = 'translateY(20px)';
+            container.appendChild(newCard);
+            
+            setTimeout(() => {
+                newCard.classList.add('step-transition');
+                newCard.style.opacity = '1';
+                newCard.style.transform = 'translateY(0)';
+            }, 50);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Partner Registration - Step 4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Lexend:wght@300;400;500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#33302f",
+                    "on-error-container": "#93000a",
+                    "surface-tonal": "#F1F5F9",
+                    "primary-fixed-dim": "#ffb690",
+                    "inverse-primary": "#ffb690",
+                    "on-primary-fixed": "#341100",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "outline": "#8c7164",
+                    "surface-variant": "#e8e1df",
+                    "primary": "#9d4300",
+                    "surface-container-highest": "#e8e1df",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#e0c0b1",
+                    "on-secondary-container": "#00714e",
+                    "on-background": "#1d1b1a",
+                    "background": "#fff8f6",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f6efed",
+                    "on-primary-fixed-variant": "#783200",
+                    "surface-dim": "#dfd9d7",
+                    "on-secondary-fixed": "#002114",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-surface-variant": "#584237",
+                    "surface-container-low": "#f9f2f0",
+                    "tertiary": "#565e74",
+                    "on-tertiary-fixed": "#131b2e",
+                    "primary-container": "#f97316",
+                    "surface-tint": "#9d4300",
+                    "surface": "#fff8f6",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#005137",
+                    "brand-accent": "#FF6B35",
+                    "secondary-fixed": "#85f8c4",
+                    "surface-container-high": "#ede7e5",
+                    "surface-container": "#f3ecea",
+                    "primary-fixed": "#ffdbca",
+                    "danger-red": "#DC2626",
+                    "on-tertiary-container": "#2a3246",
+                    "secondary-fixed-dim": "#68dba9",
+                    "secondary": "#006c4a",
+                    "on-surface": "#1d1b1a",
+                    "tertiary-fixed": "#dae2fd",
+                    "tertiary-container": "#929ab2",
+                    "warning-amber": "#D97706",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#82f5c1",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "on-primary-container": "#582200"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "80px",
+                    "base": "4px",
+                    "margin-mobile": "20px",
+                    "gutter-mobile": "16px",
+                    "gutter-desktop": "24px",
+                    "section-gap": "120px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Lexend"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active { font-variation-settings: 'FILL' 1; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0c0b1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant/10 shadow-sm">
+<div class="flex justify-between items-center h-20 px-margin-desktop max-w-7xl mx-auto">
+<div class="font-display-lg text-display-lg font-extrabold text-primary dark:text-primary-fixed-dim">
+                FitOra Partner
+            </div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-brand-accent transition-colors duration-200" href="#">Benefits</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-brand-accent transition-colors duration-200" href="#">Pricing</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-brand-accent transition-colors duration-200" href="#">FAQ</a>
+</div>
+<div class="h-8 w-px bg-outline-variant/30 hidden md:block"></div>
+<button class="font-label-md text-label-md text-primary font-bold px-4 py-2 hover:bg-primary-fixed/20 rounded-lg transition-all">Partner Login</button>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-margin-desktop py-12 flex flex-col md:flex-row gap-12">
+<!-- Sidebar Navigation (Mandatory Style Mapping) -->
+<aside class="hidden md:flex flex-col gap-4 w-64 shrink-0">
+<div class="mb-6">
+<h1 class="font-headline-md text-headline-md text-primary">Partner Registration</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Step 4 of 4</p>
+</div>
+<nav class="bg-surface-container dark:bg-surface-container rounded-xl p-4 flex flex-col gap-2">
+<div class="flex items-center gap-3 text-on-surface-variant p-3 opacity-60">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">business</span>
+<span class="font-label-md text-label-md">Business Info</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant p-3 opacity-60">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">stadium</span>
+<span class="font-label-md text-label-md">Venue Details</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant p-3 opacity-60">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">schedule</span>
+<span class="font-label-md text-label-md">Operational Hours</span>
+</div>
+<!-- Active State -->
+<div class="bg-primary-container text-on-primary-container font-bold rounded-lg p-3 flex items-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-md text-label-md">Review</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<div class="flex-1 max-w-3xl">
+<header class="mb-10">
+<h2 class="font-display-lg text-display-lg-mobile md:text-headline-lg text-on-surface mb-2">Final Review &amp; Visuals</h2>
+<p class="text-on-surface-variant font-body-md">Bring your venue to life with high-quality photos and review your application details before submission.</p>
+</header>
+<form class="space-y-12">
+<!-- Visuals Upload Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">image</span>
+<h3 class="font-headline-md text-headline-md">Venue Visuals</h3>
+</div>
+<!-- Business Logo Upload -->
+<div class="bg-surface-container-low rounded-xl p-8 border-2 border-dashed border-outline-variant hover:border-primary transition-colors flex flex-col items-center justify-center text-center group cursor-pointer">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">upload_file</span>
+</div>
+<p class="font-label-md text-label-md font-bold mb-1">Business Logo</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">PNG, JPG or SVG (max. 2MB)</p>
+<input class="hidden" id="logo-upload" type="file"/>
+</div>
+<!-- Photo Grid (Business & Court Photos) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
+                                Business Exterior <span class="material-symbols-outlined text-sm">info</span>
+</label>
+<div class="aspect-video bg-surface-variant rounded-lg flex items-center justify-center border border-outline-variant hover:bg-surface-container-highest transition-colors cursor-pointer group relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity" data-alt="A professional architectural photograph of a modern sports facility facade during the golden hour. The building features clean lines, large glass panels reflecting a warm sunset, and a prominent FitOra brand sign. The overall mood is prestigious and inviting, emphasizing high-end commercial sport infrastructure." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-on-surface-variant">add_a_photo</span>
+<span class="text-xs font-bold text-on-surface-variant mt-2">Upload Photo</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
+                                Reception Area <span class="material-symbols-outlined text-sm">info</span>
+</label>
+<div class="aspect-video bg-surface-variant rounded-lg flex items-center justify-center border border-outline-variant hover:bg-surface-container-highest transition-colors cursor-pointer group relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity" data-alt="A sleek and modern sports venue reception desk featuring minimalist design elements. The space uses polished concrete floors, warm wooden accents, and bright FitOra Orange highlights. Soft, diffuse overhead lighting creates a professional and clean athletic business atmosphere, suitable for a premium fitness partner." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-on-surface-variant">add_a_photo</span>
+<span class="text-xs font-bold text-on-surface-variant mt-2">Upload Photo</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Multiple Court Photos Grid -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<div>
+<label class="font-label-md text-label-md text-on-surface-variant">Court / Playing Area Photos</label>
+<p class="text-xs text-on-surface-variant">Minimum 3 photos required for verification.</p>
+</div>
+<button class="text-primary font-bold text-sm hover:underline" type="button">Add More +</button>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+<div class="aspect-square rounded-lg border-2 border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-tonal transition-all cursor-pointer">
+<span class="material-symbols-outlined">add</span>
+</div>
+<!-- Uploaded State Placeholder -->
+<div class="aspect-square rounded-lg overflow-hidden group relative">
+<img class="w-full h-full object-cover" data-alt="A wide-angle shot of a premium indoor padel court with bright blue turf and crystal-clear glass walls. The lighting is uniform and bright, highlighting the high-quality surface and professional-grade netting. The style is energetic and ultra-modern, showcasing a world-class sporting environment." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+<button class="p-2 bg-white rounded-full text-danger-red" type="button"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden group relative">
+<img class="w-full h-full object-cover" data-alt="A high-contrast interior photograph of a state-of-the-art basketball court with polished hardwood floors reflecting the bright LED ceiling lights. The arena features dark gray walls and orange court markings that align with the FitOra brand palette. The image conveys a sense of speed, performance, and professional sports management." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+<button class="p-2 bg-white rounded-full text-danger-red" type="button"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<hr class="border-outline-variant/30"/>
+<!-- Application Review Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h3 class="font-headline-md text-headline-md">Review Details</h3>
+</div>
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 space-y-6">
+<!-- Data Row 1 -->
+<div class="grid md:grid-cols-2 gap-8">
+<div class="space-y-1">
+<p class="text-xs font-bold text-primary uppercase tracking-wider">Business Entity</p>
+<p class="font-body-md text-on-surface">Peak Performance Arena LLC</p>
+<p class="text-sm text-on-surface-variant">Tax ID: 88-12345678</p>
+</div>
+<div class="space-y-1">
+<p class="text-xs font-bold text-primary uppercase tracking-wider">Primary Contact</p>
+<p class="font-body-md text-on-surface">Alex Rivera</p>
+<p class="text-sm text-on-surface-variant">a.rivera@peakperformance.com</p>
+</div>
+</div>
+<div class="h-px bg-outline-variant/20"></div>
+<!-- Data Row 2 -->
+<div class="grid md:grid-cols-2 gap-8">
+<div class="space-y-1">
+<p class="text-xs font-bold text-primary uppercase tracking-wider">Venue Location</p>
+<p class="font-body-md text-on-surface">1200 Sports Plaza, Central District</p>
+<p class="text-sm text-on-surface-variant">London, United Kingdom</p>
+</div>
+<div class="space-y-1">
+<p class="text-xs font-bold text-primary uppercase tracking-wider">Amenities Selected</p>
+<div class="flex flex-wrap gap-2 pt-1">
+<span class="px-2 py-1 bg-surface-tonal rounded text-xs font-bold text-on-surface-variant">Showers</span>
+<span class="px-2 py-1 bg-surface-tonal rounded text-xs font-bold text-on-surface-variant">Parking</span>
+<span class="px-2 py-1 bg-surface-tonal rounded text-xs font-bold text-on-surface-variant">Pro Shop</span>
+</div>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-variant text-on-surface-variant font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors" type="button">
+<span class="material-symbols-outlined text-sm">edit</span>
+                            Edit All Previous Steps
+                        </button>
+</div>
+</section>
+<!-- Footer Actions -->
+<section class="space-y-6 pt-6">
+<div class="flex items-start gap-3 bg-primary-fixed/10 p-4 rounded-xl border border-primary/10">
+<div class="pt-1">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
+</div>
+<label class="text-sm text-on-surface-variant leading-relaxed" for="terms">
+                            I hereby certify that the information provided is accurate and I am authorized to represent this business. I agree to the <a class="text-primary font-bold hover:underline" href="#">FitOra Partner Terms of Service</a> and <a class="text-primary font-bold hover:underline" href="#">Privacy Policy</a>.
+                        </label>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 pt-4">
+<button class="flex-1 py-4 font-bold text-on-surface-variant hover:bg-surface-variant rounded-xl transition-all flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined">arrow_back</span>
+                            Back to Step 3
+                        </button>
+<button class="flex-[2] py-4 bg-primary text-on-primary font-bold text-lg rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group" type="submit">
+                            Submit Application
+                            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">send</span>
+</button>
+</div>
+</section>
+</form>
+</div>
+</main>
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant/20 mt-section-gap">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop px-margin-desktop max-w-7xl mx-auto py-section-gap">
+<div class="col-span-1 md:col-span-1">
+<div class="font-display-lg text-display-lg font-extrabold text-primary dark:text-primary-fixed-dim mb-4">
+                    FitOra
+                </div>
+<p class="text-on-surface-variant text-sm max-w-xs">Empowering sports venue owners to reach their full digital potential and grow their athlete community.</p>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4">Quick Links</h4>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">About</a></li>
+<li><a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Support</a></li>
+<li><a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Legal</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4">Contact Us</h4>
+<ul class="space-y-2 text-on-surface-variant text-sm">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs">mail</span> partners@fitora.com</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs">phone</span> +44 20 7946 0000</li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4">Newsletter</h4>
+<div class="flex gap-2">
+<input class="bg-surface-container border border-outline-variant rounded-lg px-3 py-2 text-sm w-full focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="Email" type="email"/>
+<button class="bg-primary text-on-primary p-2 rounded-lg"><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+</div>
+<div class="border-t border-outline-variant/10 py-6 text-center text-on-surface-variant text-xs">
+            © 2024 FitOra Partner. All rights reserved.
+        </div>
+</footer>
+<script>
+        // Micro-interaction for form submission simulation
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<span class="animate-spin material-symbols-outlined">refresh</span> Submitting...`;
+            btn.classList.add('opacity-80', 'pointer-events-none');
+            
+            setTimeout(() => {
+                btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Application Received!`;
+                btn.classList.remove('bg-primary');
+                btn.classList.add('bg-secondary');
+            }, 1800);
+        });
+
+        // Toggle file upload focus styling
+        const logoUpload = document.getElementById('logo-upload');
+        const uploadZone = logoUpload.parentElement;
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('border-primary', 'bg-primary-fixed/10');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('border-primary', 'bg-primary-fixed/10');
+        });
+
+        uploadZone.addEventListener('click', () => logoUpload.click());
+    </script>
+</body></html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Owner - Court Inventory &amp; Status</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;family=Lexend:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f3f3",
+                    "primary": "#15157d",
+                    "secondary": "#4f53b8",
+                    "on-primary-fixed": "#04006d",
+                    "on-surface": "#1a1c1c",
+                    "inverse-surface": "#2f3131",
+                    "on-primary-container": "#9da1ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e8e8e8",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#341100",
+                    "background": "#f9f9f9",
+                    "tertiary-container": "#6c2a00",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-tertiary-container": "#f19160",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "tertiary-fixed-dim": "#ffb692",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#491a00",
+                    "surface-container": "#eeeeee",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "secondary-fixed": "#e1e0ff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#4f54b4",
+                    "surface-variant": "#e2e2e2",
+                    "primary-fixed": "#e1e0ff",
+                    "on-background": "#1a1c1c",
+                    "secondary-fixed-dim": "#c0c1ff",
+                    "on-tertiary-fixed-variant": "#773207",
+                    "on-secondary-container": "#23248d",
+                    "on-secondary-fixed": "#05006d",
+                    "on-secondary-fixed-variant": "#36399f",
+                    "tertiary-fixed": "#ffdbcb",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-dim": "#dadada",
+                    "secondary-container": "#8f94fe",
+                    "surface": "#f9f9f9",
+                    "outline": "#777683",
+                    "outline-variant": "#c7c5d4",
+                    "surface-bright": "#f9f9f9",
+                    "on-surface-variant": "#464652",
+                    "primary-container": "#2e3192",
+                    "surface-container-highest": "#e2e2e2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "20px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "xl": "40px",
+                    "margin-desktop": "48px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "body-sm": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "title-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .soft-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .premium-shadow {
+            box-shadow: 0px 12px 32px rgba(46, 49, 146, 0.12);
+        }
+        body {
+            background-color: #FAFAFA;
+            color: #1A1C1C;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-24">
+<!-- Top Navigation Anchor -->
+<nav class="fixed top-0 w-full z-50 bg-surface shadow-[0px_12px_32px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">fitness_center</span>
+<h1 class="font-display-lg text-headline-lg text-primary tracking-tighter">FitOra Owner</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-secondary hover:bg-surface-container-high transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="hidden md:flex gap-6 items-center ml-8">
+<span class="font-title-md text-primary cursor-pointer border-b-2 border-primary">Dashboard</span>
+<span class="font-title-md text-secondary hover:text-primary transition-colors cursor-pointer">Manage</span>
+<span class="font-title-md text-secondary hover:text-primary transition-colors cursor-pointer">Bookings</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Court Inventory</h2>
+<p class="font-body-lg text-on-surface-variant">Real-time status of all athletic facilities.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-lowest border border-outline-variant px-6 py-3 rounded-xl font-title-md text-primary flex items-center gap-2 soft-shadow hover:bg-surface-container-high transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">filter_list</span>
+                    Filter
+                </button>
+<button class="bg-primary-container px-6 py-3 rounded-xl font-title-md text-on-primary flex items-center gap-2 premium-shadow hover:scale-[1.02] transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add Facility
+                </button>
+</div>
+</header>
+<!-- Stats Overview Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12">
+<div class="bg-surface-container-lowest p-lg rounded-2xl soft-shadow border border-surface-variant/50">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest block mb-2">Total Courts</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-primary">12</span>
+<span class="font-body-sm text-on-surface-variant">Facilities</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-2xl soft-shadow border border-surface-variant/50">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest block mb-2">Active Now</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-[#2E3192]">08</span>
+<span class="font-body-sm text-green-600 font-medium">+15% vs yesterday</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-2xl soft-shadow border border-surface-variant/50">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest block mb-2">Daily Revenue</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-primary">$3.2k</span>
+<span class="font-body-sm text-on-surface-variant">Projected</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-2xl soft-shadow border border-surface-variant/50 relative overflow-hidden">
+<div class="relative z-10">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest block mb-2">Occupancy Rate</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-primary">82%</span>
+<div class="w-12 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 82%"></div>
+</div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[100px]">pie_chart</span>
+</div>
+</div>
+</div>
+<!-- Court Inventory Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Court Card 1: Active -->
+<div class="bg-surface-container-lowest rounded-2xl soft-shadow hover:premium-shadow transition-all group border border-surface-variant/30">
+<div class="h-48 w-full rounded-t-2xl overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A professional, brightly lit indoor tennis court with blue hard surfaces and crisp white lines. The architectural style is minimalist and modern, with high-end lighting fixtures. The atmosphere is energetic and premium, perfectly aligned with a luxury fitness facility." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCXDlJ7wJckUSSEhQFOQDd7x25sH3nW4JD-mgXWfSPlPAMhk0NG2btDMoCSrvdwRGy24m1cN6F8zcDIGMqLLf4qFdcuBnqNLvykgOk_vKGLNNW_ZP487TJZLINU0G7BKDsbfb-XNtiPhpwypZsna8ivF3EDc78m8M4vhLPjarmwQ6NWrnC7FefuqDdou_EsiFbDZf9uaE-8KXi48YFlogbQ4jgnbD_4sCtzsFL_SovZC8mtKYCGOSfO')"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-green-50 text-green-700 font-label-md text-label-md rounded-full border border-green-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                        Active
+                    </div>
+</div>
+<div class="p-lg">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-lg text-title-md text-on-surface">Court 01 - Main Arena</h3>
+<p class="font-body-sm text-on-surface-variant">Premium Indoor Tennis</p>
+</div>
+<button class="text-secondary hover:bg-surface-container-high p-1 rounded-full"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="mb-6 space-y-3">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Current Booking</span>
+<span class="text-primary font-medium">Williams / 14:00 - 15:30</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Equipment Check</span>
+<span class="text-green-600 font-medium">Passed 2h ago</span>
+</div>
+<div class="w-full bg-surface-variant h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full" style="width: 65%"></div>
+</div>
+<div class="flex justify-between text-label-md text-on-surface-variant font-label-md">
+<span>Occupancy</span>
+<span>65%</span>
+</div>
+</div>
+<button class="w-full py-3 bg-primary-container text-on-primary rounded-xl font-title-md premium-shadow hover:scale-[1.02] active:scale-95 transition-all">
+                        View Detailed Log
+                    </button>
+</div>
+</div>
+<!-- Court Card 2: Booked -->
+<div class="bg-surface-container-lowest rounded-2xl soft-shadow hover:premium-shadow transition-all group border border-surface-variant/30">
+<div class="h-48 w-full rounded-t-2xl overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A luxury indoor basketball court with polished hardwood floors and professional glass backboards. Soft, high-key studio lighting creates a bright and airy atmosphere. The color palette emphasizes clean whites and natural wood tones, fitting a high-end corporate athletic facility." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBI0VAM4xjcwts1UGytP1ZDe04jXDQz5uhFuw0W9AEeUnpR6a1UQvahcsrYPbQttrSin-yFiNUFcxRPMLbO4RQ2t_0gb3l3kiw0UaC1kOCz_qMGRDJj7I5_tTZdWBnzUuWlt2n7pMAxpxuXj6uBXZ6u67a5DtlnqXFyOZRk2GfAOw_TAw7oDFgYJ_1U4iX-TZqpPYOUHC33GoSeAUKxslv8YfwprIpMqu_VD0jcLr98NiWQ1HyYBo9J')"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-blue-50 text-[#2E3192] font-label-md text-label-md rounded-full border border-blue-200 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">event_available</span>
+                        Booked
+                    </div>
+</div>
+<div class="p-lg">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-lg text-title-md text-on-surface">Court 04 - VIP Suite</h3>
+<p class="font-body-sm text-on-surface-variant">Multi-purpose Hardwood</p>
+</div>
+<button class="text-secondary hover:bg-surface-container-high p-1 rounded-full"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="mb-6 space-y-3">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Next Booking</span>
+<span class="text-primary font-medium">Jordan G. / 16:00</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Waitlist</span>
+<span class="text-on-surface-variant">3 Members</span>
+</div>
+<div class="w-full bg-surface-variant h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full" style="width: 100%"></div>
+</div>
+<div class="flex justify-between text-label-md text-on-surface-variant font-label-md">
+<span>Occupancy</span>
+<span>100% (Full Day)</span>
+</div>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary rounded-xl font-title-md hover:bg-primary-container hover:text-on-primary active:scale-95 transition-all">
+                        Manage Bookings
+                    </button>
+</div>
+</div>
+<!-- Court Card 3: Maintenance -->
+<div class="bg-surface-container-lowest rounded-2xl soft-shadow hover:premium-shadow transition-all group border border-surface-variant/30">
+<div class="h-48 w-full rounded-t-2xl overflow-hidden relative opacity-75 grayscale-[0.3]">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A state-of-the-art swimming pool facility with sleek blue tiles and modern lane markers. The environment is clean and sterile, currently empty for maintenance. Overhead light panels create soft, linear reflections on the water surface. The aesthetic is professional, disciplined, and high-end." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCeU1Ugidx-EA_ZneLCnOoNvajqnvrA3DnUFTE-_6l9V2K2Jg4puTIkBS786SrrInbi1tBJaJwELGEGjczvmmlQw9OYhvo216E3_e9V7qLscxD0IHneqHnCOPJqxbH_p9VBHGnjNNesLif_S58onRWW4bniTzQ5co16uNd7KGSQqu0nS_SCtBxYB9bhhDRkPj0xsnaxB61cWiOQoPyAPAmv3LAZ4F21vhSrNnpmEyuPPaLqqg_ldUuU')"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-amber-50 text-amber-700 font-label-md text-label-md rounded-full border border-amber-200 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">settings_suggest</span>
+                        Maintenance
+                    </div>
+</div>
+<div class="p-lg">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-lg text-title-md text-on-surface">Lane 02 - Olympic Pool</h3>
+<p class="font-body-sm text-on-surface-variant">Aquatic Performance</p>
+</div>
+<button class="text-secondary hover:bg-surface-container-high p-1 rounded-full"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="mb-6 p-4 bg-surface-container-low rounded-xl">
+<p class="text-body-sm text-on-surface-variant italic">"Routine water filtration system check. Estimated completion at 18:00."</p>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 bg-surface-container-highest text-on-surface rounded-xl font-title-md hover:bg-surface-variant transition-all">
+                            Contact Crew
+                        </button>
+<button class="px-4 py-3 bg-primary-container text-on-primary rounded-xl transition-all">
+<span class="material-symbols-outlined">update</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Section: Revenue Forecast (Bento Extension) -->
+<div class="mt-margin-desktop grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<div class="lg:col-span-2 bg-surface-container-lowest p-lg rounded-2xl soft-shadow border border-surface-variant/50">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg text-title-md text-on-surface">Weekly Utilization</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-primary-container/10 text-primary font-label-md text-label-md">Peak Hours</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container/10 text-secondary font-label-md text-label-md">Off-Peak</span>
+</div>
+</div>
+<!-- Mock Chart Area -->
+<div class="h-64 flex items-end justify-around gap-4 pt-4">
+<div class="w-full bg-surface-container h-[40%] rounded-t-lg relative group">
+<div class="absolute bottom-0 w-full bg-primary h-full rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md text-label-md">Mon</span>
+</div>
+<div class="w-full bg-surface-container h-[65%] rounded-t-lg relative group">
+<div class="absolute bottom-0 w-full bg-primary h-full rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md text-label-md">Tue</span>
+</div>
+<div class="w-full bg-surface-container h-[90%] rounded-t-lg relative group">
+<div class="absolute bottom-0 w-full bg-primary h-full rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md text-label-md">Wed</span>
+</div>
+<div class="w-full bg-surface-container h-[75%] rounded-t-lg relative group">
+<div class="absolute bottom-0 w-full bg-primary h-full rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md text-label-md">Thu</span>
+</div>
+<div class="w-full bg-surface-container h-[85%] rounded-t-lg relative group">
+<div class="absolute bottom-0 w-full bg-primary h-full rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md text-label-md">Fri</span>
+</div>
+<div class="w-full bg-surface-container h-[100%] rounded-t-lg relative group">
+<div class="absolute bottom-0 w-full bg-primary h-full rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md text-label-md">Sat</span>
+</div>
+<div class="w-full bg-surface-container h-[60%] rounded-t-lg relative group">
+<div class="absolute bottom-0 w-full bg-primary h-full rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md text-label-md">Sun</span>
+</div>
+</div>
+</div>
+<div class="bg-primary-container p-lg rounded-2xl premium-shadow text-on-primary flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<h3 class="font-headline-lg text-title-md mb-2">Inventory Alert</h3>
+<p class="font-body-sm opacity-80 mb-6">Court 05 equipment sensors reporting high wear. Schedule inspection recommended within 48 hours.</p>
+</div>
+<div class="relative z-10">
+<button class="bg-surface-container-lowest text-primary font-title-md px-6 py-3 rounded-xl w-full hover:scale-[1.02] transition-all active:scale-95">
+                        Schedule Maintenance
+                    </button>
+</div>
+<!-- Atmospheric Decor -->
+<span class="material-symbols-outlined absolute -bottom-8 -right-8 text-[160px] opacity-10">warning</span>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-2 bg-surface border-t border-outline-variant z-50 rounded-t-xl shadow-lg">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-label-md text-label-md">Manage</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-label-md text-label-md">More</span>
+</div>
+</nav>
+<!-- Interactive Layer Logic -->
+<script>
+        // Simple scale interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                if(!btn.classList.contains('active:scale-95')) {
+                    btn.style.transform = 'translateY(-1px)';
+                }
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Mock interaction for cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('click', () => {
+                console.log('Facility Detail View Requested');
+                // Placeholder for detail navigation or modal
+            });
+        });
+    </script>
+</body></html>

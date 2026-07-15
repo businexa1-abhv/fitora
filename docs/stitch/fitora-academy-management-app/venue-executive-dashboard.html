@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Owner - Venue Executive Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Lexend:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f3f3",
+                    "primary": "#15157d",
+                    "secondary": "#4f53b8",
+                    "on-primary-fixed": "#04006d",
+                    "on-surface": "#1a1c1c",
+                    "inverse-surface": "#2f3131",
+                    "on-primary-container": "#9da1ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e8e8e8",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#341100",
+                    "background": "#f9f9f9",
+                    "tertiary-container": "#6c2a00",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-tertiary-container": "#f19160",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "tertiary-fixed-dim": "#ffb692",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#491a00",
+                    "surface-container": "#eeeeee",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "secondary-fixed": "#e1e0ff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#4f54b4",
+                    "surface-variant": "#e2e2e2",
+                    "primary-fixed": "#e1e0ff",
+                    "on-background": "#1a1c1c",
+                    "secondary-fixed-dim": "#c0c1ff",
+                    "on-tertiary-fixed-variant": "#773207",
+                    "on-secondary-container": "#23248d",
+                    "on-secondary-fixed": "#05006d",
+                    "on-secondary-fixed-variant": "#36399f",
+                    "tertiary-fixed": "#ffdbcb",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-dim": "#dadada",
+                    "secondary-container": "#8f94fe",
+                    "surface": "#f9f9f9",
+                    "outline": "#777683",
+                    "outline-variant": "#c7c5d4",
+                    "surface-bright": "#f9f9f9",
+                    "on-surface-variant": "#464652",
+                    "primary-container": "#2e3192",
+                    "surface-container-highest": "#e2e2e2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "xl": "40px",
+                    "margin-desktop": "48px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "body-sm": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "title-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f9;
+            color: #1a1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .custom-shadow-l1 { shadow-[0px_4px_20px_rgba(0,0,0,0.04)] }
+        .custom-shadow-l2 { shadow-[0px_12px_32px_rgba(46,49,146,0.12)] }
+        
+        .occupancy-gauge {
+            position: relative;
+            width: 160px;
+            height: 80px;
+            overflow: hidden;
+        }
+        .gauge-body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            border-radius: 50%;
+            border: 16px solid #e2e2e2;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            transform: rotate(-45deg);
+        }
+        .gauge-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            border-radius: 50%;
+            border: 16px solid #2e3192;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            transform: rotate(45deg); /* Dynamic */
+            transition: transform 1s ease-in-out;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-lg text-body-lg pb-24 md:pb-0 md:pt-16">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-sm h-16">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 max-w-[1440px] mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-display-lg text-headline-lg" data-icon="fitness_center">fitness_center</span>
+<h1 class="font-display-lg text-headline-lg text-primary tracking-tighter">FitOra Owner</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-primary font-title-md text-[16px] border-b-2 border-primary pb-1" href="#">Dashboard</a>
+<a class="text-secondary hover:text-primary transition-colors font-title-md text-[16px]" href="#">Manage</a>
+<a class="text-secondary hover:text-primary transition-colors font-title-md text-[16px]" href="#">Bookings</a>
+<a class="text-secondary hover:text-primary transition-colors font-title-md text-[16px]" href="#">Finance</a>
+</nav>
+<div class="flex items-center gap-4 border-l pl-8 border-outline-variant">
+<button class="material-symbols-outlined text-secondary hover:bg-surface-container-high p-2 rounded-full transition-colors" data-icon="notifications">notifications</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary font-bold">JD</div>
+</div>
+</div>
+<button class="md:hidden material-symbols-outlined text-primary" data-icon="menu">menu</button>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12">
+<!-- Page Header & Global Controls -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<p class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-2">Executive Overview</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Venue Performance</h2>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-title-md text-[14px] hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+                    Last 30 Days
+                </button>
+<button class="flex items-center gap-2 px-6 py-2 rounded-lg bg-primary-container text-white font-title-md text-[14px] hover:scale-[1.02] transition-all shadow-[0px_4px_12px_rgba(46,49,146,0.2)] active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
+                    Export PDF
+                </button>
+</div>
+</div>
+<!-- Primary KPI Section (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-10">
+<!-- Revenue Card -->
+<div class="bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-white/40 flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="payments">payments</span>
+</div>
+<span class="text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-[12px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span> 12.4%
+                    </span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Total Revenue</p>
+<h3 class="font-headline-lg text-headline-lg text-primary mt-1">$142,850.00</h3>
+</div>
+</div>
+<!-- Active Members -->
+<div class="bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-white/40 flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="group">group</span>
+</div>
+<span class="text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-[12px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span> 4.1%
+                    </span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Active Members</p>
+<h3 class="font-headline-lg text-headline-lg text-primary mt-1">2,482</h3>
+</div>
+</div>
+<!-- Average Occupancy -->
+<div class="bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-white/40 flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+</div>
+<span class="text-on-surface-variant bg-surface-container-high px-2 py-1 rounded-full text-[12px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="horizontal_rule">horizontal_rule</span> Steady
+                    </span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Avg. Daily Occupancy</p>
+<h3 class="font-headline-lg text-headline-lg text-primary mt-1">68.2%</h3>
+</div>
+</div>
+<!-- Retention Rate -->
+<div class="bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-white/40 flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="loop">loop</span>
+</div>
+<span class="text-red-600 bg-red-50 px-2 py-1 rounded-full text-[12px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_down">trending_down</span> 0.8%
+                    </span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Member Retention</p>
+<h3 class="font-headline-lg text-headline-lg text-primary mt-1">94.1%</h3>
+</div>
+</div>
+</div>
+<!-- Main Dashboard Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Revenue Snapshot (Chart Area) -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-white/40 min-h-[400px] flex flex-col">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-title-md text-title-md text-on-surface">Revenue Snapshot</h3>
+<div class="flex bg-surface-container rounded-full p-1">
+<button class="px-4 py-1.5 rounded-full bg-primary-container text-white text-[12px] font-bold shadow-sm transition-all">Weekly</button>
+<button class="px-4 py-1.5 rounded-full text-on-surface-variant text-[12px] font-bold hover:text-primary transition-all">Monthly</button>
+</div>
+</div>
+<div class="flex-grow flex items-end gap-2 px-2">
+<!-- Custom Bar Chart UI -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container rounded-t-lg relative h-48 overflow-hidden group">
+<div class="absolute bottom-0 w-full bg-primary transition-all duration-500 h-[65%] group-hover:h-[70%]"></div>
+</div>
+<span class="font-label-md text-[10px] text-on-surface-variant">MON</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container rounded-t-lg relative h-48 overflow-hidden group">
+<div class="absolute bottom-0 w-full bg-primary transition-all duration-500 h-[82%] group-hover:h-[85%]"></div>
+</div>
+<span class="font-label-md text-[10px] text-on-surface-variant">TUE</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container rounded-t-lg relative h-48 overflow-hidden group">
+<div class="absolute bottom-0 w-full bg-primary transition-all duration-500 h-[74%] group-hover:h-[78%]"></div>
+</div>
+<span class="font-label-md text-[10px] text-on-surface-variant">WED</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-primary-container rounded-t-lg relative h-48 overflow-hidden group">
+<div class="absolute bottom-0 w-full bg-primary transition-all duration-500 h-[95%]"></div>
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">$24.2k</div>
+</div>
+<span class="font-label-md text-[10px] text-primary font-bold">THU</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container rounded-t-lg relative h-48 overflow-hidden group">
+<div class="absolute bottom-0 w-full bg-primary transition-all duration-500 h-[88%] group-hover:h-[90%]"></div>
+</div>
+<span class="font-label-md text-[10px] text-on-surface-variant">FRI</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container rounded-t-lg relative h-48 overflow-hidden group">
+<div class="absolute bottom-0 w-full bg-primary transition-all duration-500 h-[52%] group-hover:h-[55%]"></div>
+</div>
+<span class="font-label-md text-[10px] text-on-surface-variant">SAT</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-surface-container rounded-t-lg relative h-48 overflow-hidden group">
+<div class="absolute bottom-0 w-full bg-primary transition-all duration-500 h-[42%] group-hover:h-[45%]"></div>
+</div>
+<span class="font-label-md text-[10px] text-on-surface-variant">SUN</span>
+</div>
+</div>
+</div>
+<!-- Live Occupancy Gauge & Activity -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<div class="bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-white/40 flex flex-col items-center justify-center text-center">
+<h3 class="font-title-md text-title-md text-on-surface mb-6">Live Occupancy</h3>
+<div class="occupancy-gauge mb-4">
+<div class="gauge-body"></div>
+<div class="gauge-fill" style="transform: rotate(85deg);"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-end pb-1">
+<span class="font-headline-lg text-[24px] text-primary leading-none">82%</span>
+<span class="font-label-md text-[10px] text-on-surface-variant">at Peak</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2 px-4">
+                        Current venue load is high. Suggest opening additional locker rooms.
+                    </p>
+<button class="mt-6 w-full py-3 bg-secondary-container/10 text-primary border border-primary-container/20 rounded-xl font-bold hover:bg-secondary-container/20 transition-all">
+                        View Heatmap
+                    </button>
+</div>
+<!-- Recent Alerts -->
+<div class="bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-white/40">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md text-on-surface">Recent Alerts</h3>
+<span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 items-start p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-error-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error text-[20px]" data-icon="report">report</span>
+</div>
+<div>
+<h4 class="font-title-md text-[14px] text-on-surface">AC Unit Fault: Zone B</h4>
+<p class="text-body-sm text-[12px] text-on-surface-variant">Reported 12m ago by SmartSensor-04</p>
+</div>
+</div>
+<div class="flex gap-4 items-start p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<h4 class="font-title-md text-[14px] text-on-surface">Sanitation Complete</h4>
+<p class="text-body-sm text-[12px] text-on-surface-variant">Floor 2 completed by Night Team Alpha</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Venue Heatmap Area -->
+<div class="mt-10 lg:mt-12 bg-surface-container-lowest rounded-[20px] p-lg shadow-[0px_12px_32px_rgba(46,49,146,0.06)] border border-white/40 overflow-hidden relative min-h-[480px]">
+<div class="absolute top-8 left-8 z-10">
+<h3 class="font-headline-lg text-headline-lg text-primary mb-2">Live Floor View</h3>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-[12px] text-on-surface-variant">High Traffic</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-3 h-3 rounded-full bg-primary/30"></span>
+<span class="text-[12px] text-on-surface-variant">Low Traffic</span>
+</div>
+</div>
+</div>
+<!-- Heatmap Visualization (Abstract Representation) -->
+<div class="absolute inset-0 bg-[#f3f4f6]">
+<div class="absolute inset-0 grid grid-cols-8 grid-rows-6 p-12 gap-4">
+<!-- Cardio Zone -->
+<div class="col-span-3 row-span-3 bg-primary/20 border-2 border-dashed border-primary/40 rounded-3xl flex items-center justify-center relative overflow-hidden">
+
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="directions_run">directions_run</span>
+<span class="font-label-md text-primary font-bold mt-2">Cardio Zone</span>
+<span class="text-[10px] text-primary/70">85% Occupancy</span>
+</div>
+</div>
+<!-- Weight Room -->
+<div class="col-span-5 row-span-4 bg-primary/5 border-2 border-dashed border-primary/20 rounded-3xl flex items-center justify-center relative">
+<div class="absolute top-1/2 left-1/4 w-32 h-32 bg-primary/40 rounded-full blur-[60px]"></div>
+<div class="absolute bottom-1/4 right-1/4 w-48 h-48 bg-primary/20 rounded-full blur-[80px]"></div>
+<div class="relative z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="fitness_center">fitness_center</span>
+<span class="font-label-md text-primary font-bold mt-2">Strength Floor</span>
+<span class="text-[10px] text-primary/70">42% Occupancy</span>
+</div>
+</div>
+<!-- Yoga Studio -->
+<div class="col-span-3 row-span-3 bg-white border border-outline-variant/30 rounded-3xl flex items-center justify-center shadow-sm">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary text-4xl" data-icon="self_improvement">self_improvement</span>
+<span class="font-label-md text-secondary font-bold mt-2">Yoga Studio</span>
+<span class="text-[10px] text-secondary/70">Session in 12m</span>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-8 right-8 z-10">
+<button class="bg-primary-container text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="videocam">videocam</span>
+                    Switch to CCTV
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-2 bg-surface border-t border-outline-variant z-50">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-label-md text-[10px]">Manage</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-md text-[10px]">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-[10px]">Finance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-label-md text-[10px]">More</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for the gauge
+        document.addEventListener('DOMContentLoaded', () => {
+            const gauge = document.querySelector('.gauge-fill');
+            setTimeout(() => {
+                gauge.style.transform = 'rotate(105deg)'; // Simulating data change
+            }, 1000);
+        });
+    </script>
+</body></html>

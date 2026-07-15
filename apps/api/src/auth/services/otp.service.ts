@@ -51,7 +51,7 @@ export class OtpService {
   async sendOtp(
     phone: string,
     purpose: OtpPurpose,
-  ): Promise<{ message: string; expiresIn: number }> {
+  ): Promise<{ message: string; expiresIn: number; debugOtp?: string }> {
     const normalizedPhone = this.normalizePhone(phone);
 
     await this.assertHourlyOtpLimit(normalizedPhone, purpose);
@@ -90,9 +90,11 @@ export class OtpService {
 
     await this.dispatchOtp(normalizedPhone, code);
 
+    const isProd = process.env.NODE_ENV === 'production';
     return {
       message: 'OTP sent successfully',
       expiresIn: OTP_EXPIRY_MINUTES * 60,
+      ...(isProd ? {} : { debugOtp: code }),
     };
   }
 
@@ -209,6 +211,26 @@ export class OtpService {
   }
 
   private async dispatchOtp(phone: string, code: string): Promise<void> {
+    const isProd = process.env.NODE_ENV === 'production';
+
+    // Always print OTP to the API terminal outside production.
+    if (!isProd) {
+      process.stdout.write(
+        [
+          '',
+          '====================================',
+          'FITORA DEVELOPMENT OTP',
+          '====================================',
+          `Phone: ${phone}`,
+          `OTP: ${code}`,
+          `Expires: ${OTP_EXPIRY_MINUTES} minutes`,
+          '====================================',
+          '',
+        ].join('\n'),
+      );
+      this.logger.log(`[DEV OTP] phone=${phone} code=${code}`);
+    }
+
     const sent = await this.smsProvider.send(
       phone,
       `Your FitOra verification code is ${code}. It expires in ${OTP_EXPIRY_MINUTES} minutes.`,
@@ -216,6 +238,10 @@ export class OtpService {
     );
 
     if (!sent) {
+      if (!isProd) {
+        this.logger.warn(`SMS provider failed for ${phone}; continuing with terminal OTP`);
+        return;
+      }
       throw new ServiceUnavailableException('Unable to send OTP at this time');
     }
 

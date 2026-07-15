@@ -51,8 +51,14 @@ async function bootstrap() {
     }),
   );
 
-  const corsOrigins = process.env.CORS_ORIGINS?.split(',').map((o) => o.trim()) ?? [
+  const corsOrigins = process.env.CORS_ORIGINS?.split(',')
+    .map((o) => o.trim())
+    .filter(Boolean) ?? [
     'http://localhost:3000',
+    'http://localhost:3002',
+    'http://localhost:3010',
+    'http://localhost:3011',
+    'http://localhost:3012',
   ];
 
   app.enableCors({
@@ -64,7 +70,9 @@ async function bootstrap() {
         callback(null, true);
         return;
       }
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
+      // Reject without throwing — throwing surfaces as opaque 500 / Failed to fetch in browsers.
+      logger.warn(`CORS blocked origin: ${origin}`);
+      callback(null, false);
     },
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],

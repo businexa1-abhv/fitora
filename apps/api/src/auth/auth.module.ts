@@ -32,7 +32,7 @@ import { smsProviderProviders } from '../notifications/providers/sms.provider';
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
   ],
-  exports: [AuthService, TokenService],
+  exports: [AuthService, TokenService, OtpService, PasswordService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

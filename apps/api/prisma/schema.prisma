@@ -258,6 +258,14 @@ enum TenantStatus {
   SUSPENDED
 }
 
+enum PartnerApplicationStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  ACTIVATED
+  REJECTED
+}
+
 enum OtpPurpose {
   LOGIN
   REGISTER
@@ -300,12 +308,48 @@ model Tenant {
   serviceListings   ServiceListing[]
   printListings     PrintListing[]
   auditLogs         AuditLog[]
+  partnerApplications PartnerApplication[]
 
   @@index([ownerId])
   @@index([slug])
   @@index([customDomain])
   @@index([status, isActive, deletedAt])
   @@map("tenants")
+}
+
+model PartnerApplication {
+  id              String                    @id @default(uuid()) @db.Uuid
+  status          PartnerApplicationStatus  @default(DRAFT)
+  currentStep     String                    @default("business") @map("current_step") @db.VarChar(40)
+  ownerName       String?                   @map("owner_name") @db.VarChar(200)
+  businessName    String?                   @map("business_name") @db.VarChar(200)
+  phone           String?                   @db.VarChar(20)
+  phoneVerified   Boolean                   @default(false) @map("phone_verified")
+  email           String?                   @db.VarChar(255)
+  city            String?                   @db.VarChar(100)
+  venueAddress    String?                   @map("venue_address") @db.VarChar(500)
+  state           String?                   @db.VarChar(100)
+  pincode         String?                   @db.VarChar(10)
+  venue           Json?
+  sportsConfig    Json?                     @map("sports_config")
+  trainers        Json?
+  legal           Json?
+  visuals         Json?
+  userId          String?                   @map("user_id") @db.Uuid
+  tenantId        String?                   @map("tenant_id") @db.Uuid
+  submittedAt     DateTime?                 @map("submitted_at")
+  createdAt       DateTime                  @default(now()) @map("created_at")
+  updatedAt       DateTime                  @updatedAt @map("updated_at")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([email])
+  @@index([phone])
+  @@index([userId])
+  @@index([tenantId])
+  @@map("partner_applications")
 }
 
 model TenantMember {
@@ -404,6 +448,7 @@ model User {
   ownedTenants          Tenant[]           @relation("TenantOwner")
   tenantMemberships     TenantMember[]
   tenantTrainerLinks    TenantTrainer[]    @relation("TenantTrainerUser")
+  partnerApplications   PartnerApplication[]
 
   @@index([email])
   @@index([phone])

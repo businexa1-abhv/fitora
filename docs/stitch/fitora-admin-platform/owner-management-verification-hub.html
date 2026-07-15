@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Owner Management | ProMarket Admin</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "surface-container": "#ffeae0",
+                    "on-tertiary-container": "#003554",
+                    "surface-variant": "#f6ded3",
+                    "tertiary-container": "#00a2f4",
+                    "inverse-on-surface": "#ffede6",
+                    "tertiary-fixed-dim": "#93ccff",
+                    "on-primary-container": "#582200",
+                    "secondary": "#006e2f",
+                    "on-surface": "#251913",
+                    "on-tertiary-fixed-variant": "#004b74",
+                    "surface-container-low": "#fff1eb",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#f6ded3",
+                    "tertiary-fixed": "#cde5ff",
+                    "tertiary": "#006398",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#9d4300",
+                    "surface": "#fff8f6",
+                    "primary": "#9d4300",
+                    "inverse-surface": "#3c2d26",
+                    "background": "#fff8f6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#007432",
+                    "on-secondary-fixed-variant": "#005321",
+                    "outline": "#8c7164",
+                    "on-surface-variant": "#584237",
+                    "inverse-primary": "#ffb690",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#4ae176",
+                    "on-tertiary-fixed": "#001d32",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#fce3d9",
+                    "secondary-fixed": "#6bff8f",
+                    "primary-fixed-dim": "#ffb690",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#783200",
+                    "primary-fixed": "#ffdbca",
+                    "surface-bright": "#fff8f6",
+                    "primary-container": "#f97316",
+                    "secondary-container": "#6bff8f",
+                    "on-secondary-fixed": "#002109",
+                    "on-primary-fixed": "#341100",
+                    "surface-dim": "#edd5cb",
+                    "outline-variant": "#e0c0b1",
+                    "on-background": "#251913"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "24px",
+                    "section-gap": "48px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "title-lg": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f6;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(224, 192, 177, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #8c7164;
+            border-radius: 10px;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low flex flex-col py-8 px-4 shadow-sm z-50">
+<div class="mb-10 px-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">ProMarket</h1>
+<p class="text-on-surface-variant font-label-md">Enterprise Admin</p>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Management is active based on page context -->
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Overview</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-primary font-bold border-r-4 border-primary bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md">Management</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-body-md">Support</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-on-surface-variant opacity-70 hover:bg-surface-container-high transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-body-md">CMS</span>
+</a>
+</nav>
+<button class="mt-auto bg-primary text-on-primary font-label-lg py-3 px-4 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">file_download</span>
+            Export Report
+        </button>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="h-16 fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-surface flex items-center justify-between px-margin-desktop shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-primary rounded-full transition-all">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-label-lg focus:ring-0" placeholder="Search owners or facilities..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="hover:bg-surface-container rounded-full p-2 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:bg-surface-container rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="hover:bg-surface-container rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-label-lg leading-none">Alex Rivera</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Super Admin</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-fixed ring-2 ring-surface" data-alt="A professional headshot of a Hispanic male in his late 30s with a neat beard, wearing a charcoal business suit against a minimalist light gray studio background. The lighting is crisp and corporate, highlighting leadership and precision. The overall aesthetic is clean, professional, and trustworthy, matching a high-end enterprise administrative interface." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 mt-16 p-margin-desktop min-h-screen">
+<!-- Welcome Header -->
+<div class="mb-stack-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Owner Management</h2>
+<p class="font-body-lg text-on-surface-variant mt-1">Review, verify, and manage venue partnerships.</p>
+</div>
+<div class="flex gap-stack-sm">
+<div class="bg-primary-fixed flex items-center gap-3 px-4 py-2 rounded-lg border border-primary-fixed-dim">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+<div>
+<p class="font-label-md text-on-primary-fixed leading-none">Pending KYC</p>
+<p class="font-title-lg text-on-primary-fixed">12</p>
+</div>
+</div>
+<div class="bg-secondary-container flex items-center gap-3 px-4 py-2 rounded-lg border border-secondary-fixed-dim">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<p class="font-label-md text-on-secondary-container leading-none">Active Owners</p>
+<p class="font-title-lg text-on-secondary-container">248</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 1: Verification Queue (Asymmetric Layout) -->
+<section class="mb-section-gap">
+<div class="flex items-center gap-3 mb-stack-md">
+<span class="material-symbols-outlined text-primary">priority_high</span>
+<h3 class="font-title-lg text-title-lg">Verification Queue</h3>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- KYC Cards -->
+<div class="glass-card p-6 rounded-xl flex flex-col hover:border-primary transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-3">
+<div class="w-12 h-12 bg-tertiary-fixed rounded-lg flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div>
+<h4 class="font-label-lg text-on-surface">Iron Paradise Gym</h4>
+<p class="text-label-md text-on-surface-variant">Submitted 2h ago</p>
+</div>
+</div>
+<span class="status-badge bg-surface-container-high text-primary">Urgent</span>
+</div>
+<div class="space-y-2 mb-6 flex-1">
+<div class="flex justify-between text-body-md">
+<span class="text-on-surface-variant">Owner:</span>
+<span class="font-medium">Marcus Chen</span>
+</div>
+<div class="flex justify-between text-body-md">
+<span class="text-on-surface-variant">Location:</span>
+<span class="font-medium">Singapore, SG</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary text-on-primary font-label-lg py-2 rounded-md hover:bg-opacity-90 transition-all">Review KYC</button>
+<button class="w-10 h-10 border border-outline-variant flex items-center justify-center rounded-md text-on-surface-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-3">
+<div class="w-12 h-12 bg-secondary-fixed rounded-lg flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">sports_tennis</span>
+</div>
+<div>
+<h4 class="font-label-lg text-on-surface">Ace Point Tennis</h4>
+<p class="text-label-md text-on-surface-variant">Submitted 5h ago</p>
+</div>
+</div>
+<span class="status-badge bg-tertiary-fixed text-tertiary">Standard</span>
+</div>
+<div class="space-y-2 mb-6 flex-1">
+<div class="flex justify-between text-body-md">
+<span class="text-on-surface-variant">Owner:</span>
+<span class="font-medium">Sarah Jenkins</span>
+</div>
+<div class="flex justify-between text-body-md">
+<span class="text-on-surface-variant">Location:</span>
+<span class="font-medium">London, UK</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary text-on-primary font-label-lg py-2 rounded-md hover:bg-opacity-90 transition-all">Review KYC</button>
+<button class="w-10 h-10 border border-outline-variant flex items-center justify-center rounded-md text-on-surface-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Animated Placeholder for empty queue slots -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center p-6 text-center opacity-60">
+<span class="material-symbols-outlined text-4xl mb-2">assignment_turned_in</span>
+<p class="font-label-md">Queue processing at 94%</p>
+<p class="text-body-md max-w-[200px]">Next registration expected in ~45 mins</p>
+</div>
+</div>
+</section>
+<!-- Section 2: Owner Database -->
+<section>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-stack-md">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h3 class="font-title-lg text-title-lg">Approved Owners Directory</h3>
+</div>
+<!-- Filter Bar -->
+<div class="flex flex-wrap gap-2">
+<div class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-1.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<select class="bg-transparent border-none p-0 text-label-md focus:ring-0 cursor-pointer">
+<option>All Cities</option>
+<option>New York</option>
+<option>London</option>
+<option>Singapore</option>
+</select>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-1.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">sports_soccer</span>
+<select class="bg-transparent border-none p-0 text-label-md focus:ring-0 cursor-pointer">
+<option>Sport Specialty</option>
+<option>Football</option>
+<option>Gym</option>
+<option>Swimming</option>
+</select>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-1.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+<select class="bg-transparent border-none p-0 text-label-md focus:ring-0 cursor-pointer">
+<option>Verification</option>
+<option>Verified</option>
+<option>Pending Info</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Detailed Table -->
+<div class="glass-card rounded-2xl overflow-hidden border border-outline-variant">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container text-on-surface-variant border-b border-outline-variant">
+<th class="px-6 py-4 font-label-lg">Owner Entity</th>
+<th class="px-6 py-4 font-label-lg">Facilities</th>
+<th class="px-6 py-4 font-label-lg">Subscription</th>
+<th class="px-6 py-4 font-label-lg">GST Status</th>
+<th class="px-6 py-4 font-label-lg">Status</th>
+<th class="px-6 py-4 font-label-lg text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center font-bold text-primary">VM</div>
+<div>
+<p class="font-label-lg text-on-surface">Vantage Multisport</p>
+<p class="text-label-md text-on-surface-variant">owner_vm_092@vantage.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="font-medium text-on-surface">12</span>
+<span class="text-xs text-on-surface-variant px-1.5 py-0.5 bg-surface-variant rounded">Global</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-label-lg text-on-surface">Enterprise</span>
+<span class="text-xs text-secondary font-semibold">Renews: Dec 2024</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-md">Verified</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="status-badge bg-secondary-container text-on-secondary-container">Active</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-tertiary-fixed rounded-lg text-tertiary transition-colors" title="Request Info"><span class="material-symbols-outlined">info</span></button>
+<button class="p-2 hover:bg-secondary-fixed rounded-lg text-secondary transition-colors" title="Approve Changes"><span class="material-symbols-outlined">check</span></button>
+<button class="p-2 hover:bg-error-container rounded-lg text-error transition-colors" title="Reject"><span class="material-symbols-outlined">close</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-tertiary-fixed flex items-center justify-center font-bold text-tertiary">ST</div>
+<div>
+<p class="font-label-lg text-on-surface">SportTech India</p>
+<p class="text-label-md text-on-surface-variant">admin@sporttech.in</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="font-medium text-on-surface">04</span>
+<span class="text-xs text-on-surface-variant px-1.5 py-0.5 bg-surface-variant rounded">Regional</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-label-lg text-on-surface">Pro Tier</span>
+<span class="text-xs text-on-surface-variant">Monthly</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-label-md">Re-validating</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="status-badge bg-surface-container-highest text-on-surface-variant">Under Review</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-tertiary-fixed rounded-lg text-tertiary transition-colors" title="Request Info"><span class="material-symbols-outlined">info</span></button>
+<button class="p-2 hover:bg-secondary-fixed rounded-lg text-secondary transition-colors" title="Approve Changes"><span class="material-symbols-outlined">check</span></button>
+<button class="p-2 hover:bg-error-container rounded-lg text-error transition-colors" title="Reject"><span class="material-symbols-outlined">close</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-secondary-fixed flex items-center justify-center font-bold text-secondary">PK</div>
+<div>
+<p class="font-label-lg text-on-surface">Peak Performance</p>
+<p class="text-label-md text-on-surface-variant">contact@peakperf.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="font-medium text-on-surface">01</span>
+<span class="text-xs text-on-surface-variant px-1.5 py-0.5 bg-surface-variant rounded">Solo</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-label-lg text-on-surface">Pro Tier</span>
+<span class="text-xs text-on-surface-variant">Annual</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-sm">warning</span>
+<span class="font-label-md">Invalid ID</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="status-badge bg-error-container text-on-error-container">Suspended</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-tertiary-fixed rounded-lg text-tertiary transition-colors" title="Request Info"><span class="material-symbols-outlined">info</span></button>
+<button class="p-2 hover:bg-secondary-fixed rounded-lg text-secondary transition-colors" title="Approve Changes"><span class="material-symbols-outlined">check</span></button>
+<button class="p-2 hover:bg-error-container rounded-lg text-error transition-colors" title="Reject"><span class="material-symbols-outlined">close</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-surface-container-low px-6 py-4 flex items-center justify-between border-t border-outline-variant">
+<p class="text-body-md text-on-surface-variant">Showing <span class="font-semibold">3</span> of <span class="font-semibold">248</span> owners</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-md border border-outline-variant disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-md bg-primary text-on-primary font-label-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-md border border-outline-variant hover:bg-surface-container transition-all font-label-md">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-md border border-outline-variant hover:bg-surface-container transition-all font-label-md">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-md border border-outline-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Action Toast (Floating) -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full shadow-lg flex items-center gap-4 translate-y-32 opacity-0 transition-all duration-300 z-[100]" id="action-toast">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<p class="font-label-md">Action successful: Venue KYC approved.</p>
+<button class="text-primary-fixed font-bold text-xs uppercase hover:underline" onclick="hideToast()">Undo</button>
+</div>
+</main>
+<script>
+        function showToast() {
+            const toast = document.getElementById('action-toast');
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => hideToast(), 5000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('action-toast');
+            toast.classList.add('translate-y-32', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }
+
+        // Simulating interaction for demonstration
+        document.querySelectorAll('button[title="Approve Changes"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                showToast();
+            });
+        });
+
+        // Search Bar Focus Effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('max-w-xl');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('max-w-xl');
+        });
+    </script>
+</body></html>

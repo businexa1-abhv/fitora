@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Owner - Login</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Lexend:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3f3",
+                        "primary": "#15157d",
+                        "secondary": "#4f53b8",
+                        "on-primary-fixed": "#04006d",
+                        "on-surface": "#1a1c1c",
+                        "inverse-surface": "#2f3131",
+                        "on-primary-container": "#9da1ff",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e8e8e8",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#341100",
+                        "background": "#f9f9f9",
+                        "tertiary-container": "#6c2a00",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary-container": "#f19160",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "tertiary-fixed-dim": "#ffb692",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#491a00",
+                        "surface-container": "#eeeeee",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "secondary-fixed": "#e1e0ff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#4f54b4",
+                        "surface-variant": "#e2e2e2",
+                        "primary-fixed": "#e1e0ff",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-fixed-variant": "#773207",
+                        "on-secondary-container": "#23248d",
+                        "on-secondary-fixed": "#05006d",
+                        "on-secondary-fixed-variant": "#36399f",
+                        "tertiary-fixed": "#ffdbcb",
+                        "inverse-primary": "#c0c1ff",
+                        "surface-dim": "#dadada",
+                        "secondary-container": "#8f94fe",
+                        "surface": "#f9f9f9",
+                        "outline": "#777683",
+                        "outline-variant": "#c7c5d4",
+                        "surface-bright": "#f9f9f9",
+                        "on-surface-variant": "#464652",
+                        "primary-container": "#2e3192",
+                        "surface-container-highest": "#e2e2e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "base": "4px",
+                        "xl": "40px",
+                        "margin-desktop": "48px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Lexend"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Lexend"],
+                        "title-md": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-lg": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #FAFAFA; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .shadow-premium-lift {
+            box-shadow: 0px 12px 32px rgba(46, 49, 146, 0.12);
+        }
+        .shadow-ambient-card {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-lg min-h-screen flex flex-col">
+<!-- TopAppBar Fragment (Manual Shell) -->
+<header class="fixed top-0 w-full z-50 bg-surface shadow-sm h-16 flex justify-between items-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="fitness_center">fitness_center</span>
+<span class="font-display-lg text-headline-lg text-primary tracking-tighter hidden md:block">FitOra Owner</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter md:hidden">FitOra</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-secondary" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center pt-24 pb-12 px-margin-mobile">
+<div class="w-full max-w-md">
+<!-- Bento Layout Wrapper -->
+<div class="grid grid-cols-1 gap-gutter">
+<!-- Main Login Card -->
+<div class="bg-surface-container-lowest rounded-[20px] p-lg md:p-xl shadow-ambient-card border border-outline-variant/30">
+<div class="mb-xl text-center">
+<h1 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg text-primary mb-sm">Welcome Back</h1>
+<p class="text-on-surface-variant font-body-lg">Manage your elite fitness facility</p>
+</div>
+<!-- Role Selector (Active States) -->
+<div class="flex p-1 bg-surface-container-low rounded-xl mb-lg">
+<button class="flex-1 py-3 px-4 rounded-lg font-title-md text-title-md transition-all duration-300 flex items-center justify-center gap-2 bg-primary-container text-on-primary-container shadow-premium-lift" id="tab-owner" onclick="switchTab('owner')">
+<span class="material-symbols-outlined text-xl" data-icon="admin_panel_settings">admin_panel_settings</span>
+                            Owner
+                        </button>
+<button class="flex-1 py-3 px-4 rounded-lg font-title-md text-title-md transition-all duration-300 flex items-center justify-center gap-2 text-secondary hover:bg-surface-container-high" id="tab-coach" onclick="switchTab('coach')">
+<span class="material-symbols-outlined text-xl" data-icon="sports">sports</span>
+                            Coach
+                        </button>
+</div>
+<!-- Form -->
+<form action="#" class="space-y-md" onsubmit="return false;">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-xs px-1">Institutional Email</label>
+<div class="relative">
+<input class="w-full h-14 bg-surface-container-lowest border border-outline-variant rounded-[8px] px-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all outline-none font-body-lg" placeholder="owner@fitora.com" type="email"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline" data-icon="alternate_email">alternate_email</span>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-xs px-1">
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Access Code</label>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors" href="#">Forgot?</a>
+</div>
+<div class="relative">
+<input class="w-full h-14 bg-surface-container-lowest border border-outline-variant rounded-[8px] px-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all outline-none font-body-lg" placeholder="••••••••" type="password"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline cursor-pointer" data-icon="visibility">visibility</span>
+</div>
+</div>
+<div class="flex items-center gap-sm py-2">
+<input class="w-5 h-5 rounded-[4px] border-outline-variant text-primary-container focus:ring-primary-container transition-all" id="remember" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-on-surface-variant cursor-pointer" for="remember">Keep me logged in on this workstation</label>
+</div>
+<button class="w-full h-16 bg-primary-container text-on-primary-container font-headline-lg-mobile text-headline-lg-mobile rounded-full shadow-premium-lift hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 mt-md flex items-center justify-center gap-sm">
+                            Log In
+                            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+</div>
+<!-- Secondary Bento Section (Quick Actions/Status) -->
+<div class="grid grid-cols-2 gap-gutter">
+<div class="bg-surface-container-high rounded-[20px] p-lg shadow-ambient-card flex flex-col justify-between aspect-square md:aspect-auto">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="add_business">add_business</span>
+<div>
+<p class="font-title-md text-title-md text-primary mb-xs">New Branch?</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Register a new studio location.</p>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-[20px] p-lg shadow-ambient-card flex flex-col justify-between aspect-square md:aspect-auto">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="token">token</span>
+<div>
+<p class="font-title-md text-title-md text-primary mb-xs">SSO Portal</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Log in with enterprise credentials.</p>
+</div>
+</div>
+</div>
+<!-- Bottom Branding Decoration -->
+<div class="relative h-48 rounded-[20px] overflow-hidden shadow-ambient-card">
+<div class="w-full h-full bg-cover bg-center" data-alt="A cinematic, high-contrast interior shot of a premium, state-of-the-art corporate gym. The aesthetic is clean and high-end with deep blue accent lighting, polished concrete floors, and professional athletic equipment. The atmosphere is quiet, disciplined, and powerful, illuminated by soft atmospheric light-mode studio lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6z-gV__pMuwhb_HtNO3ILQ_ZTqvIlJGTsfTpI71IfHCXNywIEJioS2mvv4EvHl6k56zt0TqrGV41VfpM-JxWfwNitG3jgPluB6bAKbHCrRnRmaP4JK-ZQNMs2nabGZELQfMHpqhOWYKGeZ3m7VCzo90W9k_xu4flJOBQN0LeOXZjfEJ6w7_rfrehWshwtFqFQ6g-EZ9XAugVzGvesfc63ZWqVXmnXIi8ELgHpdbR9RMUY2zh0uQ4R')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-lg">
+<p class="text-on-primary font-title-md text-title-md leading-tight">Elevating Performance Management.</p>
+</div>
+</div>
+</div>
+<footer class="mt-xl text-center">
+<p class="font-label-md text-label-md text-outline uppercase tracking-[0.1em] mb-md">© 2024 FitOra Systems. All rights reserved.</p>
+<div class="flex justify-center gap-lg">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a>
+</div>
+</footer>
+</div>
+</main>
+<script>
+        function switchTab(role) {
+            const ownerTab = document.getElementById('tab-owner');
+            const coachTab = document.getElementById('tab-coach');
+            
+            if (role === 'owner') {
+                ownerTab.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-premium-lift');
+                ownerTab.classList.remove('text-secondary', 'hover:bg-surface-container-high');
+                
+                coachTab.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-premium-lift');
+                coachTab.classList.add('text-secondary', 'hover:bg-surface-container-high');
+            } else {
+                coachTab.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-premium-lift');
+                coachTab.classList.remove('text-secondary', 'hover:bg-surface-container-high');
+                
+                ownerTab.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-premium-lift');
+                ownerTab.classList.add('text-secondary', 'hover:bg-surface-container-high');
+            }
+        }
+
+        // Lightweight atmospheric effect for form focus
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('scale-[1.01]');
+                input.parentElement.style.transition = 'transform 0.2s ease-out';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('scale-[1.01]');
+            });
+        });
+    </script>
+</body></html>

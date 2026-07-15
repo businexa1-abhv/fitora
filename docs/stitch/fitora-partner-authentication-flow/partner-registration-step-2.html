@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Venue Details &amp; Facilities | FitOra Partner</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Lexend:wght@300;400;500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "error-container": "#ffdad6",
+                "inverse-surface": "#33302f",
+                "on-error-container": "#93000a",
+                "surface-tonal": "#F1F5F9",
+                "primary-fixed-dim": "#ffb690",
+                "inverse-primary": "#ffb690",
+                "on-primary-fixed": "#341100",
+                "on-tertiary-fixed-variant": "#3f465c",
+                "outline": "#8c7164",
+                "surface-variant": "#e8e1df",
+                "primary": "#9d4300",
+                "surface-container-highest": "#e8e1df",
+                "surface-container-lowest": "#ffffff",
+                "outline-variant": "#e0c0b1",
+                "on-secondary-container": "#00714e",
+                "on-background": "#1d1b1a",
+                "background": "#fff8f6",
+                "on-primary": "#ffffff",
+                "on-secondary": "#ffffff",
+                "inverse-on-surface": "#f6efed",
+                "on-primary-fixed-variant": "#783200",
+                "surface-dim": "#dfd9d7",
+                "on-secondary-fixed": "#002114",
+                "tertiary-fixed-dim": "#bec6e0",
+                "on-surface-variant": "#584237",
+                "surface-container-low": "#f9f2f0",
+                "tertiary": "#565e74",
+                "on-tertiary-fixed": "#131b2e",
+                "primary-container": "#f97316",
+                "surface-tint": "#9d4300",
+                "surface": "#fff8f6",
+                "error": "#ba1a1a",
+                "on-secondary-fixed-variant": "#005137",
+                "brand-accent": "#FF6B35",
+                "secondary-fixed": "#85f8c4",
+                "surface-container-high": "#ede7e5",
+                "surface-container": "#f3ecea",
+                "primary-fixed": "#ffdbca",
+                "danger-red": "#DC2626",
+                "on-tertiary-container": "#2a3246",
+                "secondary-fixed-dim": "#68dba9",
+                "secondary": "#006c4a",
+                "on-surface": "#1d1b1a",
+                "tertiary-fixed": "#dae2fd",
+                "tertiary-container": "#929ab2",
+                "warning-amber": "#D97706",
+                "on-error": "#ffffff",
+                "secondary-container": "#82f5c1",
+                "on-tertiary": "#ffffff",
+                "surface-bright": "#fff8f6",
+                "on-primary-container": "#582200"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin-desktop": "80px",
+                "base": "4px",
+                "margin-mobile": "20px",
+                "gutter-mobile": "16px",
+                "gutter-desktop": "24px",
+                "section-gap": "120px"
+            },
+            "fontFamily": {
+                "display-lg": ["Plus Jakarta Sans"],
+                "headline-lg": ["Plus Jakarta Sans"],
+                "headline-md": ["Plus Jakarta Sans"],
+                "body-lg": ["Lexend"],
+                "body-md": ["Lexend"],
+                "label-md": ["Inter"],
+                "label-sm": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-sport-card {
+            border: 2px solid #9d4300;
+            background-color: rgba(249, 115, 22, 0.05);
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #e0c0b1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopNavBar -->
+<header class="w-full top-0 bg-surface dark:bg-surface-dim shadow-sm sticky z-50">
+<div class="flex justify-between items-center h-16 px-margin-desktop max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="font-display-lg text-[24px] font-extrabold text-primary">FitOra Partner</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-tonal p-2 rounded-full transition-all">help</button>
+<div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary font-bold">JD</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto flex gap-gutter-desktop px-margin-desktop py-12">
+<!-- SideNavBar (Progress Anchor) -->
+<aside class="hidden md:flex flex-col gap-4 w-64 p-6 bg-surface-container rounded-xl sticky top-28 h-fit">
+<div class="mb-4">
+<h2 class="font-headline-md text-primary">Partner Registration</h2>
+<p class="font-label-md text-on-surface-variant">Step 2 of 4</p>
+</div>
+<nav class="flex flex-col gap-2">
+<div class="text-on-surface-variant p-3 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="business">business</span>
+<span class="font-label-md">Business Info</span>
+</div>
+<div class="bg-primary-container text-on-primary-container font-bold rounded-lg p-3 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="stadium">stadium</span>
+<span class="font-label-md">Venue Details</span>
+</div>
+<div class="text-on-surface-variant p-3 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-label-md">Operational Hours</span>
+</div>
+<div class="text-on-surface-variant p-3 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+<span class="font-label-md">Review</span>
+</div>
+</nav>
+</aside>
+<!-- Main Form Canvas -->
+<section class="flex-1 max-w-3xl">
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-8 shadow-sm">
+<div class="mb-8">
+<h1 class="font-headline-lg text-on-surface mb-2">Venue Details &amp; Facilities</h1>
+<p class="font-body-md text-on-surface-variant">Provide information about your sports facility and the amenities available to athletes.</p>
+</div>
+<form class="space-y-10">
+<!-- Location Picker Section -->
+<div class="space-y-4">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<h3 class="font-headline-md text-on-surface">Venue Location</h3>
+</div>
+<div class="relative w-full h-64 rounded-xl overflow-hidden border border-outline-variant group">
+<div class="absolute inset-0 bg-surface-variant flex items-center justify-center" data-alt="A clean, high-resolution satellite map view of a modern urban neighborhood in London, showing neatly planned streets and green spaces. The visual style is professional and crisp, with a subtle overlay indicating a central location pin. The lighting is bright and even, fitting a premium SaaS dashboard aesthetic." data-location="London" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7qAvjb53Ux6G-Hgm02rdDaG5dkpL9ECmQc-WNCcEMc50YU6m6ftViqByKp4brdm6kW51nbYe8rVScp8ew3mJV9eDKZ7QIB31SaE0e7bSCqt-we3Fo_qZN0Xv4uqnkZ6E5bxQsd_44F1OSpF9UYTzmcRXU7uZuHgjTh4OIm7JM6SjzIsArjVOKp-BQ868hcnCH68Il5IVxDwWPrLc7JImSBt8hfbxBpFaQrQfHBKOTr0dO9sU9ikmL')"></div>
+<div class="absolute top-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-lg shadow-lg flex items-center gap-3 border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full font-body-md text-on-surface" placeholder="Search for your venue address..." type="text"/>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white p-2 rounded-full shadow-lg cursor-pointer hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+</div>
+</div>
+<p class="font-label-sm text-on-surface-variant">Pin your exact entrance on the map for easy navigation.</p>
+</div>
+<!-- Sports Offered (Interactive Grid) -->
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="sports_tennis">sports_tennis</span>
+<h3 class="font-headline-md text-on-surface">Sports Offered</h3>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+<!-- Sport Item 1 -->
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="p-4 border border-outline-variant rounded-xl flex flex-col items-center gap-2 transition-all hover:bg-surface-tonal peer-checked:border-primary peer-checked:bg-primary/5">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary transition-colors peer-checked:text-primary" data-icon="sports_cricket">sports_cricket</span>
+<span class="font-label-md text-on-surface">Cricket</span>
+</div>
+</label>
+<!-- Sport Item 2 -->
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="p-4 border border-outline-variant rounded-xl flex flex-col items-center gap-2 transition-all hover:bg-surface-tonal peer-checked:border-primary peer-checked:bg-primary/5">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary transition-colors peer-checked:text-primary" data-icon="sports_tennis">sports_tennis</span>
+<span class="font-label-md text-on-surface">Badminton</span>
+</div>
+</label>
+<!-- Sport Item 3 -->
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="p-4 border border-outline-variant rounded-xl flex flex-col items-center gap-2 transition-all hover:bg-surface-tonal peer-checked:border-primary peer-checked:bg-primary/5">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary transition-colors peer-checked:text-primary" data-icon="sports_soccer">sports_soccer</span>
+<span class="font-label-md text-on-surface">Football</span>
+</div>
+</label>
+<!-- Sport Item 4 -->
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="p-4 border border-outline-variant rounded-xl flex flex-col items-center gap-2 transition-all hover:bg-surface-tonal peer-checked:border-primary peer-checked:bg-primary/5">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary transition-colors peer-checked:text-primary" data-icon="sports_basketball">sports_basketball</span>
+<span class="font-label-md text-on-surface">Basketball</span>
+</div>
+</label>
+<!-- Sport Item 5 -->
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="p-4 border border-outline-variant rounded-xl flex flex-col items-center gap-2 transition-all hover:bg-surface-tonal peer-checked:border-primary peer-checked:bg-primary/5">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary transition-colors peer-checked:text-primary" data-icon="pool">pool</span>
+<span class="font-label-md text-on-surface">Swimming</span>
+</div>
+</label>
+<!-- Sport Item 6 -->
+<label class="cursor-pointer group">
+<div class="p-4 border border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center gap-2 transition-all hover:bg-surface-tonal">
+<span class="material-symbols-outlined text-2xl text-on-surface-variant" data-icon="add_circle">add_circle</span>
+<span class="font-label-md text-on-surface-variant">Add Other</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Court Details -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-desktop">
+<div class="space-y-2">
+<label class="font-label-md text-on-surface">Court Type</label>
+<select class="w-full p-4 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white">
+<option>Synthetic Turf</option>
+<option>Wooden Floor</option>
+<option>Clay</option>
+<option>Acrylic</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-on-surface">Number of Courts</label>
+<div class="flex items-center h-[56px] border border-outline-variant rounded-lg overflow-hidden bg-white">
+<button class="px-4 hover:bg-surface-tonal text-primary font-bold transition-colors" type="button">−</button>
+<input class="w-full text-center border-none focus:ring-0 font-body-lg" type="number" value="4"/>
+<button class="px-4 hover:bg-surface-tonal text-primary font-bold transition-colors" type="button">+</button>
+</div>
+</div>
+</div>
+<!-- Amenities Checklist -->
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="checklist">checklist</span>
+<h3 class="font-headline-md text-on-surface">Amenities</h3>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<label class="flex items-center gap-3 p-4 border border-outline-variant/40 rounded-lg cursor-pointer hover:bg-surface-tonal transition-colors">
+<input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-outline" type="checkbox"/>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="local_parking">local_parking</span>
+<span class="font-body-md text-on-surface">Ample Parking</span>
+</label>
+<label class="flex items-center gap-3 p-4 border border-outline-variant/40 rounded-lg cursor-pointer hover:bg-surface-tonal transition-colors">
+<input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-outline" type="checkbox"/>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="ac_unit">ac_unit</span>
+<span class="font-body-md text-on-surface">Fully Air Conditioned</span>
+</label>
+<label class="flex items-center gap-3 p-4 border border-outline-variant/40 rounded-lg cursor-pointer hover:bg-surface-tonal transition-colors">
+<input class="w-5 h-5 rounded text-primary focus:ring-primary border-outline" type="checkbox"/>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="shower">shower</span>
+<span class="font-body-md text-on-surface">Showers &amp; Changing Rooms</span>
+</label>
+<label class="flex items-center gap-3 p-4 border border-outline-variant/40 rounded-lg cursor-pointer hover:bg-surface-tonal transition-colors">
+<input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-outline" type="checkbox"/>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="water_drop">water_drop</span>
+<span class="font-body-md text-on-surface">Drinking Water</span>
+</label>
+<label class="flex items-center gap-3 p-4 border border-outline-variant/40 rounded-lg cursor-pointer hover:bg-surface-tonal transition-colors">
+<input class="w-5 h-5 rounded text-primary focus:ring-primary border-outline" type="checkbox"/>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="wifi">wifi</span>
+<span class="font-body-md text-on-surface">Free Wi-Fi</span>
+</label>
+<label class="flex items-center gap-3 p-4 border border-outline-variant/40 rounded-lg cursor-pointer hover:bg-surface-tonal transition-colors">
+<input class="w-5 h-5 rounded text-primary focus:ring-primary border-outline" type="checkbox"/>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="first_aid_kit">fire_hydrant</span>
+<span class="font-body-md text-on-surface">First Aid Support</span>
+</label>
+</div>
+</div>
+<!-- Navigation Actions -->
+<div class="flex items-center justify-between pt-8 border-t border-outline-variant/20">
+<button class="px-8 py-4 rounded-full font-label-md text-on-surface-variant hover:bg-surface-variant/40 transition-all active:scale-95" type="button">
+                            Back to Business Info
+                        </button>
+<button class="px-10 py-4 bg-primary text-white rounded-full font-label-md font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2" type="submit">
+                            Next: Operational Hours
+                            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</section>
+<!-- Contextual Help / Preview -->
+<aside class="hidden xl:block w-72 space-y-6">
+<div class="p-6 bg-secondary-container text-on-secondary-container rounded-xl">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined" data-icon="tips_and_updates">tips_and_updates</span>
+<h4 class="font-headline-md text-sm">Pro Tip</h4>
+</div>
+<p class="font-body-md text-sm opacity-90 leading-relaxed">Venues that list more than 5 amenities see a <span class="font-bold">40% higher</span> booking rate. Make sure to highlight those showers!</p>
+</div>
+<div class="relative rounded-xl overflow-hidden group">
+<div class="h-48 w-full bg-cover bg-center" data-alt="A professional, vibrant indoor badminton court with brilliant high-key lighting and clean wooden flooring. The atmosphere is energetic yet corporate, representing a high-quality sports facility. The colors are dominated by warm wood tones and professional athletic markings, captured in a modern architectural style." style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+<span class="text-white font-label-sm">Example Premium Listing</span>
+</div>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant/20 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop px-margin-desktop max-w-7xl mx-auto">
+<div class="space-y-4">
+<span class="font-display-lg text-[24px] font-extrabold text-primary">FitOra Partner</span>
+<p class="text-on-surface-variant font-body-md">Empowering venue owners with world-class management tools.</p>
+</div>
+<div class="flex flex-col gap-2">
+<h5 class="font-bold text-on-surface mb-2">Company</h5>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">About</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Pricing</a>
+</div>
+<div class="flex flex-col gap-2">
+<h5 class="font-bold text-on-surface mb-2">Support</h5>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Support</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Legal</a>
+</div>
+<div class="flex flex-col gap-2">
+<h5 class="font-bold text-on-surface mb-2">Policies</h5>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+<div class="mt-12 text-center text-on-surface-variant font-label-sm border-t border-outline-variant/10 pt-8">
+            © 2024 FitOra Partner. All rights reserved.
+        </div>
+</footer>
+<script>
+        // Simple counter interaction
+        const counterInput = document.querySelector('input[type="number"]');
+        const buttons = document.querySelectorAll('button[type="button"]');
+        
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                let val = parseInt(counterInput.value);
+                if (btn.innerText === '+') {
+                    counterInput.value = val + 1;
+                } else if (btn.innerText === '−' && val > 1) {
+                    counterInput.value = val - 1;
+                }
+            });
+        });
+
+        // Form submission prevention for demo
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Step 2 saved! Moving to Operational Hours...');
+        });
+    </script>
+</body></html>

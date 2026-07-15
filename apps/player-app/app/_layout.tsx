@@ -82,6 +82,7 @@ function AppNavigator() {
         <Stack.Screen name="booking/[courtId]" />
         <Stack.Screen name="booking/success" />
         <Stack.Screen name="court/[id]" />
+        <Stack.Screen name="venue/[id]" />
         <Stack.Screen name="membership/index" />
         <Stack.Screen name="notification-settings" />
         <Stack.Screen name="notifications" />

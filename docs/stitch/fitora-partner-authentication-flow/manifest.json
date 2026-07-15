@@ -1,0 +1,65 @@
+{
+  "project": {
+    "title": "FitOra Player Authentication Flow",
+    "id": "5652553660313852668"
+  },
+  "screens": [
+    {
+      "title": "Partner Registration - Step 1",
+      "id": "325de0e556514c8c8100519e87094fac",
+      "html": "partner-registration-step-1.html",
+      "screenshot": "partner-registration-step-1.png"
+    },
+    {
+      "title": "Partner Registration - Step 2",
+      "id": "5785e3ecdf354880b16011885c38e4c2",
+      "html": "partner-registration-step-2.html",
+      "screenshot": "partner-registration-step-2.png"
+    },
+    {
+      "title": "Partner Registration - Step 3",
+      "id": "4083596fec8e43b184150a6ca2f2cb4b",
+      "html": "partner-registration-step-3.html",
+      "screenshot": "partner-registration-step-3.png"
+    },
+    {
+      "title": "Partner Registration - Step 4",
+      "id": "bf38b53454cd44bc9c6bcfee2caad22a",
+      "html": "partner-registration-step-4.html",
+      "screenshot": "partner-registration-step-4.png"
+    },
+    {
+      "title": "Partner Registration - Sports & Pricing Config",
+      "id": "d4bdf75b32994fe59e7aa8182524f5c6",
+      "html": "partner-registration-sports-pricing.html",
+      "screenshot": "partner-registration-sports-pricing.png"
+    },
+    {
+      "title": "Partner Registration - Add Trainers",
+      "id": "e9085549e93842339ebe7d56e8dba7d1",
+      "html": "partner-registration-add-trainers.html",
+      "screenshot": "partner-registration-add-trainers.png"
+    },
+    {
+      "title": "Application Submitted",
+      "id": "214d9f3739544a8bb5579aa9dcf05dca",
+      "html": "application-submitted.html",
+      "screenshot": "application-submitted.png"
+    },
+    {
+      "title": "FitOra Partner - Landing Page",
+      "id": "bd41e155475b46bbb63c5441e0c723f3",
+      "html": "fitora-partner-landing-page.html",
+      "screenshot": "fitora-partner-landing-page.png"
+    },
+    {
+      "title": "Design System",
+      "id": "assets_65d2a14abe854e08a1760756da848504",
+      "html": null,
+      "screenshot": null,
+      "sourceAsset": "assets/65d2a14abe854e08a1760756da848504",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "meta": "design-system.json"
+    }
+  ]
+}

@@ -23,14 +23,20 @@ import { useTheme } from '@/providers/theme-provider';
 import { useAuth } from '@/providers/auth-provider';
 import { ScreenHeader } from '@/components/screen-header';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { QueryState } from '@/components/query-state';
 import { SPORT_COLORS, SPORT_EMOJI } from '@/lib/constants';
 import { getCourt, getCourtSlots, createBooking } from '@/lib/courts';
+import { getVenue } from '@/lib/venues';
 import { completePayment } from '@/lib/payments';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 const DURATION_OPTIONS = [60, 90, 120];
+
+function shortCourtLabel(name: string, index: number) {
+  const match = name.match(/Court\s+(\d+)/i);
+  if (match) return `Court ${match[1]}`;
+  return `Court ${index + 1}`;
+}
 
 function formatSlotTime(iso: string) {
   return new Date(iso).toLocaleTimeString('en-IN', {
@@ -95,6 +101,12 @@ export default function BookingScreen() {
     enabled: !!courtId,
   });
 
+  const venueQuery = useQuery({
+    queryKey: ['venue', courtQuery.data?.tenantId],
+    queryFn: () => getVenue(courtQuery.data!.tenantId!),
+    enabled: !!courtQuery.data?.tenantId,
+  });
+
   const slotsQuery = useQuery({
     queryKey: ['slots', courtId, selectedDate],
     queryFn: () => getCourtSlots(courtId!, selectedDate),
@@ -102,13 +114,18 @@ export default function BookingScreen() {
   });
 
   const court = courtQuery.data;
+  const siblingCourts = venueQuery.data?.courts?.length
+    ? venueQuery.data.courts
+    : court
+      ? [court]
+      : [];
   const slots = slotsQuery.data ?? [];
   const selected = slots.find((slot) => slot.id === selectedSlot);
   const total = selected ? Number(selected.price) : 0;
   const sport: SportType = (court?.sportType as SportType | null) ?? SportType.OTHER;
-  const sportColor = SPORT_COLORS[sport];
   const imageUrl = court ? getPrimaryImage(court) : undefined;
   const selectedMonth = dateOptions.find((date) => date.iso === selectedDate)?.month ?? '';
+  const venueTitle = venueQuery.data?.name ?? court?.name ?? 'Select Court';
 
   const bookMutation = useMutation({
     mutationFn: async () => {
@@ -167,28 +184,34 @@ export default function BookingScreen() {
         >
           <View style={styles.content}>
             <View style={styles.sectionHeader}>
-              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Select Venue</Text>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>{venueTitle}</Text>
               <Text style={[styles.sportText, { color: colors.accent }]}>
                 {SPORT_LABELS[sport]}
               </Text>
             </View>
 
-            {court && (
+            {siblingCourts.length > 0 && (
               <View style={styles.courtGrid}>
-                <CourtTile
-                  active
-                  emoji={SPORT_EMOJI[sport]}
-                  imageUrl={imageUrl}
-                  label={court.name}
-                  sportColor={sportColor}
-                  subtitle="Professional Grade"
-                />
-                <CourtTile
-                  emoji={SPORT_EMOJI[sport]}
-                  label="Court 2"
-                  sportColor={sportColor}
-                  subtitle="Standard Elite"
-                />
+                {siblingCourts.map((item, index) => {
+                  const active = item.id === courtId;
+                  const itemSport = (item.sportType as SportType | null) ?? SportType.OTHER;
+                  return (
+                    <CourtTile
+                      key={item.id}
+                      active={active}
+                      emoji={SPORT_EMOJI[itemSport]}
+                      imageUrl={active ? imageUrl : undefined}
+                      label={shortCourtLabel(item.name, index)}
+                      sportColor={SPORT_COLORS[itemSport]}
+                      subtitle={active ? 'Selected' : 'Available'}
+                      onPress={() => {
+                        if (item.id === courtId) return;
+                        setSelectedSlot(null);
+                        router.setParams({ courtId: item.id });
+                      }}
+                    />
+                  );
+                })}
               </View>
             )}
 
@@ -361,6 +384,7 @@ function CourtTile({
   label,
   sportColor,
   subtitle,
+  onPress,
 }: {
   active?: boolean;
   emoji: string;
@@ -368,6 +392,7 @@ function CourtTile({
   label: string;
   sportColor: string;
   subtitle: string;
+  onPress?: () => void;
 }) {
   const { colors } = useTheme();
   const content = (
@@ -399,13 +424,19 @@ function CourtTile({
 
   if (imageUrl) {
     return (
-      <ImageBackground source={{ uri: imageUrl }} style={tileStyle} imageStyle={styles.tileImage}>
-        {content}
-      </ImageBackground>
+      <Pressable onPress={onPress}>
+        <ImageBackground source={{ uri: imageUrl }} style={tileStyle} imageStyle={styles.tileImage}>
+          {content}
+        </ImageBackground>
+      </Pressable>
     );
   }
 
-  return <View style={tileStyle}>{content}</View>;
+  return (
+    <Pressable onPress={onPress} style={tileStyle}>
+      {content}
+    </Pressable>
+  );
 }
 
 function LegendDot({ color, label }: { color: string; label: string }) {

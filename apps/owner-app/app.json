@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "FitOra Owner",
+    "slug": "fitora-owner",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "fitora-owner",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#15157d"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fitora.owner"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#15157d"
+      },
+      "package": "com.fitora.owner"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router", "expo-secure-store", "expo-font"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

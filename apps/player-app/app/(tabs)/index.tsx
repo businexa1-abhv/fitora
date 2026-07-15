@@ -10,29 +10,30 @@ import {
   SPORT_LABELS,
   SportType,
   formatCurrency,
-  type Court,
+  type Venue,
 } from '@fitora/shared';
 import { useTheme } from '@/providers/theme-provider';
 import { useAuth } from '@/providers/auth-provider';
 import { Badge } from '@/components/ui/badge';
 import { QueryState } from '@/components/query-state';
 import { SPORT_COLORS, SPORT_EMOJI, POPULAR_SPORTS } from '@/lib/constants';
-import { getCourts, getMyBookings } from '@/lib/courts';
+import { getMyBookings } from '@/lib/courts';
+import { getVenues } from '@/lib/venues';
 import { getUnreadNotificationCount } from '@/lib/notifications';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 export default function HomeScreen() {
   const { colors } = useTheme();
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [selectedSport, setSelectedSport] = useState<SportType | null>(POPULAR_SPORTS[0] ?? null);
 
-  const courtsQuery = useQuery({
-    queryKey: ['courts', 'home', selectedSport, search],
+  const venuesQuery = useQuery({
+    queryKey: ['venues', 'home', selectedSport, search],
     queryFn: () =>
-      getCourts({
+      getVenues({
         page: 1,
         sportType: selectedSport ?? undefined,
         search: search.trim() || undefined,
@@ -172,7 +173,7 @@ export default function HomeScreen() {
 
         <View style={styles.sectionHeader}>
           <View>
-            <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Nearby Courts</Text>
+            <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Nearby Venues</Text>
             <Text style={[styles.sectionSub, { color: colors.muted }]}>
               Based on your current location
             </Text>
@@ -183,14 +184,14 @@ export default function HomeScreen() {
         </View>
 
         <QueryState
-          isLoading={courtsQuery.isLoading}
-          isError={courtsQuery.isError}
-          error={courtsQuery.error as Error}
-          onRetry={() => courtsQuery.refetch()}
+          isLoading={venuesQuery.isLoading}
+          isError={venuesQuery.isError}
+          error={venuesQuery.error as Error}
+          onRetry={() => venuesQuery.refetch()}
         >
           <View style={styles.courtList}>
-            {courtsQuery.data?.items.slice(0, 3).map((court) => (
-              <DashboardCourtCard key={court.id} court={court} />
+            {venuesQuery.data?.items.slice(0, 3).map((venue) => (
+              <DashboardVenueCard key={venue.id} venue={venue} />
             ))}
           </View>
         </QueryState>
@@ -199,15 +200,19 @@ export default function HomeScreen() {
   );
 }
 
-function DashboardCourtCard({ court }: { court: Court }) {
+function DashboardVenueCard({ venue }: { venue: Venue }) {
   const { colors } = useTheme();
   const router = useRouter();
-  const sport = (court.sportType as SportType | null) ?? SportType.OTHER;
+  const sport =
+    (venue.sports[0]?.slug?.toUpperCase().replace(/-/g, '_') as SportType | undefined) ??
+    SportType.OTHER;
   const sportColor = SPORT_COLORS[sport];
+  const from = Number(venue.priceFrom);
+  const price = Number.isFinite(from) && from > 0 ? from : 499;
 
   return (
     <Pressable
-      onPress={() => router.push(`/court/${court.id}`)}
+      onPress={() => router.push(`/venue/${venue.id}`)}
       style={({ pressed }) => [
         styles.venueCard,
         { backgroundColor: colors.card },
@@ -221,32 +226,34 @@ function DashboardCourtCard({ court }: { court: Court }) {
           <Text style={styles.ratingText}>4.8</Text>
         </View>
         <View style={styles.premiumPill}>
-          <Text style={styles.premiumText}>Premium</Text>
+          <Text style={styles.premiumText}>
+            {venue.courtCount === 1 ? '1 court' : `${venue.courtCount} courts`}
+          </Text>
         </View>
       </View>
       <View style={styles.venueBody}>
         <View style={styles.venueTitleRow}>
           <Text style={[styles.venueName, { color: colors.foreground }]} numberOfLines={1}>
-            {court.name}
+            {venue.name}
           </Text>
           <Text style={[styles.venueDistance, { color: colors.muted }]}>2.4 km</Text>
         </View>
         <View style={styles.venueMetaRow}>
           <Ionicons name="location-outline" size={14} color={colors.muted} />
           <Text style={[styles.venueMeta, { color: colors.muted }]} numberOfLines={1}>
-            {court.city} · {court.address}
+            {venue.city} · {venue.address}
           </Text>
         </View>
         <View style={styles.venueFooter}>
           <View>
             <Text style={[styles.fromLabel, { color: colors.muted }]}>Starting from</Text>
             <Text style={[styles.fromPrice, { color: colors.foreground }]}>
-              {formatCurrency(499)}
+              {formatCurrency(price)}
               <Text style={[styles.perHour, { color: colors.muted }]}>/hr</Text>
             </Text>
           </View>
           <View style={[styles.bookNow, { backgroundColor: colors.accent }]}>
-            <Text style={styles.bookNowText}>Book Now</Text>
+            <Text style={styles.bookNowText}>View Courts</Text>
           </View>
         </View>
       </View>

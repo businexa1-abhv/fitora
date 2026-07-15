@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Partner - Legal &amp; Banking</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#33302f",
+                    "on-error-container": "#93000a",
+                    "surface-tonal": "#F1F5F9",
+                    "primary-fixed-dim": "#ffb690",
+                    "inverse-primary": "#ffb690",
+                    "on-primary-fixed": "#341100",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "outline": "#8c7164",
+                    "surface-variant": "#e8e1df",
+                    "primary": "#9d4300",
+                    "surface-container-highest": "#e8e1df",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#e0c0b1",
+                    "on-secondary-container": "#00714e",
+                    "on-background": "#1d1b1a",
+                    "background": "#fff8f6",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f6efed",
+                    "on-primary-fixed-variant": "#783200",
+                    "surface-dim": "#dfd9d7",
+                    "on-secondary-fixed": "#002114",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-surface-variant": "#584237",
+                    "surface-container-low": "#f9f2f0",
+                    "tertiary": "#565e74",
+                    "on-tertiary-fixed": "#131b2e",
+                    "primary-container": "#f97316",
+                    "surface-tint": "#9d4300",
+                    "surface": "#fff8f6",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#005137",
+                    "brand-accent": "#FF6B35",
+                    "secondary-fixed": "#85f8c4",
+                    "surface-container-high": "#ede7e5",
+                    "surface-container": "#f3ecea",
+                    "primary-fixed": "#ffdbca",
+                    "danger-red": "#DC2626",
+                    "on-tertiary-container": "#2a3246",
+                    "secondary-fixed-dim": "#68dba9",
+                    "secondary": "#006c4a",
+                    "on-surface": "#1d1b1a",
+                    "tertiary-fixed": "#dae2fd",
+                    "tertiary-container": "#929ab2",
+                    "warning-amber": "#D97706",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#82f5c1",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "on-primary-container": "#582200"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "80px",
+                    "base": "4px",
+                    "margin-mobile": "20px",
+                    "gutter-mobile": "16px",
+                    "gutter-desktop": "24px",
+                    "section-gap": "120px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Lexend"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Lexend"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active { width: 100%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="w-full top-0 bg-surface dark:bg-surface-dim shadow-sm sticky z-50">
+<nav class="flex justify-between items-center h-16 px-margin-desktop max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="font-display-lg text-display-lg font-extrabold text-primary dark:text-primary-fixed-dim">FitOra Partner</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:bg-surface-tonal p-2 rounded-full transition-all active:scale-98">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-label-sm">JD</div>
+<span class="font-label-md text-label-md hidden md:block">Jane Doe</span>
+</div>
+</div>
+</nav>
+</header>
+<main class="max-w-7xl mx-auto px-margin-desktop py-12 flex flex-col md:flex-row gap-gutter-desktop">
+<!-- SideNavBar / Stepper -->
+<aside class="w-full md:w-64 shrink-0">
+<div class="flex flex-col gap-4 p-6 bg-surface-container dark:bg-surface-container rounded-xl">
+<div class="mb-4">
+<h2 class="font-headline-md text-headline-md text-primary">Partner Registration</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Step 3 of 4</p>
+</div>
+<!-- Business Info (Completed) -->
+<div class="text-on-surface-variant p-3 flex items-center gap-3 opacity-60">
+<span class="material-symbols-outlined text-[20px]" data-icon="business">business</span>
+<span class="font-label-md text-label-md">Business Info</span>
+<span class="material-symbols-outlined ml-auto text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Venue Details (Completed) -->
+<div class="text-on-surface-variant p-3 flex items-center gap-3 opacity-60">
+<span class="material-symbols-outlined text-[20px]" data-icon="stadium">stadium</span>
+<span class="font-label-md text-label-md">Venue Details</span>
+<span class="material-symbols-outlined ml-auto text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Operational Hours (Active - Contextual Mapping to Legal) -->
+<!-- Note: The JSON provided "Operational Hours" as step 3, but the prompt asks for "Legal & Banking" as Step 3. I will maintain the JSON's structural intent but update label per prompt request as it's the "Current Step". -->
+<div class="bg-primary-container text-on-primary-container font-bold rounded-lg p-3 flex items-center gap-3 shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance">account_balance</span>
+<span class="font-label-md text-label-md">Legal &amp; Banking</span>
+</div>
+<!-- Review (Inactive) -->
+<div class="text-on-surface-variant p-3 flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="verified">verified</span>
+<span class="font-label-md text-label-md">Review</span>
+</div>
+</div>
+<!-- Security Trust Card -->
+<div class="mt-8 p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary text-[32px] mb-3" style="font-variation-settings: 'FILL' 1;">encrypted</span>
+<h4 class="font-label-md text-label-md font-bold mb-2">Secure Connection</h4>
+<p class="text-label-sm text-on-surface-variant leading-relaxed">Your financial and legal data is encrypted using 256-bit AES protocol. We never store raw document files on public servers.</p>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<section class="flex-1">
+<div class="bg-surface border border-outline-variant/10 rounded-2xl overflow-hidden shadow-sm">
+<!-- Form Header -->
+<div class="p-8 border-b border-outline-variant/10 bg-surface-bright">
+<h1 class="font-headline-lg text-headline-lg mb-2">Legal Verification &amp; Banking</h1>
+<p class="text-on-surface-variant font-body-md">Provide your business identification and bank account details for seamless revenue settlement and tax compliance.</p>
+</div>
+<!-- Step Progress Bar -->
+<div class="h-1 bg-surface-container">
+<div class="h-full bg-primary-container w-[75%] transition-all duration-700"></div>
+</div>
+<form class="p-8 space-y-10">
+<!-- Section 1: Business Identification -->
+<div class="space-y-6">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="badge">badge</span>
+<h3 class="font-label-md text-label-md font-bold uppercase tracking-wider text-on-surface-variant">Business Identification</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-desktop">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-on-surface-variant">GST Number</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none bg-surface-container-lowest" placeholder="22AAAAA0000A1Z5" type="text"/>
+<p class="text-label-sm text-on-surface-variant/70 italic">15-digit alphanumeric GSTIN</p>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-on-surface-variant">PAN Card Number</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none bg-surface-container-lowest" placeholder="ABCDE1234F" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-on-surface-variant">Aadhaar Number (Authorized Representative)</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none bg-surface-container-lowest" placeholder="XXXX XXXX XXXX" type="text"/>
+</div>
+</div>
+<!-- Section 2: Banking Details -->
+<div class="space-y-6 pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance">account_balance</span>
+<h3 class="font-label-md text-label-md font-bold uppercase tracking-wider text-on-surface-variant">Settlement Account</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-desktop">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-on-surface-variant">Bank Account Number</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none bg-surface-container-lowest" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-on-surface-variant">IFSC Code</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none bg-surface-container-lowest" placeholder="HDFC0001234" type="text"/>
+</div>
+</div>
+</div>
+<!-- Section 3: Document Uploads -->
+<div class="space-y-6 pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_upload">cloud_upload</span>
+<h3 class="font-label-md text-label-md font-bold uppercase tracking-wider text-on-surface-variant">Document Repository</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-desktop">
+<!-- Business License -->
+<div class="relative group cursor-pointer border-2 border-dashed border-outline-variant rounded-xl p-8 bg-surface-container-low hover:border-primary-container transition-all flex flex-col items-center justify-center text-center">
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+<span class="material-symbols-outlined text-primary text-[40px] mb-3 group-hover:scale-110 transition-transform" data-icon="receipt_long">receipt_long</span>
+<p class="font-label-md text-label-md font-bold mb-1">Business License / Registration</p>
+<p class="text-label-sm text-on-surface-variant">PDF, JPEG or PNG (Max 5MB)</p>
+</div>
+<!-- Identity Proof -->
+<div class="relative group cursor-pointer border-2 border-dashed border-outline-variant rounded-xl p-8 bg-surface-container-low hover:border-primary-container transition-all flex flex-col items-center justify-center text-center">
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+<span class="material-symbols-outlined text-primary text-[40px] mb-3 group-hover:scale-110 transition-transform" data-icon="person_pin_circle">person_pin_circle</span>
+<p class="font-label-md text-label-md font-bold mb-1">Identity Proof (Aadhaar/PAN)</p>
+<p class="text-label-sm text-on-surface-variant">PDF, JPEG or PNG (Max 5MB)</p>
+</div>
+</div>
+<div class="flex items-start gap-3 bg-secondary-container/20 p-4 rounded-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="info">info</span>
+<p class="text-label-sm text-on-secondary-fixed-variant leading-relaxed">
+                                Please ensure all documents are clear, uncropped, and have the same business name as mentioned in the registration details. Mismatched data may lead to delays in approval.
+                            </p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center justify-between pt-10">
+<button class="flex items-center gap-2 px-8 py-3 rounded-lg font-label-md text-on-surface-variant hover:bg-surface-tonal transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                            Back to Details
+                        </button>
+<button class="bg-primary-container text-white px-10 py-4 rounded-xl font-headline-md shadow-lg shadow-primary-container/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3" type="submit">
+                            Save &amp; Continue
+                            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant/20 mt-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop px-margin-desktop max-w-7xl mx-auto">
+<div class="md:col-span-1">
+<span class="font-display-lg text-display-lg font-extrabold text-primary dark:text-primary-fixed-dim">FitOra Partner</span>
+<p class="mt-4 text-on-surface-variant font-body-md">Empowering sports venue owners with institutional-grade management tools.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-label-md font-bold text-on-surface">Resources</h5>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">About</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Support</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-label-md font-bold text-on-surface">Legal</h5>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Legal</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-label-md font-bold text-on-surface">Contact</h5>
+<p class="text-on-surface-variant">partners@fitora.com</p>
+<div class="flex gap-4 mt-2">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="language">language</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="public">public</span>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-margin-desktop mt-12 pt-8 border-t border-outline-variant/10 text-center">
+<p class="text-on-surface-variant font-body-md">© 2024 FitOra Partner. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Micro-interactions for form focus and progress
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label')?.classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label')?.classList.remove('text-primary');
+            });
+        });
+
+        // Prevent form submission for demo
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Legal & Banking details saved! Moving to Review step.');
+        });
+    </script>
+</body></html>

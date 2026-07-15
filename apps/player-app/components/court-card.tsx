@@ -13,11 +13,20 @@ interface CourtCardProps {
   compact?: boolean;
 }
 
+function splitCourtTitle(name: string): { title: string; subtitle?: string } {
+  const match = name.match(/^(.*?)(?:\s*[·—-]\s*Court\s+(\d+)\s*)$/i);
+  if (match?.[1] && match[2]) {
+    return { title: match[1].trim(), subtitle: `Court ${match[2]}` };
+  }
+  return { title: name };
+}
+
 export function CourtCard({ court, priceFrom = 400, compact }: CourtCardProps) {
   const { colors } = useTheme();
   const router = useRouter();
   const sport: SportType = (court.sportType as SportType | null) ?? SportType.OTHER;
   const sportColor = SPORT_COLORS[sport];
+  const { title, subtitle } = splitCourtTitle(court.name);
 
   return (
     <Pressable
@@ -38,11 +47,21 @@ export function CourtCard({ court, priceFrom = 400, compact }: CourtCardProps) {
           <View style={[styles.sportPill, { backgroundColor: colors.accent }]}>
             <Text style={styles.sportPillText}>{SPORT_LABELS[sport]}</Text>
           </View>
+          {subtitle ? (
+            <View style={[styles.courtPill, { backgroundColor: colors.card }]}>
+              <Text style={[styles.courtPillText, { color: colors.foreground }]}>{subtitle}</Text>
+            </View>
+          ) : null}
         </View>
         <View style={styles.body}>
           <View style={styles.titleRow}>
-            <Text style={[styles.name, { color: colors.foreground }]} numberOfLines={1}>
-              {court.name}
+            <Text style={[styles.name, { color: colors.foreground }]} numberOfLines={2}>
+              {title}
+              {subtitle ? (
+                <Text
+                  style={[styles.courtInline, { color: colors.muted }]}
+                >{` · ${subtitle}`}</Text>
+              ) : null}
             </Text>
             <Text style={[styles.distance, { color: colors.muted }]}>2.4 km</Text>
           </View>
@@ -111,6 +130,15 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
+  courtPill: {
+    borderRadius: Radius.sm,
+    bottom: Spacing.md,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    position: 'absolute',
+    right: Spacing.md,
+  },
+  courtPillText: { fontSize: 10, fontWeight: '900', letterSpacing: 0.4 },
   body: { padding: Spacing.lg },
   titleRow: {
     alignItems: 'flex-start',
@@ -119,6 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   name: { flex: 1, fontSize: FontSize.xl, fontWeight: '900' },
+  courtInline: { fontSize: FontSize.sm, fontWeight: '800' },
   distance: { fontSize: FontSize.xs, fontWeight: '800', marginTop: 5 },
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   meta: { flex: 1, fontSize: FontSize.sm, fontWeight: '600' },

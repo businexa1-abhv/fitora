@@ -194,6 +194,7 @@ export interface Court {
   isApproved: boolean;
   isActive: boolean;
   ownerId: string;
+  tenantId?: string;
   createdAt: string;
   updatedAt: string;
   owner?: {
@@ -202,6 +203,28 @@ export interface Court {
     lastName: string;
     email: string;
   };
+}
+
+export interface Venue {
+  id: string;
+  name: string;
+  brandName: string | null;
+  slug: string;
+  logoUrl: string | null;
+  status: string;
+  isActive: boolean;
+  address: string;
+  city: string;
+  state: string | null;
+  pincode: string | null;
+  latitude: number | string | null;
+  longitude: number | string | null;
+  amenities: string[];
+  sports: SportSummary[];
+  courtCount: number;
+  priceFrom: string | null;
+  images: CourtImage[];
+  courts?: Court[];
 }
 
 export interface CourtSlot {
@@ -297,12 +320,7 @@ export interface PaymentReports {
 export type AnalyticsPeriod = 'daily' | 'monthly' | 'yearly';
 
 export type AnalyticsExportMetric =
-  | 'revenue'
-  | 'bookings'
-  | 'memberships'
-  | 'products'
-  | 'users'
-  | 'overview';
+  'revenue' | 'bookings' | 'memberships' | 'products' | 'users' | 'overview';
 
 export interface AnalyticsSeriesPoint {
   label: string;

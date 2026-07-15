@@ -1,57 +1,69 @@
 import { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { AuthProvider, useAuth } from '@fitora/auth';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthProvider, useAuth } from '@/providers/auth-provider';
+import { QueryProvider } from '@/providers/query-provider';
+import { ThemeProvider, useTheme } from '@/providers/theme-provider';
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 function OwnerNavigator() {
-  const { hasRole, isAuthenticated, isLoading, session } = useAuth();
+  const { colors } = useTheme();
+  const { isAuthenticated, isLoading, isOwner, isTrainer } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading) {
-      SplashScreen.hideAsync().catch(() => undefined);
-    }
+    if (!isLoading) SplashScreen.hideAsync().catch(() => undefined);
   }, [isLoading]);
 
-  if (isLoading) return null;
+  useEffect(() => {
+    if (isLoading) return;
+    const inAuth = segments[0] === '(auth)';
 
-  const isOwner = hasRole('OWNER');
-  const isCoach = hasRole('COACH');
+    if (!isAuthenticated && !inAuth) {
+      router.replace('/(auth)/welcome');
+      return;
+    }
+
+    if (isAuthenticated && inAuth) {
+      if (isOwner || isTrainer) {
+        router.replace('/(tabs)');
+      }
+    }
+  }, [isAuthenticated, isLoading, isOwner, isTrainer, router, segments]);
+
+  if (isLoading) return null;
 
   return (
     <>
       <StatusBar style="dark" />
-      {!isAuthenticated ? (
-        <Stack initialRouteName="(auth)" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)" />
-        </Stack>
-      ) : isOwner ? (
-        <Stack
-          initialRouteName={session?.subscriptionActive === false ? 'subscription' : '(owner)'}
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen name="(owner)" />
-          <Stack.Screen name="subscription" />
-        </Stack>
-      ) : isCoach ? (
-        <Stack initialRouteName="(coach)" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(coach)" />
-        </Stack>
-      ) : (
-        <Stack initialRouteName="(auth)" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)" />
-        </Stack>
-      )}
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+          animation: 'slide_from_right',
+        }}
+      >
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+      </Stack>
     </>
   );
 }
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <OwnerNavigator />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <QueryProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <OwnerNavigator />
+          </ThemeProvider>
+        </AuthProvider>
+      </QueryProvider>
+    </SafeAreaProvider>
   );
 }

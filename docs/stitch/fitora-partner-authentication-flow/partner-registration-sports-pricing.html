@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Partner - Step 2.5: Sports & Membership Configuration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@300;400;500;600&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lexend:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for better UX */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3ecea;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e0c0b1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9d4300;
+        }
+        .tonal-card {
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tonal-card:hover {
+            box-shadow: 0 10px 30px -10px rgba(157, 67, 0, 0.08);
+            border-color: rgba(157, 67, 0, 0.1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#f97316",
+                        "on-secondary-container": "#00714e",
+                        "background": "#fff8f6",
+                        "error": "#ba1a1a",
+                        "tertiary": "#565e74",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-secondary-fixed": "#002114",
+                        "on-error": "#ffffff",
+                        "warning-amber": "#D97706",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1d1b1a",
+                        "secondary-container": "#82f5c1",
+                        "on-primary-fixed-variant": "#783200",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#68dba9",
+                        "inverse-on-surface": "#f6efed",
+                        "on-primary-fixed": "#341100",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-surface-variant": "#584237",
+                        "surface-bright": "#fff8f6",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#582200",
+                        "surface": "#fff8f6",
+                        "danger-red": "#DC2626",
+                        "primary-fixed": "#ffdbca",
+                        "surface-container": "#f3ecea",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#929ab2",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#ffb690",
+                        "on-secondary-fixed-variant": "#005137",
+                        "surface-variant": "#e8e1df",
+                        "surface-container-highest": "#e8e1df",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "brand-accent": "#FF6B35",
+                        "surface-tonal": "#F1F5F9",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "secondary-fixed": "#85f8c4",
+                        "surface-dim": "#dfd9d7",
+                        "surface-container-low": "#f9f2f0",
+                        "primary-fixed-dim": "#ffb690",
+                        "outline-variant": "#e0c0b1",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#ede7e5",
+                        "primary": "#9d4300",
+                        "on-surface": "#1d1b1a",
+                        "on-tertiary-container": "#2a3246",
+                        "secondary": "#006c4a",
+                        "outline": "#8c7164",
+                        "surface-tint": "#9d4300",
+                        "inverse-surface": "#33302f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "section-gap": "120px",
+                        "margin-mobile": "20px",
+                        "gutter-mobile": "16px",
+                        "gutter-desktop": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Lexend"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Lexend"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="bg-surface sticky top-0 z-50 shadow-sm border-b border-outline-variant/10">
+<div class="flex justify-between items-center h-20 px-margin-desktop max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="font-display-lg text-headline-md font-extrabold text-primary">FitOra Partner</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-tonal p-2 rounded-full transition-all">help</button>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-md transition-all active:scale-95">Partner Login</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-margin-desktop py-12 flex gap-10">
+<!-- Sidebar Navigation (Step Tracker) -->
+<aside class="hidden md:flex flex-col gap-4 w-72 shrink-0">
+<div class="bg-surface-container rounded-xl p-6">
+<div class="mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Partner Registration</h2>
+<p class="font-label-md text-on-surface-variant mt-1">Step 2.5 of 4</p>
+</div>
+<nav class="flex flex-col gap-2">
+<div class="text-on-surface-variant p-3 flex items-center gap-3 opacity-60">
+<span class="material-symbols-outlined">business</span>
+<span class="font-label-md">Business Info</span>
+</div>
+<div class="bg-primary-container text-on-primary-container font-bold rounded-lg p-4 flex items-center gap-3 shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">stadium</span>
+<span class="font-label-md">Venue Details</span>
+</div>
+<!-- Nested Step Indicator -->
+<div class="ml-10 py-2 border-l-2 border-primary-container pl-4 flex flex-col gap-3">
+<div class="text-on-primary-container font-bold text-label-sm">Sports Config</div>
+<div class="text-on-surface-variant text-label-sm opacity-50">Equipment</div>
+</div>
+<div class="text-on-surface-variant p-3 flex items-center gap-3">
+<span class="material-symbols-outlined">schedule</span>
+<span class="font-label-md">Operational Hours</span>
+</div>
+<div class="text-on-surface-variant p-3 flex items-center gap-3">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-label-md">Review</span>
+</div>
+</nav>
+</div>
+<!-- Help Card -->
+<div class="bg-tertiary-fixed rounded-xl p-6 mt-4">
+<p class="font-label-md text-on-tertiary-fixed font-bold">Need help?</p>
+<p class="font-body-md text-label-sm text-on-tertiary-fixed-variant mt-2">Setting up your sports rates correctly ensures maximum booking efficiency.</p>
+<button class="mt-4 text-primary font-bold font-label-md flex items-center gap-2">
+                    Read Guide <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<section class="flex-1">
+<div class="mb-10">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Sports & Membership Configuration</h1>
+<p class="font-body-lg text-on-surface-variant mt-2">Customize the rules and pricing for each sport available at your venue. This helps us generate your dynamic booking calendar.</p>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<!-- Badminton Configuration Card -->
+<article class="tonal-card rounded-2xl overflow-hidden">
+<div class="bg-surface-container-high px-8 py-4 flex justify-between items-center border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">badminton</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Badminton</h3>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-label-sm font-bold uppercase tracking-wider">Most Popular</span>
+</div>
+<div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+<!-- Court Logic -->
+<div class="space-y-6">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Number of Courts</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-2 border-outline-variant/30 rounded-xl px-4 py-3 focus:border-primary focus:ring-0 outline-none transition-all font-body-md" placeholder="e.g. 6" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 material-symbols-outlined">grid_view</span>
+</div>
+<p class="text-label-sm text-on-surface-variant/60 mt-1.5">Total count of playable badminton courts.</p>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Max Players per Court</label>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center hover:bg-outline-variant/20 transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<input class="w-20 text-center bg-transparent border-0 font-display-lg text-headline-md text-primary p-0" type="text" value="4"/>
+<button class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center hover:bg-outline-variant/20 transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pricing & Intervals -->
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Standard Rate</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">$</span>
+<input class="w-full pl-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-xl px-4 py-3 focus:border-primary focus:ring-0 outline-none transition-all font-body-md" placeholder="25.00" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Member Rate</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">$</span>
+<input class="w-full pl-8 bg-primary/5 border-2 border-primary/30 rounded-xl px-4 py-3 focus:border-primary focus:ring-0 outline-none transition-all font-body-md" placeholder="18.00" type="text"/>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-3">Available Slot Intervals</label>
+<div class="flex flex-wrap gap-3">
+<button class="px-5 py-2.5 rounded-full border-2 border-primary bg-primary text-on-primary font-label-md transition-all">60m</button>
+<button class="px-5 py-2.5 rounded-full border-2 border-outline-variant/30 bg-white text-on-surface-variant font-label-md hover:border-primary transition-all">90m</button>
+<button class="px-5 py-2.5 rounded-full border-2 border-outline-variant/30 bg-white text-on-surface-variant font-label-md hover:border-primary transition-all">120m</button>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Cricket Configuration Card -->
+<article class="tonal-card rounded-2xl overflow-hidden">
+<div class="bg-surface-container-high px-8 py-4 flex justify-between items-center border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">sports_cricket</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Cricket Nets</h3>
+</div>
+</div>
+<div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+<!-- Left Column -->
+<div class="space-y-6">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Number of Nets</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-2 border-outline-variant/30 rounded-xl px-4 py-3 focus:border-primary focus:ring-0 outline-none transition-all font-body-md" placeholder="e.g. 4" type="number"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 material-symbols-outlined">stadium</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Max Players per Net</label>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center hover:bg-outline-variant/20">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<input class="w-20 text-center bg-transparent border-0 font-display-lg text-headline-md text-primary p-0" type="text" value="6"/>
+<button class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center hover:bg-outline-variant/20">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column -->
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Standard Rate</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">$</span>
+<input class="w-full pl-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-xl px-4 py-3 focus:border-primary focus:ring-0 outline-none transition-all font-body-md" placeholder="40.00" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-2">Member Rate</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">$</span>
+<input class="w-full pl-8 bg-primary/5 border-2 border-primary/30 rounded-xl px-4 py-3 focus:border-primary focus:ring-0 outline-none transition-all font-body-md" placeholder="32.00" type="text"/>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-3">Available Slot Intervals</label>
+<div class="flex flex-wrap gap-3">
+<button class="px-5 py-2.5 rounded-full border-2 border-outline-variant/30 bg-white text-on-surface-variant font-label-md hover:border-primary transition-all">60m</button>
+<button class="px-5 py-2.5 rounded-full border-2 border-primary bg-primary text-on-primary font-label-md transition-all">90m</button>
+<button class="px-5 py-2.5 rounded-full border-2 border-outline-variant/30 bg-white text-on-surface-variant font-label-md hover:border-primary transition-all">120m</button>
+</div>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Action Bar -->
+<div class="mt-12 flex justify-between items-center py-6 border-t border-outline-variant/30">
+<button class="flex items-center gap-2 text-on-surface-variant font-label-md hover:text-primary transition-all">
+<span class="material-symbols-outlined">arrow_back</span> Back to Venue Details
+                </button>
+<div class="flex gap-4">
+<button class="px-8 py-3 rounded-xl border border-outline font-label-md hover:bg-surface-variant transition-all">Save Draft</button>
+<button class="px-10 py-3 rounded-xl bg-primary text-on-primary font-label-md font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                        Continue to Equipment
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Simple Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant/20 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop px-margin-desktop max-w-7xl mx-auto py-section-gap">
+<div class="col-span-1 md:col-span-2">
+<span class="font-display-lg text-headline-md font-extrabold text-primary">FitOra Partner</span>
+<p class="mt-4 text-on-surface-variant font-body-md max-w-sm">Empowering sports venue owners with elite digital management tools for the modern athlete.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-on-surface">Resources</h4>
+<a class="text-on-surface-variant hover:text-brand-accent transition-all font-body-md" href="#">Onboarding Guide</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-all font-body-md" href="#">Support Center</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-all font-body-md" href="#">Partner FAQ</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-on-surface">Legal</h4>
+<a class="text-on-surface-variant hover:text-brand-accent transition-all font-body-md" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-all font-body-md" href="#">Terms of Service</a>
+<p class="mt-4 text-label-sm text-on-surface-variant/60">© 2024 FitOra Partner. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for button toggles
+        document.querySelectorAll('.flex.flex-wrap.gap-3 button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.parentElement;
+                parent.querySelectorAll('button').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary', 'border-primary');
+                    b.classList.add('bg-white', 'text-on-surface-variant', 'border-outline-variant/30');
+                });
+                this.classList.add('bg-primary', 'text-on-primary', 'border-primary');
+                this.classList.remove('bg-white', 'text-on-surface-variant', 'border-outline-variant/30');
+            });
+        });
+
+        // Numeric stepper logic
+        document.querySelectorAll('.flex.items-center.gap-3').forEach(stepper => {
+            const input = stepper.querySelector('input');
+            const btns = stepper.querySelectorAll('button');
+            
+            btns[0].addEventListener('click', () => {
+                let val = parseInt(input.value);
+                if (val > 1) input.value = val - 1;
+            });
+            
+            btns[1].addEventListener('click', () => {
+                let val = parseInt(input.value);
+                input.value = val + 1;
+            });
+        });
+    </script>
+</body></html>

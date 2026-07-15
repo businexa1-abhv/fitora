@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Admin Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "surface-container": "#ffeae0",
+                    "on-tertiary-container": "#003554",
+                    "surface-variant": "#f6ded3",
+                    "tertiary-container": "#00a2f4",
+                    "inverse-on-surface": "#ffede6",
+                    "tertiary-fixed-dim": "#93ccff",
+                    "on-primary-container": "#582200",
+                    "secondary": "#006e2f",
+                    "on-surface": "#251913",
+                    "on-tertiary-fixed-variant": "#004b74",
+                    "surface-container-low": "#fff1eb",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#f6ded3",
+                    "tertiary-fixed": "#cde5ff",
+                    "tertiary": "#006398",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#9d4300",
+                    "surface": "#fff8f6",
+                    "primary": "#9d4300",
+                    "inverse-surface": "#3c2d26",
+                    "background": "#fff8f6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#007432",
+                    "on-secondary-fixed-variant": "#005321",
+                    "outline": "#8c7164",
+                    "on-surface-variant": "#584237",
+                    "inverse-primary": "#ffb690",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#4ae176",
+                    "on-tertiary-fixed": "#001d32",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#fce3d9",
+                    "secondary-fixed": "#6bff8f",
+                    "primary-fixed-dim": "#ffb690",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#783200",
+                    "primary-fixed": "#ffdbca",
+                    "surface-bright": "#fff8f6",
+                    "primary-container": "#f97316",
+                    "secondary-container": "#6bff8f",
+                    "on-secondary-fixed": "#002109",
+                    "on-primary-fixed": "#341100",
+                    "surface-dim": "#edd5cb",
+                    "outline-variant": "#e0c0b1",
+                    "on-background": "#251913"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "24px",
+                    "section-gap": "48px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "title-lg": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e0c0b1; border-radius: 10px; }
+        .toggle-checkbox:checked { right: 0; border-color: #9d4300; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #9d4300; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- TopNavBar (Shared Component Blueprint) -->
+<header class="h-16 fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-surface shadow-sm flex items-center justify-between px-margin-desktop">
+<div class="flex items-center gap-stack-md flex-1">
+<div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-primary rounded-full px-4 py-1.5 bg-surface-container-low transition-all">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full pl-8 font-body-md text-on-surface" placeholder="Search sports, cities, or campaigns..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container rounded-full p-2 text-on-surface-variant transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<button class="hover:bg-surface-container rounded-full p-2 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="hover:bg-surface-container rounded-full p-2 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden lg:block">
+<p class="font-label-lg text-on-surface leading-none">Admin User</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Super Admin</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-fixed" data-alt="Close-up professional portrait of a tech executive in a brightly lit, modern minimalist office space with warm wooden accents and soft natural light. The style is clean, sharp, and high-energy, reflecting a premium athletic brand identity with professional attire and a confident smile." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Shared Component Blueprint) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface shadow-sm flex flex-col py-8 px-4 z-50">
+<div class="mb-10 px-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">ProMarket</h1>
+<p class="text-xs text-on-surface-variant opacity-70 tracking-widest uppercase">Enterprise Admin</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors opacity-70" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors opacity-70" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md">Management</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors opacity-70" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors opacity-70" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-body-md">Support</span>
+</a>
+<!-- ACTIVE TAB: CMS -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+<span class="font-body-md">CMS</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full bg-primary-container text-white py-3 rounded-md font-label-lg uppercase tracking-widest shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                Export Report
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-margin-desktop h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar">
+<header class="mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Platform Configuration</h2>
+<p class="text-on-surface-variant font-body-md">Manage global services, regional accessibility, and marketing assets.</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- 1. Service Management: Supported Sports (Bento Large) -->
+<section class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-lg">
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+<h3 class="font-title-lg text-title-lg">Service Management</h3>
+</div>
+<button class="text-primary font-label-lg flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">add</span> Add New Sport
+                    </button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Sport Card -->
+<div class="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-3xl text-primary-container">sports_cricket</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100">edit</span>
+</div>
+<p class="font-label-lg text-on-surface">Cricket</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">124 Venues</p>
+</div>
+<!-- Sport Card -->
+<div class="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-3xl text-primary-container">sports_tennis</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100">edit</span>
+</div>
+<p class="font-label-lg text-on-surface">Badminton</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">88 Venues</p>
+</div>
+<!-- Sport Card -->
+<div class="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-3xl text-primary-container">pool</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100">edit</span>
+</div>
+<p class="font-label-lg text-on-surface">Swimming</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">42 Venues</p>
+</div>
+<!-- Sport Card -->
+<div class="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-3xl text-primary-container">sports_soccer</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100">edit</span>
+</div>
+<p class="font-label-lg text-on-surface">Football</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">210 Venues</p>
+</div>
+<!-- Sport Card -->
+<div class="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-3xl text-primary-container">fitness_center</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100">edit</span>
+</div>
+<p class="font-label-lg text-on-surface">Gym Training</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">340 Venues</p>
+</div>
+<!-- Sport Card -->
+<div class="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-3xl text-primary-container">self_improvement</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100">edit</span>
+</div>
+<p class="font-label-lg text-on-surface">Yoga</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">112 Classes</p>
+</div>
+<!-- Sport Card -->
+<div class="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-3xl text-primary-container">directions_run</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100">edit</span>
+</div>
+<p class="font-label-lg text-on-surface">Running Tracks</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">15 Circuits</p>
+</div>
+<!-- Sport Card - Add More -->
+<div class="group border-2 border-dashed border-outline-variant rounded-lg p-4 flex flex-col items-center justify-center hover:bg-surface-container hover:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant">add_circle</span>
+<p class="font-label-md text-on-surface-variant mt-2">New Entry</p>
+</div>
+</div>
+</section>
+<!-- 2. City Manager (Bento Side) -->
+<section class="col-span-12 lg:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-lg flex flex-col">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-primary">location_city</span>
+<h3 class="font-title-lg text-title-lg">City Manager</h3>
+</div>
+<div class="space-y-4 overflow-y-auto max-h-[340px] pr-2 custom-scrollbar">
+<!-- City Toggle Item -->
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A cinematic, high-resolution photo of the Mumbai skyline at golden hour, featuring the Bandra-Worli Sea Link. The image is filtered with a modern, high-contrast aesthetic with warm orange and deep navy tones to match a premium fitness brand visual system." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<p class="font-label-lg text-on-surface">Mumbai</p>
+<p class="text-[10px] text-secondary font-bold uppercase">Active</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- City Toggle Item -->
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A stunning aerial view of the Bangalore city landscape with lush green parks and modern glass skyscrapers under a clear blue sky. The lighting is crisp and midday, emphasizing the urban-nature balance. Style is clean, professional, and vibrant." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<p class="font-label-lg text-on-surface">Bangalore</p>
+<p class="text-[10px] text-secondary font-bold uppercase">Active</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- City Toggle Item -->
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover grayscale opacity-50" data-alt="A wide-angle professional photograph of the New Delhi Lotus Temple surrounded by manicured gardens, captured in soft morning light. The color palette features whites, soft greens, and warm sunlight, following the premium minimalist sports aesthetic." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<p class="font-label-lg text-on-surface-variant">New Delhi</p>
+<p class="text-[10px] text-on-surface-variant font-bold uppercase">Inactive</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<button class="mt-auto pt-4 text-primary font-label-lg flex items-center justify-center gap-1 hover:underline">
+                    Manage Localized Banners <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</section>
+<!-- 3. Marketing Suite (Bento Full Width Bottom) -->
+<section class="col-span-12 bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-lg">
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">campaign</span>
+<h3 class="font-title-lg text-title-lg">Marketing Suite</h3>
+</div>
+<div class="flex gap-stack-sm">
+<button class="px-4 py-2 bg-surface-container-high rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-highest transition-colors">Drafts (3)</button>
+<button class="px-4 py-2 bg-primary text-white rounded-full font-label-md hover:brightness-110 transition-all flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">add_task</span> New Campaign
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Promo Banner Management -->
+<div class="bg-surface-container rounded-lg p-stack-md overflow-hidden relative">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+
+</div>
+<div class="relative z-10">
+<p class="text-[10px] text-primary font-bold uppercase tracking-widest mb-1">Live Banner</p>
+<h4 class="font-label-lg text-on-surface mb-3">Summer Sprint 20% Off</h4>
+<div class="h-24 w-full bg-cover bg-center rounded-md mb-3 border border-outline-variant" data-alt="A vibrant, high-energy promotional banner design showing an athlete running on a modern track. Intense orange and deep navy gradient overlays with bold white typography reading 'SUMMER SPRINT'. Minimalist yet impactful composition." style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg')"></div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant">Ends in 4 days</span>
+<button class="text-primary font-label-md border-b border-primary">Edit Banner</button>
+</div>
+</div>
+</div>
+<!-- Active Coupons -->
+<div class="border border-outline-variant rounded-lg p-stack-md">
+<h4 class="font-label-lg text-on-surface mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">confirmation_number</span> Active Coupons
+                        </h4>
+<div class="space-y-2">
+<div class="flex justify-between items-center p-2 border-b border-outline-variant">
+<div>
+<p class="font-mono text-sm font-bold text-primary">FITORA50</p>
+<p class="text-[10px] text-on-surface-variant">50% off First Booking</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">more_vert</span>
+</div>
+<div class="flex justify-between items-center p-2 border-b border-outline-variant">
+<div>
+<p class="font-mono text-sm font-bold text-primary">CRICKET20</p>
+<p class="text-[10px] text-on-surface-variant">Venue Specific Promo</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">more_vert</span>
+</div>
+</div>
+<button class="w-full mt-3 py-2 text-primary font-label-md border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Generate Codes</button>
+</div>
+<!-- Notification Scheduler -->
+<div class="border border-outline-variant rounded-lg p-stack-md flex flex-col">
+<h4 class="font-label-lg text-on-surface mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule_send</span> Notifications
+                        </h4>
+<div class="flex-1 space-y-3">
+<div class="bg-surface-container-low p-2 rounded text-xs">
+<p class="text-on-surface font-semibold">Morning Workout Reminder</p>
+<p class="text-on-surface-variant">Scheduled: Tomorrow, 07:00 AM</p>
+</div>
+<div class="bg-surface-container-low p-2 rounded text-xs opacity-60">
+<p class="text-on-surface font-semibold">Weekend Sports Digest</p>
+<p class="text-on-surface-variant">Recurring: Fri, 05:00 PM</p>
+</div>
+</div>
+<button class="mt-4 py-2 bg-on-surface text-surface rounded-md font-label-md hover:opacity-90 transition-all">New Push Alert</button>
+</div>
+</div>
+</section>
+<!-- 4. Legal Center & Platform Stats (Bento Split) -->
+<section class="col-span-12 lg:col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-lg">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">gavel</span>
+<h3 class="font-title-lg text-title-lg">Legal Center</h3>
+</div>
+<span class="text-[10px] bg-secondary-container text-on-secondary-container px-2 py-1 rounded font-bold">COMPLIANT</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg">
+<div>
+<p class="font-label-lg text-on-surface">Terms of Service</p>
+<p class="text-xs text-on-surface-variant">v2.4.1 — Last updated 12 Feb 2024</p>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full text-primary transition-colors">
+<span class="material-symbols-outlined">edit_document</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg">
+<div>
+<p class="font-label-lg text-on-surface">Privacy Policy</p>
+<p class="text-xs text-on-surface-variant">v3.0.0 — Last updated 05 Jan 2024</p>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full text-primary transition-colors">
+<span class="material-symbols-outlined">edit_document</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg">
+<div>
+<p class="font-label-lg text-on-surface">Refund &amp; Cancellation</p>
+<p class="text-xs text-on-surface-variant">v1.2.0 — Last updated 18 Nov 2023</p>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full text-primary transition-colors">
+<span class="material-symbols-outlined">edit_document</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Platform Meta Info -->
+<div class="bg-surface-container-highest rounded-xl border border-outline-variant p-stack-lg flex flex-col justify-center items-center text-center">
+<div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4 shadow-lg animate-pulse">
+<span class="material-symbols-outlined text-white text-3xl">hub</span>
+</div>
+<h3 class="font-headline-md text-on-surface">System Integrity</h3>
+<p class="text-on-surface-variant max-w-sm mb-6">All platform services are operational. Version 4.8.2-delta is currently live across all regional nodes.</p>
+<div class="flex gap-4">
+<div class="px-6 py-2 bg-white rounded-full border border-outline-variant">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">API Uptime</p>
+<p class="font-title-lg text-secondary">99.9%</p>
+</div>
+<div class="px-6 py-2 bg-white rounded-full border border-outline-variant">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Sync Delay</p>
+<p class="font-title-lg text-primary">12ms</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Spacer for Bottom -->
+<div class="h-12"></div>
+</main>
+<!-- Micro-interaction JS -->
+<script>
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mousedown', () => card.style.transform = 'scale(0.98)');
+            card.addEventListener('mouseup', () => card.style.transform = 'scale(1)');
+            card.addEventListener('mouseleave', () => card.style.transform = 'scale(1)');
+        });
+
+        // Simulating some dynamic behavior
+        const toggles = document.querySelectorAll('input[type="checkbox"]');
+        toggles.forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                const statusText = e.target.closest('div.flex').querySelector('p:last-child');
+                if(statusText) {
+                    if(e.target.checked) {
+                        statusText.innerText = 'Active';
+                        statusText.classList.remove('text-on-surface-variant');
+                        statusText.classList.add('text-secondary');
+                    } else {
+                        statusText.innerText = 'Inactive';
+                        statusText.classList.remove('text-secondary');
+                        statusText.classList.add('text-on-surface-variant');
+                    }
+                }
+            });
+        });
+    </script>
+</body></html>

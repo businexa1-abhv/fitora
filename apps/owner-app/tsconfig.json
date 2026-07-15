@@ -1,3 +1,12 @@
 {
-  "extends": "@fitora/config/typescript/react-native.json"
+  "extends": "@fitora/config/typescript/react-native.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["node_modules"]
 }

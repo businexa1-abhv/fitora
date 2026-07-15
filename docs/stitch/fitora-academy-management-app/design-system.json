@@ -1,0 +1,632 @@
+{
+  "createTime": "2026-07-15T14:27:16.636009Z",
+  "designTheme": {
+    "bodyFont": "INTER",
+    "bodyFontFamily": "Inter",
+    "colorMode": "LIGHT",
+    "colorVariant": "FIDELITY",
+    "customColor": "#2e3192",
+    "designMd": "---\nname: FitOra Owner\ncolors:\n  surface: '#f9f9ff'\n  surface-dim: '#cfdaf2'\n  surface-bright: '#f9f9ff'\n  surface-container-lowest: '#ffffff'\n  surface-container-low: '#f0f3ff'\n  surface-container: '#e7eeff'\n  surface-container-high: '#dee8ff'\n  surface-container-highest: '#d8e3fb'\n  on-surface: '#111c2d'\n  on-surface-variant: '#464652'\n  inverse-surface: '#263143'\n  inverse-on-surface: '#ecf1ff'\n  outline: '#777683'\n  outline-variant: '#c7c5d4'\n  surface-tint: '#4f54b4'\n  primary: '#15157d'\n  on-primary: '#ffffff'\n  primary-container: '#2e3192'\n  on-primary-container: '#9da1ff'\n  inverse-primary: '#c0c1ff'\n  secondary: '#006c49'\n  on-secondary: '#ffffff'\n  secondary-container: '#6cf8bb'\n  on-secondary-container: '#00714d'\n  tertiary: '#3c2300'\n  on-tertiary: '#ffffff'\n  tertiary-container: '#5a3700'\n  on-tertiary-container: '#ec9700'\n  error: '#ba1a1a'\n  on-error: '#ffffff'\n  error-container: '#ffdad6'\n  on-error-container: '#93000a'\n  primary-fixed: '#e1e0ff'\n  primary-fixed-dim: '#c0c1ff'\n  on-primary-fixed: '#04006d'\n  on-primary-fixed-variant: '#373a9b'\n  secondary-fixed: '#6ffbbe'\n  secondary-fixed-dim: '#4edea3'\n  on-secondary-fixed: '#002113'\n  on-secondary-fixed-variant: '#005236'\n  tertiary-fixed: '#ffddb8'\n  tertiary-fixed-dim: '#ffb95f'\n  on-tertiary-fixed: '#2a1700'\n  on-tertiary-fixed-variant: '#653e00'\n  background: '#f9f9ff'\n  on-background: '#111c2d'\n  surface-variant: '#d8e3fb'\ntypography:\n  display-lg:\n    fontFamily: Inter\n    fontSize: 57px\n    fontWeight: '700'\n    lineHeight: 64px\n    letterSpacing: -0.25px\n  headline-lg:\n    fontFamily: Inter\n    fontSize: 32px\n    fontWeight: '600'\n    lineHeight: 40px\n  headline-md:\n    fontFamily: Inter\n    fontSize: 28px\n    fontWeight: '600'\n    lineHeight: 36px\n  headline-sm:\n    fontFamily: Inter\n    fontSize: 24px\n    fontWeight: '600'\n    lineHeight: 32px\n  title-lg:\n    fontFamily: Inter\n    fontSize: 22px\n    fontWeight: '500'\n    lineHeight: 28px\n  title-md:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: '500'\n    lineHeight: 24px\n    letterSpacing: 0.15px\n  body-lg:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: '400'\n    lineHeight: 24px\n    letterSpacing: 0.5px\n  body-md:\n    fontFamily: Inter\n    fontSize: 14px\n    fontWeight: '400'\n    lineHeight: 20px\n    letterSpacing: 0.25px\n  label-lg:\n    fontFamily: JetBrains Mono\n    fontSize: 12px\n    fontWeight: '500'\n    lineHeight: 16px\n    letterSpacing: 0.5px\n  headline-lg-mobile:\n    fontFamily: Inter\n    fontSize: 28px\n    fontWeight: '700'\n    lineHeight: 34px\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  unit: 4px\n  margin-mobile: 16px\n  gutter-mobile: 12px\n  stack-sm: 8px\n  stack-md: 16px\n  stack-lg: 24px\n---\n\n## Brand & Style\nThe design system for this product is rooted in **Corporate Modernism** with a high-performance edge. It balances the authoritative reliability of an enterprise management tool with the kinetic energy of a sports academy. The visual narrative is built on the principles of Material Design 3 (M3), utilizing a \"Management-First\" philosophy that prioritizes data clarity and actionable insights without sacrificing a premium, aspirational feel.\n\nThe emotional response should be one of \"Controlled Vitality.\" The UI feels robust and stable (Indigo) while remaining fresh and growth-oriented (Emerald). High-contrast elements and ample whitespace ensure that owners can navigate complex schedules and financial data with zero cognitive friction.\n\n## Colors\nThe palette utilizes a high-contrast foundation to ensure accessibility and professional rigor.\n- **Primary (Deep Indigo):** Used for key structural elements, primary buttons, and active states to signal authority.\n- **Secondary (Emerald Green):** Applied to success states, growth metrics, and \"active\" sports indicators.\n- **Tertiary (Amber):** Reserved for alerts, pending status, or urgent management notifications.\n- **Neutral/Surface:** A tiered system of cool greys and pure whites. Surfaces use `Neutral 99` (#FAFAFA) for the background to keep the interface feeling airy, while containers use pure white (#FFFFFF) to create a distinct card-based hierarchy.\n\n## Typography\nThis design system employs **Inter** for all primary communication to maintain a neutral, highly legible, and professional tone. For data-heavy contexts\u2014such as athlete IDs, financial figures, or timestamps\u2014**JetBrains Mono** is used as a secondary \"Label\" font to provide a technical, precise aesthetic that aids in scanning lists.\n\nThe type scale is intentionally dense for the management context. Use `Title Medium` for card headers and `Body Medium` for secondary information to maximize information density on mobile screens.\n\n## Layout & Spacing\nThe layout follows a **Fluid Grid** model optimized for mobile-first management. \n- **Grid:** 4-column system on mobile devices.\n- **Safe Zones:** 16px horizontal margins protect content from screen edges.\n- **Rhythm:** An 8pt spatial system (with a 4pt sub-grid for tight components) ensures vertical consistency.\n- **Density:** High-density layouts are preferred for data lists. Use 12px gutters between cards to maximize the number of visible items while maintaining clear separation.\n\n## Elevation & Depth\nIn accordance with Material 3, depth is communicated through **Tonal Layers** rather than heavy shadows.\n- **Surface Level 0 (Background):** #FAFAFA.\n- **Surface Level 1 (Cards/Lists):** Pure white with a subtle 1px stroke (#E2E8F0) and no shadow for a clean, flat look.\n- **Surface Level 2 (FABs/Active Modals):** Uses a soft ambient shadow (Y: 4, Blur: 12, Opacity: 0.08, Color: Indigo) to indicate interactivity.\n- **Scrim:** A 40% opacity Indigo tint is used for background overlays when modals are active.\n\n## Shapes\nThe shape language is \"Professional Soft.\"\n- **Standard Containers:** Use `rounded-md` (0.5rem / 8px) for cards, input fields, and list items. This provides a modern feel without looking overly playful.\n- **Action Elements:** Buttons and Floating Action Buttons (FABs) use `rounded-xl` (1.5rem / 24px) or full pill shapes to stand out against the geometric card-based layout.\n- **Data Indicators:** Small badges or tags use `rounded-sm` (4px) to maximize space for text.\n\n## Components\n- **Floating Action Buttons (FAB):** Following M3, the FAB is a large, rounded-square (or \"squircle\") located in the bottom-right. It should be Primary Indigo with a white icon for high-impact actions like \"New Enrollment.\"\n- **Cards:** Use a \"Elevated-Flat\" style. Pure white background, 1px light-grey border. Headers within cards should use Primary Indigo text for emphasis.\n- **Data Tables/Lists:** Highly condensed. Use JetBrains Mono for numeric values. Alternate row backgrounds are not required; use thin 1px horizontal dividers instead.\n- **Chips:** Used for filtering sports categories (e.g., \"Tennis,\" \"Swimming\"). Emerald Green is used for selected states with a 12% opacity background.\n- **Navigation Bar:** A fixed bottom navigation bar with clear icons and labels. The active state uses a Primary Indigo pill-shaped indicator behind the icon, consistent with M3 standards.\n- **Input Fields:** Outlined style with a 1px border that thickens and changes to Indigo on focus. Labels should float to the top border when active.",
+    "font": "INTER",
+    "headlineFont": "INTER",
+    "headlineFontFamily": "Inter",
+    "labelFont": "JETBRAINS_MONO",
+    "labelFontFamily": "Jetbrains Mono",
+    "namedColors": {
+      "background": "#f9f9ff",
+      "error": "#ba1a1a",
+      "error_container": "#ffdad6",
+      "inverse_on_surface": "#ecf1ff",
+      "inverse_primary": "#c0c1ff",
+      "inverse_surface": "#263143",
+      "on_background": "#111c2d",
+      "on_error": "#ffffff",
+      "on_error_container": "#93000a",
+      "on_primary": "#ffffff",
+      "on_primary_container": "#9da1ff",
+      "on_primary_fixed": "#04006d",
+      "on_primary_fixed_variant": "#373a9b",
+      "on_secondary": "#ffffff",
+      "on_secondary_container": "#00714d",
+      "on_secondary_fixed": "#002113",
+      "on_secondary_fixed_variant": "#005236",
+      "on_surface": "#111c2d",
+      "on_surface_variant": "#464652",
+      "on_tertiary": "#ffffff",
+      "on_tertiary_container": "#ec9700",
+      "on_tertiary_fixed": "#2a1700",
+      "on_tertiary_fixed_variant": "#653e00",
+      "outline": "#777683",
+      "outline_variant": "#c7c5d4",
+      "primary": "#15157d",
+      "primary_container": "#2e3192",
+      "primary_fixed": "#e1e0ff",
+      "primary_fixed_dim": "#c0c1ff",
+      "secondary": "#006c49",
+      "secondary_container": "#6cf8bb",
+      "secondary_fixed": "#6ffbbe",
+      "secondary_fixed_dim": "#4edea3",
+      "surface": "#f9f9ff",
+      "surface_bright": "#f9f9ff",
+      "surface_container": "#e7eeff",
+      "surface_container_high": "#dee8ff",
+      "surface_container_highest": "#d8e3fb",
+      "surface_container_low": "#f0f3ff",
+      "surface_container_lowest": "#ffffff",
+      "surface_dim": "#cfdaf2",
+      "surface_tint": "#4f54b4",
+      "surface_variant": "#d8e3fb",
+      "tertiary": "#3c2300",
+      "tertiary_container": "#5a3700",
+      "tertiary_fixed": "#ffddb8",
+      "tertiary_fixed_dim": "#ffb95f"
+    },
+    "overrideNeutralColor": "#1e293b",
+    "overridePrimaryColor": "#2e3192",
+    "overrideSecondaryColor": "#10b981",
+    "overrideTertiaryColor": "#f59e0b",
+    "roundness": "ROUND_EIGHT",
+    "spacing": {
+      "gutter-mobile": "12px",
+      "margin-mobile": "16px",
+      "stack-lg": "24px",
+      "stack-md": "16px",
+      "stack-sm": "8px",
+      "unit": "4px"
+    },
+    "spacingScale": 2,
+    "typography": {
+      "body-lg": {
+        "fontFamily": "Inter",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "letterSpacing": "0.5px",
+        "lineHeight": "24px"
+      },
+      "body-md": {
+        "fontFamily": "Inter",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "letterSpacing": "0.25px",
+        "lineHeight": "20px"
+      },
+      "display-lg": {
+        "fontFamily": "Inter",
+        "fontSize": "57px",
+        "fontWeight": "700",
+        "letterSpacing": "-0.25px",
+        "lineHeight": "64px"
+      },
+      "headline-lg": {
+        "fontFamily": "Inter",
+        "fontSize": "32px",
+        "fontWeight": "600",
+        "lineHeight": "40px"
+      },
+      "headline-lg-mobile": {
+        "fontFamily": "Inter",
+        "fontSize": "28px",
+        "fontWeight": "700",
+        "lineHeight": "34px"
+      },
+      "headline-md": {
+        "fontFamily": "Inter",
+        "fontSize": "28px",
+        "fontWeight": "600",
+        "lineHeight": "36px"
+      },
+      "headline-sm": {
+        "fontFamily": "Inter",
+        "fontSize": "24px",
+        "fontWeight": "600",
+        "lineHeight": "32px"
+      },
+      "label-lg": {
+        "fontFamily": "JetBrains Mono",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "letterSpacing": "0.5px",
+        "lineHeight": "16px"
+      },
+      "title-lg": {
+        "fontFamily": "Inter",
+        "fontSize": "22px",
+        "fontWeight": "500",
+        "lineHeight": "28px"
+      },
+      "title-md": {
+        "fontFamily": "Inter",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "letterSpacing": "0.15px",
+        "lineHeight": "24px"
+      }
+    }
+  },
+  "deviceType": "MOBILE",
+  "metadata": {
+    "userRole": "OWNER"
+  },
+  "name": "projects/7326153259200245460",
+  "origin": "STITCH",
+  "projectType": "TEXT_TO_UI_PRO",
+  "screenInstances": [
+    {
+      "height": 2205,
+      "id": "0196a34992e043fc9fb451dbc545d69f",
+      "sourceScreen": "projects/7326153259200245460/screens/0196a34992e043fc9fb451dbc545d69f",
+      "width": 390,
+      "x": 908,
+      "y": 3420
+    },
+    {
+      "height": 1108,
+      "id": "06903a992d1d487ea33b133ab22c9ab8",
+      "sourceScreen": "projects/7326153259200245460/screens/06903a992d1d487ea33b133ab22c9ab8",
+      "width": 390,
+      "y": 11057
+    },
+    {
+      "height": 1890,
+      "id": "134ed14cc5434abaa5d4b2dee15b4df2",
+      "sourceScreen": "projects/7326153259200245460/screens/134ed14cc5434abaa5d4b2dee15b4df2",
+      "width": 390,
+      "x": 908,
+      "y": 1274
+    },
+    {
+      "height": 2086,
+      "id": "1cc7912cd77642c0b9ce0a239b6d0161",
+      "sourceScreen": "projects/7326153259200245460/screens/1cc7912cd77642c0b9ce0a239b6d0161",
+      "width": 390,
+      "x": 908,
+      "y": 24600
+    },
+    {
+      "height": 1222,
+      "id": "24f087d55e18418f8ce47153927301c6",
+      "sourceScreen": "projects/7326153259200245460/screens/24f087d55e18418f8ce47153927301c6",
+      "width": 390,
+      "x": 7158
+    },
+    {
+      "height": 2174,
+      "id": "26d235d2f4d34b4ba11710a6db385d23",
+      "sourceScreen": "projects/7326153259200245460/screens/26d235d2f4d34b4ba11710a6db385d23",
+      "width": 390,
+      "y": 24600
+    },
+    {
+      "height": 884,
+      "id": "26e87d5e9e914e9c9fa223264b78424a",
+      "sourceScreen": "projects/7326153259200245460/screens/26e87d5e9e914e9c9fa223264b78424a",
+      "width": 390,
+      "x": 4772
+    },
+    {
+      "height": 884,
+      "id": "2977ffd6b41c48199a9c211050e63854",
+      "sourceScreen": "projects/7326153259200245460/screens/2977ffd6b41c48199a9c211050e63854",
+      "width": 390,
+      "x": 1478
+    },
+    {
+      "height": 1068,
+      "id": "2acee018fd31444b99c609cb2c045032",
+      "sourceScreen": "projects/7326153259200245460/screens/2acee018fd31444b99c609cb2c045032",
+      "width": 390,
+      "x": 908,
+      "y": 6037
+    },
+    {
+      "height": 2366,
+      "id": "2d7b3a4a7f964ab68288396c895f3d29",
+      "sourceScreen": "projects/7326153259200245460/screens/2d7b3a4a7f964ab68288396c895f3d29",
+      "width": 390,
+      "y": 8435
+    },
+    {
+      "height": 2568,
+      "id": "2f5683dd4879401ba7b60f2e540a6be5",
+      "sourceScreen": "projects/7326153259200245460/screens/2f5683dd4879401ba7b60f2e540a6be5",
+      "width": 390,
+      "x": 1362,
+      "y": 21064
+    },
+    {
+      "height": 1365,
+      "id": "3187e25d46e94feaa877b00eb022f817",
+      "sourceScreen": "projects/7326153259200245460/screens/3187e25d46e94feaa877b00eb022f817",
+      "width": 390,
+      "x": 454,
+      "y": 8435
+    },
+    {
+      "height": 1033,
+      "id": "39a094cf8b5d4c94ab2225b6c4c1e6cb",
+      "sourceScreen": "projects/7326153259200245460/screens/39a094cf8b5d4c94ab2225b6c4c1e6cb",
+      "width": 390,
+      "x": 454,
+      "y": 1274
+    },
+    {
+      "height": 2638,
+      "id": "420921c5a44a48588472ed1ba94aae38",
+      "sourceScreen": "projects/7326153259200245460/screens/420921c5a44a48588472ed1ba94aae38",
+      "width": 390,
+      "x": 5680
+    },
+    {
+      "height": 2074,
+      "id": "4b6a6e7477694dc9851c56b4d2a10eac",
+      "sourceScreen": "projects/7326153259200245460/screens/4b6a6e7477694dc9851c56b4d2a10eac",
+      "width": 390,
+      "x": 908,
+      "y": 21064
+    },
+    {
+      "height": 2921,
+      "id": "4fade0a709844116ad27e9d6f7e36844",
+      "sourceScreen": "projects/7326153259200245460/screens/4fade0a709844116ad27e9d6f7e36844",
+      "width": 390,
+      "y": 29044
+    },
+    {
+      "height": 1781,
+      "id": "52cd5622b8094490b55e069ce1b2490a",
+      "sourceScreen": "projects/7326153259200245460/screens/52cd5622b8094490b55e069ce1b2490a",
+      "width": 390,
+      "x": 1362,
+      "y": 18428
+    },
+    {
+      "height": 2361,
+      "id": "530aa17448854ad2bfcfd2cd37f0634e",
+      "sourceScreen": "projects/7326153259200245460/screens/530aa17448854ad2bfcfd2cd37f0634e",
+      "width": 390,
+      "y": 3420
+    },
+    {
+      "height": 2255,
+      "id": "5863b43f9e54413ca77c04bb0a1c755c",
+      "sourceScreen": "projects/7326153259200245460/screens/5863b43f9e54413ca77c04bb0a1c755c",
+      "width": 390,
+      "x": 1362,
+      "y": 29044
+    },
+    {
+      "height": 1894,
+      "id": "6972d78be7b2429f938644170ffd0c26",
+      "sourceScreen": "projects/7326153259200245460/screens/6972d78be7b2429f938644170ffd0c26",
+      "width": 390,
+      "x": 1362,
+      "y": 11057
+    },
+    {
+      "height": 2106,
+      "id": "714f252b85c347da882b1b5d31867610",
+      "sourceScreen": "projects/7326153259200245460/screens/714f252b85c347da882b1b5d31867610",
+      "width": 390,
+      "x": 908,
+      "y": 29044
+    },
+    {
+      "height": 1197,
+      "id": "73f3cba098a743f69f2072b4faf61102",
+      "sourceScreen": "projects/7326153259200245460/screens/73f3cba098a743f69f2072b4faf61102",
+      "width": 390,
+      "x": 7612
+    },
+    {
+      "height": 2712,
+      "id": "76f59adf85ec4f43b240efa842c6bc2e",
+      "sourceScreen": "projects/7326153259200245460/screens/76f59adf85ec4f43b240efa842c6bc2e",
+      "width": 390,
+      "x": 8520
+    },
+    {
+      "height": 1018,
+      "id": "78228f2aaa3b4f329154039b428fd506",
+      "sourceScreen": "projects/7326153259200245460/screens/78228f2aaa3b4f329154039b428fd506",
+      "width": 390,
+      "x": 2840
+    },
+    {
+      "height": 884,
+      "id": "792b5d4aa7304f0ba0232e288686e0f4",
+      "sourceScreen": "projects/7326153259200245460/screens/792b5d4aa7304f0ba0232e288686e0f4",
+      "width": 390,
+      "x": 1932
+    },
+    {
+      "height": 2072,
+      "id": "7cb17fb8ecd94b2a82d358ba27035893",
+      "sourceScreen": "projects/7326153259200245460/screens/7cb17fb8ecd94b2a82d358ba27035893",
+      "width": 390,
+      "x": 1362,
+      "y": 3420
+    },
+    {
+      "height": 2170,
+      "id": "7d341fca780946a784bc017673ca53fb",
+      "sourceScreen": "projects/7326153259200245460/screens/7d341fca780946a784bc017673ca53fb",
+      "width": 390,
+      "x": 908,
+      "y": 24600
+    },
+    {
+      "height": 2223,
+      "id": "810311bb2e7843339330c93438ac21b2",
+      "sourceScreen": "projects/7326153259200245460/screens/810311bb2e7843339330c93438ac21b2",
+      "width": 390,
+      "x": 454,
+      "y": 11057
+    },
+    {
+      "height": 1408,
+      "id": "838ea7996bb94af984e9ab5bc4f0b440",
+      "sourceScreen": "projects/7326153259200245460/screens/838ea7996bb94af984e9ab5bc4f0b440",
+      "width": 390,
+      "x": 454,
+      "y": 18428
+    },
+    {
+      "height": 3156,
+      "id": "8586acb54a57409bbbda0819aaeba8f7",
+      "sourceScreen": "projects/7326153259200245460/screens/8586acb54a57409bbbda0819aaeba8f7",
+      "width": 390,
+      "x": 8066
+    },
+    {
+      "height": 884,
+      "id": "888cd65cc9dd41c8b394d30c2b5fca5a",
+      "sourceScreen": "projects/7326153259200245460/screens/888cd65cc9dd41c8b394d30c2b5fca5a",
+      "width": 390,
+      "x": 1024
+    },
+    {
+      "height": 1073,
+      "id": "89dbaf2918e64ae8be9108fa41a0b4d9",
+      "sourceScreen": "projects/7326153259200245460/screens/89dbaf2918e64ae8be9108fa41a0b4d9",
+      "width": 390,
+      "x": 908,
+      "y": 8435
+    },
+    {
+      "height": 1959,
+      "id": "8d0f3fb1cb804b5da0d6dfff25a81f10",
+      "sourceScreen": "projects/7326153259200245460/screens/8d0f3fb1cb804b5da0d6dfff25a81f10",
+      "width": 390,
+      "x": 454,
+      "y": 24600
+    },
+    {
+      "height": 1913,
+      "id": "97375e3d8bfe4012b2de4749ba77a8f0",
+      "sourceScreen": "projects/7326153259200245460/screens/97375e3d8bfe4012b2de4749ba77a8f0",
+      "width": 390,
+      "x": 5226
+    },
+    {
+      "height": 1382,
+      "id": "98ebfe1a27c54cd79484a9d378369850",
+      "sourceScreen": "projects/7326153259200245460/screens/98ebfe1a27c54cd79484a9d378369850",
+      "width": 390,
+      "x": 454,
+      "y": 15879
+    },
+    {
+      "height": 4188,
+      "id": "9e0172362be14532910680dbb92fbb58",
+      "sourceScreen": "projects/7326153259200245460/screens/9e0172362be14532910680dbb92fbb58",
+      "width": 390,
+      "x": 1362,
+      "y": 24600
+    },
+    {
+      "height": 942,
+      "id": "9fa9eff0a3554ddfb80da42092698db1",
+      "sourceScreen": "projects/7326153259200245460/screens/9fa9eff0a3554ddfb80da42092698db1",
+      "width": 390,
+      "x": 2386
+    },
+    {
+      "height": 1472,
+      "id": "a76011db810d496bb0971c526d6b1123",
+      "sourceScreen": "projects/7326153259200245460/screens/a76011db810d496bb0971c526d6b1123",
+      "width": 390,
+      "x": 908,
+      "y": 13536
+    },
+    {
+      "height": 1170,
+      "id": "a90d364a414e4c33b930470599e07f32",
+      "sourceScreen": "projects/7326153259200245460/screens/a90d364a414e4c33b930470599e07f32",
+      "width": 390,
+      "x": 1362,
+      "y": 15879
+    },
+    {
+      "height": 3280,
+      "id": "ad82947835694961a67c252aafbe7972",
+      "sourceScreen": "projects/7326153259200245460/screens/ad82947835694961a67c252aafbe7972",
+      "width": 390,
+      "x": 454,
+      "y": 21064
+    },
+    {
+      "height": 540,
+      "id": "assets_0a61b98e2ee7400dae117a17bd41f419",
+      "sourceAsset": "assets/0a61b98e2ee7400dae117a17bd41f419",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "x": 3294
+    },
+    {
+      "height": 540,
+      "id": "assets_271b013a2be8490b9a15186d514425fa",
+      "sourceAsset": "assets/271b013a2be8490b9a15186d514425fa",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960,
+      "x": 6134
+    },
+    {
+      "height": 540,
+      "id": "assets_7002b6d41c764171a16905f1451df9cc",
+      "sourceAsset": "assets/7002b6d41c764171a16905f1451df9cc",
+      "type": "DESIGN_SYSTEM_INSTANCE",
+      "width": 960
+    },
+    {
+      "height": 1660,
+      "id": "b42af0ad7eba489d889d836c76e5b321",
+      "sourceScreen": "projects/7326153259200245460/screens/b42af0ad7eba489d889d836c76e5b321",
+      "width": 390,
+      "y": 6037
+    },
+    {
+      "height": 1584,
+      "id": "c4e5f5c1e3fd4ba38068f3bc8c4abdff",
+      "sourceScreen": "projects/7326153259200245460/screens/c4e5f5c1e3fd4ba38068f3bc8c4abdff",
+      "width": 390,
+      "x": 908,
+      "y": 18428
+    },
+    {
+      "height": 985,
+      "id": "c72a96495bea4759b76b687d274abea7",
+      "sourceScreen": "projects/7326153259200245460/screens/c72a96495bea4759b76b687d274abea7",
+      "width": 390,
+      "x": 454,
+      "y": 3420
+    },
+    {
+      "height": 884,
+      "id": "cb9cdf600e704bdaac9f94bf3235edab",
+      "sourceScreen": "projects/7326153259200245460/screens/cb9cdf600e704bdaac9f94bf3235edab",
+      "width": 390,
+      "x": 4318
+    },
+    {
+      "height": 1794,
+      "id": "cc600fb0a89444b885841f0369485167",
+      "sourceScreen": "projects/7326153259200245460/screens/cc600fb0a89444b885841f0369485167",
+      "width": 390,
+      "x": 1362,
+      "y": 13536
+    },
+    {
+      "height": 2848,
+      "id": "cdb45889de654b70b15158470dd59e70",
+      "sourceScreen": "projects/7326153259200245460/screens/cdb45889de654b70b15158470dd59e70",
+      "width": 390,
+      "y": 21064
+    },
+    {
+      "height": 1437,
+      "id": "d0b84acc3eff460e922fc0f6944d2f9b",
+      "sourceScreen": "projects/7326153259200245460/screens/d0b84acc3eff460e922fc0f6944d2f9b",
+      "width": 390,
+      "x": 1362,
+      "y": 6037
+    },
+    {
+      "height": 1230,
+      "id": "dd3d3e16e7b0490e9a23689a8a84d0fe",
+      "sourceScreen": "projects/7326153259200245460/screens/dd3d3e16e7b0490e9a23689a8a84d0fe",
+      "width": 390,
+      "y": 13536
+    },
+    {
+      "height": 2199,
+      "id": "de9a2846835b4aa18ca8e438e5959117",
+      "sourceScreen": "projects/7326153259200245460/screens/de9a2846835b4aa18ca8e438e5959117",
+      "width": 390,
+      "y": 24600
+    },
+    {
+      "height": 2293,
+      "id": "e186dc41eaac465aabcf5a40605f126b",
+      "sourceScreen": "projects/7326153259200245460/screens/e186dc41eaac465aabcf5a40605f126b",
+      "width": 390,
+      "y": 15879
+    },
+    {
+      "height": 1076,
+      "id": "e89f9c0a78fd47cdbab0595eea8f8493",
+      "sourceScreen": "projects/7326153259200245460/screens/e89f9c0a78fd47cdbab0595eea8f8493",
+      "width": 390,
+      "x": 1362,
+      "y": 8435
+    },
+    {
+      "height": 4376,
+      "id": "ec8854036995441eb0636eff64620fe7",
+      "sourceScreen": "projects/7326153259200245460/screens/ec8854036995441eb0636eff64620fe7",
+      "width": 390,
+      "x": 454,
+      "y": 24600
+    },
+    {
+      "height": 2179,
+      "id": "ee7cfde43f1d4033b5938e4b5720a463",
+      "sourceScreen": "projects/7326153259200245460/screens/ee7cfde43f1d4033b5938e4b5720a463",
+      "width": 390,
+      "x": 1362,
+      "y": 24600
+    },
+    {
+      "height": 2380,
+      "id": "efe7b656a92a4e80aab6e4560148a87f",
+      "sourceScreen": "projects/7326153259200245460/screens/efe7b656a92a4e80aab6e4560148a87f",
+      "width": 390,
+      "y": 18428
+    },
+    {
+      "height": 2142,
+      "id": "f151404f1aae41a0a9d2329aead78db6",
+      "sourceScreen": "projects/7326153259200245460/screens/f151404f1aae41a0a9d2329aead78db6",
+      "width": 390,
+      "x": 454,
+      "y": 6037
+    },
+    {
+      "height": 1696,
+      "id": "f181e3cc6372425db3520c8b95b888d7",
+      "sourceScreen": "projects/7326153259200245460/screens/f181e3cc6372425db3520c8b95b888d7",
+      "width": 390,
+      "y": 1274
+    },
+    {
+      "height": 3042,
+      "id": "fc70f3a8c66d4c7abe0dda1d6e3823f5",
+      "sourceScreen": "projects/7326153259200245460/screens/fc70f3a8c66d4c7abe0dda1d6e3823f5",
+      "width": 390,
+      "x": 454,
+      "y": 29044
+    },
+    {
+      "height": 2087,
+      "id": "fe489ead94234627a846544e14ce1fbd",
+      "sourceScreen": "projects/7326153259200245460/screens/fe489ead94234627a846544e14ce1fbd",
+      "width": 390,
+      "x": 454,
+      "y": 13536
+    },
+    {
+      "height": 1496,
+      "id": "ff11af7478d94e678cac2eb7298f36e6",
+      "sourceScreen": "projects/7326153259200245460/screens/ff11af7478d94e678cac2eb7298f36e6",
+      "width": 390,
+      "x": 908,
+      "y": 15879
+    }
+  ],
+  "thumbnailScreenshot": {
+    "downloadUrl": "https://lh3.googleusercontent.com/aida/AP1WRLuBVtwK6zvhWBgweh5EXka9BeRInjDyQqdQph3TtwSB8RGmZer7hmhuGebjZQLOOS6gwHn7V6s8jrJ2PybcGp-ctwmxDwMY8kQ1FjnP7SdQWDvEokaaVh9utalbjSgHPc5FdcNUkc_uUljo9rOF8mk12oa2MOsdl2j_HIfa1sIOhEqIIMwNh1EOx_4Ik65D5OD5q5FjZ973hPhoB9TPBOp1-wFAeEZXRK7-lFtLBcqrS_i--GfRaozpHq4",
+    "name": "projects/7326153259200245460/screens/888cd65cc9dd41c8b394d30c2b5fca5a/fileEntries/screenshot"
+  },
+  "title": "FitOra Academy Management App",
+  "updateTime": "2026-07-15T15:42:45.695601Z",
+  "visibility": "PRIVATE"
+}

@@ -7,25 +7,26 @@ import {
 import {
   AuditAction,
   CourtApprovalStatus,
-  Prisma,
+  type Prisma,
+  TenantStatus,
   UserRole,
 } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.module';
-import { AuthUserPayload } from '../common/decorators/current-user.decorator';
-import { CacheService } from '../common/redis/cache.service';
-import { CACHE_KEYS, CACHE_TTL } from '../common/redis/cache.constants';
+import { type PrismaService } from '../prisma/prisma.module';
+import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { type CacheService } from '../common/redis/cache.service';
+import { CACHE_KEYS, CACHE_PREFIX, CACHE_TTL } from '../common/redis/cache.constants';
 import { optimizeImageUrl } from '../common/utils/cdn.util';
 import { hashQueryParams } from '../common/utils/cursor-pagination.util';
-import { TenantsService } from '../tenants/tenants.service';
+import { type TenantsService } from '../tenants/tenants.service';
 import { COURT_AMENITIES } from './constants/court.constants';
 import {
-  AddCourtImageDto,
-  CourtQueryDto,
-  CreateCourtDto,
-  RejectCourtDto,
-  ResubmitCourtDto,
-  UpdateCourtDto,
-  UpdateCourtImageDto,
+  type AddCourtImageDto,
+  type CourtQueryDto,
+  type CreateCourtDto,
+  type RejectCourtDto,
+  type ResubmitCourtDto,
+  type UpdateCourtDto,
+  type UpdateCourtImageDto,
 } from './dto';
 import {
   generateUniqueCourtSlug,
@@ -133,6 +134,7 @@ export class CourtsService {
       ...(!isAdmin && {
         approvalStatus: CourtApprovalStatus.APPROVED,
         isActive: true,
+        tenant: { status: TenantStatus.ACTIVE, isActive: true, deletedAt: null },
       }),
       ...(isAdmin && query.includeInactive === false && { isActive: true }),
     };
@@ -214,7 +216,10 @@ export class CourtsService {
   async findOne(id: string, user?: AuthUserPayload) {
     const court = await this.prisma.court.findFirst({
       where: { id, deletedAt: null },
-      include: COURT_INCLUDE,
+      include: {
+        ...COURT_INCLUDE,
+        tenant: { select: { id: true, status: true, isActive: true, deletedAt: true } },
+      },
     });
 
     if (!court) throw new NotFoundException('Court not found');
@@ -227,6 +232,16 @@ export class CourtsService {
     }
 
     if (!court.isActive && !isAdmin && !isOwner) {
+      throw new NotFoundException('Court not found');
+    }
+
+    if (
+      !isAdmin &&
+      !isOwner &&
+      (court.tenant.status !== TenantStatus.ACTIVE ||
+        !court.tenant.isActive ||
+        court.tenant.deletedAt)
+    ) {
       throw new NotFoundException('Court not found');
     }
 
@@ -316,6 +331,7 @@ export class CourtsService {
     });
 
     await this.logAudit(adminId, AuditAction.APPROVE, id, court, updated);
+    await this.cacheService.invalidatePattern(`${CACHE_PREFIX}courts:list:*`);
     return this.formatCourt(updated);
   }
 
@@ -336,6 +352,7 @@ export class CourtsService {
     });
 
     await this.logAudit(adminId, AuditAction.REJECT, id, court, updated);
+    await this.cacheService.invalidatePattern(`${CACHE_PREFIX}courts:list:*`);
     return this.formatCourt(updated);
   }
 
@@ -466,7 +483,8 @@ export class CourtsService {
       images: court.images.map((img) => ({
         ...img,
         url: optimizeImageUrl(img.url, { width: 800, quality: 80, format: 'webp' }) ?? img.url,
-        thumbnailUrl: optimizeImageUrl(img.url, { width: 400, quality: 75, format: 'webp' }) ?? img.url,
+        thumbnailUrl:
+          optimizeImageUrl(img.url, { width: 400, quality: 75, format: 'webp' }) ?? img.url,
       })),
     };
   }

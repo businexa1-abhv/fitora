@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Partner Registration - Business Profile</title>
+<!-- Fonts and Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lexend:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Shared Components Logic: Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#33302f",
+                    "on-error-container": "#93000a",
+                    "surface-tonal": "#F1F5F9",
+                    "primary-fixed-dim": "#ffb690",
+                    "inverse-primary": "#ffb690",
+                    "on-primary-fixed": "#341100",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "outline": "#8c7164",
+                    "surface-variant": "#e8e1df",
+                    "primary": "#9d4300",
+                    "surface-container-highest": "#e8e1df",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#e0c0b1",
+                    "on-secondary-container": "#00714e",
+                    "on-background": "#1d1b1a",
+                    "background": "#fff8f6",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f6efed",
+                    "on-primary-fixed-variant": "#783200",
+                    "surface-dim": "#dfd9d7",
+                    "on-secondary-fixed": "#002114",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-surface-variant": "#584237",
+                    "surface-container-low": "#f9f2f0",
+                    "tertiary": "#565e74",
+                    "on-tertiary-fixed": "#131b2e",
+                    "primary-container": "#f97316",
+                    "surface-tint": "#9d4300",
+                    "surface": "#fff8f6",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#005137",
+                    "brand-accent": "#FF6B35",
+                    "secondary-fixed": "#85f8c4",
+                    "surface-container-high": "#ede7e5",
+                    "surface-container": "#f3ecea",
+                    "primary-fixed": "#ffdbca",
+                    "danger-red": "#DC2626",
+                    "on-tertiary-container": "#2a3246",
+                    "secondary-fixed-dim": "#68dba9",
+                    "secondary": "#006c4a",
+                    "on-surface": "#1d1b1a",
+                    "tertiary-fixed": "#dae2fd",
+                    "tertiary-container": "#929ab2",
+                    "warning-amber": "#D97706",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#82f5c1",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "on-primary-container": "#582200"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "80px",
+                    "base": "4px",
+                    "margin-mobile": "20px",
+                    "gutter-mobile": "16px",
+                    "gutter-desktop": "24px",
+                    "section-gap": "120px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Lexend"],
+                    "body-md": ["Lexend"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-city {
+            border-color: #f97316;
+            background-color: #fff8f6;
+            box-shadow: 0 0 0 2px #f97316;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3ecea;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e0c0b1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8c7164;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopNavBar (Shell) -->
+<nav class="bg-surface border-b border-outline-variant/10 w-full top-0 sticky z-50">
+<div class="flex justify-between items-center h-20 px-margin-desktop max-w-7xl mx-auto">
+<span class="font-display-lg text-display-lg font-extrabold text-primary">FitOra Partner</span>
+<div class="flex items-center gap-6">
+<a class="font-body-md text-on-surface-variant hover:text-brand-accent transition-colors duration-200" href="#">Support</a>
+<button class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-bold hover:opacity-80 active:scale-95 transition-all">
+                    Partner Login
+                </button>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-margin-desktop py-12 flex gap-gutter-desktop">
+<!-- SideNavBar (Progress Sidebar) -->
+<aside class="w-72 sticky top-32 h-fit">
+<div class="bg-surface-container rounded-xl flex flex-col gap-4 p-6 shadow-sm">
+<div class="mb-4">
+<h2 class="font-headline-md text-headline-md text-primary">Partner Registration</h2>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Step 1 of 4</p>
+</div>
+<nav class="flex flex-col gap-2">
+<!-- Business Info (Active) -->
+<div class="bg-primary-container text-on-primary-container font-bold rounded-lg p-3 flex items-center gap-3 transition-transform active:scale-98">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">business</span>
+<span class="font-label-md text-label-md">Business Info</span>
+</div>
+<!-- Venue Details -->
+<div class="text-on-surface-variant p-3 flex items-center gap-3 hover:bg-surface-variant rounded-lg transition-colors cursor-not-allowed opacity-60">
+<span class="material-symbols-outlined">stadium</span>
+<span class="font-label-md text-label-md">Venue Details</span>
+</div>
+<!-- Operational Hours -->
+<div class="text-on-surface-variant p-3 flex items-center gap-3 hover:bg-surface-variant rounded-lg transition-colors cursor-not-allowed opacity-60">
+<span class="material-symbols-outlined">schedule</span>
+<span class="font-label-md text-label-md">Operational Hours</span>
+</div>
+<!-- Review -->
+<div class="text-on-surface-variant p-3 flex items-center gap-3 hover:bg-surface-variant rounded-lg transition-colors cursor-not-allowed opacity-60">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-label-md text-label-md">Review</span>
+</div>
+</nav>
+<!-- Help Card -->
+<div class="mt-8 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<p class="text-label-sm text-on-surface-variant leading-relaxed">Need help with registration? Our onboarding team is available 24/7.</p>
+<button class="mt-3 text-primary font-bold text-label-md flex items-center gap-1 hover:underline">
+                        Contact Support <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Form Content Canvas -->
+<section class="flex-1 max-w-3xl">
+<div class="bg-surface rounded-xl p-10 border border-outline-variant/10 shadow-sm">
+<header class="mb-10">
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-2">Business Profile</h1>
+<p class="text-body-lg text-on-surface-variant">Tell us about your sports facility and ownership details to get started.</p>
+</header>
+<form class="space-y-8" onsubmit="event.preventDefault();">
+<!-- Personal Info Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Owner Name</label>
+<input class="w-full h-12 px-4 rounded-lg bg-surface border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none text-body-md" placeholder="Enter full name" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Business Name</label>
+<input class="w-full h-12 px-4 rounded-lg bg-surface border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none text-body-md" placeholder="e.g. Smash Arena Bangalore" type="text"/>
+</div>
+</div>
+<!-- Contact Info Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2 relative">
+<label class="font-label-md text-label-md text-on-surface-variant">Mobile Number</label>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-on-surface-variant font-medium">+91</span>
+<input class="w-full h-12 pl-14 pr-20 rounded-lg bg-surface border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none text-body-md" placeholder="98765 43210" type="tel"/>
+<button class="absolute right-2 text-primary font-bold text-label-md px-2 py-1 hover:bg-primary-container/10 rounded transition-colors" type="button">
+                                    Get OTP
+                                </button>
+</div>
+<p class="text-label-sm text-on-surface-variant/70 mt-1">We'll send a 6-digit code for verification.</p>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Email Address</label>
+<input class="w-full h-12 px-4 rounded-lg bg-surface border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none text-body-md" placeholder="owner@business.com" type="email"/>
+</div>
+</div>
+<!-- City Selection Section -->
+<div class="flex flex-col gap-4">
+<label class="font-label-md text-label-md text-on-surface-variant">Select Your City</label>
+<div class="grid grid-cols-3 md:grid-cols-6 gap-3">
+<!-- City Item 1 -->
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all group active:scale-95" onclick="selectCity(this)" type="button">
+<div class="w-12 h-12 mb-2 overflow-hidden rounded-md">
+<img alt="City Icon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtf54e6PrEFIfR5PMGaCSSJh-kO5vXcRUKM6TdpNIX4MJc05GEUtIHHhGLVdGluvPJSpUAM-rlmf2fv4SG1gQsUaKLMQyhiMGupNd2C9HYU2_efRGyRsWsq3doLoW-8Jw4JLiCEpNt7ADMlWVrWhvL0vhXvma_1VRVcylL6OKZrRp9qOHUz0Amh2d94C_CG1VYuBHLGa28M5jQGUK2jh4lo39d0G_PN8EyFJSfNvhA7OYlj0MtEdlxdb1Q"/>
+</div>
+<span class="text-label-sm font-medium text-center">Mumbai</span>
+</button>
+<!-- City Item 2 -->
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all group active-city" onclick="selectCity(this)" type="button">
+<div class="w-12 h-12 mb-2 overflow-hidden rounded-md">
+<img alt="City Icon" class="w-full h-full object-cover grayscale opacity-50 group-[.active-city]:grayscale-0 group-[.active-city]:opacity-100" src="https://lh3.googleusercontent.com/aida/AP1WRLtf54e6PrEFIfR5PMGaCSSJh-kO5vXcRUKM6TdpNIX4MJc05GEUtIHHhGLVdGluvPJSpUAM-rlmf2fv4SG1gQsUaKLMQyhiMGupNd2C9HYU2_efRGyRsWsq3doLoW-8Jw4JLiCEpNt7ADMlWVrWhvL0vhXvma_1VRVcylL6OKZrRp9qOHUz0Amh2d94C_CG1VYuBHLGa28M5jQGUK2jh4lo39d0G_PN8EyFJSfNvhA7OYlj0MtEdlxdb1Q"/>
+</div>
+<span class="text-label-sm font-medium text-center">Delhi</span>
+</button>
+<!-- City Item 3 -->
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all group" onclick="selectCity(this)" type="button">
+<div class="w-12 h-12 mb-2 overflow-hidden rounded-md">
+<img alt="City Icon" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida/AP1WRLtf54e6PrEFIfR5PMGaCSSJh-kO5vXcRUKM6TdpNIX4MJc05GEUtIHHhGLVdGluvPJSpUAM-rlmf2fv4SG1gQsUaKLMQyhiMGupNd2C9HYU2_efRGyRsWsq3doLoW-8Jw4JLiCEpNt7ADMlWVrWhvL0vhXvma_1VRVcylL6OKZrRp9qOHUz0Amh2d94C_CG1VYuBHLGa28M5jQGUK2jh4lo39d0G_PN8EyFJSfNvhA7OYlj0MtEdlxdb1Q"/>
+</div>
+<span class="text-label-sm font-medium text-center">Bengaluru</span>
+</button>
+<!-- City Item 4 -->
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all group" onclick="selectCity(this)" type="button">
+<div class="w-12 h-12 mb-2 overflow-hidden rounded-md">
+<img alt="City Icon" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida/AP1WRLtf54e6PrEFIfR5PMGaCSSJh-kO5vXcRUKM6TdpNIX4MJc05GEUtIHHhGLVdGluvPJSpUAM-rlmf2fv4SG1gQsUaKLMQyhiMGupNd2C9HYU2_efRGyRsWsq3doLoW-8Jw4JLiCEpNt7ADMlWVrWhvL0vhXvma_1VRVcylL6OKZrRp9qOHUz0Amh2d94C_CG1VYuBHLGa28M5jQGUK2jh4lo39d0G_PN8EyFJSfNvhA7OYlj0MtEdlxdb1Q"/>
+</div>
+<span class="text-label-sm font-medium text-center">Hyderabad</span>
+</button>
+<!-- City Item 5 -->
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all group" onclick="selectCity(this)" type="button">
+<div class="w-12 h-12 mb-2 overflow-hidden rounded-md">
+<img alt="City Icon" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida/AP1WRLtf54e6PrEFIfR5PMGaCSSJh-kO5vXcRUKM6TdpNIX4MJc05GEUtIHHhGLVdGluvPJSpUAM-rlmf2fv4SG1gQsUaKLMQyhiMGupNd2C9HYU2_efRGyRsWsq3doLoW-8Jw4JLiCEpNt7ADMlWVrWhvL0vhXvma_1VRVcylL6OKZrRp9qOHUz0Amh2d94C_CG1VYuBHLGa28M5jQGUK2jh4lo39d0G_PN8EyFJSfNvhA7OYlj0MtEdlxdb1Q"/>
+</div>
+<span class="text-label-sm font-medium text-center">Chennai</span>
+</button>
+<!-- City Item 6 -->
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all group" onclick="selectCity(this)" type="button">
+<div class="w-12 h-12 mb-2 overflow-hidden rounded-md">
+<img alt="City Icon" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida/AP1WRLtf54e6PrEFIfR5PMGaCSSJh-kO5vXcRUKM6TdpNIX4MJc05GEUtIHHhGLVdGluvPJSpUAM-rlmf2fv4SG1gQsUaKLMQyhiMGupNd2C9HYU2_efRGyRsWsq3doLoW-8Jw4JLiCEpNt7ADMlWVrWhvL0vhXvma_1VRVcylL6OKZrRp9qOHUz0Amh2d94C_CG1VYuBHLGa28M5jQGUK2jh4lo39d0G_PN8EyFJSfNvhA7OYlj0MtEdlxdb1Q"/>
+</div>
+<span class="text-label-sm font-medium text-center">Kolkata</span>
+</button>
+</div>
+</div>
+<!-- Address Section -->
+<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Venue Address</label>
+<textarea class="w-full p-4 rounded-lg bg-surface border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none text-body-md resize-none" placeholder="Shop/Plot Number, Street Name, Landmark" rows="3"></textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">State</label>
+<select class="w-full h-12 px-4 rounded-lg bg-surface border border-outline-variant focus:border-primary-container outline-none text-body-md appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238c7164%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_1rem_center] bg-no-repeat">
+<option value="">Select State</option>
+<option value="karnataka">Karnataka</option>
+<option value="maharashtra">Maharashtra</option>
+<option value="delhi">Delhi</option>
+<option value="telangana">Telangana</option>
+<option value="tamilnadu">Tamil Nadu</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">PIN Code</label>
+<input class="w-full h-12 px-4 rounded-lg bg-surface border border-outline-variant focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none text-body-md" maxlength="6" placeholder="560001" type="text"/>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-10 flex justify-end items-center gap-4">
+<button class="px-8 h-14 rounded-lg font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors" type="button">
+                            Save Draft
+                        </button>
+<button class="bg-primary-container text-on-primary-container px-12 h-14 rounded-lg font-bold shadow-lg shadow-primary-container/20 hover:opacity-90 active:scale-95 transition-all" type="submit">
+                            Continue to Step 2
+                        </button>
+</div>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer (Shell) -->
+<footer class="bg-surface-container-low border-t border-outline-variant/20 w-full py-section-gap mt-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop px-margin-desktop max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-2">
+<span class="font-display-lg text-display-lg font-extrabold text-primary block mb-4">FitOra Partner</span>
+<p class="text-body-md text-on-surface-variant max-w-sm">Empowering sports venue owners with smart management tools for the next generation of athletic excellence.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-primary">Company</h4>
+<div class="flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">About</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Support</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Legal</a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-primary">Resources</h4>
+<div class="flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-brand-accent transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-margin-desktop mt-12 pt-8 border-t border-outline-variant/10 text-center">
+<p class="text-label-md text-on-surface-variant">© 2024 FitOra Partner. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        function selectCity(element) {
+            // Remove active class from all city buttons
+            const buttons = document.querySelectorAll('.grid button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active-city');
+                const img = btn.querySelector('img');
+                if (img) {
+                    img.classList.add('grayscale', 'opacity-50');
+                    img.classList.remove('grayscale-0', 'opacity-100');
+                }
+            });
+
+            // Add active class to clicked button
+            element.classList.add('active-city');
+            const activeImg = element.querySelector('img');
+            if (activeImg) {
+                activeImg.classList.remove('grayscale', 'opacity-50');
+                activeImg.classList.add('grayscale-0', 'opacity-100');
+            }
+        }
+
+        // OTP Timer micro-interaction
+        const otpBtn = document.querySelector('button:contains("Get OTP")');
+        if (otpBtn) {
+            otpBtn.addEventListener('click', function() {
+                let seconds = 30;
+                this.disabled = true;
+                this.classList.add('opacity-50', 'cursor-not-allowed');
+                
+                const interval = setInterval(() => {
+                    seconds--;
+                    this.textContent = `Resend in ${seconds}s`;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        this.textContent = 'Resend OTP';
+                        this.disabled = false;
+                        this.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }, 1000);
+            });
+        }
+
+        // Polyfill for :contains selector if needed for the script above
+        window.addEventListener('DOMContentLoaded', () => {
+             // Custom selection logic for the OTP button since :contains isn't standard CSS
+             const buttons = Array.from(document.querySelectorAll('button'));
+             const otpButton = buttons.find(btn => btn.innerText === 'Get OTP');
+             if (otpButton) {
+                otpButton.addEventListener('click', function() {
+                    let seconds = 30;
+                    this.disabled = true;
+                    this.classList.add('opacity-50', 'cursor-not-allowed');
+                    const interval = setInterval(() => {
+                        seconds--;
+                        this.textContent = `Retry ${seconds}s`;
+                        if (seconds <= 0) {
+                            clearInterval(interval);
+                            this.textContent = 'Resend OTP';
+                            this.disabled = false;
+                            this.classList.remove('opacity-50', 'cursor-not-allowed');
+                        }
+                    }, 1000);
+                });
+             }
+        });
+    </script>
+</body></html>
