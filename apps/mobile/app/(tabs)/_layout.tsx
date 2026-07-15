@@ -40,35 +40,36 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="home" focused={focused} color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="home" focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
-          title: 'Search',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="search" focused={focused} color={color} />,
+          title: 'Courts',
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="search" focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="training"
+        name="bookings"
         options={{
-          title: 'Training',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="school" focused={focused} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="store"
-        options={{
-          title: 'Store',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="bag-handle" focused={focused} color={color} />,
+          title: 'Bookings',
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="calendar" focused={focused} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="person" focused={focused} color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon name="person" focused={focused} color={color} />
+          ),
         }}
       />
     </Tabs>

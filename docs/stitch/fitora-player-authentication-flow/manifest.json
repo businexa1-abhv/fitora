@@ -1,0 +1,112 @@
+{
+  "project": {
+    "title": "FitOra Player Authentication Flow",
+    "id": "5652553660313852668"
+  },
+  "screens": [
+    {
+      "title": "Refined Sports Selection Screen",
+      "id": "56cd3ebb09b74f7eb09fcd142a437251",
+      "html": "refined-sports-selection-screen.html",
+      "screenshot": "refined-sports-selection-screen.png"
+    },
+    {
+      "title": "Refined Welcome Screen",
+      "id": "5f072521ed67496b910fcf855b5754a3",
+      "html": "refined-welcome-screen.html",
+      "screenshot": "refined-welcome-screen.png"
+    },
+    {
+      "title": "Refined Profile Setup Screen",
+      "id": "559f420e52ed4ea6be5576c513edf46c",
+      "html": "refined-profile-setup-screen.html",
+      "screenshot": "refined-profile-setup-screen.png"
+    },
+    {
+      "title": "Refined Mobile Number Screen",
+      "id": "571f61c473114fa48ccdc4d3c9a058e5",
+      "html": "refined-mobile-number-screen.html",
+      "screenshot": "refined-mobile-number-screen.png"
+    },
+    {
+      "title": "Refined Splash Screen",
+      "id": "5f26546a1ede413f89b134c9bacaac83",
+      "html": "refined-splash-screen.html",
+      "screenshot": "refined-splash-screen.png"
+    },
+    {
+      "title": "Refined Notification Permissions Screen",
+      "id": "7cdea5e174f04f388b81a208956eae2d",
+      "html": "refined-notification-permissions-screen.html",
+      "screenshot": "refined-notification-permissions-screen.png"
+    },
+    {
+      "title": "Indian City Line Art Icons",
+      "id": "cd307c0f6a74472f8d0aaa907b995bb4",
+      "html": null,
+      "screenshot": "indian-city-line-art-icons.png"
+    },
+    {
+      "title": "City Selection",
+      "id": "ee0513a822a5474b8e772ee2e6e1d1d9",
+      "html": "city-selection.html",
+      "screenshot": "city-selection.png"
+    },
+    {
+      "title": "Shader",
+      "id": "e2a495b0dadd498880ff226edd3db599",
+      "html": "shader.html",
+      "screenshot": null
+    },
+    {
+      "title": "A high-quality, professional close-up photograph of a modern tennis racket and a neon green tennis ball resting on a high-end blue hard court. Clean, minimalist composition, dramatic sunlight shadows, premium sports feel. No text.",
+      "id": "3c10102c55a641bc9ff3a4bef76dfe5f",
+      "html": null,
+      "screenshot": "tennis-racket-ball-court.jpg"
+    },
+    {
+      "title": "A premium, high-resolution lifestyle photograph for a sports app. A group of diverse young adults in stylish athletic gear laughing and walking onto a modern outdoor multi-sport court (tennis, basketball). The lighting is warm golden hour. Shallow depth of field, professional photography, energetic and inclusive vibe. No text.",
+      "id": "c79227211e994ec19617ba7a153b0b79",
+      "html": null,
+      "screenshot": "sports-lifestyle-court.jpg"
+    },
+    {
+      "title": "Design System",
+      "id": "assets_558877cddea6496cb9fbf8c2b6ca468e",
+      "html": null,
+      "screenshot": null,
+      "sourceAsset": "assets/558877cddea6496cb9fbf8c2b6ca468e",
+      "type": "DESIGN_SYSTEM_INSTANCE"
+    },
+    {
+      "title": "FitOra Home - Courts",
+      "id": "99254b600f144885973adede67f7bf17",
+      "html": "fitora-home-courts.html",
+      "screenshot": "fitora-home-courts.png"
+    },
+    {
+      "title": "Court Details",
+      "id": "0c200226ba634a56975fe3356d33df3f",
+      "html": "court-details.html",
+      "screenshot": "court-details.png"
+    },
+    {
+      "title": "Book a Court",
+      "id": "498f883896754bdd9c99a010a0be1cad",
+      "html": "book-a-court.html",
+      "screenshot": "book-a-court.png"
+    },
+    {
+      "title": "Booking Success",
+      "id": "cfa2bd779f4a4b6d8cb7e45529f8fefc",
+      "html": "booking-success.html",
+      "screenshot": "booking-success.png"
+    },
+    {
+      "title": "My Bookings",
+      "id": "c24dac9b44bb4d8f94e099e3a83dea23",
+      "html": "my-bookings.html",
+      "screenshot": "my-bookings.png"
+    }
+  ]
+}

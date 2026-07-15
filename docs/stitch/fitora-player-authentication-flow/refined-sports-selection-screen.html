@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Select Your Sports</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Include Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#006e2f",
+                    "on-surface": "#251913",
+                    "surface-container-high": "#fce3d9",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e0c0b1",
+                    "tertiary": "#006398",
+                    "on-secondary-fixed-variant": "#005321",
+                    "inverse-on-surface": "#ffede6",
+                    "tertiary-fixed": "#cde5ff",
+                    "surface-container": "#ffeae0",
+                    "primary-fixed-dim": "#ffb690",
+                    "surface-dim": "#edd5cb",
+                    "secondary-fixed-dim": "#4ae176",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#6bff8f",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#584237",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#ffdbca",
+                    "tertiary-container": "#00a2f4",
+                    "surface-bright": "#fff8f6",
+                    "primary-container": "#f97316",
+                    "secondary-container": "#6bff8f",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#002109",
+                    "on-background": "#251913",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#582200",
+                    "outline": "#8c7164",
+                    "surface": "#fff8f6",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#004b74",
+                    "on-secondary-container": "#007432",
+                    "on-primary-fixed": "#341100",
+                    "on-tertiary-fixed": "#001d32",
+                    "tertiary-fixed-dim": "#93ccff",
+                    "surface-container-highest": "#f6ded3",
+                    "on-tertiary-container": "#003554",
+                    "on-primary-fixed-variant": "#783200",
+                    "surface-tint": "#9d4300",
+                    "surface-container-low": "#fff1eb",
+                    "background": "#fff8f6",
+                    "surface-variant": "#f6ded3",
+                    "inverse-surface": "#3c2d26",
+                    "inverse-primary": "#ffb690",
+                    "primary": "#9d4300"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "section-gap": "48px",
+                    "stack-sm": "8px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Lexend"],
+                    "headline-md": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "title-lg": ["Lexend"],
+                    "headline-lg-mobile": ["Lexend"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sport-card-selected {
+            border: 3px solid #9d4300 !important;
+            background-color: #ffeae0 !important;
+            transform: scale(0.98);
+        }
+        .sport-card-selected .check-overlay {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stagger-item {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="w-full sticky top-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-between px-margin-mobile h-16 max-w-7xl mx-auto border-b border-surface-variant/20">
+<button class="text-primary hover:opacity-80 transition-opacity active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">FitOra</span>
+<div class="w-6"></div>
+</header>
+<main class="flex-grow max-w-7xl mx-auto w-full px-margin-mobile pt-stack-sm pb-32 overflow-y-auto hide-scrollbar">
+<!-- Progress Indicator -->
+<div class="mb-stack-lg">
+<div class="flex justify-between items-center mb-unit">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Onboarding</span>
+<span class="font-label-md text-label-md text-primary font-bold">Step 2 of 3</span>
+</div>
+<div class="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-700 ease-in-out" style="width: 66.6%;"></div>
+</div>
+</div>
+<!-- Headline -->
+<div class="mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">What do you love to play?</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Select your favorite sports to personalize your activity feed.</p>
+</div>
+<!-- Sports Grid -->
+<div class="grid grid-cols-2 gap-4" id="sportsGrid">
+<!-- Badminton -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.1s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 0% 0%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Badminton</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Cricket -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.15s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 33.33% 0%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Cricket</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Football -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.2s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 66.66% 0%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Football</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Tennis -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.25s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 100% 0%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Tennis</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Swimming -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.3s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 0% 50%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Swimming</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Basketball -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.35s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 66.66% 50%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Basketball</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Volleyball -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.4s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 100% 50%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Volleyball</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Running -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.45s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 33.33% 100%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Running</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Cycling -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.5s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 66.66% 100%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Cycling</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+<!-- Yoga -->
+<button class="stagger-item group relative flex flex-col items-center p-4 bg-surface-container-lowest border border-outline-variant rounded-2xl transition-all duration-300 hover:shadow-md active:scale-95" onclick="toggleSelection(this)" style="animation-delay: 0.55s">
+<div class="w-full aspect-square rounded-xl mb-3 overflow-hidden bg-surface-variant/10 flex items-center justify-center">
+<div class="w-24 h-24 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtiAjR4KzpvhNXKTCTO33NdtcBMIFXEm-R7GF5iGt-gsnNh-adEW4K4QKcmLYp_hAS16HKRxc0pX2YdTzs_S_gGQ41EAygYfi7OZl1JZ10Hqln09SMWuuVmhuGAn35Q1Yw2FzS-x-yT2gzJO4MQOebPkpHSoDDgeD3i6aQ42__HlkQwFA20OBgAQefB_0EIso4-_rWVyZaBF2MArRBGinKcqyzAe2vupkjJ9fIYueSz2AsJ0Gq-Rob4Hf8'); background-position: 100% 100%; background-size: 400% 300%;"></div>
+</div>
+<span class="font-lexend font-semibold text-on-surface text-base">Yoga</span>
+<div class="check-overlay opacity-0 scale-50 absolute top-3 right-3 bg-primary text-on-primary rounded-full p-1 transition-all duration-300 shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</button>
+</div>
+</main>
+<!-- Fixed Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full bg-background/90 backdrop-blur-md p-margin-mobile flex justify-center z-50 border-t border-surface-variant/20">
+<button class="w-full max-w-md bg-primary-container text-on-primary-container font-lexend text-label-lg h-14 rounded-full shadow-lg hover:brightness-105 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all flex items-center justify-center uppercase tracking-widest font-bold" disabled="" id="continueBtn">
+            Continue
+        </button>
+</footer>
+<script>
+        let selectedCount = 0;
+        const continueBtn = document.getElementById('continueBtn');
+
+        function toggleSelection(el) {
+            const isSelected = el.classList.contains('sport-card-selected');
+
+            if (isSelected) {
+                el.classList.remove('sport-card-selected');
+                selectedCount--;
+            } else {
+                el.classList.add('sport-card-selected');
+                selectedCount++;
+            }
+
+            updateButtonState();
+
+            // Haptic feedback simulation
+            el.classList.add('scale-90');
+            setTimeout(() => el.classList.remove('scale-90'), 100);
+        }
+
+        function updateButtonState() {
+            if (selectedCount > 0) {
+                continueBtn.disabled = false;
+                continueBtn.classList.remove('opacity-50', 'grayscale');
+            } else {
+                continueBtn.disabled = true;
+                continueBtn.classList.add('opacity-50', 'grayscale');
+            }
+        }
+    </script>
+</body></html>

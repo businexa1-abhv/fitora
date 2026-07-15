@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Complete Your Profile</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Lexend & Inter Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#006e2f",
+                      "on-surface": "#251913",
+                      "surface-container-high": "#fce3d9",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#e0c0b1",
+                      "tertiary": "#006398",
+                      "on-secondary-fixed-variant": "#005321",
+                      "inverse-on-surface": "#ffede6",
+                      "tertiary-fixed": "#cde5ff",
+                      "surface-container": "#ffeae0",
+                      "primary-fixed-dim": "#ffb690",
+                      "surface-dim": "#edd5cb",
+                      "secondary-fixed-dim": "#4ae176",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed": "#6bff8f",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#584237",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#ffdbca",
+                      "tertiary-container": "#00a2f4",
+                      "surface-bright": "#fff8f6",
+                      "primary-container": "#f97316",
+                      "secondary-container": "#6bff8f",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#002109",
+                      "on-background": "#251913",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#582200",
+                      "outline": "#8c7164",
+                      "surface": "#fff8f6",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#004b74",
+                      "on-secondary-container": "#007432",
+                      "on-primary-fixed": "#341100",
+                      "on-tertiary-fixed": "#001d32",
+                      "tertiary-fixed-dim": "#93ccff",
+                      "surface-container-highest": "#f6ded3",
+                      "on-tertiary-container": "#003554",
+                      "on-primary-fixed-variant": "#783200",
+                      "surface-tint": "#9d4300",
+                      "surface-container-low": "#fff1eb",
+                      "background": "#fff8f6",
+                      "surface-variant": "#f6ded3",
+                      "inverse-surface": "#3c2d26",
+                      "inverse-primary": "#ffb690",
+                      "primary": "#9d4300"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "stack-md": "16px",
+                      "margin-mobile": "16px",
+                      "gutter": "16px",
+                      "margin-desktop": "32px",
+                      "section-gap": "48px",
+                      "stack-sm": "8px",
+                      "stack-lg": "24px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Lexend"],
+                      "headline-md": ["Lexend"],
+                      "display-lg": ["Lexend"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Lexend"],
+                      "title-lg": ["Lexend"],
+                      "headline-lg-mobile": ["Lexend"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', sans-serif;
+            min-height: 100dvh;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Floating label logic */
+        .floating-label-group {
+            position: relative;
+        }
+        .floating-label-group input:focus ~ label,
+        .floating-label-group input:not(:placeholder-shown) ~ label {
+            top: -10px;
+            left: 8px;
+            font-size: 12px;
+            color: #9d4300;
+            background-color: #fff8f6;
+            padding: 0 4px;
+        }
+        .floating-label-group label {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            transition: all 0.2s ease-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- Energetic Background Gradient Overlay -->
+<div class="fixed inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 bg-background/80 backdrop-blur-md z-50 border-b border-outline-variant/30">
+<div class="flex items-center justify-between px-margin-mobile h-16 w-full max-w-7xl mx-auto">
+<button class="text-primary dark:text-inverse-primary p-2 -ml-2 hover:bg-primary/10 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-inverse-primary">FitOra</span>
+<div class="w-10"></div>
+</div>
+</header>
+<main class="max-w-md mx-auto px-margin-mobile pb-12 relative z-10">
+<!-- Multi-step Progress Indicator -->
+<div class="mt-stack-md flex flex-col items-center">
+<div class="w-full flex gap-1 h-1.5 px-1">
+<div class="flex-1 bg-primary rounded-full"></div>
+<div class="flex-1 bg-surface-container-highest rounded-full"></div>
+<div class="flex-1 bg-surface-container-highest rounded-full"></div>
+</div>
+<p class="mt-stack-sm font-label-md text-label-md text-primary font-bold">Step 1 of 3</p>
+</div>
+<!-- Headline -->
+<section class="mt-stack-lg text-center">
+<h1 class="font-headline-md text-on-surface">Complete your profile</h1>
+<p class="mt-unit font-body-md text-on-surface-variant">Build your identity in the global athletic community.</p>
+</section>
+<!-- Profile Photo Uploader -->
+<section class="mt-section-gap flex flex-col items-center">
+<div class="relative group cursor-pointer">
+<div class="w-36 h-36 rounded-full border-2 border-primary border-dashed flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-all shadow-inner overflow-hidden ring-offset-4 ring-2 ring-transparent group-hover:ring-primary/20">
+<span class="material-symbols-outlined text-primary text-5xl mb-1">add_a_photo</span>
+<span class="font-label-md text-label-md text-primary/70">Add Photo</span>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-white p-2.5 rounded-full shadow-xl border-4 border-background">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</div>
+</div>
+</section>
+<!-- Form Fields -->
+<form class="mt-section-gap space-y-stack-lg">
+<!-- Name Row -->
+<div class="grid grid-cols-2 gap-gutter">
+<div class="floating-label-group">
+<input class="w-full h-14 px-stack-md bg-transparent border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none placeholder-transparent" id="firstName" placeholder="First Name" type="text"/>
+<label class="font-label-lg text-on-surface-variant" for="firstName">First Name</label>
+</div>
+<div class="floating-label-group">
+<input class="w-full h-14 px-stack-md bg-transparent border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none placeholder-transparent" id="lastName" placeholder="Last Name" type="text"/>
+<label class="font-label-lg text-on-surface-variant" for="lastName">Last Name</label>
+</div>
+</div>
+<!-- Gender Segmented Picker -->
+<div class="space-y-stack-sm">
+<label class="font-label-lg text-label-lg text-on-surface-variant px-unit">Gender</label>
+<div class="flex p-1.5 bg-surface-container-low rounded-2xl border border-outline-variant/50">
+<button class="flex-1 py-2.5 rounded-xl font-label-lg text-on-surface bg-white shadow-sm transition-all" type="button">Male</button>
+<button class="flex-1 py-2.5 rounded-xl font-label-lg text-on-surface-variant hover:bg-surface-variant/30 transition-all" type="button">Female</button>
+<button class="flex-1 py-2.5 rounded-xl font-label-lg text-on-surface-variant hover:bg-surface-variant/30 transition-all" type="button">Other</button>
+</div>
+</div>
+<!-- Date of Birth -->
+<div class="floating-label-group">
+<input class="w-full h-14 px-stack-md bg-transparent border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" id="dob" type="date"/>
+<label class="font-label-lg text-on-surface-variant -top-2.5 left-2 text-xs bg-background px-1 text-primary" for="dob">Date of Birth</label>
+</div>
+<!-- City -->
+<div class="floating-label-group">
+<input class="w-full h-14 pl-12 pr-stack-md bg-transparent border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none placeholder-transparent" id="city" placeholder="City" type="text"/>
+<label class="font-label-lg text-on-surface-variant" for="city">City</label>
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">location_on</span>
+</div>
+<!-- High Quality Atmospheric Card -->
+<div class="mt-stack-lg relative rounded-3xl overflow-hidden h-44 shadow-lg group border border-outline-variant/20">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCSy71xpADqLzWuQ-5T09lNiD3wxfOs5sIt8WkerbtWgLwy4YExzV7uTMCHWSqwBcejuQQbv2Lt9b5JoESlq-iKEkwJNZbm-W06VBAZKgN11gFHmjOMFiX9o_oNF3RHtRZqraU-T2UlcO3IDRQcc6rZiK81j7qgo_9EgfjiJmwqWNV2xCiENkieQadZi-gtIRWxso6_hWLxMJkRtzByzX78xpuyZ93M_0AY-WtOTgRQqxLAQtyekYM8')"></div>
+<div class="absolute inset-0 z-20 flex flex-col justify-end p-6">
+<p class="text-white font-title-lg text-title-lg font-bold leading-tight uppercase tracking-tight">JOIN THE GLOBAL PERFORMANCE COMMUNITY</p>
+<p class="text-white/70 font-label-md text-xs mt-1">Connect with athletes worldwide</p>
+</div>
+</div>
+<!-- Continue Button -->
+<div class="pt-stack-lg">
+<button class="w-full h-14 bg-primary text-white rounded-full font-label-lg text-label-lg uppercase tracking-widest shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.97] transition-all flex items-center justify-center gap-3" type="submit">
+                    Continue
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</form>
+<div class="mt-stack-lg text-center px-4">
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                By continuing, you agree to our
+                <a class="text-primary font-bold underline decoration-primary/30 hover:decoration-primary inline-block min-h-[32px] px-1 py-1" href="#">Terms of Service</a>
+                and
+                <a class="text-primary font-bold underline decoration-primary/30 hover:decoration-primary inline-block min-h-[32px] px-1 py-1" href="#">Privacy Policy</a>.
+            </p>
+</div>
+</main>
+<script>
+        // Simple micro-interaction for gender picker
+        const genderButtons = document.querySelectorAll('.flex.p-1.5 button');
+        genderButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                genderButtons.forEach(b => {
+                    b.classList.remove('bg-white', 'shadow-sm', 'text-on-surface');
+                    b.classList.add('text-on-surface-variant');
+                });
+                btn.classList.add('bg-white', 'shadow-sm', 'text-on-surface');
+                btn.classList.remove('text-on-surface-variant');
+            });
+        });
+
+        // Form submission loading state
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="animate-spin material-symbols-outlined">sync</span> Processing...';
+            btn.classList.add('opacity-80', 'pointer-events-none');
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.classList.remove('opacity-80', 'pointer-events-none');
+            }, 1500);
+        });
+    </script>
+</body></html>

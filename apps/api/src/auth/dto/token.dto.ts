@@ -70,6 +70,12 @@ export class SessionAuthResponseDto {
 
   @ApiProperty({ type: AuthUserDto })
   user: AuthUserDto;
+
+  @ApiProperty({ example: false, description: 'True when OTP verification created a new player' })
+  isNewUser: boolean;
+
+  @ApiProperty({ example: false, description: 'True when the player should finish onboarding' })
+  requiresOnboarding: boolean;
 }
 
 export class PermissionsResponseDto {

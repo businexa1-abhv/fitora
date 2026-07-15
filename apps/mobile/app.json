@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#00b564"
+      "backgroundColor": "#ff6b00"
     },
     "ios": {
       "supportsTablet": true,
@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#00b564"
+        "backgroundColor": "#ff6b00"
       },
       "package": "com.fitora.app"
     },
@@ -29,7 +29,19 @@
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router", "expo-secure-store", "expo-notifications", "expo-font"],
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-notifications",
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "FitOra uses the camera to capture your player profile photo.",
+          "photosPermission": "FitOra uses your photos to set your player profile photo."
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }

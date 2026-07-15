@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Stay in the loop</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary": "#006e2f",
+                "on-surface": "#251913",
+                "surface-container-high": "#fce3d9",
+                "error": "#ba1a1a",
+                "outline-variant": "#e0c0b1",
+                "tertiary": "#006398",
+                "on-secondary-fixed-variant": "#005321",
+                "inverse-on-surface": "#ffede6",
+                "tertiary-fixed": "#cde5ff",
+                "surface-container": "#ffeae0",
+                "primary-fixed-dim": "#ffb690",
+                "surface-dim": "#edd5cb",
+                "secondary-fixed-dim": "#4ae176",
+                "on-primary": "#ffffff",
+                "secondary-fixed": "#6bff8f",
+                "on-error-container": "#93000a",
+                "on-surface-variant": "#584237",
+                "on-error": "#ffffff",
+                "primary-fixed": "#ffdbca",
+                "tertiary-container": "#00a2f4",
+                "surface-bright": "#fff8f6",
+                "primary-container": "#f97316",
+                "secondary-container": "#6bff8f",
+                "on-secondary": "#ffffff",
+                "on-secondary-fixed": "#002109",
+                "on-background": "#251913",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-container": "#582200",
+                "outline": "#8c7164",
+                "surface": "#fff8f6",
+                "error-container": "#ffdad6",
+                "on-tertiary": "#ffffff",
+                "on-tertiary-fixed-variant": "#004b74",
+                "on-secondary-container": "#007432",
+                "on-primary-fixed": "#341100",
+                "on-tertiary-fixed": "#001d32",
+                "tertiary-fixed-dim": "#93ccff",
+                "surface-container-highest": "#f6ded3",
+                "on-tertiary-container": "#003554",
+                "on-primary-fixed-variant": "#783200",
+                "surface-tint": "#9d4300",
+                "surface-container-low": "#fff1eb",
+                "background": "#fff8f6",
+                "surface-variant": "#f6ded3",
+                "inverse-surface": "#3c2d26",
+                "inverse-primary": "#ffb690",
+                "primary": "#9d4300"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "unit": "4px",
+                "stack-md": "16px",
+                "margin-mobile": "16px",
+                "gutter": "16px",
+                "margin-desktop": "32px",
+                "section-gap": "48px",
+                "stack-sm": "8px",
+                "stack-lg": "24px"
+            },
+            "fontFamily": {
+                "display-lg-mobile": ["Lexend"],
+                "headline-md": ["Lexend"],
+                "display-lg": ["Lexend"],
+                "label-md": ["Inter"],
+                "body-md": ["Inter"],
+                "label-lg": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-lg": ["Lexend"],
+                "title-lg": ["Lexend"],
+                "headline-lg-mobile": ["Lexend"]
+            },
+            "fontSize": {
+                "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .btn-press:active {
+            transform: scale(0.96);
+        }
+
+        .floating-notif {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .benefit-card {
+            transition: all 0.2s ease-out;
+        }
+
+        .benefit-card:active {
+            background-color: #fce3d9;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col items-center overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<header class="w-full sticky top-0 bg-background/80 backdrop-blur-md flex items-center justify-between px-margin-mobile h-16 z-50 border-b border-surface-container">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors active:scale-90">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<span class="font-headline-md text-primary font-bold">FitOra</span>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</header>
+<main class="w-full max-w-md flex flex-col px-margin-mobile flex-grow pt-unit pb-stack-lg">
+<!-- Step Indicator -->
+<div class="w-full flex flex-col gap-2 mb-stack-lg mt-4">
+<div class="flex justify-between items-end">
+<span class="text-label-md font-label-md text-on-surface-variant">STEP 3 OF 3</span>
+<span class="text-label-md font-label-md text-primary font-semibold">FINAL STEP</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full rounded-full transition-all duration-700 ease-out"></div>
+</div>
+</div>
+<!-- Illustration Section -->
+<section class="relative w-full aspect-square max-h-[280px] flex items-center justify-center mb-8">
+<div class="relative z-10 w-56 h-56 bg-surface-container-low rounded-full flex items-center justify-center shadow-inner border border-outline-variant/30">
+<!-- Abstract floating UI elements representing notifications -->
+<div class="absolute -top-2 -right-4 floating-notif" style="animation-delay: 0s;">
+<div class="bg-primary text-white p-3 rounded-2xl shadow-xl flex items-center gap-2 border border-white/20">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+<div class="h-2.5 w-16 bg-white/40 rounded-full"></div>
+</div>
+</div>
+<div class="absolute bottom-4 -left-6 floating-notif" style="animation-delay: 2s;">
+<div class="bg-secondary text-white p-3 rounded-2xl shadow-xl flex items-center gap-2 border border-white/20">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<div class="h-2.5 w-20 bg-white/40 rounded-full"></div>
+</div>
+</div>
+<div class="absolute top-1/2 -right-8 floating-notif" style="animation-delay: 4s;">
+<div class="bg-tertiary-container text-on-tertiary-container p-3 rounded-full shadow-lg border border-white/20">
+<span class="material-symbols-outlined">notifications_active</span>
+</div>
+</div>
+<!-- Main Central Icon -->
+<div class="flex flex-col items-center">
+<div class="relative">
+<span class="material-symbols-outlined text-primary text-7xl" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="absolute -top-1 -right-1 flex h-5 w-5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-5 w-5 bg-primary"></span>
+</span>
+</div>
+<div class="mt-4 flex gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary/20"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary/60"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+</div>
+</div>
+</div>
+<!-- Background Glow -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-primary/10 blur-[64px] rounded-full -z-10"></div>
+</section>
+<!-- Headline & Copy -->
+<section class="text-center mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-3">Stay in the loop</h1>
+<p class="text-body-md text-on-surface-variant px-2 leading-relaxed">
+                Enable notifications to receive real-time updates about your matches, bookings, and training sessions.
+            </p>
+</section>
+<!-- Benefits List -->
+<section class="flex flex-col gap-3 mb-10">
+<div class="benefit-card flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-outline-variant/20">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary font-bold">schedule</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-lg text-on-surface">Booking reminders</span>
+<span class="text-body-md text-on-surface-variant">Never miss a session you've booked</span>
+</div>
+</div>
+<div class="benefit-card flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-outline-variant/20">
+<div class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary font-bold">sports_soccer</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-lg text-on-surface">Game invitations</span>
+<span class="text-body-md text-on-surface-variant">Get notified when friends invite you</span>
+</div>
+</div>
+<div class="benefit-card flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-outline-variant/20">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container/10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-tertiary font-bold">emoji_events</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-lg text-on-surface">Tournament updates</span>
+<span class="text-body-md text-on-surface-variant">Brackets and results in real-time</span>
+</div>
+</div>
+</section>
+<!-- CTA Buttons -->
+<footer class="mt-auto flex flex-col gap-3 pb-6">
+<button class="btn-press w-full bg-primary text-on-primary font-label-lg text-label-lg py-5 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all hover:brightness-110 active:brightness-90">
+                Allow Notifications
+            </button>
+<button class="btn-press w-full py-4 text-on-surface-variant font-label-lg text-label-lg flex items-center justify-center hover:bg-surface-variant/20 rounded-full transition-all">
+                Skip for now
+            </button>
+</footer>
+</main>
+<!-- Visual Polish: Ambient Glows -->
+<div class="fixed top-1/4 -left-20 w-64 h-64 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="fixed bottom-1/4 -right-20 w-64 h-64 bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
+<script>
+        // Micro-interaction for allowing notifications
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            if (btn.textContent.trim() === 'Allow Notifications') {
+                btn.addEventListener('click', () => {
+                    btn.innerHTML = '<span class="material-symbols-outlined animate-spin mr-2">sync</span> Enabling...';
+                    btn.disabled = true;
+                    setTimeout(() => {
+                        btn.innerHTML = '<span class="material-symbols-outlined mr-2">check_circle</span> Enabled!';
+                        btn.classList.remove('bg-primary');
+                        btn.classList.add('bg-secondary');
+                    }, 1500);
+                });
+            }
+            if (btn.textContent.trim() === 'Skip for now') {
+                btn.addEventListener('click', () => {
+                    btn.style.opacity = '0.5';
+                    btn.innerText = 'Skipping...';
+                });
+            }
+        });
+    </script>
+</body></html>

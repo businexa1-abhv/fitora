@@ -35,16 +35,11 @@ export default function EnrollScreen() {
     mutationFn: async () => {
       if (!token || !user || !batchId) throw new Error('Sign in required');
       const { payment } = await enrollInBatch(token, batchId, form);
-      await completePayment(
-        token,
-        payment,
-        user.email,
-        `${user.firstName} ${user.lastName}`,
-      );
+      await completePayment(token, payment, user.email, `${user.firstName} ${user.lastName}`);
     },
     onSuccess: () => {
       Alert.alert('Enrolled', 'Training enrollment confirmed.', [
-        { text: 'OK', onPress: () => router.replace('/(tabs)/training') },
+        { text: 'OK', onPress: () => router.replace('/(tabs)/search') },
       ]);
     },
     onError: (err: Error) => Alert.alert('Enrollment failed', err.message),
@@ -67,7 +62,14 @@ export default function EnrollScreen() {
             <TextInput
               value={form[key] ?? ''}
               onChangeText={(v) => setForm((prev) => ({ ...prev, [key]: v }))}
-              style={[styles.input, { color: colors.foreground, borderColor: colors.border, backgroundColor: colors.card }]}
+              style={[
+                styles.input,
+                {
+                  color: colors.foreground,
+                  borderColor: colors.border,
+                  backgroundColor: colors.card,
+                },
+              ]}
               placeholderTextColor={colors.muted}
             />
           </View>

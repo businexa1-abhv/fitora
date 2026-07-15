@@ -1,0 +1,322 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Elite Smashers Academy - FitOra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab-indicator {
+            view-transition-name: active-tab;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a04100;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "deep-navy": "#171A26",
+                      "on-primary-fixed": "#351000",
+                      "secondary-container": "#d6e0f3",
+                      "background": "#f8f9fa",
+                      "on-tertiary-fixed-variant": "#00497b",
+                      "secondary": "#555f6f",
+                      "primary": "#a04100",
+                      "on-surface-variant": "#5a4136",
+                      "secondary-fixed": "#d9e3f6",
+                      "primary-fixed": "#ffdbcc",
+                      "surface-container-high": "#e7e8e9",
+                      "tertiary": "#0062a1",
+                      "surface-tint": "#a04100",
+                      "on-surface": "#191c1d",
+                      "surface": "#f8f9fa",
+                      "inverse-primary": "#ffb693",
+                      "on-background": "#191c1d",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-variant": "#e1e3e4",
+                      "outline-variant": "#e2bfb0",
+                      "surface-dim": "#d9dadb",
+                      "surface-container-low": "#f3f4f5",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#ff6b00",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#9ccaff",
+                      "surface-container": "#edeeef",
+                      "inverse-surface": "#2e3132",
+                      "vibrant-pink": "#FF3278",
+                      "on-tertiary": "#ffffff",
+                      "outline": "#8e7164",
+                      "on-secondary-fixed": "#121c2a",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#059eff",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-fixed": "#001d35",
+                      "on-secondary-fixed-variant": "#3d4756",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#596373",
+                      "on-primary-fixed-variant": "#7a3000",
+                      "tertiary-fixed": "#d0e4ff",
+                      "secondary-fixed-dim": "#bdc7d9",
+                      "primary-fixed-dim": "#ffb693",
+                      "on-primary-container": "#572000",
+                      "error-container": "#ffdad6",
+                      "electric-yellow": "#FFDB17",
+                      "on-tertiary-container": "#003357",
+                      "inverse-on-surface": "#f0f1f2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "base": "8px",
+                      "margin-desktop": "64px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "body-lg": ["Inter"],
+                      "display-lg-mobile": ["Plus Jakarta Sans"],
+                      "label-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["36px", {"lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&amp;display=swap" rel="stylesheet"></head>
+<body class="bg-surface text-on-surface font-body-md text-body-md overflow-x-hidden">
+<!-- Top App Bar (Suppressing shared nav logic for detail sub-page as per instructions) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 bg-surface/80 backdrop-blur-md shadow-sm">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container transition-colors" onclick="window.history.back()">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<span class="font-headline-md text-headline-md font-extrabold text-primary">FitOra</span>
+<div class="flex gap-2">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary">share</span>
+</button>
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary">favorite</span>
+</button>
+</div>
+</header>
+<main class="pb-32">
+<!-- Hero Gallery Section -->
+<section class="relative w-full h-[40vh] md:h-[60vh] overflow-hidden group">
+<div class="flex h-full w-full overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth" id="gallery-slider">
+<div class="min-w-full h-full snap-center bg-surface-container" data-alt="A wide-angle, high-performance photography shot of a pristine indoor multisport arena. The court features polished hardwood floors reflecting vibrant sports orange and deep charcoal accents. Elite smashers academy branding is visible on the sleek glass partitions. The lighting is crisp and professional, highlighting the athletic minimalism of the architecture." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCkhwphuiSbEg6BIgYyzd4am89WFjR9InCGoYHzdK8v-K8RcqdLIY5UCsd1nwQ558RrUxvlozNQLh80MpjXVcd90Z39polMotb3pOhPRBeXT7UudYWHnK0ww9BlrjLFg_wPXHTET6YhNQa1V13-vLSyF-SazIrcg00K_kUTTYqj44n3Q_oSPMkb94lo1IBtm9lCAPkVhzMho3xnqAorxbhC-fztKV90bmFr2OLay0ya8be3x7ZgFATV')"></div>
+<div class="min-w-full h-full snap-center bg-surface-container" data-alt="Close-up detail of a high-tension tennis net and perfectly lined blue and orange court surfaces. In the background, modern stadium seating is visible under bright, cinematic lighting. The atmosphere is energetic yet disciplined, characteristic of a premium athletic training environment. Soft ambient shadows provide depth to the structural elements." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD7tWiN5kcSN4qWxJHN3J4LqvWe6znu4J0pUclw1BINrfKyBnUzYsQhlrqXy7mCAFswbtN11AFEKkYzjvbAS_ebz6jlz8XI2pz8GltQMSgBTj8ESgkVBVEkuDEZonk8FEQ9Qg0KDLxBD6I6KHsGiN_NhrI2oM7noJlhj5-SFIndWAUs2lXKhU5uJ0nWsLc-X6YZa088bf2rZ5oqo-vlzKphhzuxitim1mf4KmDIoP2A2fRpaSYeD8n1')"></div>
+<div class="min-w-full h-full snap-center bg-surface-container" data-alt="An overhead cinematic shot of athletes training in a state-of-the-art sports complex. The layout is spacious with generous whitespace between courts. The color palette uses high-contrast oranges and white tones against a deep navy ceiling. The mood is peak performance, professional, and inspiring for a high-performance audience." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASYNTh3E3LpICqqNRNp3bse0nDlYKAwFtbbPIWJZYlsQ5QYLmkQy_uD_9aQgbUaH2uQiW5f63QxAeGvMg0dz3sBS87rfpcAQB9C6oBNVY_DXP5Sa1oXrczgZSlm5B2j7ju4laEdRBG-X86Pqh9a8PShfPW9WOv-YyAOeoemYyMFN-nyyrFRMm-iVu1B2kz6Ldxci_B4ZkxZf1ZRdJTRxHxy5oL7xtn6CHEg0uUQiuAiyaOTVBbBsft')"></div>
+</div>
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+<div class="w-2 h-2 rounded-full bg-white opacity-100 transition-all"></div>
+<div class="w-2 h-2 rounded-full bg-white opacity-40 transition-all"></div>
+<div class="w-2 h-2 rounded-full bg-white opacity-40 transition-all"></div>
+</div>
+<div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
+</section>
+<!-- Header Info & Stats -->
+<section class="px-margin-mobile md:px-margin-desktop mt-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Elite Smashers Academy</h1>
+<div class="flex items-center gap-4 mt-2">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-electric-yellow" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-lg text-label-lg font-bold">4.9</span>
+<span class="text-secondary font-label-md text-label-md">(124 Reviews)</span>
+</div>
+<div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-label-lg text-label-lg">1.2 km away</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md uppercase tracking-wider">Top Rated</span>
+<span class="px-4 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md uppercase tracking-wider">Premium</span>
+</div>
+</div>
+</section>
+<!-- Tabbed Navigation -->
+<section class="mt-10 sticky top-16 bg-surface z-40">
+<div class="px-margin-mobile md:px-margin-desktop border-b border-surface-container-high overflow-x-auto no-scrollbar">
+<div class="flex gap-8">
+<button class="py-4 font-label-lg text-label-lg text-primary border-b-2 border-primary whitespace-nowrap" onclick="switchTab(this, 'overview')">Overview</button>
+<button class="py-4 font-label-lg text-label-lg text-secondary hover:text-primary transition-colors whitespace-nowrap" onclick="switchTab(this, 'book')">Book</button>
+<button class="py-4 font-label-lg text-label-lg text-secondary hover:text-primary transition-colors whitespace-nowrap" onclick="switchTab(this, 'reviews')">Reviews</button>
+</div>
+</div>
+</section>
+<div class="px-margin-mobile md:px-margin-desktop mt-8 space-y-12 max-w-container-max mx-auto" id="tab-content">
+<!-- Overview Section -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter" id="overview">
+<!-- Bento Layout Details -->
+<div class="md:col-span-8 space-y-12">
+<section>
+<h3 class="font-headline-md text-headline-md mb-4">About Venue</h3>
+<p class="text-secondary leading-relaxed font-body-lg text-body-lg">
+                            Experience the pinnacle of racket sports at the Elite Smashers Academy. Our facility boasts six Olympic-standard badminton courts and four world-class tennis arenas. Designed for high-performance athletes, the academy features professional-grade floating timber floors, anti-glare high-bay LED lighting, and climate control ensuring peak training conditions 365 days a year. Whether you're a seasoned pro or an aspiring enthusiast, our venue provides the discipline and momentum needed for your next breakthrough.
+                        </p>
+</section>
+<section>
+<h3 class="font-headline-md text-headline-md mb-6">Amenities</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="flex flex-col items-center p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 hover:border-primary/50 transition-colors text-center group">
+<span class="material-symbols-outlined text-primary text-3xl mb-3 group-hover:scale-110 transition-transform">wifi</span>
+<span class="font-label-lg text-label-lg">High-Speed WiFi</span>
+</div>
+<div class="flex flex-col items-center p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 hover:border-primary/50 transition-colors text-center group">
+<span class="material-symbols-outlined text-primary text-3xl mb-3 group-hover:scale-110 transition-transform">local_parking</span>
+<span class="font-label-lg text-label-lg">Free Parking</span>
+</div>
+<div class="flex flex-col items-center p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 hover:border-primary/50 transition-colors text-center group">
+<span class="material-symbols-outlined text-primary text-3xl mb-3 group-hover:scale-110 transition-transform">shower</span>
+<span class="font-label-lg text-label-lg">Private Showers</span>
+</div>
+<div class="flex flex-col items-center p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 hover:border-primary/50 transition-colors text-center group">
+<span class="material-symbols-outlined text-primary text-3xl mb-3 group-hover:scale-110 transition-transform">ac_unit</span>
+<span class="font-label-lg text-label-lg">Full AC</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Sidebar Info -->
+<div class="md:col-span-4 space-y-6">
+<div class="p-8 rounded-2xl bg-surface-container-highest/50 border border-outline-variant shadow-sm">
+<h4 class="font-headline-md text-headline-md mb-6">Operating Hours</h4>
+<div class="space-y-4">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="font-label-lg text-label-lg">Monday - Friday</span>
+<span class="font-label-lg text-label-lg text-primary">6 AM - 11 PM</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="font-label-lg text-label-lg">Saturday</span>
+<span class="font-label-lg text-label-lg text-primary">7 AM - 10 PM</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-label-lg text-label-lg">Sunday</span>
+<span class="font-label-lg text-label-lg text-primary">8 AM - 8 PM</span>
+</div>
+</div>
+</div>
+<div class="rounded-2xl overflow-hidden h-48 bg-surface-container border border-outline-variant relative">
+<div class="absolute inset-0 bg-cover bg-center" data-location="Los Angeles" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3kL5jdki4E7wOT_JyZtHjX3Cvn1OO-pV-iXJv_uGozXZMkuQnMC4-FDme2THH0jlKupLwLgQd1UOUjT59T7rpbg_Pt9RIndXrNdDJsUTKUpdTDJiNeUprb0pW-hH_ih1mfvbotWAcdh6AmhOUtv3v66MfJR89oQed48v2c9w4uQoUmxImKr3TE8IT48ezZHUMLNDYwibgFlEXVogAnoL_isOGqtT8VCkOE26tJPUoCt8DKvlow-oO')"></div>
+<div class="absolute bottom-3 right-3">
+<button class="bg-surface p-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined">directions</span>
+<span class="font-label-md text-label-md pr-2">Get Directions</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Bottom CTA -->
+<nav class="fixed bottom-0 left-0 w-full bg-surface/95 backdrop-blur-xl border-t border-outline-variant/20 px-margin-mobile md:px-margin-desktop py-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+  <div class="max-w-container-max mx-auto flex justify-between items-center">
+    <a href="#" class="flex flex-col items-center gap-1 group">
+      <span class="material-symbols-outlined text-primary">home</span>
+      <span class="text-label-md font-medium text-primary" style="font-family: 'Lexend', sans-serif;">Home</span>
+      <div class="w-1 h-1 rounded-full bg-primary"></div>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 group">
+      <span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">calendar_today</span>
+      <span class="text-label-md font-medium text-secondary group-hover:text-primary transition-colors" style="font-family: 'Lexend', sans-serif;">Bookings</span>
+      <div class="w-1 h-1 rounded-full bg-transparent"></div>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 group">
+      <span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">card_membership</span>
+      <span class="text-label-md font-medium text-secondary group-hover:text-primary transition-colors" style="font-family: 'Lexend', sans-serif;">Membership</span>
+      <div class="w-1 h-1 rounded-full bg-transparent"></div>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 group">
+      <span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">fitness_center</span>
+      <span class="text-label-md font-medium text-secondary group-hover:text-primary transition-colors" style="font-family: 'Lexend', sans-serif;">Training</span>
+      <div class="w-1 h-1 rounded-full bg-transparent"></div>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 group">
+      <span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">person</span>
+      <span class="text-label-md font-medium text-secondary group-hover:text-primary transition-colors" style="font-family: 'Lexend', sans-serif;">Profile</span>
+      <div class="w-1 h-1 rounded-full bg-transparent"></div>
+    </a>
+  </div>
+</nav>
+<script>
+        function switchTab(element, tabId) {
+            // Update Tab Styling
+            const tabs = element.parentElement.children;
+            for (let tab of tabs) {
+                tab.classList.remove('text-primary', 'border-b-2', 'border-primary');
+                tab.classList.add('text-secondary');
+            }
+            element.classList.remove('text-secondary');
+            element.classList.add('text-primary', 'border-b-2', 'border-primary');
+
+            // Tab content visibility (simplified for demo)
+            console.log(`Switched to tab: ${tabId}`);
+        }
+
+        // Micro-interaction: Gallery dots update
+        const slider = document.getElementById('gallery-slider');
+        const dots = document.querySelectorAll('.absolute.bottom-4 .w-2');
+
+        slider.addEventListener('scroll', () => {
+            const scrollIndex = Math.round(slider.scrollLeft / slider.offsetWidth);
+            dots.forEach((dot, idx) => {
+                dot.style.opacity = idx === scrollIndex ? '1' : '0.4';
+                dot.style.width = idx === scrollIndex ? '1.5rem' : '0.5rem';
+            });
+        });
+
+        // Tonal depth effect on scroll for header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-md');
+                header.classList.replace('bg-surface/80', 'bg-surface/95');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.replace('bg-surface/95', 'bg-surface/80');
+            }
+        });
+    </script>
+
+
+
+</body></html>

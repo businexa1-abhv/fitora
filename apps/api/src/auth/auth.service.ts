@@ -226,6 +226,7 @@ export class AuthService {
     await this.otpService.verifyOtp(phone, dto.otp, OtpPurpose.LOGIN);
 
     let user = await this.otpService.findUserByPhone(phone);
+    const isNewUser = !user;
     if (!user) {
       const name = this.splitName(dto.name);
       user = await this.prisma.user.create({
@@ -254,14 +255,18 @@ export class AuthService {
 
     await this.auditService.logAuthEvent(AuditAction.LOGIN, user.id, meta);
 
-    return this.buildSessionAuthResponse(user, {
-      ...meta,
-      deviceId: dto.deviceId,
-      deviceName: dto.deviceName,
-      platform: dto.platform,
-      os: dto.os,
-      appVersion: dto.appVersion,
-    });
+    return this.buildSessionAuthResponse(
+      user,
+      {
+        ...meta,
+        deviceId: dto.deviceId,
+        deviceName: dto.deviceName,
+        platform: dto.platform,
+        os: dto.os,
+        appVersion: dto.appVersion,
+      },
+      isNewUser,
+    );
   }
 
   async sendOtp(dto: SendOtpDto): Promise<{ message: string; expiresIn: number }> {
@@ -350,6 +355,8 @@ export class AuthService {
       refreshToken: result.tokens.refreshToken,
       expiresIn: result.expiresIn,
       user: this.formatUser(result.user as UserWithRoles),
+      isNewUser: false,
+      requiresOnboarding: this.requiresPlayerOnboarding(result.user as UserWithRoles),
     };
   }
 
@@ -410,6 +417,7 @@ export class AuthService {
   private async buildSessionAuthResponse(
     user: UserWithRoles,
     meta?: AuthMeta,
+    isNewUser = false,
   ): Promise<SessionAuthResponseDto> {
     const response = await this.buildAuthResponse(user, meta);
 
@@ -418,6 +426,8 @@ export class AuthService {
       refreshToken: response.tokens.refreshToken,
       expiresIn: this.tokenService.getAccessTokenExpiresInSeconds(),
       user: response.user,
+      isNewUser,
+      requiresOnboarding: isNewUser || this.requiresPlayerOnboarding(user),
     };
   }
 
@@ -447,6 +457,13 @@ export class AuthService {
 
   private buildPhoneEmail(phone: string): string {
     return `phone.${phone.replace(/\D/g, '')}@fitora.local`;
+  }
+
+  private requiresPlayerOnboarding(user: UserWithRoles): boolean {
+    const isPlayer = user.roles.some((role) => role.role === UserRole.PLAYER);
+    if (!isPlayer || !user.phone) return false;
+
+    return user.email === this.buildPhoneEmail(user.phone);
   }
 
   private splitName(name?: string): { firstName: string; lastName: string } {

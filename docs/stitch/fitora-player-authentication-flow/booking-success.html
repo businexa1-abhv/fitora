@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Confirmed | FitOra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .success-checkmark-draw {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw 0.6s ease-out forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+        .confetti-canvas {
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "deep-navy": "#171A26",
+                      "on-primary-fixed": "#351000",
+                      "secondary-container": "#d6e0f3",
+                      "background": "#f8f9fa",
+                      "on-tertiary-fixed-variant": "#00497b",
+                      "secondary": "#555f6f",
+                      "primary": "#a04100",
+                      "on-surface-variant": "#5a4136",
+                      "secondary-fixed": "#d9e3f6",
+                      "primary-fixed": "#ffdbcc",
+                      "surface-container-high": "#e7e8e9",
+                      "tertiary": "#0062a1",
+                      "surface-tint": "#a04100",
+                      "on-surface": "#191c1d",
+                      "surface": "#f8f9fa",
+                      "inverse-primary": "#ffb693",
+                      "on-background": "#191c1d",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-variant": "#e1e3e4",
+                      "outline-variant": "#e2bfb0",
+                      "surface-dim": "#d9dadb",
+                      "surface-container-low": "#f3f4f5",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#ff6b00",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#9ccaff",
+                      "surface-container": "#edeeef",
+                      "inverse-surface": "#2e3132",
+                      "vibrant-pink": "#FF3278",
+                      "on-tertiary": "#ffffff",
+                      "outline": "#8e7164",
+                      "on-secondary-fixed": "#121c2a",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#059eff",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-fixed": "#001d35",
+                      "on-secondary-fixed-variant": "#3d4756",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#596373",
+                      "on-primary-fixed-variant": "#7a3000",
+                      "tertiary-fixed": "#d0e4ff",
+                      "secondary-fixed-dim": "#bdc7d9",
+                      "primary-fixed-dim": "#ffb693",
+                      "on-primary-container": "#572000",
+                      "error-container": "#ffdad6",
+                      "electric-yellow": "#FFDB17",
+                      "on-tertiary-container": "#003357",
+                      "inverse-on-surface": "#f0f1f2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "base": "8px",
+                      "margin-desktop": "64px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "body-lg": ["Inter"],
+                      "display-lg-mobile": ["Plus Jakarta Sans"],
+                      "label-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["36px", {"lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<canvas class="confetti-canvas" id="confetti"></canvas>
+<!-- Content Wrapper for Success Splash (Suppresses Global Nav) -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile py-12 md:px-margin-desktop md:py-24 relative z-20">
+<!-- Success Animation & Headline -->
+<div class="text-center space-y-6 max-w-lg mx-auto">
+<div class="relative inline-flex items-center justify-center">
+<div class="absolute inset-0 bg-primary-container/20 rounded-full animate-ping"></div>
+<div class="relative w-24 h-24 bg-primary-container rounded-full flex items-center justify-center shadow-lg">
+<svg class="w-16 h-16 text-on-primary" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24">
+<polyline class="success-checkmark-draw" points="20 6 9 17 4 12"></polyline>
+</svg>
+</div>
+</div>
+<div class="space-y-2">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
+                    Booking Confirmed!
+                </h1>
+<p class="text-secondary font-body-md">
+                    Booking ID: <span class="font-bold text-primary">#FO987654</span>
+</p>
+</div>
+</div>
+<!-- Bento Layout for Receipt/Check-in -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-12 gap-6 w-full max-w-3xl">
+<!-- Main QR Card -->
+<div class="md:col-span-7 bg-surface-container-lowest rounded-[20px] p-8 shadow-sm border border-outline-variant/30 flex flex-col items-center justify-center space-y-6">
+<div class="text-center">
+<p class="font-label-lg text-label-lg text-secondary uppercase tracking-widest">Check-in Pass</p>
+<p class="font-headline-md text-headline-md text-on-surface mt-1">Premium Tennis Court</p>
+</div>
+<div class="p-4 bg-white rounded-xl shadow-inner border border-outline-variant/20">
+<div class="w-48 h-48 bg-slate-100 flex items-center justify-center relative overflow-hidden group">
+<!-- Simulated QR Code with CSS Grid -->
+<div class="grid grid-cols-10 grid-rows-10 w-40 h-40 gap-1">
+<script>
+                                for(let i=0; i<100; i++) {
+                                    const opacity = Math.random() > 0.5 ? 'bg-deep-navy' : 'bg-transparent';
+                                    document.write(`<div class="${opacity} rounded-sm transition-colors duration-500"></div>`);
+                                }
+                            </script>
+</div>
+</div>
+</div>
+<div class="w-full flex justify-between px-2 pt-4 border-t border-dashed border-outline-variant">
+<div class="text-center">
+<p class="text-secondary font-label-md">Date</p>
+<p class="font-bold text-on-surface">Oct 24, 2023</p>
+</div>
+<div class="text-center">
+<p class="text-secondary font-label-md">Time</p>
+<p class="font-bold text-on-surface">10:00 AM</p>
+</div>
+<div class="text-center">
+<p class="text-secondary font-label-md">Member</p>
+<p class="font-bold text-on-surface">A. Rivera</p>
+</div>
+</div>
+</div>
+<!-- Side Actions -->
+<div class="md:col-span-5 flex flex-col gap-4">
+<button class="group flex items-center gap-4 bg-surface-container-high p-4 rounded-xl hover:bg-primary-container/10 transition-all duration-300">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+</div>
+<div class="text-left">
+<p class="font-label-lg text-label-lg text-on-surface">Get Directions</p>
+<p class="text-secondary text-[12px]">Elite Sports Hub, City Center</p>
+</div>
+</button>
+<button class="group flex items-center gap-4 bg-surface-container-high p-4 rounded-xl hover:bg-tertiary-container/10 transition-all duration-300">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-tertiary shadow-sm">
+<span class="material-symbols-outlined" data-icon="calendar_add_on">calendar_add_on</span>
+</div>
+<div class="text-left">
+<p class="font-label-lg text-label-lg text-on-surface">Add to Calendar</p>
+<p class="text-secondary text-[12px]">Sync with Google/Apple</p>
+</div>
+</button>
+<button class="group flex items-center gap-4 bg-surface-container-high p-4 rounded-xl hover:bg-secondary-container/30 transition-all duration-300">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+</div>
+<div class="text-left">
+<p class="font-label-lg text-label-lg text-on-surface">Download Invoice</p>
+<p class="text-secondary text-[12px]">PDF format receipt</p>
+</div>
+</button>
+<div class="mt-4 p-5 bg-gradient-to-br from-primary to-vibrant-pink rounded-2xl text-white shadow-lg overflow-hidden relative">
+<div class="relative z-10">
+<p class="font-bold text-lg">Next Step</p>
+<p class="text-white/80 text-sm mt-1">Don't forget your hydration and indoor shoes.</p>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12" data-icon="sports_tennis">sports_tennis</span>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="mt-16 w-full max-w-sm">
+<button class="w-full bg-primary-container text-on-primary font-headline-md text-headline-md h-16 rounded-full shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2" onclick="window.location.reload()">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+                Go to Home
+            </button>
+<p class="text-center text-secondary text-sm mt-6">
+                A confirmation email has been sent to your registered address.
+            </p>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Simple Confetti Effect
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = canvas.width / 2;
+                this.y = canvas.height / 2;
+                this.size = Math.random() * 8 + 4;
+                this.weight = Math.random() * 2 + 1;
+                this.directionX = (Math.random() - 0.5) * 15;
+                this.directionY = (Math.random() - 0.7) * 20;
+                this.color = ['#ff6b00', '#FF3278', '#FFDB17', '#059eff'][Math.floor(Math.random() * 4)];
+            }
+            update() {
+                this.y += this.directionY;
+                this.x += this.directionX;
+                this.directionY += 0.5; // gravity
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].y > canvas.height) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            if (particles.length > 0) requestAnimationFrame(animate);
+        }
+
+        // Trigger on load
+        setTimeout(() => {
+            init();
+            animate();
+        }, 300);
+
+        // QR Code Flicker micro-interaction
+        const qrDots = document.querySelectorAll('.grid > div');
+        setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * qrDots.length);
+            qrDots[randomIndex].classList.toggle('bg-deep-navy');
+            qrDots[randomIndex].classList.toggle('bg-transparent');
+        }, 100);
+    </script>
+</body></html>

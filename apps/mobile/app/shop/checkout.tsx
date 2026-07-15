@@ -34,7 +34,7 @@ export default function CheckoutScreen() {
     },
     onSuccess: () => {
       Alert.alert('Order placed', 'Your order has been confirmed.', [
-        { text: 'OK', onPress: () => router.replace('/(tabs)/store') },
+        { text: 'OK', onPress: () => router.replace('/(tabs)/search') },
       ]);
     },
     onError: (err: Error) => Alert.alert('Checkout failed', err.message),
@@ -52,21 +52,37 @@ export default function CheckoutScreen() {
         contentContainerStyle={[styles.form, { paddingBottom: insets.bottom + Spacing.xxxl }]}
         keyboardShouldPersistTaps="handled"
       >
-        {(['shippingName', 'shippingPhone', 'shippingAddress', 'shippingCity', 'shippingPincode'] as const).map(
-          (field) => (
-            <View key={field}>
-              <Text style={[styles.label, { color: colors.muted }]}>
-                {field.replace('shipping', '').replace(/([A-Z])/g, ' $1').trim()}
-              </Text>
-              <TextInput
-                value={form[field]}
-                onChangeText={(v) => update(field, v)}
-                style={[styles.input, { color: colors.foreground, borderColor: colors.border, backgroundColor: colors.card }]}
-                placeholderTextColor={colors.muted}
-              />
-            </View>
-          ),
-        )}
+        {(
+          [
+            'shippingName',
+            'shippingPhone',
+            'shippingAddress',
+            'shippingCity',
+            'shippingPincode',
+          ] as const
+        ).map((field) => (
+          <View key={field}>
+            <Text style={[styles.label, { color: colors.muted }]}>
+              {field
+                .replace('shipping', '')
+                .replace(/([A-Z])/g, ' $1')
+                .trim()}
+            </Text>
+            <TextInput
+              value={form[field]}
+              onChangeText={(v) => update(field, v)}
+              style={[
+                styles.input,
+                {
+                  color: colors.foreground,
+                  borderColor: colors.border,
+                  backgroundColor: colors.card,
+                },
+              ]}
+              placeholderTextColor={colors.muted}
+            />
+          </View>
+        ))}
         <Button
           label={checkoutMutation.isPending ? 'Processing…' : 'Place order'}
           disabled={checkoutMutation.isPending}

@@ -1,14 +1,14 @@
 import { Inject, Injectable, Logger, type OnModuleInit, forwardRef } from '@nestjs/common';
 import { PaymentStatus } from '@prisma/client';
-import { type AnalyticsService } from '../analytics/analytics.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 import { AnalyticsPeriod } from '../analytics/analytics.constants';
-import { type RedisService } from '../common/redis/redis.service';
+import { RedisService } from '../common/redis/redis.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { type EmailProvider } from '../notifications/providers/email.provider';
-import { type PushProvider } from '../notifications/providers/push.provider';
+import { EmailProvider } from '../notifications/providers/email.provider';
+import { PushProvider } from '../notifications/providers/push.provider';
 import { SMS_PROVIDER, type SmsProvider } from '../notifications/providers/sms.provider';
 import { PaymentsService } from '../payments/payments.service';
-import { type PrismaService } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.module';
 import {
   CHANNEL_JOB_OPTIONS,
   QUEUES,
@@ -16,7 +16,7 @@ import {
   SCHEDULED_JOBS,
   type ScheduledJobName,
 } from './queue.constants';
-import { type QueueManagerService } from './queue-manager.service';
+import { QueueManagerService } from './queue-manager.service';
 import type {
   EmailJobData,
   PaymentRetryJobData,
@@ -31,17 +31,23 @@ export class QueueJobsService implements OnModuleInit {
   private readonly logger = new Logger(QueueJobsService.name);
 
   constructor(
+    @Inject(QueueManagerService)
     private queueManager: QueueManagerService,
+    @Inject(EmailProvider)
     private emailProvider: EmailProvider,
     @Inject(SMS_PROVIDER)
     private smsProvider: SmsProvider,
+    @Inject(PushProvider)
     private pushProvider: PushProvider,
     @Inject(forwardRef(() => NotificationsService))
     private notificationsService: NotificationsService,
     @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
+    @Inject(AnalyticsService)
     private analyticsService: AnalyticsService,
+    @Inject(PrismaService)
     private prisma: PrismaService,
+    @Inject(RedisService)
     private redisService: RedisService,
   ) {}
 

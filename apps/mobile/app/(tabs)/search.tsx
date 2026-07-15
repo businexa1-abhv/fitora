@@ -1,13 +1,13 @@
-import { useMemo, useState } from 'react';
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SPORT_LABELS, type SportType } from '@fitora/shared';
-import { useTheme } from '@/providers/theme-provider';
-import { SearchBar } from '@/components/search-bar';
 import { CourtCard } from '@/components/court-card';
 import { QueryState } from '@/components/query-state';
-import { SPORT_EMOJI, CITIES, POPULAR_SPORTS } from '@/lib/constants';
+import { useTheme } from '@/providers/theme-provider';
+import { CITIES, POPULAR_SPORTS, SPORT_EMOJI } from '@/lib/constants';
 import { getCourts } from '@/lib/courts';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -15,14 +15,14 @@ export default function SearchScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
-  const [sport, setSport] = useState<SportType | null>(null);
-  const [city, setCity] = useState<string | null>(null);
+  const [sport, setSport] = useState<SportType | null>(POPULAR_SPORTS[0] ?? null);
+  const [city, setCity] = useState<string | null>('Hyderabad');
 
   const courtsQuery = useQuery({
     queryKey: ['courts', 'search', query, sport, city],
     queryFn: () =>
       getCourts({
-        search: query || undefined,
+        search: query.trim() || undefined,
         sportType: sport ?? undefined,
         city: city ?? undefined,
       }),
@@ -32,72 +32,143 @@ export default function SearchScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.lg }]}>
-        <Text style={[styles.title, { color: colors.foreground }]}>Find venues</Text>
-        <SearchBar value={query} onChangeText={setQuery} placeholder="Search courts, cities…" />
+      <View
+        style={[
+          styles.header,
+          { paddingTop: insets.top + Spacing.lg, backgroundColor: colors.background },
+        ]}
+      >
+        <View style={styles.locationWrap}>
+          <Ionicons name="location" size={17} color={colors.accent} />
+          <Text style={[styles.locationText, { color: colors.foreground }]}>
+            {city ?? 'All cities'}
+          </Text>
+        </View>
+        <Text style={[styles.brand, { color: colors.primary }]}>FitOra</Text>
+        <View style={[styles.headerIcon, { backgroundColor: colors.card }]}>
+          <Ionicons name="filter-outline" size={21} color={colors.primary} />
+        </View>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filters}>
-        <View style={styles.filterRow}>
-          <FilterChip label="All sports" active={!sport} onPress={() => setSport(null)} />
-          {POPULAR_SPORTS.map((s) => (
-            <FilterChip
-              key={s}
-              label={`${SPORT_EMOJI[s]} ${SPORT_LABELS[s]}`}
-              active={sport === s}
-              onPress={() => setSport(sport === s ? null : s)}
-            />
-          ))}
-        </View>
-      </ScrollView>
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filters}>
-        <View style={styles.filterRow}>
-          <FilterChip label="All cities" active={!city} onPress={() => setCity(null)} />
-          {CITIES.map((c) => (
-            <FilterChip
-              key={c}
-              label={c}
-              active={city === c}
-              onPress={() => setCity(city === c ? null : c)}
-            />
-          ))}
-        </View>
-      </ScrollView>
-
-      <QueryState
-        isLoading={courtsQuery.isLoading}
-        isError={courtsQuery.isError}
-        error={courtsQuery.error as Error}
-        onRetry={() => courtsQuery.refetch()}
-      >
-        <FlatList
-          data={results}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + Spacing.xxxl }]}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Text style={[styles.resultCount, { color: colors.muted }]}>
-              {courtsQuery.data?.total ?? results.length} venue
-              {(courtsQuery.data?.total ?? results.length) !== 1 ? 's' : ''} found
-            </Text>
-          }
-          renderItem={({ item }) => (
-            <View style={styles.cardWrap}>
-              <CourtCard court={item} />
+      <FlatList
+        data={results}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + Spacing.xxxl }]}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <View style={styles.topContent}>
+            <View
+              style={[
+                styles.searchBox,
+                { backgroundColor: colors.card, borderColor: colors.border },
+              ]}
+            >
+              <Ionicons name="search" size={20} color={colors.muted} />
+              <TextInput
+                autoCapitalize="none"
+                onChangeText={setQuery}
+                placeholder="Search courts, sports or location"
+                placeholderTextColor={colors.muted}
+                style={[styles.searchInput, { color: colors.foreground }]}
+                value={query}
+              />
             </View>
-          )}
-          ListEmptyComponent={
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.horizontalScroll}
+            >
+              <View style={styles.categoryRow}>
+                {POPULAR_SPORTS.map((item) => {
+                  const active = sport === item;
+                  return (
+                    <Pressable
+                      key={item}
+                      onPress={() => setSport(active ? null : item)}
+                      style={styles.categoryItem}
+                    >
+                      <View
+                        style={[
+                          styles.categoryIcon,
+                          { backgroundColor: active ? colors.accent : colors.mutedBg },
+                        ]}
+                      >
+                        <Text style={styles.categoryEmoji}>{SPORT_EMOJI[item]}</Text>
+                      </View>
+                      <Text
+                        style={[
+                          styles.categoryLabel,
+                          { color: active ? colors.accent : colors.muted },
+                        ]}
+                      >
+                        {SPORT_LABELS[item]}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </ScrollView>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.horizontalScroll}
+            >
+              <View style={styles.cityRow}>
+                <FilterChip label="All cities" active={!city} onPress={() => setCity(null)} />
+                {CITIES.map((item) => (
+                  <FilterChip
+                    key={item}
+                    label={item}
+                    active={city === item}
+                    onPress={() => setCity(city === item ? null : item)}
+                  />
+                ))}
+              </View>
+            </ScrollView>
+
+            <View style={styles.sectionHeader}>
+              <View>
+                <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
+                  Nearby Courts
+                </Text>
+                <Text style={[styles.resultCount, { color: colors.muted }]}>
+                  {courtsQuery.data?.total ?? results.length} premium venues found
+                </Text>
+              </View>
+            </View>
+          </View>
+        }
+        ListEmptyComponent={
+          <QueryState
+            isLoading={courtsQuery.isLoading}
+            isError={courtsQuery.isError}
+            error={courtsQuery.error as Error}
+            onRetry={() => courtsQuery.refetch()}
+          >
             <View style={styles.empty}>
-              <Text style={styles.emptyEmoji}>🔍</Text>
+              <View style={[styles.emptyIcon, { backgroundColor: colors.mutedBg }]}>
+                <Ionicons name="search" size={40} color={colors.muted} />
+              </View>
               <Text style={[styles.emptyTitle, { color: colors.foreground }]}>No venues found</Text>
               <Text style={[styles.emptyText, { color: colors.muted }]}>
-                Try adjusting your filters or search term
+                Try another sport, city, or court name.
               </Text>
             </View>
-          }
-        />
-      </QueryState>
+          </QueryState>
+        }
+        renderItem={({ item }) => (
+          <QueryState
+            isLoading={courtsQuery.isLoading}
+            isError={courtsQuery.isError}
+            error={courtsQuery.error as Error}
+            onRetry={() => courtsQuery.refetch()}
+          >
+            <CourtCard court={item} priceFrom={499} />
+          </QueryState>
+        )}
+      />
     </View>
   );
 }
@@ -119,12 +190,12 @@ function FilterChip({
       style={[
         styles.chip,
         {
-          backgroundColor: active ? colors.primary : colors.card,
-          borderColor: active ? colors.primary : colors.border,
+          backgroundColor: active ? colors.accent : colors.card,
+          borderColor: active ? colors.accent : colors.border,
         },
       ]}
     >
-      <Text style={[styles.chipLabel, { color: active ? colors.primaryForeground : colors.foreground }]}>
+      <Text style={[styles.chipLabel, { color: active ? '#fff' : colors.foreground }]}>
         {label}
       </Text>
     </Pressable>
@@ -133,22 +204,67 @@ function FilterChip({
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { paddingHorizontal: Spacing.lg, gap: Spacing.md, paddingBottom: Spacing.md },
-  title: { fontSize: FontSize.hero, fontWeight: '800' },
-  filters: { maxHeight: 44, marginBottom: Spacing.sm },
-  filterRow: { flexDirection: 'row', gap: Spacing.sm, paddingHorizontal: Spacing.lg },
+  header: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.xl,
+  },
+  locationWrap: { alignItems: 'center', flexDirection: 'row', gap: 5, minWidth: 88 },
+  locationText: { fontSize: FontSize.sm, fontWeight: '900' },
+  brand: { fontSize: FontSize.xxl, fontWeight: '900' },
+  headerIcon: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
+  list: { gap: Spacing.lg, paddingHorizontal: Spacing.xl },
+  topContent: { gap: Spacing.xl, paddingBottom: Spacing.xs },
+  searchBox: {
+    alignItems: 'center',
+    borderRadius: Radius.xl,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    height: 56,
+    paddingHorizontal: Spacing.lg,
+  },
+  searchInput: { flex: 1, fontSize: FontSize.md, fontWeight: '700' },
+  horizontalScroll: { marginHorizontal: -Spacing.xl, paddingHorizontal: Spacing.xl },
+  categoryRow: { flexDirection: 'row', gap: Spacing.lg, paddingRight: Spacing.xl },
+  categoryItem: { alignItems: 'center', gap: Spacing.sm, width: 78 },
+  categoryIcon: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    height: 64,
+    justifyContent: 'center',
+    width: 64,
+  },
+  categoryEmoji: { fontSize: 25 },
+  categoryLabel: { fontSize: FontSize.xs, fontWeight: '900', textAlign: 'center' },
+  cityRow: { flexDirection: 'row', gap: Spacing.sm, paddingRight: Spacing.xl },
   chip: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
     borderRadius: Radius.full,
     borderWidth: 1,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
-  chipLabel: { fontSize: FontSize.sm, fontWeight: '600' },
-  list: { paddingHorizontal: Spacing.lg, gap: Spacing.md },
-  cardWrap: { marginBottom: Spacing.md },
-  resultCount: { fontSize: FontSize.sm, marginBottom: Spacing.md },
-  empty: { alignItems: 'center', paddingTop: 60, gap: Spacing.sm },
-  emptyEmoji: { fontSize: 48 },
-  emptyTitle: { fontSize: FontSize.lg, fontWeight: '700' },
-  emptyText: { fontSize: FontSize.md, textAlign: 'center' },
+  chipLabel: { fontSize: FontSize.sm, fontWeight: '900' },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between' },
+  sectionTitle: { fontSize: FontSize.xl, fontWeight: '900' },
+  resultCount: { fontSize: FontSize.sm, fontWeight: '700', marginTop: 3 },
+  empty: { alignItems: 'center', paddingHorizontal: Spacing.xxl, paddingTop: 72 },
+  emptyIcon: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    height: 96,
+    justifyContent: 'center',
+    marginBottom: Spacing.lg,
+    width: 96,
+  },
+  emptyTitle: { fontSize: FontSize.xl, fontWeight: '900' },
+  emptyText: { fontSize: FontSize.md, lineHeight: 22, marginTop: Spacing.sm, textAlign: 'center' },
 });
