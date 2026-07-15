@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+        /* Custom scrollbar for data-dense areas */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#6ffbbe",
+                        "on-primary-fixed": "#04006d",
+                        "surface-tint": "#4f54b4",
+                        "inverse-surface": "#263143",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-surface-variant": "#464652",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-tertiary-container": "#ec9700",
+                        "on-error": "#ffffff",
+                        "secondary": "#006c49",
+                        "surface-bright": "#f9f9ff",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#cfdaf2",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-variant": "#d8e3fb",
+                        "on-secondary-container": "#00714d",
+                        "surface-container-high": "#dee8ff",
+                        "primary": "#15157d",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffddb8",
+                        "outline-variant": "#c7c5d4",
+                        "secondary-container": "#6cf8bb",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#111c2d",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container": "#e7eeff",
+                        "inverse-primary": "#c0c1ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#d8e3fb",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary": "#3c2300",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "tertiary-container": "#5a3700",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-background": "#111c2d",
+                        "surface-container-low": "#f0f3ff",
+                        "surface": "#f9f9ff",
+                        "primary-container": "#2e3192",
+                        "outline": "#777683",
+                        "on-primary-container": "#9da1ff",
+                        "on-secondary-fixed-variant": "#005236"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "unit": "4px",
+                        "gutter-mobile": "12px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-20 overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">sports_kabaddi</span>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fit fitness academy owner in a modern indigo polo shirt, set against a clean, brightly lit corporate athletic facility with glass walls and emerald green plants in the background. The lighting is crisp and optimistic, emphasizing a leadership role within a high-performance environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBphea53H7YespARpZPfoD-D2tR34eqSfDFNSh2mYyOAjzOBMxDZjGFOsaJPeLL3Jox_xCDxBgeY0GbiVniJdrGHTyI3v4Tg-zU17TwAJLxfHE59hbWE6FJyQ9hGs6EPs_daI-yPgclb1ANboawchmiFZsUF-LbeqXOY8VtCkGcjpIc5zI2neNqucbvOuS5G8gHFz1yjncnXYieTjmr9eJp-kAxIa2HhG6q9XtXN8_VLHgDnh_Xx9Es"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 px-margin-mobile max-w-5xl mx-auto space-y-stack-lg">
+<!-- Header Section -->
+<section class="flex justify-between items-end">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider mb-1">Performance Overview</p>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">Analytics Detail</h2>
+</div>
+<div class="hidden md:flex gap-2">
+<button class="bg-surface-container border border-outline-variant px-4 py-2 rounded-lg font-label-lg text-label-lg text-primary hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                    Last 6 Months
+                </button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-lg text-label-lg hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    Export Report
+                </button>
+</div>
+</section>
+<!-- KPI Cards Grid (Bento Style) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter-mobile">
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-lg">payments</span>
+<span class="text-secondary font-label-lg text-label-lg flex items-center">+12%</span>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Membership Rev.</p>
+<p class="font-headline-sm text-headline-sm font-bold text-on-surface mt-1">$42,500</p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-lg">group</span>
+<span class="text-secondary font-label-lg text-label-lg flex items-center">+48</span>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Active Students</p>
+<p class="font-headline-sm text-headline-sm font-bold text-on-surface mt-1">450</p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-lg">fitness_center</span>
+<span class="text-on-surface-variant font-label-lg text-label-lg flex items-center">Stable</span>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Active Coaches</p>
+<p class="font-headline-sm text-headline-sm font-bold text-on-surface mt-1">12</p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-lg">stadium</span>
+<span class="text-error font-label-lg text-label-lg flex items-center">-2%</span>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Avg. Utilization</p>
+<p class="font-headline-sm text-headline-sm font-bold text-on-surface mt-1">84%</p>
+</div>
+</div>
+<!-- Charts and Details Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Revenue Trend Chart -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-lg text-title-lg text-on-surface">Revenue Trends</h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 font-label-lg text-label-lg text-on-surface-variant">
+<span class="w-3 h-3 bg-primary rounded-full"></span> Subscriptions
+                        </span>
+</div>
+</div>
+<div class="chart-container flex items-end justify-between gap-2 px-2">
+<!-- Simplified Visual Representation of a bar chart -->
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary-container rounded-t-lg transition-all group-hover:bg-primary" style="height: 60%"></div>
+<span class="font-label-lg text-label-lg text-on-surface-variant mt-2">Jan</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary-container rounded-t-lg transition-all group-hover:bg-primary" style="height: 75%"></div>
+<span class="font-label-lg text-label-lg text-on-surface-variant mt-2">Feb</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary-container rounded-t-lg transition-all group-hover:bg-primary" style="height: 70%"></div>
+<span class="font-label-lg text-label-lg text-on-surface-variant mt-2">Mar</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary-container rounded-t-lg transition-all group-hover:bg-primary" style="height: 85%"></div>
+<span class="font-label-lg text-label-lg text-on-surface-variant mt-2">Apr</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary-container rounded-t-lg transition-all group-hover:bg-primary" style="height: 92%"></div>
+<span class="font-label-lg text-label-lg text-on-surface-variant mt-2">May</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary-container rounded-t-lg transition-all group-hover:bg-primary" style="height: 80%"></div>
+<span class="font-label-lg text-label-lg text-on-surface-variant mt-2">Jun</span>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-3 gap-4 border-t border-outline-variant pt-6">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Monthly Average</p>
+<p class="font-title-md text-title-md text-on-surface">$7,083</p>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Peak Month</p>
+<p class="font-title-md text-title-md text-secondary">May ($9.2k)</p>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Projected July</p>
+<p class="font-title-md text-title-md text-primary">$8,100</p>
+</div>
+</div>
+</div>
+<!-- Capacity Utilization -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-6">Capacity Utilization</h3>
+<div class="space-y-stack-lg">
+<!-- Tennis -->
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-title-md text-title-md text-on-surface">Tennis</span>
+<span class="font-label-lg text-label-lg text-primary font-bold">92%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 92%"></div>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant mt-1">High demand: Weekends fully booked</p>
+</div>
+<!-- Badminton -->
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-title-md text-title-md text-on-surface">Badminton</span>
+<span class="font-label-lg text-label-lg text-secondary font-bold">78%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 78%"></div>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant mt-1">Evening slots increasing (+5%)</p>
+</div>
+<!-- Football -->
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-title-md text-title-md text-on-surface">Football</span>
+<span class="font-label-lg text-label-lg text-on-tertiary-container font-bold">65%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2.5 overflow-hidden">
+<div class="bg-tertiary-container h-full rounded-full" style="width: 65%"></div>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant mt-1">Available for morning leagues</p>
+</div>
+<!-- Coaching Load (Mini Stats) -->
+<div class="bg-surface-container-low p-stack-md rounded-lg mt-4">
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-2">Average Coach Load</p>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">groups_3</span>
+<p class="font-headline-sm text-headline-sm text-on-surface">37.5 <span class="text-body-md font-normal">Students/Coach</span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Dense Coach List -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-stack-lg border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Active Coaching Staff</h3>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Efficiency and Student Satisfaction</p>
+</div>
+<button class="text-primary font-label-lg text-label-lg hover:underline transition-all">View All 12 Staff</button>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface-variant uppercase">Coach</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface-variant uppercase">Sport</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface-variant uppercase text-right">Students</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface-variant uppercase text-right">Rating</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface-variant uppercase text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary text-xs">MA</div>
+<span class="font-body-md text-on-surface">Mark Anthony</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-fixed-variant rounded-full text-[10px] font-bold uppercase">Tennis</span>
+</td>
+<td class="px-6 py-4 text-right font-label-lg">42</td>
+<td class="px-6 py-4 text-right text-secondary font-bold">4.9/5</td>
+<td class="px-6 py-4 text-right">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center font-bold text-tertiary text-xs">SL</div>
+<span class="font-body-md text-on-surface">Sarah Lee</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-fixed-variant rounded-full text-[10px] font-bold uppercase">Badminton</span>
+</td>
+<td class="px-6 py-4 text-right font-label-lg">38</td>
+<td class="px-6 py-4 text-right text-secondary font-bold">4.8/5</td>
+<td class="px-6 py-4 text-right">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed-dim flex items-center justify-center font-bold text-on-primary-fixed-variant text-xs">JD</div>
+<span class="font-body-md text-on-surface">John Doe</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-fixed-variant rounded-full text-[10px] font-bold uppercase">Football</span>
+</td>
+<td class="px-6 py-4 text-right font-label-lg">55</td>
+<td class="px-6 py-4 text-right text-secondary font-bold">4.7/5</td>
+<td class="px-6 py-4 text-right">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- FAB for New Insights/Enrollment -->
+<button class="fixed bottom-20 right-6 w-14 h-14 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40 group">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-label-lg text-label-lg">Stats</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</div>
+</nav>
+<!-- Interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Minimalist hover interaction for chart bars
+            const bars = document.querySelectorAll('.chart-container div');
+            bars.forEach(bar => {
+                bar.addEventListener('mouseenter', () => {
+                    // Possible to add dynamic tooltips here
+                });
+            });
+
+            // Smooth scaling for FAB
+            const fab = document.querySelector('button.fixed.bottom-20');
+            if(fab) {
+                fab.addEventListener('click', () => {
+                    console.log('Open Analytics Filter/Export Menu');
+                });
+            }
+        });
+    </script>
+</body></html>

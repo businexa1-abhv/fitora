@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy - Court Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c7c5d4",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#e7eeff",
+                        "on-primary-fixed": "#04006d",
+                        "primary": "#15157d",
+                        "surface-variant": "#d8e3fb",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "tertiary": "#3c2300",
+                        "outline": "#777683",
+                        "on-surface-variant": "#464652",
+                        "secondary-container": "#6cf8bb",
+                        "surface-dim": "#cfdaf2",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "inverse-primary": "#c0c1ff",
+                        "primary-container": "#2e3192",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#00714d",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "background": "#f9f9ff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-tertiary-container": "#ec9700",
+                        "on-primary-container": "#9da1ff",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#dee8ff",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "surface-tint": "#4f54b4",
+                        "tertiary-fixed": "#ffddb8",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#5a3700",
+                        "secondary": "#006c49",
+                        "surface-bright": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface": "#f9f9ff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-background": "#111c2d",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#373a9b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px",
+                        "gutter-mobile": "12px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f9f9ff;
+            color: #111c2d;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="pb-24">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined text-on-surface-variant active:scale-95 duration-100 p-2 rounded-full hover:bg-surface-container">arrow_back</button>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant p-2 rounded-full hover:bg-surface-container">notifications</span>
+<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+</div>
+</header>
+<main class="mt-20 px-margin-mobile max-w-5xl mx-auto space-y-6">
+<!-- Hero Section: Asymmetric Layout -->
+<section class="relative h-[320px] md:h-[400px] rounded-2xl overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A high-performance indoor tennis court with vibrant blue professional surfacing and pristine white boundary lines. The facility is illuminated by soft, natural light streaming through large clerestory windows, creating a bright and energetic atmosphere. In the background, modern stadium seating and emerald green accent walls align with the corporate sports academy aesthetic. High-resolution photography focusing on the court's texture and professional scale." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2Jt5k1X1m-g7mWRqmi6FgNxUR6iympW60aEyvlyNKxOLJ583BIvFxizYVa9257C9_ZPetdeb2JR1ONBj4lCEq3r6TL6qAlglqadC_mgWt34z-smBqUmNoTYQn0GCxh9EadABCxMyv6p9KvYA3FffXOFgMs2laqwUxsKRHqKdW3Q5BiAtapLb6BM_aRqOsZEfK6tcW6kNAsO1Tqx8RA6B6zugaMSRIJdu3XwlduiWTNnRro6aI39kk')"></div>
+<div class="absolute bottom-0 left-0 p-6 z-20 w-full flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-lg text-label-lg font-bold">ACTIVE</span>
+<span class="px-3 py-1 bg-surface/20 backdrop-blur-md text-white rounded-full font-label-lg text-label-lg">Court #04</span>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-white mb-1">Premier Padel Centre</h2>
+<p class="text-white/80 font-body-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                        East Wing, Floor 1
+                    </p>
+</div>
+<div class="flex gap-2">
+<button class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-6 py-2 rounded-xl font-label-lg text-label-lg transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                        Edit Court
+                    </button>
+<button class="bg-primary text-white px-6 py-2 rounded-xl font-label-lg text-label-lg shadow-lg active:scale-95 transition-transform flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                        View Full Schedule
+                    </button>
+</div>
+</div>
+</section>
+<!-- Stats Bento Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface border border-outline-variant p-5 rounded-2xl flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Utilization</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">trending_up</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold">84.2%</p>
+<p class="text-secondary font-label-lg text-label-lg">+5.2% vs last week</p>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-5 rounded-2xl flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Monthly Revenue</span>
+<span class="material-symbols-outlined text-primary text-[20px]">payments</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold">$12,480</p>
+<p class="text-on-surface-variant font-label-lg text-label-lg">Forecast: $15k</p>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-5 rounded-2xl flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Peak Hour</span>
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[20px]">schedule</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold">18:00</p>
+<p class="text-on-surface-variant font-label-lg text-label-lg">Mon - Fri Average</p>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-5 rounded-2xl flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Maint. Score</span>
+<span class="material-symbols-outlined text-error text-[20px]">build</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold">98/100</p>
+<p class="text-on-surface-variant font-label-lg text-label-lg">Next check in 4d</p>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Amenities Column -->
+<div class="space-y-4">
+<h3 class="font-title-md text-title-md text-primary px-1">Court Amenities</h3>
+<div class="bg-surface border border-outline-variant rounded-2xl p-4 space-y-4">
+<div class="flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div>
+<p class="font-body-lg text-on-surface font-medium">Smart Lighting</p>
+<p class="font-body-md text-on-surface-variant">4K Lux Intensity</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">videocam</span>
+</div>
+<div>
+<p class="font-body-lg text-on-surface font-medium">AI Play Analytics</p>
+<p class="font-body-md text-on-surface-variant">Live HD Recording</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">ac_unit</span>
+</div>
+<div>
+<p class="font-body-lg text-on-surface font-medium">Climate Control</p>
+<p class="font-body-md text-on-surface-variant">Maintained at 22°C</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">wifi</span>
+</div>
+<div>
+<p class="font-body-lg text-on-surface font-medium">Player WiFi</p>
+<p class="font-body-md text-on-surface-variant">Guest Mesh Network</p>
+</div>
+</div>
+</div>
+<!-- Surface Quality Insight -->
+<div class="bg-primary-container p-5 rounded-2xl text-on-primary-container">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-label-lg text-label-lg font-bold uppercase tracking-widest">Quality Insight</span>
+</div>
+<p class="font-body-md mb-3">Court surface was resurfaced 12 days ago. Traction is currently at peak levels for competitive play.</p>
+<div class="h-1 bg-white/20 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-[92%]"></div>
+</div>
+</div>
+</div>
+<!-- Schedule Column -->
+<div class="md:col-span-2 space-y-4">
+<div class="flex justify-between items-center px-1">
+<h3 class="font-title-md text-title-md text-primary">Today's Schedule</h3>
+<div class="flex gap-2">
+<button class="material-symbols-outlined p-1 rounded-lg hover:bg-surface-container text-on-surface-variant">chevron_left</button>
+<span class="font-label-lg text-label-lg self-center text-on-surface-variant">Oct 24, 2023</span>
+<button class="material-symbols-outlined p-1 rounded-lg hover:bg-surface-container text-on-surface-variant">chevron_right</button>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-2xl overflow-hidden divide-y divide-outline-variant/30">
+<!-- Schedule Row -->
+<div class="flex p-4 items-center hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="w-20 font-label-lg text-label-lg text-on-surface-variant">08:00 AM</div>
+<div class="flex-1 px-4">
+<p class="font-body-lg text-on-surface font-semibold">Morning Drills - Elite Squad</p>
+<p class="font-body-md text-on-surface-variant">Trainer: Marco Rossi</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary-fixed flex items-center justify-center font-label-lg text-label-lg text-primary">JD</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-secondary-fixed flex items-center justify-center font-label-lg text-label-lg text-on-secondary-fixed">SK</div>
+</div>
+<span class="px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full font-label-lg text-label-lg">COACHED</span>
+</div>
+</div>
+<!-- Schedule Row (Busy) -->
+<div class="flex p-4 items-center bg-surface-container-low border-l-4 border-primary">
+<div class="w-20 font-label-lg text-label-lg text-primary font-bold">10:00 AM</div>
+<div class="flex-1 px-4">
+<p class="font-body-lg text-primary font-bold">Private Booking</p>
+<p class="font-body-md text-on-surface-variant">Client: Alexander Pierce</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label-lg text-label-lg text-primary uppercase font-bold">IN PROGRESS</span>
+</div>
+</div>
+<!-- Schedule Row -->
+<div class="flex p-4 items-center hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-20 font-label-lg text-label-lg text-on-surface-variant">12:00 PM</div>
+<div class="flex-1 px-4 text-outline font-body-md italic">Available for booking</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-1.5 rounded-lg font-label-lg text-label-lg hover:brightness-110">BOOK NOW</button>
+</div>
+<!-- Schedule Row -->
+<div class="flex p-4 items-center hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-20 font-label-lg text-label-lg text-on-surface-variant">01:30 PM</div>
+<div class="flex-1 px-4">
+<p class="font-body-lg text-on-surface font-semibold">Junior Academy Training</p>
+<p class="font-body-md text-on-surface-variant">U14 Group Session</p>
+</div>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-lg text-label-lg font-bold">CLINIC</span>
+</div>
+<!-- Schedule Row -->
+<div class="flex p-4 items-center hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-20 font-label-lg text-label-lg text-on-surface-variant">04:00 PM</div>
+<div class="flex-1 px-4">
+<p class="font-body-lg text-on-surface font-semibold">League Match: Semis</p>
+<p class="font-body-md text-on-surface-variant">Tournament: Spring Cup</p>
+</div>
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded-full font-label-lg text-label-lg font-bold">TOURNAMENT</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<!-- FAB -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-white rounded-2xl shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all md:bottom-10">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<script>
+        // Micro-interaction for utilization card hover
+        document.querySelectorAll('.bg-surface').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('border-primary');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('border-primary');
+            });
+        });
+    </script>
+</body></html>

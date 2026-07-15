@@ -4,12 +4,15 @@ FitOra Owner / Academy Management mobile app (Expo), built from the Stitch proje
 
 ## Screens (Stitch)
 
-| Screen                    | Route             |
-| ------------------------- | ----------------- |
-| Welcome to FitOra Owner   | `/(auth)/welcome` |
-| Owner Login               | `/(auth)/login`   |
-| Venue Executive Dashboard | `/(tabs)`         |
-| Court Inventory & Status  | `/(tabs)/courts`  |
+| Screen                   | Route                   |
+| ------------------------ | ----------------------- |
+| Welcome to FitOra Owner  | `/(auth)/welcome`       |
+| Owner Login              | `/(auth)/login`         |
+| Academy Dashboard        | `/(tabs)`               |
+| Court Inventory & Status | `/(tabs)/courts`        |
+| Performance Analytics    | `/(tabs)/analytics`     |
+| Notifications Center     | `/(tabs)/notifications` |
+| Settings                 | `/(tabs)/more`          |
 
 Design downloads: `docs/stitch/fitora-academy-management-app/`
 

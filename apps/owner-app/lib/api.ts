@@ -58,19 +58,40 @@ export async function apiFetch<T>(
   const token = accessToken ?? (await getAccessToken());
   if (token) headers.set('Authorization', `Bearer ${token}`);
 
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers,
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers,
+    });
+  } catch {
+    throw new ApiError(
+      `Cannot reach API at ${API_URL}. Start the API (pnpm dev:api) and use your Mac LAN IP for Expo Go.`,
+      0,
+    );
+  }
 
-  if (response.status === 401 && retry) {
+  // Only attempt token refresh for authenticated calls — not for login/register 401s.
+  const isAuthAttempt =
+    path.startsWith('/auth/login') ||
+    path.startsWith('/auth/register') ||
+    path.startsWith('/auth/verify');
+
+  if (response.status === 401 && retry && !isAuthAttempt) {
     const refreshed = await refreshAccessToken();
     if (refreshed) return apiFetch<T>(path, options, refreshed, false);
     throw new ApiError('Session expired. Please sign in again.', 401);
   }
 
   const text = await response.text();
-  const body = text ? (JSON.parse(text) as unknown) : null;
+  let body: unknown = null;
+  if (text) {
+    try {
+      body = JSON.parse(text) as unknown;
+    } catch {
+      body = { message: text };
+    }
+  }
   if (!response.ok) {
     throw new ApiError(
       getErrorMessage(body, `Request failed (${response.status})`),

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy - Add/Edit Court</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c7c5d4",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#e7eeff",
+                    "on-primary-fixed": "#04006d",
+                    "primary": "#15157d",
+                    "surface-variant": "#d8e3fb",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#111c2d",
+                    "tertiary": "#3c2300",
+                    "outline": "#777683",
+                    "on-surface-variant": "#464652",
+                    "secondary-container": "#6cf8bb",
+                    "surface-dim": "#cfdaf2",
+                    "primary-fixed": "#e1e0ff",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "inverse-primary": "#c0c1ff",
+                    "primary-container": "#2e3192",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "background": "#f9f9ff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-tertiary-container": "#ec9700",
+                    "on-primary-container": "#9da1ff",
+                    "surface-container-low": "#f0f3ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#dee8ff",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "surface-tint": "#4f54b4",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#002113",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#5a3700",
+                    "secondary": "#006c49",
+                    "surface-bright": "#f9f9ff",
+                    "inverse-surface": "#263143",
+                    "surface": "#f9f9ff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "on-background": "#111c2d",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#373a9b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px",
+                    "stack-lg": "24px",
+                    "gutter-mobile": "12px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-sm": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chip-active {
+            background-color: rgba(0, 108, 73, 0.12);
+            color: #006c49;
+            border-color: #006c49;
+        }
+        .glass-header {
+            background: rgba(249, 249, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            transform: translateY(-24px) scale(0.85);
+            color: #15157d;
+            background-color: #f9f9ff;
+            padding: 0 4px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 glass-header flex justify-between items-center px-margin-mobile h-16 w-full border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container p-2 rounded-full transition-colors active:scale-95">arrow_back</button>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Add New Court</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a sports facility manager, middle-aged with a friendly expression, wearing a navy blue corporate polo shirt. The background is a clean, out-of-focus modern office with bright lighting, maintaining a premium Corporate Modernism aesthetic with Indigo and white tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASvfhDzXLBBj4DihN4oB0wN-VmJCyz-ojwO27uueXFnjUW57IE28APQ3lotfohRt3NOgNCfFF46hnmdePpqts0kuBlHOuq-mowtHQmCyiM1pKJnO2OfeMgRRLjqv6jIZ5jCiXq_Lyr15N7W74icjOO6JKYp7twuKXx3KyYQnuSB6Jk1-rh2dJtCFUHduTlRuQpezJS5v3za-5QnU3OfwYdEumKtXY0HEpNMQHzyfSeRA67TP_-YU1m"/>
+</div>
+</header>
+<main class="max-w-xl mx-auto px-margin-mobile pt-stack-lg">
+<form class="flex flex-col gap-stack-lg" id="court-form">
+<!-- Court Image Upload Section -->
+<section class="flex flex-col gap-stack-sm">
+<span class="font-label-lg text-label-lg text-on-surface-variant">COURT PHOTOS</span>
+<div class="grid grid-cols-2 gap-gutter-mobile">
+<div class="aspect-video relative rounded-xl border-2 border-dashed border-outline-variant flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group overflow-hidden">
+<span class="material-symbols-outlined text-outline group-hover:scale-110 transition-transform">add_a_photo</span>
+<span class="font-label-lg text-label-lg text-outline mt-2">Upload Photo</span>
+<!-- Hidden File Input -->
+<input accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" multiple="" type="file"/>
+</div>
+<div class="aspect-video rounded-xl overflow-hidden relative group">
+<img class="w-full h-full object-cover" data-alt="A high-angle professional architectural shot of a pristine indoor tennis court with vibrant blue surfacing and crisp white lines. The lighting is dramatic and cinematic, coming from high-performance LED floodlights above, creating a premium and energetic sports atmosphere within a modern facility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlCfwtwi4IThZVp1BWJc8y8y8W4EWYCfC-tUXuzdBQeZ_j_BEP5ZAXewh2iyDTU35cMWVbcOIW4UgyB1WDPXH0pEzIgvIjCpqO-HS_cNlE8SnX5szA06Q0s8Ljoy07Sv9qmr852vkOjz4Sk4sl8QjtPFNDbfnrRfqbut8PBpR1IN7uFIkk02FzXxuADiQm9qND_2k2sGgICguWqAS1D9suG53NtYY7Ef3ib9yoL24onM68u1eTtImN"/>
+<button class="absolute top-2 right-2 bg-error text-on-error p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Basic Details Card -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl flex flex-col gap-stack-lg shadow-sm">
+<!-- Court Name -->
+<div class="relative flex flex-col">
+<input class="peer w-full h-14 bg-transparent border border-outline rounded-lg px-4 pt-2 text-on-surface focus:border-primary focus:ring-0 transition-all outline-none" id="court-name" placeholder=" " type="text"/>
+<label class="absolute left-4 top-4 text-on-surface-variant transition-all pointer-events-none font-body-md text-body-md" for="court-name">Court Name (e.g., Center Court 01)</label>
+</div>
+<div class="grid grid-cols-2 gap-gutter-mobile">
+<!-- Sport Type Dropdown -->
+<div class="relative flex flex-col">
+<select class="w-full h-14 bg-transparent border border-outline rounded-lg px-4 text-on-surface focus:border-primary focus:ring-0 transition-all outline-none appearance-none" id="sport-type">
+<option disabled="" selected="" value="">Sport Type</option>
+<option value="tennis">Tennis</option>
+<option value="padel">Padel</option>
+<option value="basketball">Basketball</option>
+<option value="swimming">Swimming</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-4 text-outline pointer-events-none">expand_more</span>
+</div>
+<!-- Capacity -->
+<div class="relative flex flex-col">
+<input class="peer w-full h-14 bg-transparent border border-outline rounded-lg px-4 pt-2 text-on-surface focus:border-primary focus:ring-0 transition-all outline-none" id="capacity" placeholder=" " type="number"/>
+<label class="absolute left-4 top-4 text-on-surface-variant transition-all pointer-events-none font-body-md text-body-md" for="capacity">Max Players</label>
+</div>
+</div>
+<!-- Price Field -->
+<div class="relative flex flex-col">
+<div class="absolute left-4 top-4 text-on-surface pointer-events-none font-label-lg text-label-lg">$</div>
+<input class="peer w-full h-14 bg-transparent border border-outline rounded-lg pl-8 pr-4 pt-2 text-on-surface focus:border-primary focus:ring-0 transition-all outline-none" id="price" placeholder=" " type="number"/>
+<label class="absolute left-8 top-4 text-on-surface-variant transition-all pointer-events-none font-body-md text-body-md" for="price">Base Hourly Price</label>
+</div>
+</div>
+<!-- Amenities Chips -->
+<section class="flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Amenities</span>
+<span class="font-label-lg text-label-lg text-primary">Select all that apply</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant font-label-lg text-label-lg flex items-center gap-2 transition-all hover:bg-surface-container active:scale-95" onclick="toggleChip(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+                        Floodlights
+                    </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant font-label-lg text-label-lg flex items-center gap-2 transition-all hover:bg-surface-container active:scale-95" onclick="toggleChip(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">home</span>
+                        Indoor
+                    </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant font-label-lg text-label-lg flex items-center gap-2 transition-all hover:bg-surface-container active:scale-95 chip-active" onclick="toggleChip(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">checkroom</span>
+                        Locker Rooms
+                        <span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant font-label-lg text-label-lg flex items-center gap-2 transition-all hover:bg-surface-container active:scale-95" onclick="toggleChip(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">shower</span>
+                        Showers
+                    </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant font-label-lg text-label-lg flex items-center gap-2 transition-all hover:bg-surface-container active:scale-95" onclick="toggleChip(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">local_parking</span>
+                        Parking
+                    </button>
+</div>
+</section>
+<!-- Availability Note (Contextual Data) -->
+<div class="bg-secondary-container/10 border border-secondary p-stack-md rounded-xl flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary">info</span>
+<p class="font-body-md text-body-md text-on-secondary-container">
+                    Courts are set to <strong>Available</strong> by default. You can manage specific maintenance blackout periods in the <span class="font-bold underline cursor-pointer">Calendar Settings</span>.
+                </p>
+</div>
+<!-- Action Button -->
+<button class="mt-stack-md w-full h-14 bg-primary text-on-primary rounded-xl font-title-md text-title-md font-bold shadow-lg hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined">save</span>
+                Save Court
+            </button>
+</form>
+</main>
+<!-- Bottom Navigation Shell (Suppressing FAB as per rules on Detail screens) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant">
+<!-- Courts is active -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<script>
+        function toggleChip(button) {
+            button.classList.toggle('chip-active');
+            const checkmark = button.querySelector('.check-icon');
+            
+            if (button.classList.contains('chip-active')) {
+                if (!button.querySelector('.check-indicator')) {
+                    const span = document.createElement('span');
+                    span.className = 'material-symbols-outlined text-[14px] check-indicator';
+                    span.innerText = 'check';
+                    button.appendChild(span);
+                }
+            } else {
+                const indicator = button.querySelector('.check-indicator');
+                if (indicator) indicator.remove();
+            }
+        }
+
+        // Form submission animation/feedback
+        document.getElementById('court-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Saving...';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Saved Successfully';
+                btn.classList.remove('bg-primary');
+                btn.classList.add('bg-secondary');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('bg-secondary');
+                    btn.classList.add('bg-primary');
+                    btn.disabled = false;
+                }, 2000);
+            }, 1500);
+        });
+    </script>
+</body></html>

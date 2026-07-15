@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Court Availability &amp; Maintenance | FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c7c5d4",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#e7eeff",
+                        "on-primary-fixed": "#04006d",
+                        "primary": "#15157d",
+                        "surface-variant": "#d8e3fb",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "tertiary": "#3c2300",
+                        "outline": "#777683",
+                        "on-surface-variant": "#464652",
+                        "secondary-container": "#6cf8bb",
+                        "surface-dim": "#cfdaf2",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "inverse-primary": "#c0c1ff",
+                        "primary-container": "#2e3192",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#00714d",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "background": "#f9f9ff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-tertiary-container": "#ec9700",
+                        "on-primary-container": "#9da1ff",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#dee8ff",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "surface-tint": "#4f54b4",
+                        "tertiary-fixed": "#ffddb8",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#5a3700",
+                        "secondary": "#006c49",
+                        "surface-bright": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface": "#f9f9ff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-background": "#111c2d",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#373a9b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px",
+                        "gutter-mobile": "12px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .court-grid-container::-webkit-scrollbar {
+            display: none;
+        }
+        .court-grid-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #E2E8F0;
+            transition: all 0.2s ease;
+        }
+        .bento-card:hover {
+            border-color: #15157d;
+        }
+        .scrim-overlay {
+            background-color: rgba(21, 21, 125, 0.4);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed text-headline-sm font-headline-sm">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant p-2 rounded-full transition-colors active:scale-95 duration-100">notifications</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a sports academy owner in business attire, looking confident and approachable. The background is a blurred high-end sports facility with clean lines and premium branding. The lighting is bright and crisp, emphasizing a corporate modern aesthetic with indigo and emerald accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXUDc6BixVclvO73A7Fx6-FrNKyizsJwjXfYYZ0FgfwAMgKxhU5PpGLyZzq3t8fqPNi2b1XKa0ZWMC1y8uf2yv-RxS_YtOyKP4uscFvDmTxhaWXbvtYYAx3oShBexunAHGSRL22_E-9smSsX2y_zggaazZeGBM_wF5i_emkGQ8Fn9AgCwWfpgW-dBnxbSsTasfeU1Ezhr-9BwPBbgPp__6-6ARWloY7tkQLK-NdRw-OCBoHnYDdO1U"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24 px-margin-mobile max-w-7xl mx-auto">
+<!-- Page Title & Primary Action -->
+<section class="flex flex-col md:flex-row md:items-center justify-between mb-stack-lg gap-4">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Court Availability</h2>
+<p class="text-on-surface-variant">Manage bookings and schedule maintenance tasks.</p>
+</div>
+<button class="bg-primary text-on-primary px-stack-md py-3 rounded-xl font-title-md flex items-center justify-center gap-2 shadow-lg hover:shadow-xl active:scale-95 transition-all" onclick="toggleModal('maintenance-modal')">
+<span class="material-symbols-outlined">event_busy</span>
+                Schedule Maintenance
+            </button>
+</section>
+<!-- Status Legend & Filter Chips -->
+<section class="flex flex-wrap gap-stack-sm mb-stack-md">
+<div class="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-outline-variant">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="font-label-lg text-label-lg">Available</span>
+</div>
+<div class="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-outline-variant">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span>
+<span class="font-label-lg text-label-lg">Booked</span>
+</div>
+<div class="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-outline-variant">
+<span class="w-3 h-3 rounded-full bg-on-tertiary-container"></span>
+<span class="font-label-lg text-label-lg">Maintenance</span>
+</div>
+<div class="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-outline-variant">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span class="font-label-lg text-label-lg">Blocked</span>
+</div>
+</section>
+<!-- Bento Grid: Main Timeline & Quick Stats -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter-mobile">
+<!-- Timeline (Wide 3/4) -->
+<div class="lg:col-span-3 bento-card rounded-xl p-stack-md overflow-hidden flex flex-col">
+<div class="flex justify-between items-center mb-stack-md">
+<div class="flex items-center gap-4">
+<h3 class="font-title-lg text-title-lg text-primary">Weekly Schedule</h3>
+<div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded-lg">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">chevron_left</button>
+<span class="font-label-lg text-label-lg px-2">Oct 21 - Oct 27</span>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">chevron_right</button>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded-lg bg-primary-container text-on-primary-container font-label-lg text-label-lg">Weekly</button>
+<button class="px-3 py-1 rounded-lg text-on-surface-variant hover:bg-surface-container font-label-lg text-label-lg transition-colors">Daily</button>
+</div>
+</div>
+<div class="court-grid-container overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr>
+<th class="p-2 border-b border-outline-variant text-left font-label-lg text-label-lg text-on-surface-variant min-w-[80px]">TIME</th>
+<th class="p-2 border-b border-outline-variant text-center font-label-lg text-label-lg text-on-surface-variant min-w-[120px]">MON 21</th>
+<th class="p-2 border-b border-outline-variant text-center font-label-lg text-label-lg text-on-surface-variant min-w-[120px]">TUE 22</th>
+<th class="p-2 border-b border-outline-variant text-center font-label-lg text-label-lg text-on-surface-variant min-w-[120px]">WED 23</th>
+<th class="p-2 border-b border-outline-variant text-center font-label-lg text-label-lg text-on-surface-variant min-w-[120px]">THU 24</th>
+<th class="p-2 border-b border-outline-variant text-center font-label-lg text-label-lg text-on-surface-variant min-w-[120px]">FRI 25</th>
+</tr>
+</thead>
+<tbody class="font-label-lg text-label-lg">
+<!-- 08:00 Row -->
+<tr>
+<td class="p-2 text-on-surface-variant font-medium border-b border-outline-variant/30">08:00</td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-primary-container text-on-primary-container rounded flex items-center justify-center">Booked</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-on-tertiary-container rounded flex items-center justify-center text-white">Repair</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+</tr>
+<!-- 09:00 Row -->
+<tr>
+<td class="p-2 text-on-surface-variant font-medium border-b border-outline-variant/30">09:00</td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-primary-container text-on-primary-container rounded flex items-center justify-center">Booked</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+</tr>
+<!-- 10:00 Row -->
+<tr>
+<td class="p-2 text-on-surface-variant font-medium border-b border-outline-variant/30">10:00</td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-on-tertiary-container rounded flex items-center justify-center text-white">Cleaning</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-primary-container text-on-primary-container rounded flex items-center justify-center">Booked</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-primary-container text-on-primary-container rounded flex items-center justify-center">Booked</div></td>
+</tr>
+<!-- 11:00 Row -->
+<tr>
+<td class="p-2 text-on-surface-variant font-medium border-b border-outline-variant/30">11:00</td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-on-tertiary-container rounded flex items-center justify-center text-white">Cleaning</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+<td class="p-1 border-b border-outline-variant/30"><div class="h-10 bg-secondary rounded flex items-center justify-center text-white">Open</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Stats & Quick Actions (Side 1/4) -->
+<div class="lg:col-span-1 flex flex-col gap-gutter-mobile">
+<!-- Occupancy Card -->
+<div class="bento-card rounded-xl p-stack-md flex flex-col items-center justify-center relative overflow-hidden">
+
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest mb-1">Weekly Occupancy</span>
+<span class="font-display-lg text-display-lg text-primary">78%</span>
+<div class="w-full bg-surface-container h-2 rounded-full mt-stack-md">
+<div class="bg-secondary h-full rounded-full w-[78%]"></div>
+</div>
+<span class="font-label-lg text-label-lg text-secondary mt-2">+12% from last week</span>
+</div>
+<!-- Maintenance Alerts -->
+<div class="bento-card rounded-xl p-stack-md flex flex-col">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-on-tertiary-container">warning</span>
+<h4 class="font-title-md text-title-md">Pending Alerts</h4>
+</div>
+<div class="space-y-stack-sm">
+<div class="p-3 bg-surface-container-low rounded-lg border-l-4 border-on-tertiary-container">
+<p class="font-title-md text-sm">Court 4 Net Replacement</p>
+<p class="text-xs text-on-surface-variant">Scheduled: Tomorrow, 09:00</p>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border-l-4 border-error">
+<p class="font-title-md text-sm">Court 2 Lighting Issue</p>
+<p class="text-xs text-on-surface-variant">High Priority - Emergency</p>
+</div>
+</div>
+</div>
+<!-- Quick Toggle -->
+<div class="bento-card rounded-xl p-stack-md">
+<h4 class="font-title-md text-title-md mb-stack-md text-primary">Academy Mode</h4>
+<div class="flex items-center justify-between p-2 hover:bg-surface-container transition-colors rounded-lg cursor-pointer">
+<span class="font-label-lg text-label-lg">Public Bookings</span>
+<div class="w-10 h-6 bg-secondary rounded-full relative p-1">
+<div class="w-4 h-4 bg-white rounded-full absolute right-1"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-2 hover:bg-surface-container transition-colors rounded-lg cursor-pointer">
+<span class="font-label-lg text-label-lg">Night Illumination</span>
+<div class="w-10 h-6 bg-outline-variant rounded-full relative p-1">
+<div class="w-4 h-4 bg-white rounded-full absolute left-1"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Court Details Carousel -->
+<section class="mt-stack-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-stack-md">Facility Overview</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-mobile">
+<!-- Court 1 -->
+<div class="bento-card rounded-xl overflow-hidden group">
+<div class="h-32 w-full relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean, professional-grade indoor tennis court with high-visibility indigo surfacing and crisp white lines. The lighting is even and bright, highlighting a premium athletic facility environment. Minimalist branding of a sports academy is visible on the far wall. Light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD69EwT5dJRcr-XUwIJPL4uBECFqpsR3wp3gepYtmousLHgpacgafbpEF5nzqwzu0_3Xdkr9UWff9-e-XTt3zAuPKuH1kYuVtOxpCSYrL9PduLpldlan3UApvgYYbiIFii5nIi77SR8s0-_iimAp6mISQTF7vbEMlkB63ike_WHT1iXaOIvGFaqT0Ei7vuGcnkGWOSw80-b40GEDphS8C9t5fTqEVphSZNuPvJQGdMBWtIWpTuNNkhQ"/>
+<span class="absolute top-2 right-2 bg-secondary text-white font-label-lg text-[10px] px-2 py-0.5 rounded-full">ACTIVE</span>
+</div>
+<div class="p-3">
+<h5 class="font-title-md text-title-md">Court 1 (Main)</h5>
+<p class="text-xs text-on-surface-variant">Last cleaning: 4h ago</p>
+</div>
+</div>
+<!-- Court 2 -->
+<div class="bento-card rounded-xl overflow-hidden group">
+<div class="h-32 w-full relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An empty professional basketball court with polished hardwood floors reflecting soft overhead lighting. The atmosphere is quiet and well-maintained. The color palette includes natural wood tones, deep indigo accents, and clean white lines. Minimalist corporate sports facility style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUFjlPijpoRhh1bENTawbJVg3UkDC-OaD1VEj7kiKVXBUjJ8eKqhEP1WWptktc45WE9itmakp7o8kyBqeHTz_FzJh0xjf8r6JEJwopPkvxtmnYTPGsKn6R7Ex_O_CE_tnlKn-PjYa3cX2Dt05HSII7YER6ntcyVZ0OLXZNsSPQqnUBTB3TMcPGPRIxv7lE9USr4ufAYJq8iFNPoIeTEx___cmcrPcsFKl09ngsQ8y68wjjk8xe6eHK"/>
+<span class="absolute top-2 right-2 bg-on-tertiary-container text-white font-label-lg text-[10px] px-2 py-0.5 rounded-full">MAINTENANCE</span>
+</div>
+<div class="p-3">
+<h5 class="font-title-md text-title-md">Court 2 (North)</h5>
+<p class="text-xs text-on-surface-variant">Lighting Repair In Progress</p>
+</div>
+</div>
+<!-- Court 3 -->
+<div class="bento-card rounded-xl overflow-hidden group">
+<div class="h-32 w-full relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern glass-walled squash court with high-performance flooring and vibrant indigo-tinted glass panels. The design is sleek and minimalist, emphasizing a high-tech athletic training facility for an elite sports academy. Bright, high-key lighting for a light-mode UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEUP9WK9LKt5c5Mzy4KTQxmSDF2Mee28Bizgc47S_GSQvwhwB5XwE1MtU76_Q7GJJcPcUIezAKorskM_xT72e_0FSSc8uZaunGi8DhYEy3WuyXfCoemJASVGakuvZGm5KAO1P3nPk0wXbIVNYDtzU6aYaKVah_wk6e-o0qmSgQ57kOSV_KQ-Wtt8Bvr3GEB1wjpo-l7NGUROuOcudQGTBB-X24-Aa9t_0fCQKhU-N3JIpAI178y0BN"/>
+<span class="absolute top-2 right-2 bg-secondary text-white font-label-lg text-[10px] px-2 py-0.5 rounded-full">ACTIVE</span>
+</div>
+<div class="p-3">
+<h5 class="font-title-md text-title-md">Court 3 (Squash)</h5>
+<p class="text-xs text-on-surface-variant">Optimal Condition</p>
+</div>
+</div>
+<!-- Court 4 -->
+<div class="bento-card rounded-xl overflow-hidden group">
+<div class="h-32 w-full relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional padel court with blue synthetic grass and glass enclosures. The setting is modern and bright, part of a high-end corporate athletic complex. The surfacing is immaculate, reflecting a corporate management-first sports philosophy. Indigo and emerald green palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2bh-juaAHltZwA98o-frGigABPf4EjU-OAIjrMj2HoasYz11u9MIrC8yCT5CzuYeHN-t7cdnRke2XaFIGk4V5ipelm-x1arzZEdYQ6l-EN12o1mHObhaBUq65MXgBje7VaWZ7qh8OPvgKfkQvWOIC6ByOxfM9aDSC18eBKX163OS0K8SWaN6sMrpgPRWXuoAkyV486ZkZOlVJJ88OkaFzbud9DunHnwGh-kAjii0foRfMLSwgtyfn"/>
+<span class="absolute top-2 right-2 bg-secondary text-white font-label-lg text-[10px] px-2 py-0.5 rounded-full">ACTIVE</span>
+</div>
+<div class="p-3">
+<h5 class="font-title-md text-title-md">Court 4 (Padel)</h5>
+<p class="text-xs text-on-surface-variant">Net Check Required</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Maintenance Modal -->
+<div class="fixed inset-0 z-[60] hidden flex items-center justify-center p-margin-mobile" id="maintenance-modal">
+<div class="scrim-overlay absolute inset-0" onclick="toggleModal('maintenance-modal')"></div>
+<div class="bg-white rounded-xl w-full max-w-md p-stack-lg relative shadow-2xl animate-in fade-in zoom-in duration-300">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-stack-md">Schedule Maintenance</h3>
+<form class="space-y-4">
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant block mb-1">Court Selection</label>
+<select class="w-full border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary outline-none">
+<option>Court 1 (Main)</option>
+<option>Court 2 (North)</option>
+<option>Court 3 (Squash)</option>
+<option>Court 4 (Padel)</option>
+</select>
+</div>
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant block mb-1">Maintenance Type</label>
+<select class="w-full border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary outline-none">
+<option>Routine Cleaning</option>
+<option>Surface Repair</option>
+<option>Lighting Adjustment</option>
+<option>Emergency Block</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant block mb-1">Start Date</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary outline-none" type="date"/>
+</div>
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant block mb-1">Time Slot</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary outline-none" type="time"/>
+</div>
+</div>
+<div class="flex gap-4 pt-4">
+<button class="flex-1 py-3 font-title-md border border-outline text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors" onclick="toggleModal('maintenance-modal')" type="button">Cancel</button>
+<button class="flex-1 py-3 font-title-md bg-primary text-on-primary rounded-xl hover:opacity-90 active:scale-95 transition-all" type="submit">Confirm</button>
+</div>
+</form>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg dark:shadow-none">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed-dim dark:text-on-primary-fixed-variant rounded-full px-4 py-1 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg mt-1">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg mt-1">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg mt-1">Settings</span>
+</a>
+</nav>
+<!-- FAB for New Enrollment (Contextual) -->
+<button class="fixed right-6 bottom-24 w-14 h-14 bg-primary text-on-primary rounded-[16px] shadow-lg flex items-center justify-center hover:shadow-xl active:scale-90 transition-all z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script>
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Add visual interest to timeline slots
+        document.querySelectorAll('tbody td div').forEach(slot => {
+            slot.addEventListener('click', () => {
+                if (slot.classList.contains('bg-secondary')) {
+                    slot.classList.remove('bg-secondary');
+                    slot.classList.add('bg-on-tertiary-container');
+                    slot.textContent = 'Maintenance';
+                } else if (slot.classList.contains('bg-on-tertiary-container')) {
+                    slot.classList.remove('bg-on-tertiary-container');
+                    slot.classList.add('bg-secondary');
+                    slot.textContent = 'Open';
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy | Notification Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar for better UI */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d8e3fb;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c7c5d4;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#6ffbbe",
+                    "on-primary-fixed": "#04006d",
+                    "surface-tint": "#4f54b4",
+                    "inverse-surface": "#263143",
+                    "inverse-on-surface": "#ecf1ff",
+                    "on-surface-variant": "#464652",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary-container": "#ec9700",
+                    "on-error": "#ffffff",
+                    "secondary": "#006c49",
+                    "surface-bright": "#f9f9ff",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#cfdaf2",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-variant": "#d8e3fb",
+                    "on-secondary-container": "#00714d",
+                    "surface-container-high": "#dee8ff",
+                    "primary": "#15157d",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffddb8",
+                    "outline-variant": "#c7c5d4",
+                    "secondary-container": "#6cf8bb",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#111c2d",
+                    "on-secondary-fixed": "#002113",
+                    "surface-container": "#e7eeff",
+                    "inverse-primary": "#c0c1ff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#d8e3fb",
+                    "primary-fixed": "#e1e0ff",
+                    "tertiary": "#3c2300",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "background": "#f9f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-container": "#5a3700",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-background": "#111c2d",
+                    "surface-container-low": "#f0f3ff",
+                    "surface": "#f9f9ff",
+                    "primary-container": "#2e3192",
+                    "outline": "#777683",
+                    "on-primary-container": "#9da1ff",
+                    "on-secondary-fixed-variant": "#005236"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "24px",
+                    "unit": "4px",
+                    "gutter-mobile": "12px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "title-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary" data-icon="sports_kabaddi">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a sports academy manager, wearing a clean indigo-branded polo shirt, looking confidently at the camera. The background is a blurred high-end gym facility with soft morning light filtering through large windows, creating a premium and authoritative atmosphere consistent with the Corporate Modernism style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDA8pHVk4h3_xQyHb8bJ4EE6u0FOLbqYi3zOo6tra6XNkVPh9dn1Quj4FyNgDJsNGTJDFhh-C-hmDe_EPnpK2FesEVexK-OpGfOC9Qe2eAUzD1WQXAmuC-5QNvLD6o9jIFoeJEYpf0TCO_e9gr0QK5Ir2UGMcRRs8aeKhDxbc3m3ZomJgPoJXs1RJkwmZQQYVaAZ02HaAbvKwjVpXHQkJUIqd3rLmWHXLziw6sblnVB_48n9oCsDNm"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-2xl mx-auto">
+<!-- Section Header -->
+<div class="flex items-center justify-between mb-stack-lg">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Notifications</h2>
+<button class="text-primary font-label-lg text-label-lg flex items-center gap-1 hover:underline">
+                Mark all as read
+            </button>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-stack-sm mb-stack-lg overflow-x-auto pb-2 no-scrollbar">
+<span class="px-stack-md py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-lg text-label-lg flex items-center">All</span>
+<span class="px-stack-md py-1 border border-outline text-on-surface-variant rounded-full font-label-lg text-label-lg flex items-center">Alerts</span>
+<span class="px-stack-md py-1 border border-outline text-on-surface-variant rounded-full font-label-lg text-label-lg flex items-center">Payments</span>
+<span class="px-stack-md py-1 border border-outline text-on-surface-variant rounded-full font-label-lg text-label-lg flex items-center">Requests</span>
+</div>
+<!-- Notification List -->
+<div class="space-y-unit">
+<!-- Alert / Warning Item -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl hover:bg-surface-container-low transition-all cursor-pointer group active:scale-[0.99]">
+<div class="flex gap-stack-md">
+<div class="flex-shrink-0 w-12 h-12 bg-error-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-lg text-label-lg text-error uppercase tracking-wider">Alert</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">15m ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Court 3 Maintenance Alert</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Lighting system failure reported. Scheduled maintenance required immediately.</p>
+<div class="mt-stack-md flex gap-stack-sm">
+<button class="px-stack-md py-1 bg-primary text-on-primary rounded-lg font-label-lg text-label-lg">View Details</button>
+<button class="px-stack-md py-1 border border-outline text-on-surface rounded-lg font-label-lg text-label-lg">Dismiss</button>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant my-2"></div>
+<!-- Request / Info Item -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl hover:bg-surface-container-low transition-all cursor-pointer group active:scale-[0.99]">
+<div class="flex gap-stack-md">
+<div class="flex-shrink-0 w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="person_add" style="font-variation-settings: 'FILL' 1;">person_add</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-wider">Membership</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">2h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">New Membership Request from John Doe</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Application for "Elite Performance" tier submitted. Please review the profile.</p>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant my-2"></div>
+<!-- Payment / Success Item -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl hover:bg-surface-container-low transition-all cursor-pointer group active:scale-[0.99]">
+<div class="flex gap-stack-md">
+<div class="flex-shrink-0 w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-lg text-label-lg text-secondary uppercase tracking-wider">Payment</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">5h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Payment Received: Invoice #1024</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Amount: <span class="font-label-lg text-label-lg text-on-surface">$250.00</span> via Stripe for Academy Fees.</p>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant my-2"></div>
+<!-- Application / Info Item -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl hover:bg-surface-container-low transition-all cursor-pointer group active:scale-[0.99]">
+<div class="flex gap-stack-md">
+<div class="flex-shrink-0 w-12 h-12 bg-tertiary-fixed rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="work" style="font-variation-settings: 'FILL' 1;">work</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-lg text-label-lg text-on-tertiary-fixed-variant uppercase tracking-wider">Hiring</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">Yesterday</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">New Coach Application: Sarah Smith</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">LTA Level 3 qualified coach applying for the Junior Development program.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination/Load More -->
+<div class="mt-stack-lg flex justify-center">
+<button class="flex items-center gap-2 px-stack-lg py-2 border border-outline rounded-full text-on-surface font-label-lg text-label-lg hover:bg-surface-container transition-colors">
+                Load older notifications
+                <span class="material-symbols-outlined text-[16px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="dashboard">dashboard</span>
+<span class="font-label-lg text-label-lg group-hover:text-primary transition-colors">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="sports_tennis">sports_tennis</span>
+<span class="font-label-lg text-label-lg group-hover:text-primary transition-colors">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="event_available">event_available</span>
+<span class="font-label-lg text-label-lg group-hover:text-primary transition-colors">Bookings</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined" data-icon="notifications" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="font-label-lg text-label-lg">Alerts</span>
+</div>
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="settings">settings</span>
+<span class="font-label-lg text-label-lg group-hover:text-primary transition-colors">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+<script>
+        // Simple micro-interaction for notification clicks
+        document.querySelectorAll('.cursor-pointer').forEach(item => {
+            item.addEventListener('click', () => {
+                item.style.backgroundColor = 'var(--surface-container-low)';
+                setTimeout(() => {
+                    item.classList.add('opacity-80');
+                    // In a real app, this would mark as read or navigate
+                }, 150);
+            });
+        });
+    </script>
+</body></html>

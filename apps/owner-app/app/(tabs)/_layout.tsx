@@ -33,18 +33,36 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="courts"
         options={{
-          title: 'Inventory',
+          title: 'Courts',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="tennisball-outline" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
+        name="analytics"
+        options={{
+          title: 'Stats',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bar-chart-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Alerts',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="notifications-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="more"
         options={{
-          title: 'More',
+          title: 'Settings',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="menu-outline" size={size} color={color} />
+            <Ionicons name="settings-outline" size={size} color={color} />
           ),
         }}
       />

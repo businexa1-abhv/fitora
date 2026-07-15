@@ -35,6 +35,48 @@
       "id": "76f59adf85ec4f43b240efa842c6bc2e",
       "html": "venue-executive-dashboard.html",
       "screenshot": "venue-executive-dashboard.png"
+    },
+    {
+      "title": "Academy Dashboard",
+      "id": "f181e3cc6372425db3520c8b95b888d7",
+      "html": "academy-dashboard.html",
+      "screenshot": "academy-dashboard.png"
+    },
+    {
+      "title": "Notifications Center",
+      "id": "39a094cf8b5d4c94ab2225b6c4c1e6cb",
+      "html": "notifications-center.html",
+      "screenshot": "notifications-center.png"
+    },
+    {
+      "title": "Performance Analytics",
+      "id": "134ed14cc5434abaa5d4b2dee15b4df2",
+      "html": "performance-analytics.html",
+      "screenshot": "performance-analytics.png"
+    },
+    {
+      "title": "Court List",
+      "id": "530aa17448854ad2bfcfd2cd37f0634e",
+      "html": "court-list.html",
+      "screenshot": "court-list.png"
+    },
+    {
+      "title": "Add/Edit Court",
+      "id": "c72a96495bea4759b76b687d274abea7",
+      "html": "add-edit-court.html",
+      "screenshot": "add-edit-court.png"
+    },
+    {
+      "title": "Court Availability & Maintenance",
+      "id": "0196a34992e043fc9fb451dbc545d69f",
+      "html": "court-availability-maintenance.html",
+      "screenshot": "court-availability-maintenance.png"
+    },
+    {
+      "title": "Court Detail View",
+      "id": "7cb17fb8ecd94b2a82d358ba27035893",
+      "html": "court-detail-view.html",
+      "screenshot": "court-detail-view.png"
     }
   ]
 }
