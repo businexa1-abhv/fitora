@@ -4,7 +4,7 @@
 Build all FitOra surfaces in a single production-grade monorepo with shared contracts, shared UI primitives, shared auth, and service-oriented backend boundaries.
 
 ## Monorepo Topology
-- apps: player-app, owner-app, admin-web, partner-web, shop-partner-web, existing apps
+- apps: mobile (player), owner-app, admin-web, partner-web, shop-partner-web, existing apps
 - packages: ui, design-system, api, auth, types, hooks, utils, validation, config, theme, constants
 - backend: service packages and shared backend modules
 - infra: Docker templates and compose stacks

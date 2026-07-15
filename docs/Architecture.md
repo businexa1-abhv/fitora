@@ -228,7 +228,7 @@ Separate app for security isolation and independent deploy cadence.
 **Target structure** (Phase 2 — not yet in repo):
 
 ```
-apps/mobile/
+apps/player-app/
 ├── app/                    # Expo Router (file-based)
 │   ├── (tabs)/             # Bottom tabs: Book, Train, Shop, Profile
 │   ├── (auth)/             # Login, register
@@ -1205,10 +1205,10 @@ apps/admin/
 └── package.json
 ```
 
-### 17.5 Mobile (`apps/mobile/` — Phase 2)
+### 17.5 Mobile (`apps/player-app/` — Phase 2)
 
 ```
-apps/mobile/
+apps/player-app/
 ├── app/                            # Expo Router
 │   ├── (tabs)/
 │   │   ├── index.tsx               # Home / Book
@@ -1274,7 +1274,7 @@ packages/shared/
 | `NEXT_PUBLIC_API_URL` | API base URL |
 | `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Razorpay public key (client-side) |
 
-**Mobile (`apps/mobile/.env`):**
+**Mobile (`apps/player-app/.env`):**
 
 | Variable | Description |
 |----------|-------------|

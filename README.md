@@ -101,7 +101,7 @@ cp .env.example .env                          # reference only
 cp apps/api/.env.example apps/api/.env
 cp apps/web/.env.example apps/web/.env.local
 cp apps/admin/.env.example apps/admin/.env.local
-cp apps/mobile/.env.example apps/mobile/.env
+cp apps/player-app/.env.example apps/player-app/.env
 ```
 
 ### 4. Set up database
@@ -118,13 +118,13 @@ pnpm db:seed
 pnpm dev
 ```
 
-| App     | URL                               |
-| ------- | --------------------------------- |
-| Web     | http://localhost:3000             |
-| API     | http://localhost:3001             |
-| Swagger | http://localhost:3001/api/docs    |
-| Admin   | http://localhost:3002             |
-| Mobile  | `pnpm dev:mobile` → Expo DevTools |
+| App        | URL                               |
+| ---------- | --------------------------------- |
+| Web        | http://localhost:3000             |
+| API        | http://localhost:3001             |
+| Swagger    | http://localhost:3001/api/docs    |
+| Admin      | http://localhost:3002             |
+| Player App | `pnpm dev:player` → Expo DevTools |
 
 ---
 
@@ -136,7 +136,7 @@ pnpm dev
 | `pnpm dev:api`      | API only                      |
 | `pnpm dev:web`      | Web only                      |
 | `pnpm dev:admin`    | Admin only                    |
-| `pnpm dev:mobile`   | Expo mobile app               |
+| `pnpm dev:player`   | Expo player app               |
 | `pnpm build`        | Build all apps & packages     |
 | `pnpm lint`         | ESLint across monorepo        |
 | `pnpm lint:fix`     | ESLint with auto-fix          |
@@ -199,12 +199,12 @@ Shared React components (`Button`, `Input`, `Card`) for web and admin.
 
 See [`.env.example`](.env.example) for the full reference.
 
-| App    | File                    | Key variables                                           |
-| ------ | ----------------------- | ------------------------------------------------------- |
-| API    | `apps/api/.env`         | `DATABASE_URL`, `JWT_SECRET`, `RAZORPAY_*`, `REDIS_URL` |
-| Web    | `apps/web/.env.local`   | `NEXT_PUBLIC_API_URL`                                   |
-| Admin  | `apps/admin/.env.local` | `NEXT_PUBLIC_API_URL`                                   |
-| Mobile | `apps/mobile/.env`      | `EXPO_PUBLIC_API_URL`                                   |
+| App        | File                    | Key variables                                           |
+| ---------- | ----------------------- | ------------------------------------------------------- |
+| API        | `apps/api/.env`         | `DATABASE_URL`, `JWT_SECRET`, `RAZORPAY_*`, `REDIS_URL` |
+| Web        | `apps/web/.env.local`   | `NEXT_PUBLIC_API_URL`                                   |
+| Admin      | `apps/admin/.env.local` | `NEXT_PUBLIC_API_URL`                                   |
+| Player App | `apps/player-app/.env`  | `EXPO_PUBLIC_API_URL`                                   |
 
 **Payments:** Set `PAYMENT_MODE=mock` in `apps/api/.env` for local dev without Razorpay keys.
 

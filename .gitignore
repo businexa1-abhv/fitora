@@ -10,7 +10,7 @@ out
 build
 .turbo
 .expo
-apps/mobile/dist
+apps/player-app/dist
 
 # Environment
 .env

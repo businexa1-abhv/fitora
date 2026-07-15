@@ -356,7 +356,7 @@ export class AuthService {
       expiresIn: result.expiresIn,
       user: this.formatUser(result.user as UserWithRoles),
       isNewUser: false,
-      requiresOnboarding: this.requiresPlayerOnboarding(result.user as UserWithRoles),
+      requiresOnboarding: false,
     };
   }
 
@@ -427,7 +427,8 @@ export class AuthService {
       expiresIn: this.tokenService.getAccessTokenExpiresInSeconds(),
       user: response.user,
       isNewUser,
-      requiresOnboarding: isNewUser || this.requiresPlayerOnboarding(user),
+      // Existing registered players should go directly to dashboard after OTP.
+      requiresOnboarding: isNewUser,
     };
   }
 

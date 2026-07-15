@@ -1,3 +1,9 @@
-import reactNativeConfig from '@fitora/config/eslint/react-native';
+import baseConfig from '@fitora/config/eslint/react-native';
 
-export default reactNativeConfig;
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  ...baseConfig,
+  {
+    ignores: ['.expo/**', 'dist/**', 'node_modules/**'],
+  },
+];

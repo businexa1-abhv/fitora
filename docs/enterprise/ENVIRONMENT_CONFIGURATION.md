@@ -15,7 +15,7 @@
 - PUSH_SERVICE_KEY
 
 ## App Variables
-- player-app: EXPO_PUBLIC_API_URL
+- mobile (player app): EXPO_PUBLIC_API_URL
 - owner-app: EXPO_PUBLIC_API_URL
 - admin-web: NEXT_PUBLIC_API_URL
 - partner-web: NEXT_PUBLIC_API_URL

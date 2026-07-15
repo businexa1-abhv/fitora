@@ -7,7 +7,6 @@
     "dev:api": "turbo run dev --filter=@fitora/api",
     "dev:web": "turbo run dev --filter=@fitora/web",
     "dev:admin": "turbo run dev --filter=@fitora/admin",
-    "dev:mobile": "turbo run dev --filter=@fitora/mobile",
     "dev:player": "turbo run dev --filter=@fitora/player-app",
     "dev:owner": "turbo run dev --filter=@fitora/owner-app",
     "dev:admin-web": "turbo run dev --filter=@fitora/admin-web",

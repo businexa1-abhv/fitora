@@ -19,6 +19,9 @@ export class ConsoleSmsProvider implements SmsProvider {
           '',
         ].join('\n'),
       );
+      this.logger.log(
+        `[DEV OTP] phone=${formatPhoneForConsole(phone)} code=${options.otpCode} expiresIn=${options.expiresInMinutes ?? 5}m`,
+      );
       return true;
     }
 

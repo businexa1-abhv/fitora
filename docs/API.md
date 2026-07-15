@@ -220,13 +220,13 @@ Dashboard pages use **TanStack React Query** (`@tanstack/react-query`) with:
 | Web (trainer) | `apps/web/src/lib/training.ts` |
 | Web (provider) | `apps/web/src/lib/marketplace.ts` |
 | Web (printer) | `apps/web/src/lib/print.ts` |
-| Mobile (player) | `apps/mobile/lib/*.ts` |
+| Mobile (player) | `apps/player-app/lib/*.ts` |
 
 ---
 
 ## Mobile app (Player)
 
-REST endpoints used by the **React Native mobile app** (`apps/mobile`). Configure `EXPO_PUBLIC_API_URL` (see `apps/mobile/.env.example`).
+REST endpoints used by the **React Native mobile app** (`apps/player-app`). Configure `EXPO_PUBLIC_API_URL` (see `apps/player-app/.env.example`).
 
 ### Authentication
 
@@ -333,7 +333,7 @@ Top-up completes via `POST /payments/verify` (or `POST /payments/mock-complete` 
 
 **Env vars:** `REDIS_URL`, `EMAIL_MODE`, `SENDGRID_API_KEY`, `SMS_MODE`, `MSG91_*`, `PUSH_MODE`, `FIREBASE_*`
 
-**Mobile client modules:** `apps/mobile/lib/*.ts`
+**Mobile client modules:** `apps/player-app/lib/*.ts`
 
 ---
 

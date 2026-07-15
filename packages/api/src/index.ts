@@ -1,1 +1,1 @@
-export const packageName = '@fitora/api';
+export const packageName = '@fitora/api-client';

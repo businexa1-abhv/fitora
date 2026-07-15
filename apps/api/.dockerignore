@@ -11,5 +11,5 @@ coverage
 .env.*
 apps/web
 apps/admin
-apps/mobile
+apps/player-app
 docs

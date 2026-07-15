@@ -11,5 +11,5 @@ coverage
 !.env.example
 apps/web/.next
 apps/admin/.next
-apps/mobile/.expo
-apps/mobile/dist
+apps/player-app/.expo
+apps/player-app/dist
