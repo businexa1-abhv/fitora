@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import {
   AuditAction,
@@ -10,18 +12,15 @@ import {
   CourtApprovalStatus,
   PaymentEntityType,
   PaymentStatus,
-  Prisma,
+  type Prisma,
   UserRole,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.module';
 import { PaymentsService } from '../payments/payments.service';
 import { MembershipsService } from '../memberships/memberships.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { AuthUserPayload } from '../common/decorators/current-user.decorator';
-import {
-  buildCursorPaginatedResult,
-  decodeCursor,
-} from '../common/utils/cursor-pagination.util';
+import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { buildCursorPaginatedResult, decodeCursor } from '../common/utils/cursor-pagination.util';
 import { BOOKING_LOCK_TTL_MINUTES } from './constants/refund-rules';
 import {
   calculateRefundAmount,
@@ -30,10 +29,10 @@ import {
   REFUND_RULES,
 } from './constants/refund-rules';
 import {
-  BookingHistoryQueryDto,
-  CancelBookingDto,
-  CheckInDto,
-  CreateBookingDto,
+  type BookingHistoryQueryDto,
+  type CancelBookingDto,
+  type CheckInDto,
+  type CreateBookingDto,
 } from './dto';
 import { buildQrPayload, generateQrDataUrl } from './utils/qr-code.util';
 
@@ -54,9 +53,13 @@ const BOOKING_INCLUDE = {
 @Injectable()
 export class BookingsService {
   constructor(
+    @Inject(PrismaService)
     private prisma: PrismaService,
+    @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
+    @Inject(forwardRef(() => MembershipsService))
     private membershipsService: MembershipsService,
+    @Inject(NotificationsService)
     private notificationsService: NotificationsService,
   ) {}
 
@@ -66,7 +69,11 @@ export class BookingsService {
 
     const lockedUntil = new Date(Date.now() + BOOKING_LOCK_TTL_MINUTES * 60_000);
 
-    let discountDetails = { discount: 0, purchaseId: null as string | null, bookingsRemaining: null as number | null };
+    let discountDetails = {
+      discount: 0,
+      purchaseId: null as string | null,
+      bookingsRemaining: null as number | null,
+    };
 
     const booking = await this.prisma.$transaction(async (tx) => {
       const slot = await tx.courtSlot.findFirst({
@@ -458,7 +465,13 @@ export class BookingsService {
         status: BookingStatus.PENDING,
         paymentStatus: PaymentStatus.PENDING,
         deletedAt: null,
-        OR: [{ lockedUntil: { lt: now } }, { lockedUntil: null, createdAt: { lt: new Date(now.getTime() - BOOKING_LOCK_TTL_MINUTES * 60_000) } }],
+        OR: [
+          { lockedUntil: { lt: now } },
+          {
+            lockedUntil: null,
+            createdAt: { lt: new Date(now.getTime() - BOOKING_LOCK_TTL_MINUTES * 60_000) },
+          },
+        ],
       },
     });
 
@@ -471,13 +484,11 @@ export class BookingsService {
 
   // ─── Private helpers ────────────────────────────────────────────────────────
 
-  private validateSlotAvailable(
-    slot: {
-      isBlocked: boolean;
-      startTime: Date;
-      court: { deletedAt: Date | null; approvalStatus: CourtApprovalStatus; isActive: boolean };
-    },
-  ) {
+  private validateSlotAvailable(slot: {
+    isBlocked: boolean;
+    startTime: Date;
+    court: { deletedAt: Date | null; approvalStatus: CourtApprovalStatus; isActive: boolean };
+  }) {
     if (slot.court.deletedAt || slot.court.approvalStatus !== CourtApprovalStatus.APPROVED) {
       throw new BadRequestException('Court is not available for booking');
     }
@@ -488,7 +499,13 @@ export class BookingsService {
 
   private async handleExistingBooking(
     tx: Prisma.TransactionClient,
-    existing: { id: string; userId: string; status: BookingStatus; paymentStatus: PaymentStatus; lockedUntil: Date | null },
+    existing: {
+      id: string;
+      userId: string;
+      status: BookingStatus;
+      paymentStatus: PaymentStatus;
+      lockedUntil: Date | null;
+    },
     userId: string,
   ) {
     if (

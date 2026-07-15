@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { AuthService } from './auth.service';
@@ -8,12 +8,28 @@ import { PasswordService } from './services/password.service';
 import { GoogleAuthService } from './services/google-auth.service';
 import { AuditService } from './services/audit.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { TenantsService } from '../tenants/tenants.service';
+
+interface MockPrisma {
+  user: {
+    findFirst: jest.Mock;
+    findUnique: jest.Mock;
+    create: jest.Mock;
+    update: jest.Mock;
+  };
+}
+
+interface MockTokenService {
+  issueTokenPair: jest.Mock;
+  refreshSession: jest.Mock;
+  getAccessTokenExpiresInSeconds: jest.Mock;
+}
 
 describe('AuthService', () => {
   let service: AuthService;
-  let prisma: jest.Mocked<Pick<PrismaService, 'user'>>;
+  let prisma: MockPrisma;
   let passwordService: jest.Mocked<Pick<PasswordService, 'hashPassword' | 'verifyPassword'>>;
-  let tokenService: jest.Mocked<Pick<TokenService, 'issueTokenPair'>>;
+  let tokenService: MockTokenService;
 
   const mockUser = {
     id: 'user-1',
@@ -31,7 +47,18 @@ describe('AuthService', () => {
     deletedAt: null,
     createdAt: new Date(),
     updatedAt: new Date(),
-    roles: [{ id: 'role-1', userId: 'user-1', role: UserRole.PLAYER, entityId: null, grantedBy: null, deletedAt: null, createdAt: new Date(), updatedAt: new Date() }],
+    roles: [
+      {
+        id: 'role-1',
+        userId: 'user-1',
+        role: UserRole.PLAYER,
+        entityId: null,
+        grantedBy: null,
+        deletedAt: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
   };
 
   beforeEach(async () => {
@@ -42,7 +69,7 @@ describe('AuthService', () => {
         create: jest.fn(),
         update: jest.fn(),
       },
-    } as unknown as jest.Mocked<Pick<PrismaService, 'user'>>;
+    };
 
     passwordService = {
       hashPassword: jest.fn().mockResolvedValue('hashed'),
@@ -54,6 +81,8 @@ describe('AuthService', () => {
         accessToken: 'access',
         refreshToken: 'refresh',
       }),
+      refreshSession: jest.fn(),
+      getAccessTokenExpiresInSeconds: jest.fn().mockReturnValue(900),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -61,10 +90,19 @@ describe('AuthService', () => {
         AuthService,
         { provide: PrismaService, useValue: prisma },
         { provide: TokenService, useValue: tokenService },
-        { provide: OtpService, useValue: { normalizePhone: jest.fn(), assertPhoneAvailable: jest.fn(), verifyOtp: jest.fn(), findUserByPhone: jest.fn() } },
+        {
+          provide: OtpService,
+          useValue: {
+            normalizePhone: jest.fn(),
+            assertPhoneAvailable: jest.fn(),
+            verifyOtp: jest.fn(),
+            findUserByPhone: jest.fn(),
+          },
+        },
         { provide: PasswordService, useValue: passwordService },
         { provide: GoogleAuthService, useValue: { verifyIdToken: jest.fn() } },
         { provide: AuditService, useValue: { logAuthEvent: jest.fn() } },
+        { provide: TenantsService, useValue: { createForCourtOwner: jest.fn() } },
       ],
     }).compile();
 
@@ -101,9 +139,9 @@ describe('AuthService', () => {
     prisma.user.findFirst.mockResolvedValue(mockUser);
     passwordService.verifyPassword.mockResolvedValue(false);
 
-    await expect(
-      service.login({ email: 'player@example.com', password: 'wrong' }),
-    ).rejects.toThrow(UnauthorizedException);
+    await expect(service.login({ email: 'player@example.com', password: 'wrong' })).rejects.toThrow(
+      UnauthorizedException,
+    );
   });
 
   it('registers a new player', async () => {
@@ -130,22 +168,37 @@ describe('AuthService', () => {
         accessToken: 'new-access',
         refreshToken: 'new-refresh',
       }),
-      rotateRefreshToken: jest.fn().mockResolvedValue({
+      refreshSession: jest.fn().mockResolvedValue({
         userId: 'user-1',
         email: 'player@example.com',
+        user: mockUser,
+        tokens: {
+          accessToken: 'new-access',
+          refreshToken: 'new-refresh',
+        },
+        expiresIn: 900,
       }),
+      getAccessTokenExpiresInSeconds: jest.fn().mockReturnValue(900),
     };
-    prisma.user.findUnique.mockResolvedValue(mockUser);
 
     const module = await Test.createTestingModule({
       providers: [
         AuthService,
         { provide: PrismaService, useValue: prisma },
         { provide: TokenService, useValue: tokenServiceFull },
-        { provide: OtpService, useValue: { normalizePhone: jest.fn(), assertPhoneAvailable: jest.fn(), verifyOtp: jest.fn(), findUserByPhone: jest.fn() } },
+        {
+          provide: OtpService,
+          useValue: {
+            normalizePhone: jest.fn(),
+            assertPhoneAvailable: jest.fn(),
+            verifyOtp: jest.fn(),
+            findUserByPhone: jest.fn(),
+          },
+        },
         { provide: PasswordService, useValue: passwordService },
         { provide: GoogleAuthService, useValue: { verifyIdToken: jest.fn() } },
         { provide: AuditService, useValue: { logAuthEvent: jest.fn() } },
+        { provide: TenantsService, useValue: { createForCourtOwner: jest.fn() } },
       ],
     }).compile();
     const refreshService = module.get(AuthService);

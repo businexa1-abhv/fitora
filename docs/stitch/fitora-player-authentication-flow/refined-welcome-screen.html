@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Welcome</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lexend:wght@300;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#006e2f",
+                    "on-surface": "#251913",
+                    "surface-container-high": "#fce3d9",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e0c0b1",
+                    "tertiary": "#006398",
+                    "on-secondary-fixed-variant": "#005321",
+                    "inverse-on-surface": "#ffede6",
+                    "tertiary-fixed": "#cde5ff",
+                    "surface-container": "#ffeae0",
+                    "primary-fixed-dim": "#ffb690",
+                    "surface-dim": "#edd5cb",
+                    "secondary-fixed-dim": "#4ae176",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#6bff8f",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#584237",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#ffdbca",
+                    "tertiary-container": "#00a2f4",
+                    "surface-bright": "#fff8f6",
+                    "primary-container": "#f97316",
+                    "secondary-container": "#6bff8f",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#002109",
+                    "on-background": "#251913",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#582200",
+                    "outline": "#8c7164",
+                    "surface": "#fff8f6",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#004b74",
+                    "on-secondary-container": "#007432",
+                    "on-primary-fixed": "#341100",
+                    "on-tertiary-fixed": "#001d32",
+                    "tertiary-fixed-dim": "#93ccff",
+                    "surface-container-highest": "#f6ded3",
+                    "on-tertiary-container": "#003554",
+                    "on-primary-fixed-variant": "#783200",
+                    "surface-tint": "#9d4300",
+                    "surface-container-low": "#fff1eb",
+                    "background": "#fff8f6",
+                    "surface-variant": "#f6ded3",
+                    "inverse-surface": "#3c2d26",
+                    "inverse-primary": "#ffb690",
+                    "primary": "#9d4300"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "section-gap": "48px",
+                    "stack-sm": "8px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Lexend"],
+                    "headline-md": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "title-lg": ["Lexend"],
+                    "headline-lg-mobile": ["Lexend"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+
+        .slide-up {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="w-full sticky top-0 bg-background/80 backdrop-blur-md z-50">
+<div class="flex items-center justify-between px-margin-mobile h-16 w-full max-w-7xl mx-auto">
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">FitOra</span>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95">help</button>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center justify-start w-full pb-10">
+<!-- Hero Illustration Section -->
+<section class="w-full px-margin-mobile mb-10 slide-up stagger-1">
+<div class="w-full max-w-md mx-auto aspect-[3/2] rounded-[32px] overflow-hidden shadow-xl">
+<img alt="Sports Community" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6C4y3KX2L4EyL0mfb22-v2qCicNKDzej6a_uh2sH0rJboY5bhirjPLRmjSThxApBT2Jj0mThDIuSWBkZ1MwxGQwYBS6dJ1GsYkKFlZ3lP8d9zbveDFrR4ye8bh34Ni0BPqwRZYt6jz1u6vWPFJQvy6XCVWStIdtg1bpo-EZWMZWDZL1Gd_5RPxg5e58WEJPo5mAaJwrpgnQxZ1PLkT8-qMfqsjsBPBFcK5XV56wdjc8Jng3h0mlbA"/>
+</div>
+</section>
+<!-- Welcome Text Section -->
+<section class="w-full max-w-lg px-margin-mobile text-center mb-12 slide-up stagger-2">
+<h1 class="font-display-lg-mobile text-[32px] font-bold text-on-surface mb-4 leading-tight">Welcome to FitOra</h1>
+<p class="font-display-lg-mobile text-body-lg font-light text-on-surface-variant max-w-[280px] mx-auto leading-relaxed">
+                Join the ultimate sports community and start booking today.
+            </p>
+</section>
+<!-- Authentication Options -->
+<section class="w-full max-w-md px-margin-mobile flex flex-col gap-4 slide-up stagger-3">
+<!-- Primary CTA -->
+<button class="w-full bg-primary text-white font-label-lg text-label-lg h-[56px] rounded-full flex items-center justify-center gap-3 shadow-md hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">smartphone</span>
+                Continue with Mobile Number
+            </button>
+<!-- Social Logins -->
+<div class="flex flex-col gap-3">
+<button class="w-full bg-surface text-on-surface font-label-lg text-label-lg h-[56px] rounded-full flex items-center justify-center gap-3 border border-outline hover:bg-surface-variant/10 active:scale-[0.98] transition-all slide-up stagger-4">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                    Continue with Google
+                </button>
+<button class="w-full bg-surface text-on-surface font-label-lg text-label-lg h-[56px] rounded-full flex items-center justify-center gap-3 border border-outline hover:bg-surface-variant/10 active:scale-[0.98] transition-all slide-up stagger-5">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+<path d="M17.05 20.28c-.96 0-2.04-.6-3.23-.6-1.16 0-2.23.59-3.12.59-1.39 0-3.32-1.63-4.32-3.41-2.07-3.66-1.58-9.02.43-11.89 1.14-1.61 2.82-2.61 4.58-2.61.94 0 2.02.48 2.85.48.78 0 2.05-.59 3.23-.59 1.58 0 3.25.86 4.34 2.21-3.2 1.84-2.68 6.03.49 7.42-.9 2.1-2.39 4.88-4.23 4.88zM14.94 4.54c-.82 1.01-2.12 1.74-3.39 1.66-.19-1.24.41-2.58 1.14-3.43.83-1.01 2.19-1.72 3.35-1.63.15 1.25-.33 2.45-1.1 3.4z"></path>
+</svg>
+                    Continue with Apple
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer Links -->
+<footer class="w-full py-6 px-margin-mobile text-center slide-up stagger-5">
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            By continuing, you agree to our <br/>
+<a class="text-primary font-bold hover:underline" href="#">Terms of Service</a> &amp;
+            <a class="text-primary font-bold hover:underline" href="#">Privacy Policy</a>
+</p>
+</footer>
+<!-- Bottom Padding for safe area -->
+<div class="h-8"></div>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.97)';
+            });
+            btn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

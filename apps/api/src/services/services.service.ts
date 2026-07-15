@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import {
   PaymentEntityType,
@@ -10,20 +12,20 @@ import {
   ReviewTargetType,
   ServiceCategory,
   ServiceOrderStatus,
-  Prisma,
+  type Prisma,
   UserRole,
 } from '@prisma/client';
-import { AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { generateServiceOrderNumber } from './services.constants';
 import {
-  BookServiceDto,
-  CreateServiceListingDto,
-  CreateServiceReviewDto,
-  UpdateServiceListingDto,
-  UpdateServiceOrderStatusDto,
+  type BookServiceDto,
+  type CreateServiceListingDto,
+  type CreateServiceReviewDto,
+  type UpdateServiceListingDto,
+  type UpdateServiceOrderStatusDto,
 } from './dto/services.dto';
 
 const LISTING_INCLUDE = {
@@ -40,8 +42,11 @@ const ORDER_INCLUDE = {
 @Injectable()
 export class ServicesService {
   constructor(
+    @Inject(PrismaService)
     private prisma: PrismaService,
+    @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
+    @Inject(NotificationsService)
     private notificationsService: NotificationsService,
   ) {}
 
@@ -300,7 +305,11 @@ export class ServicesService {
     };
   }
 
-  async updateOrderStatus(orderId: string, user: AuthUserPayload, dto: UpdateServiceOrderStatusDto) {
+  async updateOrderStatus(
+    orderId: string,
+    user: AuthUserPayload,
+    dto: UpdateServiceOrderStatusDto,
+  ) {
     const order = await this.getOrderEntity(orderId);
     this.assertProviderOrAdmin(order, user);
     this.validateProviderTransition(order.status, dto.status);
@@ -552,8 +561,15 @@ export class ServicesService {
   private validateProviderTransition(current: ServiceOrderStatus, next: ServiceOrderStatus) {
     const allowed: Record<ServiceOrderStatus, ServiceOrderStatus[]> = {
       [ServiceOrderStatus.PENDING]: [],
-      [ServiceOrderStatus.ACCEPTED]: [ServiceOrderStatus.IN_PROGRESS, ServiceOrderStatus.REJECTED, ServiceOrderStatus.CANCELLED],
-      [ServiceOrderStatus.IN_PROGRESS]: [ServiceOrderStatus.COMPLETED, ServiceOrderStatus.CANCELLED],
+      [ServiceOrderStatus.ACCEPTED]: [
+        ServiceOrderStatus.IN_PROGRESS,
+        ServiceOrderStatus.REJECTED,
+        ServiceOrderStatus.CANCELLED,
+      ],
+      [ServiceOrderStatus.IN_PROGRESS]: [
+        ServiceOrderStatus.COMPLETED,
+        ServiceOrderStatus.CANCELLED,
+      ],
       [ServiceOrderStatus.COMPLETED]: [],
       [ServiceOrderStatus.CANCELLED]: [],
       [ServiceOrderStatus.REJECTED]: [],

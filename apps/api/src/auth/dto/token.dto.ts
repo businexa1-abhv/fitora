@@ -58,6 +58,26 @@ export class AuthResponseDto {
   tokens: AuthTokensDto;
 }
 
+export class SessionAuthResponseDto {
+  @ApiProperty()
+  accessToken: string;
+
+  @ApiProperty()
+  refreshToken: string;
+
+  @ApiProperty({ example: 900, description: 'Access token expiry in seconds' })
+  expiresIn: number;
+
+  @ApiProperty({ type: AuthUserDto })
+  user: AuthUserDto;
+
+  @ApiProperty({ example: false, description: 'True when OTP verification created a new player' })
+  isNewUser: boolean;
+
+  @ApiProperty({ example: false, description: 'True when the player should finish onboarding' })
+  requiresOnboarding: boolean;
+}
+
 export class PermissionsResponseDto {
   @ApiProperty({ enum: Permission, isArray: true })
   permissions: Permission[];

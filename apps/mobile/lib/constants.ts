@@ -11,13 +11,13 @@ export const SPORT_EMOJI: Record<SportType, string> = {
 };
 
 export const SPORT_COLORS: Record<SportType, string> = {
-  [SportType.BADMINTON]: '#00b564',
-  [SportType.TENNIS]: '#84cc16',
-  [SportType.CRICKET]: '#0ea5e9',
-  [SportType.FOOTBALL]: '#16a34a',
-  [SportType.SWIMMING]: '#06b6d4',
-  [SportType.GYM]: '#8b5cf6',
-  [SportType.OTHER]: '#64748b',
+  [SportType.BADMINTON]: '#ff6b00',
+  [SportType.TENNIS]: '#a04100',
+  [SportType.CRICKET]: '#0062a1',
+  [SportType.FOOTBALL]: '#059eff',
+  [SportType.SWIMMING]: '#00a7c7',
+  [SportType.GYM]: '#ff3278',
+  [SportType.OTHER]: '#555f6f',
 };
 
 export const POPULAR_SPORTS = [

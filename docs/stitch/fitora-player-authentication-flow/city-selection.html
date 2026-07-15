@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Select Your City</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#005321",
+                        "surface-bright": "#fff8f6",
+                        "tertiary-container": "#00a2f4",
+                        "surface-container-high": "#fce3d9",
+                        "tertiary": "#006398",
+                        "on-secondary-container": "#007432",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#cde5ff",
+                        "on-secondary-fixed": "#002109",
+                        "surface-variant": "#f6ded3",
+                        "on-surface-variant": "#584237",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#9d4300",
+                        "tertiary-fixed-dim": "#93ccff",
+                        "on-tertiary-fixed-variant": "#004b74",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-surface": "#251913",
+                        "outline": "#8c7164",
+                        "surface-container": "#ffeae0",
+                        "on-background": "#251913",
+                        "surface-dim": "#edd5cb",
+                        "on-tertiary-fixed": "#001d32",
+                        "inverse-on-surface": "#ffede6",
+                        "outline-variant": "#e0c0b1",
+                        "surface-container-low": "#fff1eb",
+                        "inverse-surface": "#3c2d26",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#783200",
+                        "on-primary-container": "#582200",
+                        "inverse-primary": "#ffb690",
+                        "background": "#fff8f6",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#003554",
+                        "primary-fixed": "#ffdbca",
+                        "secondary": "#006e2f",
+                        "primary-container": "#f97316",
+                        "on-primary-fixed": "#341100",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#ffb690",
+                        "surface": "#fff8f6",
+                        "secondary-container": "#6bff8f",
+                        "secondary-fixed": "#6bff8f",
+                        "surface-container-highest": "#f6ded3",
+                        "primary": "#9d4300",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "section-gap": "48px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "display-lg-mobile": ["Lexend"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Lexend"],
+                        "headline-md": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-city-border {
+            box-shadow: inset 0 0 0 2px #f97316;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff1eb;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e0c0b1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased min-h-screen">
+<!-- Top AppBar (FitOra Header) -->
+<header class="w-full sticky top-0 z-40 bg-background flex items-center justify-between px-margin-mobile h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary text-2xl">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">FitOra</h1>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="font-label-lg text-on-surface-variant">Hyderabad</span>
+</div>
+</header>
+<main class="max-w-7xl mx-auto pb-32">
+<!-- Search & Auto Detect Section -->
+<section class="px-margin-mobile py-stack-md">
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface mb-stack-lg">Select Your City</h2>
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-lg outline-none shadow-sm" placeholder="Search for your city" type="text"/>
+</div>
+<button class="mt-stack-md flex items-center gap-3 text-primary-container font-label-lg hover:opacity-80 transition-opacity py-2">
+<span class="material-symbols-outlined text-primary-container">my_location</span>
+                Auto Detect My Location
+            </button>
+</section>
+<!-- Popular Cities Bento Grid -->
+<section class="mt-stack-lg px-margin-mobile">
+<div class="flex items-center justify-between mb-stack-md">
+<h3 class="font-title-lg text-on-surface uppercase tracking-wider text-xs font-bold opacity-60">Popular Cities</h3>
+</div>
+<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+<!-- Hyderabad (Active/Selected) -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 active-city-border shadow-md transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-primary-container font-bold">Hyderabad</span>
+</div>
+<!-- Mumbai -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Mumbai</span>
+</div>
+<!-- Delhi -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Delhi</span>
+</div>
+<!-- Bengaluru -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Bengaluru</span>
+</div>
+<!-- Chandigarh -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Chandigarh</span>
+</div>
+<!-- Ahmedabad -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Ahmedabad</span>
+</div>
+<!-- Pune -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Pune</span>
+</div>
+<!-- Chennai -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Chennai</span>
+</div>
+<!-- Kolkata -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Kolkata</span>
+</div>
+<!-- Jaipur -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Jaipur</span>
+</div>
+<!-- Kochi -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Kochi</span>
+</div>
+<!-- Lucknow -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="selectCity(this)">
+<div class="w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-4 border border-outline-variant shadow-sm transform group-hover:-translate-y-1 transition-all duration-300">
+<img alt="City Icon" class="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINgjm2c20h917o1ysu8NvR1ltoU7-Fd2Iq5dNg0_dkUIXdoBUxRjCl5Kq3vL0eR6IqTn5w8khojwaMJtQur2FIJgzwFcMMzJ054Ms6Lz72ogtyiFGgJToAsI_NM2sgIn3SyoF0T2qgxHlwP38CfI0OLbSxAkU2oOaoUSHcqgJhvkMd5pa8eU7Z6xyY-K6AnSy-MDuxg03nJVcOofLJWbHMJWOg4WrrCrlhDTKLeAO9-xU32VM1H88"/>
+</div>
+<span class="font-label-lg text-on-surface-variant group-hover:text-primary transition-colors">Lucknow</span>
+</div>
+</div>
+</section>
+<!-- Other Cities Section -->
+<section class="mt-section-gap px-margin-mobile">
+<h3 class="font-title-lg text-on-surface uppercase tracking-wider text-xs font-bold opacity-60 mb-stack-md">Other Cities</h3>
+<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-outline-variant/30">
+<ul class="divide-y divide-outline-variant/20">
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Aalo</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Abohar</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Abu Road</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Achampet</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Acharapakkam</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Addanki</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Adilabad</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+<li class="px-6 py-4 hover:bg-surface-container-low cursor-pointer transition-colors flex items-center justify-between group">
+<span class="text-body-lg text-on-surface">Adityapur</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</li>
+</ul>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Persistent Component) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high shadow-lg rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-surface-variant dark:hover:bg-on-surface-variant/10 px-4 py-1 transition-all">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-surface-variant dark:hover:bg-on-surface-variant/10 px-4 py-1 transition-all">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-surface-variant dark:hover:bg-on-surface-variant/10 px-4 py-1 transition-all">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md text-label-md">Community</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</div>
+</nav>
+<script>
+        function selectCity(element) {
+            // Remove active classes from all popular city grid items
+            const allItems = document.querySelectorAll('.grid > div');
+            allItems.forEach(item => {
+                const iconContainer = item.querySelector('div');
+                const label = item.querySelector('span');
+                const img = item.querySelector('img');
+
+                iconContainer.classList.remove('active-city-border', 'shadow-md');
+                iconContainer.classList.add('border-outline-variant', 'shadow-sm');
+                label.classList.remove('text-primary-container', 'font-bold');
+                label.classList.add('text-on-surface-variant');
+                img.classList.add('grayscale', 'opacity-80');
+                img.classList.remove('grayscale-0', 'opacity-100');
+            });
+
+            // Apply active classes to clicked item
+            const iconContainer = element.querySelector('div');
+            const label = element.querySelector('span');
+            const img = element.querySelector('img');
+
+            iconContainer.classList.add('active-city-border', 'shadow-md');
+            iconContainer.classList.remove('border-outline-variant', 'shadow-sm');
+            label.classList.add('text-primary-container', 'font-bold');
+            label.classList.remove('text-on-surface-variant');
+            img.classList.remove('grayscale', 'opacity-80');
+            img.classList.add('grayscale-0', 'opacity-100');
+
+            // Haptic/visual feedback
+            element.classList.add('scale-95');
+            setTimeout(() => element.classList.remove('scale-95'), 100);
+        }
+    </script>
+</body></html>

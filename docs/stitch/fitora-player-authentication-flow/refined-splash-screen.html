@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra - Elevate Your Movement</title>
+<!-- Google Fonts: Lexend for headlines, Inter for body -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006e2f",
+                        "on-surface": "#251913",
+                        "surface-container-high": "#fce3d9",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#e0c0b1",
+                        "tertiary": "#006398",
+                        "on-secondary-fixed-variant": "#005321",
+                        "inverse-on-surface": "#ffede6",
+                        "tertiary-fixed": "#cde5ff",
+                        "surface-container": "#ffeae0",
+                        "primary-fixed-dim": "#ffb690",
+                        "surface-dim": "#edd5cb",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#6bff8f",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#584237",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#ffdbca",
+                        "tertiary-container": "#00a2f4",
+                        "surface-bright": "#fff8f6",
+                        "primary-container": "#f97316",
+                        "secondary-container": "#6bff8f",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002109",
+                        "on-background": "#251913",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#582200",
+                        "outline": "#8c7164",
+                        "surface": "#fff8f6",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004b74",
+                        "on-secondary-container": "#007432",
+                        "on-primary-fixed": "#341100",
+                        "on-tertiary-fixed": "#001d32",
+                        "tertiary-fixed-dim": "#93ccff",
+                        "surface-container-highest": "#f6ded3",
+                        "on-tertiary-container": "#003554",
+                        "on-primary-fixed-variant": "#783200",
+                        "surface-tint": "#9d4300",
+                        "surface-container-low": "#fff1eb",
+                        "background": "#fff8f6",
+                        "surface-variant": "#f6ded3",
+                        "inverse-surface": "#3c2d26",
+                        "inverse-primary": "#ffb690",
+                        "primary": "#9d4300"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "section-gap": "48px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "display-lg": ["Lexend"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Lexend"],
+                        "title-lg": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+
+        /* Entrance Animation */
+        @keyframes entrance {
+            0% { opacity: 0; transform: scale(0.92); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-entrance {
+            animation: entrance 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Loading Bar Animation */
+        @keyframes loading-progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .loading-bar-fill {
+            animation: loading-progress 4s linear forwards;
+        }
+
+        #shader-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<main class="relative flex-1 flex flex-col items-center justify-center px-margin-mobile text-center">
+<!-- Shader Background -->
+<canvas id="shader-canvas"></canvas>
+<!-- Foreground Identity -->
+<section class="relative z-10 flex flex-col items-center max-w-md w-full animate-entrance">
+<!-- Logo Section -->
+<div class="mb-stack-lg drop-shadow-2xl">
+<img alt="FitOra Brand Logo" class="w-48 h-48 rounded-md object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLvrnkTUOXJKlh4qDEpDfYott8PrzhLZNCjg7RXsXFNiy8lPu6T8-1G8D_g6cVraMqcTgMYr7uPmZgbbXtjH5oUcmLJKlKWzqtyDYbQ52ca1hk6KMiip3HUNKmO3pP5N-qZMtXmvxpXOBYwqjbP92QtNfbVtFeLuB1WAyC_XzvpK24SbOP42_dSr4-rZUCT-814iMheanW31n6q4Cb2X92REZnxbBwbuKgS6DGZyiCf6IFrySKmiGBvD0Q"/>
+</div>
+<!-- Branding -->
+<div class="space-y-stack-sm">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface tracking-tight drop-shadow-sm">
+                FitOra
+            </h1>
+<p class="font-headline-md text-headline-md text-on-surface-variant font-display-lg-mobile leading-tight max-w-[300px] mx-auto">
+                One App for Everything Sports
+            </p>
+</div>
+</section>
+<!-- Minimal Loading Bar -->
+<div class="absolute bottom-12 left-0 right-0 px-12 flex flex-col items-center gap-stack-sm z-10">
+<div class="w-full max-w-[200px] h-[2px] bg-outline-variant/30 overflow-hidden rounded-full">
+<div class="h-full bg-primary loading-bar-fill w-0"></div>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant/80 tracking-wide uppercase">
+            Initializing
+        </p>
+</div>
+</main>
+<!-- Accessibility Overlay (Ensures text remains readable over shader) -->
+<div class="fixed inset-0 pointer-events-none z-[5] bg-background/10"></div>
+<script>
+    // WebGL Shader Implementation
+    const canvas = document.getElementById('shader-canvas');
+    const gl = canvas.getContext('webgl');
+
+    if (gl) {
+        const vertexShaderSource = `
+            attribute vec2 a_position;
+            varying vec2 v_texCoord;
+            void main() {
+                v_texCoord = a_position * 0.5 + 0.5;
+                gl_Position = vec4(a_position, 0.0, 1.0);
+            }
+        `;
+
+        const fragmentShaderSource = `
+            precision highp float;
+            varying vec2 v_texCoord;
+            uniform float u_time;
+            uniform vec2 u_resolution;
+
+            void main() {
+                vec2 uv = v_texCoord;
+
+                // Create a soft, flowing athletic orange gradient
+                float noise = sin(uv.x * 5.0 + u_time * 0.5) * cos(uv.y * 3.0 - u_time * 0.3) * 0.2;
+
+                vec3 color1 = vec3(0.976, 0.451, 0.086); // FitOra Orange #F97316
+                vec3 color2 = vec3(1.0, 0.973, 0.965); // Surface Light #fff8f6
+
+                float mixFactor = smoothstep(0.2, 0.8, uv.y + noise);
+                vec3 finalColor = mix(color1, color2, mixFactor);
+
+                // Add a subtle vignette for premium depth
+                float vignette = smoothstep(1.2, 0.3, length(uv - 0.5));
+                finalColor *= vignette;
+
+                gl_FragColor = vec4(finalColor, 1.0);
+            }
+        `;
+
+        function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            return shader;
+        }
+
+        const program = gl.createProgram();
+        gl.attachShader(program, createShader(gl, gl.VERTEX_SHADER, vertexShaderSource));
+        gl.attachShader(program, createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource));
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+
+        const positionLocation = gl.getAttribLocation(program, "a_position");
+        gl.enableVertexAttribArray(positionLocation);
+        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+        const timeLocation = gl.getUniformLocation(program, "u_time");
+        const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+
+        function render(time) {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+
+            gl.uniform1f(timeLocation, time * 0.001);
+            gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+    }
+
+    // Auto-transition simulation
+    setTimeout(() => {
+        console.log('Splash complete. Redirecting...');
+    }, 4000);
+</script>
+</body></html>

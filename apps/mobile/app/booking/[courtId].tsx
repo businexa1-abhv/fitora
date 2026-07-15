@@ -1,26 +1,80 @@
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View, Pressable } from 'react-native';
+import {
+  Alert,
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { formatCurrency } from '@fitora/shared';
+import {
+  SPORT_LABELS,
+  SportType,
+  formatCurrency,
+  type Court,
+  type CourtSlot,
+} from '@fitora/shared';
 import { useTheme } from '@/providers/theme-provider';
 import { useAuth } from '@/providers/auth-provider';
 import { ScreenHeader } from '@/components/screen-header';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { QueryState } from '@/components/query-state';
+import { SPORT_COLORS, SPORT_EMOJI } from '@/lib/constants';
 import { getCourt, getCourtSlots, createBooking } from '@/lib/courts';
 import { completePayment } from '@/lib/payments';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
+const DURATION_OPTIONS = [60, 90, 120];
+
 function formatSlotTime(iso: string) {
-  return new Date(iso).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true });
+  return new Date(iso).toLocaleTimeString('en-IN', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+
+function toLocalIso(date: Date) {
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return localDate.toISOString().slice(0, 10);
 }
 
 function todayIso() {
-  return new Date().toISOString().slice(0, 10);
+  return toLocalIso(new Date());
+}
+
+function buildDateOptions() {
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date();
+    date.setDate(date.getDate() + index);
+    return {
+      iso: toLocalIso(date),
+      day: date.toLocaleDateString('en-IN', { weekday: 'short' }),
+      date: date.toLocaleDateString('en-IN', { day: '2-digit' }),
+      month: date.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }),
+    };
+  });
+}
+
+function getPrimaryImage(court: Court) {
+  const primary =
+    court.images.find((image) => typeof image !== 'string' && image.isPrimary) ?? court.images[0];
+  return typeof primary === 'string' ? primary : primary?.url;
+}
+
+function slotDurationLabel(slot?: CourtSlot) {
+  if (!slot) return '60 Mins';
+  const minutes = Math.max(
+    30,
+    Math.round((new Date(slot.endTime).getTime() - new Date(slot.startTime).getTime()) / 60000),
+  );
+  return `${minutes} Mins`;
 }
 
 export default function BookingScreen() {
@@ -28,9 +82,12 @@ export default function BookingScreen() {
   const { colors } = useTheme();
   const { token, user } = useAuth();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const date = todayIso();
+  const [selectedDate, setSelectedDate] = useState(todayIso());
+  const [selectedDuration, setSelectedDuration] = useState(60);
+  const dateOptions = buildDateOptions();
 
   const courtQuery = useQuery({
     queryKey: ['court', courtId],
@@ -39,38 +96,61 @@ export default function BookingScreen() {
   });
 
   const slotsQuery = useQuery({
-    queryKey: ['slots', courtId, date],
-    queryFn: () => getCourtSlots(courtId!, date),
+    queryKey: ['slots', courtId, selectedDate],
+    queryFn: () => getCourtSlots(courtId!, selectedDate),
     enabled: !!courtId,
   });
 
+  const court = courtQuery.data;
+  const slots = slotsQuery.data ?? [];
+  const selected = slots.find((slot) => slot.id === selectedSlot);
+  const total = selected ? Number(selected.price) : 0;
+  const sport: SportType = (court?.sportType as SportType | null) ?? SportType.OTHER;
+  const sportColor = SPORT_COLORS[sport];
+  const imageUrl = court ? getPrimaryImage(court) : undefined;
+  const selectedMonth = dateOptions.find((date) => date.iso === selectedDate)?.month ?? '';
+
   const bookMutation = useMutation({
     mutationFn: async () => {
-      if (!token || !courtId || !selectedSlot) throw new Error('Missing booking data');
-      const checkout = await createBooking(token, courtId, selectedSlot);
+      if (!token || !courtId || !selected) throw new Error('Missing booking data');
+      const checkout = await createBooking(token, courtId, selected.id);
       await completePayment(
         token,
         checkout.payment,
         user?.email ?? '',
         user ? `${user.firstName} ${user.lastName}` : 'Player',
       );
-      return checkout;
+      return { checkout, slot: selected };
     },
-    onSuccess: () => {
+    onSuccess: ({ checkout, slot }) => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
-      Alert.alert('Booking confirmed', 'Your slot has been booked successfully.');
+      router.replace({
+        pathname: '/booking/success',
+        params: {
+          bookingId: checkout.booking.id,
+          courtName: checkout.booking.court?.name ?? court?.name ?? 'Court Booking',
+          city: checkout.booking.court?.city ?? court?.city ?? '',
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+          amount: checkout.booking.totalAmount ?? String(total),
+        },
+      });
     },
     onError: (err: Error) => Alert.alert('Booking failed', err.message),
   });
 
-  const court = courtQuery.data;
-  const slots = slotsQuery.data ?? [];
-  const selected = slots.find((s) => s.id === selectedSlot);
-  const total = selected ? Number(selected.price) : 0;
+  function handleDatePress(iso: string) {
+    setSelectedDate(iso);
+    setSelectedSlot(null);
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScreenHeader title="Book a slot" subtitle={court?.name ?? 'Select time'} showBack />
+      <ScreenHeader
+        title="Book a Court"
+        showBack
+        rightAction={<Ionicons name="help-circle-outline" size={24} color={colors.primary} />}
+      />
 
       <QueryState
         isLoading={courtQuery.isLoading || slotsQuery.isLoading}
@@ -82,16 +162,111 @@ export default function BookingScreen() {
         }}
       >
         <ScrollView
-          contentContainerStyle={{ paddingBottom: insets.bottom + 120 }}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 132 }}
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.content}>
-            <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Available slots</Text>
-            <Text style={[styles.sectionSub, { color: colors.muted }]}>
-              {new Date(date).toLocaleDateString('en-IN', { weekday: 'long', month: 'short', day: 'numeric' })}
-            </Text>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Select Venue</Text>
+              <Text style={[styles.sportText, { color: colors.accent }]}>
+                {SPORT_LABELS[sport]}
+              </Text>
+            </View>
 
-            <View style={styles.slots}>
+            {court && (
+              <View style={styles.courtGrid}>
+                <CourtTile
+                  active
+                  emoji={SPORT_EMOJI[sport]}
+                  imageUrl={imageUrl}
+                  label={court.name}
+                  sportColor={sportColor}
+                  subtitle="Professional Grade"
+                />
+                <CourtTile
+                  emoji={SPORT_EMOJI[sport]}
+                  label="Court 2"
+                  sportColor={sportColor}
+                  subtitle="Standard Elite"
+                />
+              </View>
+            )}
+
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Select Date</Text>
+              <Text style={[styles.monthText, { color: colors.muted }]}>{selectedMonth}</Text>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
+              <View style={styles.dateRow}>
+                {dateOptions.map((option) => {
+                  const active = selectedDate === option.iso;
+                  return (
+                    <Pressable
+                      key={option.iso}
+                      onPress={() => handleDatePress(option.iso)}
+                      style={[
+                        styles.dateCard,
+                        {
+                          backgroundColor: active ? colors.accent : colors.card,
+                          borderColor: active ? colors.accent : colors.border,
+                        },
+                      ]}
+                    >
+                      <Text style={[styles.dateDay, { color: active ? '#fff' : colors.muted }]}>
+                        {option.day}
+                      </Text>
+                      <Text
+                        style={[styles.dateNumber, { color: active ? '#fff' : colors.foreground }]}
+                      >
+                        {option.date}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </ScrollView>
+
+            <View style={styles.section}>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Duration</Text>
+              <View style={styles.durationRow}>
+                {DURATION_OPTIONS.map((duration) => {
+                  const active = selectedDuration === duration;
+                  return (
+                    <Pressable
+                      key={duration}
+                      onPress={() => setSelectedDuration(duration)}
+                      style={[
+                        styles.durationButton,
+                        {
+                          backgroundColor: active ? colors.primaryLight : colors.card,
+                          borderColor: active ? colors.accent : colors.border,
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.durationText,
+                          { color: active ? colors.accent : colors.muted },
+                        ]}
+                      >
+                        {duration} Mins
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </View>
+
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
+                Available Slots
+              </Text>
+              <View style={styles.legendRow}>
+                <LegendDot color={colors.border} label="Booked" />
+                <LegendDot color={colors.accent} label="Active" />
+              </View>
+            </View>
+            <View style={styles.slotGrid}>
               {slots.map((slot) => {
                 const isSelected = selectedSlot === slot.id;
                 const unavailable = slot.isBooked || slot.isBlocked;
@@ -103,41 +278,49 @@ export default function BookingScreen() {
                     style={[
                       styles.slot,
                       {
-                        backgroundColor: isSelected ? colors.primaryLight : colors.card,
-                        borderColor: isSelected ? colors.primary : colors.border,
-                        opacity: unavailable ? 0.45 : 1,
+                        backgroundColor: isSelected
+                          ? colors.accent
+                          : unavailable
+                            ? colors.mutedBg
+                            : colors.card,
+                        borderColor: isSelected ? colors.accent : colors.border,
+                        opacity: unavailable ? 0.56 : 1,
                       },
                     ]}
                   >
-                    <Text style={[styles.slotTime, { color: colors.foreground }]}>
-                      {formatSlotTime(slot.startTime)} – {formatSlotTime(slot.endTime)}
+                    <Text
+                      style={[styles.slotTime, { color: isSelected ? '#fff' : colors.foreground }]}
+                    >
+                      {formatSlotTime(slot.startTime)}
                     </Text>
-                    <Text style={[styles.slotPrice, { color: colors.primary }]}>
-                      {formatCurrency(Number(slot.price))}
-                    </Text>
-                    {unavailable && <Badge label={slot.isBooked ? 'Booked' : 'Blocked'} variant="default" />}
                   </Pressable>
                 );
               })}
               {slots.length === 0 && (
-                <Text style={[styles.empty, { color: colors.muted }]}>No slots available for today</Text>
+                <Text style={[styles.empty, { color: colors.muted }]}>
+                  No slots available for this date
+                </Text>
               )}
             </View>
 
-            {selected && (
-              <Card style={styles.summary}>
-                <Text style={[styles.summaryTitle, { color: colors.foreground }]}>Booking summary</Text>
-                <View style={styles.summaryRow}>
-                  <Text style={[styles.summaryLabel, { color: colors.muted }]}>Court</Text>
-                  <Text style={[styles.summaryValue, { color: colors.foreground }]}>{court?.name}</Text>
-                </View>
-                <View style={[styles.divider, { backgroundColor: colors.border }]} />
-                <View style={styles.summaryRow}>
-                  <Text style={[styles.totalLabel, { color: colors.foreground }]}>Total</Text>
-                  <Text style={[styles.totalValue, { color: colors.primary }]}>{formatCurrency(total)}</Text>
-                </View>
-              </Card>
-            )}
+            <View
+              style={[styles.summary, { backgroundColor: colors.card, borderColor: colors.border }]}
+            >
+              <Text style={[styles.summaryTitle, { color: colors.foreground }]}>Order Summary</Text>
+              <SummaryRow
+                label={`Court 1 (${selected ? slotDurationLabel(selected) : `${selectedDuration} Mins`})`}
+                value={selected ? formatCurrency(total) : '--'}
+              />
+              <SummaryRow label="Equipment Rental" value="Included" />
+              <SummaryRow label="Platform Fee" value="Free" />
+              <View style={[styles.divider, { backgroundColor: colors.border }]} />
+              <View style={styles.totalRow}>
+                <Text style={[styles.totalLabel, { color: colors.foreground }]}>Total Amount</Text>
+                <Text style={[styles.totalValue, { color: colors.accent }]}>
+                  {selected ? formatCurrency(total) : formatCurrency(0)}
+                </Text>
+              </View>
+            </View>
           </View>
         </ScrollView>
       </QueryState>
@@ -145,45 +328,206 @@ export default function BookingScreen() {
       <View
         style={[
           styles.footer,
-          { backgroundColor: colors.card, borderTopColor: colors.border, paddingBottom: insets.bottom + Spacing.md },
+          {
+            backgroundColor: colors.card,
+            borderTopColor: colors.border,
+            paddingBottom: insets.bottom + Spacing.md,
+          },
         ]}
       >
+        <View>
+          <Text style={[styles.footerLabel, { color: colors.muted }]}>Total</Text>
+          <Text style={[styles.footerAmount, { color: colors.foreground }]}>
+            {selected ? formatCurrency(total) : formatCurrency(0)}
+          </Text>
+        </View>
         <Button
-          label={bookMutation.isPending ? 'Processing…' : selected ? `Pay ${formatCurrency(total)}` : 'Select a slot'}
-          fullWidth
+          label={
+            bookMutation.isPending ? 'Processing...' : selected ? 'Confirm & Pay' : 'Select a slot'
+          }
           disabled={!selected || bookMutation.isPending}
           onPress={() => bookMutation.mutate()}
+          style={styles.payButton}
         />
       </View>
     </View>
   );
 }
 
+function CourtTile({
+  active,
+  emoji,
+  imageUrl,
+  label,
+  sportColor,
+  subtitle,
+}: {
+  active?: boolean;
+  emoji: string;
+  imageUrl?: string;
+  label: string;
+  sportColor: string;
+  subtitle: string;
+}) {
+  const { colors } = useTheme();
+  const content = (
+    <>
+      <View style={styles.tileShade} />
+      <View style={styles.tileText}>
+        <Text style={styles.tileLabel} numberOfLines={2}>
+          {label}
+        </Text>
+        <Text style={styles.tileSubtitle}>{subtitle}</Text>
+      </View>
+      {active && (
+        <View style={[styles.tileCheck, { backgroundColor: colors.accent }]}>
+          <Ionicons name="checkmark-circle" size={22} color="#fff" />
+        </View>
+      )}
+      {!imageUrl && <Text style={styles.tileEmoji}>{emoji}</Text>}
+    </>
+  );
+
+  const tileStyle = [
+    styles.courtTile,
+    {
+      backgroundColor: `${sportColor}24`,
+      borderColor: active ? colors.accent : colors.border,
+      opacity: active ? 1 : 0.7,
+    },
+  ];
+
+  if (imageUrl) {
+    return (
+      <ImageBackground source={{ uri: imageUrl }} style={tileStyle} imageStyle={styles.tileImage}>
+        {content}
+      </ImageBackground>
+    );
+  }
+
+  return <View style={tileStyle}>{content}</View>;
+}
+
+function LegendDot({ color, label }: { color: string; label: string }) {
+  const { colors } = useTheme();
+  return (
+    <View style={styles.legendItem}>
+      <View style={[styles.legendDot, { backgroundColor: color }]} />
+      <Text style={[styles.legendText, { color: colors.muted }]}>{label}</Text>
+    </View>
+  );
+}
+
+function SummaryRow({ label, value }: { label: string; value: string }) {
+  const { colors } = useTheme();
+  return (
+    <View style={styles.summaryRow}>
+      <Text style={[styles.summaryLabel, { color: colors.muted }]}>{label}</Text>
+      <Text style={[styles.summaryValue, { color: colors.foreground }]}>{value}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  content: { paddingHorizontal: Spacing.lg },
-  sectionTitle: { fontSize: FontSize.lg, fontWeight: '800' },
-  sectionSub: { fontSize: FontSize.sm, marginBottom: Spacing.lg, marginTop: 4 },
-  slots: { gap: Spacing.sm },
-  slot: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: Spacing.lg,
-    borderRadius: Radius.md,
-    borderWidth: 1.5,
-    gap: Spacing.sm,
+  content: { gap: Spacing.xl, paddingHorizontal: Spacing.xl, paddingTop: Spacing.sm },
+  section: { gap: Spacing.md },
+  sectionHeader: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+  sectionTitle: { fontSize: FontSize.xl, fontWeight: '900' },
+  sportText: {
+    fontSize: FontSize.sm,
+    fontWeight: '900',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
   },
-  slotTime: { fontSize: FontSize.md, fontWeight: '700', flex: 1 },
-  slotPrice: { fontSize: FontSize.md, fontWeight: '800' },
-  summary: { marginTop: Spacing.xl },
-  summaryTitle: { fontSize: FontSize.lg, fontWeight: '800', marginBottom: Spacing.md },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.sm },
-  summaryLabel: { fontSize: FontSize.sm },
-  summaryValue: { fontSize: FontSize.sm, fontWeight: '600' },
-  divider: { height: 1, marginVertical: Spacing.md },
-  totalLabel: { fontSize: FontSize.lg, fontWeight: '800' },
-  totalValue: { fontSize: FontSize.xl, fontWeight: '800' },
-  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: Spacing.lg, borderTopWidth: 1 },
-  empty: { textAlign: 'center', paddingVertical: Spacing.xl },
+  monthText: { fontSize: FontSize.sm, fontWeight: '800' },
+  courtGrid: { flexDirection: 'row', gap: Spacing.md },
+  courtTile: {
+    borderRadius: Radius.xl,
+    borderWidth: 2,
+    flex: 1,
+    height: 184,
+    justifyContent: 'flex-end',
+    overflow: 'hidden',
+  },
+  tileImage: { resizeMode: 'cover' },
+  tileShade: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.42)' },
+  tileText: { padding: Spacing.md, position: 'relative', zIndex: 2 },
+  tileLabel: { color: '#fff', fontSize: FontSize.lg, fontWeight: '900', lineHeight: 22 },
+  tileSubtitle: { color: '#FFDB17', fontSize: FontSize.xs, fontWeight: '800', marginTop: 3 },
+  tileCheck: {
+    borderRadius: Radius.full,
+    padding: 2,
+    position: 'absolute',
+    right: Spacing.sm,
+    top: Spacing.sm,
+    zIndex: 2,
+  },
+  tileEmoji: { fontSize: 58, position: 'absolute', right: 12, top: 34, zIndex: 1 },
+  dateScroll: { marginHorizontal: -Spacing.xl, paddingHorizontal: Spacing.xl },
+  dateRow: { flexDirection: 'row', gap: Spacing.md, paddingRight: Spacing.xl },
+  dateCard: {
+    alignItems: 'center',
+    borderRadius: Radius.xl,
+    borderWidth: 1,
+    height: 82,
+    justifyContent: 'center',
+    width: 64,
+  },
+  dateDay: { fontSize: FontSize.xs, fontWeight: '800', textTransform: 'uppercase' },
+  dateNumber: { fontSize: FontSize.xxl, fontWeight: '900', marginTop: 2 },
+  durationRow: { flexDirection: 'row', gap: Spacing.sm },
+  durationButton: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    borderWidth: 1.5,
+    flex: 1,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.md,
+  },
+  durationText: { fontSize: FontSize.sm, fontWeight: '900' },
+  legendRow: { flexDirection: 'row', gap: Spacing.md },
+  legendItem: { alignItems: 'center', flexDirection: 'row', gap: 4 },
+  legendDot: { borderRadius: 3, height: 10, width: 10 },
+  legendText: { fontSize: 10, fontWeight: '900', textTransform: 'uppercase' },
+  slotGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
+  slot: {
+    alignItems: 'center',
+    borderRadius: Radius.lg,
+    borderWidth: 1,
+    minHeight: 58,
+    justifyContent: 'center',
+    width: '31.7%',
+  },
+  slotTime: { fontSize: FontSize.sm, fontWeight: '900', textAlign: 'center' },
+  empty: { paddingVertical: Spacing.xl, textAlign: 'center', width: '100%' },
+  summary: { borderRadius: 28, borderWidth: 1, gap: Spacing.md, padding: Spacing.xl },
+  summaryTitle: { fontSize: FontSize.xl, fontWeight: '900' },
+  summaryRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: Spacing.lg,
+  },
+  summaryLabel: { flex: 1, fontSize: FontSize.md, lineHeight: 21 },
+  summaryValue: { fontSize: FontSize.md, fontWeight: '800' },
+  divider: { height: 1, marginVertical: Spacing.xs },
+  totalRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+  totalLabel: { fontSize: FontSize.lg, fontWeight: '900' },
+  totalValue: { fontSize: FontSize.xxl, fontWeight: '900' },
+  footer: {
+    alignItems: 'center',
+    borderTopWidth: 1,
+    bottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    left: 0,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.md,
+    position: 'absolute',
+    right: 0,
+  },
+  footerLabel: { fontSize: 10, fontWeight: '900', letterSpacing: 0.8, textTransform: 'uppercase' },
+  footerAmount: { fontSize: FontSize.xl, fontWeight: '900' },
+  payButton: { minWidth: 174 },
 });

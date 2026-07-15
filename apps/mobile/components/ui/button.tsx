@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, type PressableProps, type TextStyle, type ViewStyle } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  type PressableProps,
+  type TextStyle,
+  type ViewStyle,
+} from 'react-native';
 import { useTheme } from '@/providers/theme-provider';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -71,7 +78,7 @@ export function Button({
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: Radius.md,
+    borderRadius: Radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },

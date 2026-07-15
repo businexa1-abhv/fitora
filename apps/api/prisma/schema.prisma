@@ -367,6 +367,7 @@ model User {
 
   roles                 UserRoleAssignment[]
   refreshTokens         RefreshToken[]
+  userSessions          UserSession[]
   passwordResetTokens   PasswordResetToken[]
   parentProfile         ParentProfile?
   trainerProfile        TrainerProfile?
@@ -435,15 +436,52 @@ model RefreshToken {
   id        String    @id @default(uuid()) @db.Uuid
   token     String    @unique @db.VarChar(512)
   userId    String    @map("user_id") @db.Uuid
+  sessionId String?   @map("session_id") @db.Uuid
+  deviceId  String?   @map("device_id") @db.VarChar(128)
   expiresAt DateTime  @map("expires_at")
   revokedAt DateTime? @map("revoked_at")
   createdAt DateTime  @default(now()) @map("created_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session UserSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
 
   @@index([userId])
+  @@index([sessionId])
+  @@index([deviceId])
   @@index([expiresAt])
+  @@index([userId, revokedAt])
   @@map("refresh_tokens")
+}
+
+model UserSession {
+  id                  String    @id @default(uuid()) @db.Uuid
+  userId              String    @map("user_id") @db.Uuid
+  deviceId            String    @map("device_id") @db.VarChar(128)
+  deviceName          String?   @map("device_name") @db.VarChar(200)
+  platform            String    @db.VarChar(50)
+  os                  String?   @db.VarChar(100)
+  appVersion          String?   @map("app_version") @db.VarChar(50)
+  ipAddress           String?   @map("ip_address") @db.VarChar(64)
+  userAgent           String?   @map("user_agent") @db.VarChar(500)
+  refreshTokenHash    String?   @map("refresh_token_hash") @db.VarChar(512)
+  accessTokenVersion  Int       @default(1) @map("access_token_version")
+  lastLogin           DateTime  @default(now()) @map("last_login")
+  lastActive          DateTime  @default(now()) @map("last_active")
+  expiresAt           DateTime  @map("expires_at")
+  isActive            Boolean   @default(true) @map("is_active")
+  revokedAt           DateTime? @map("revoked_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokens RefreshToken[]
+
+  @@unique([userId, deviceId])
+  @@index([userId])
+  @@index([deviceId])
+  @@index([expiresAt])
+  @@index([isActive, revokedAt])
+  @@map("user_sessions")
 }
 
 model OtpVerification {

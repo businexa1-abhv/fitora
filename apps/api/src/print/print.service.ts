@@ -1,30 +1,32 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import {
   PaymentEntityType,
   PaymentStatus,
   PrintOrderStatus,
-  Prisma,
+  type Prisma,
   UserRole,
 } from '@prisma/client';
-import { AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { validateBase64Image, toDataUrl } from '../common/utils/image.util';
 import { NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { generatePrintOrderNumber, TSHIRT_COLORS, TSHIRT_SIZES } from './print.constants';
 import {
-  ApproveDesignDto,
-  CreatePrintListingDto,
-  CreatePrintOrderDto,
-  RejectDesignDto,
-  UpdatePrintListingDto,
-  UpdatePrintOrderStatusDto,
-  UploadDesignDto,
+  type ApproveDesignDto,
+  type CreatePrintListingDto,
+  type CreatePrintOrderDto,
+  type RejectDesignDto,
+  type UpdatePrintListingDto,
+  type UpdatePrintOrderStatusDto,
+  type UploadDesignDto,
 } from './dto/print.dto';
 
 const LISTING_INCLUDE = {
@@ -40,8 +42,11 @@ const ORDER_INCLUDE = {
 @Injectable()
 export class PrintService {
   constructor(
+    @Inject(PrismaService)
     private prisma: PrismaService,
+    @Inject(forwardRef(() => PaymentsService))
     private paymentsService: PaymentsService,
+    @Inject(NotificationsService)
     private notificationsService: NotificationsService,
   ) {}
 
@@ -99,7 +104,12 @@ export class PrintService {
 
   // ─── Listings ───────────────────────────────────────────────────────────────
 
-  async findListings(params?: { city?: string; search?: string; page?: number; pageSize?: number }) {
+  async findListings(params?: {
+    city?: string;
+    search?: string;
+    page?: number;
+    pageSize?: number;
+  }) {
     const page = params?.page ?? 1;
     const pageSize = params?.pageSize ?? 20;
     const where: Prisma.PrintListingWhereInput = {
@@ -260,7 +270,8 @@ export class PrintService {
       orderId: order.id,
       orderNumber: order.orderNumber,
       status: PrintOrderStatus.ACCEPTED,
-      message: `New print order ${order.orderNumber} — ${order.quantity}x ${order.tshirtSize} ${order.tshirtColor ?? ''}`.trim(),
+      message:
+        `New print order ${order.orderNumber} — ${order.quantity}x ${order.tshirtSize} ${order.tshirtColor ?? ''}`.trim(),
     });
 
     return this.formatOrder(updated);
@@ -348,7 +359,9 @@ export class PrintService {
   async getPrinterDashboard(providerId: string) {
     const [listings, orders, pendingReview, inProduction, shipped] = await Promise.all([
       this.prisma.printListing.count({ where: { providerId, isActive: true, deletedAt: null } }),
-      this.prisma.printOrder.count({ where: { providerId, paymentStatus: PaymentStatus.PAID, deletedAt: null } }),
+      this.prisma.printOrder.count({
+        where: { providerId, paymentStatus: PaymentStatus.PAID, deletedAt: null },
+      }),
       this.prisma.printOrder.count({
         where: { providerId, status: PrintOrderStatus.DESIGN_REVIEW, deletedAt: null },
       }),
@@ -468,19 +481,13 @@ export class PrintService {
     }
   }
 
-  private assertListingOwner(
-    listing: { providerId: string },
-    user: AuthUserPayload,
-  ) {
+  private assertListingOwner(listing: { providerId: string }, user: AuthUserPayload) {
     if (listing.providerId !== user.id && !user.roles.includes(UserRole.ADMIN)) {
       throw new ForbiddenException('Not your listing');
     }
   }
 
-  private assertProviderOrAdmin(
-    order: { providerId: string },
-    user: AuthUserPayload,
-  ) {
+  private assertProviderOrAdmin(order: { providerId: string }, user: AuthUserPayload) {
     if (order.providerId !== user.id && !user.roles.includes(UserRole.ADMIN)) {
       throw new ForbiddenException('Not authorized');
     }

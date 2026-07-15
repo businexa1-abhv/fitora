@@ -1,5 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { Test, type TestingModule } from '@nestjs/testing';
+import { type INestApplication } from '@nestjs/common';
+import { UserRole } from '@prisma/client';
 import request from 'supertest';
 import { AuthController } from '../../src/auth/auth.controller';
 import { AuthService } from '../../src/auth/auth.service';
@@ -18,7 +19,10 @@ describe('Auth API (integration)', () => {
     loginWithPhone: jest.fn(),
     loginWithGoogle: jest.fn(),
     sendOtp: jest.fn(),
+    sendMobileOtp: jest.fn(),
     verifyOtp: jest.fn(),
+    verifyMobileOtp: jest.fn(),
+    refreshMobile: jest.fn(),
     logoutAll: jest.fn(),
     forgotPassword: jest.fn(),
     resetPassword: jest.fn(),
@@ -155,6 +159,7 @@ describe('AuthController (unit)', () => {
       password: 'SecurePass123!',
       firstName: 'New',
       lastName: 'User',
+      role: UserRole.PLAYER,
     });
     expect(result.user.id).toBe('u1');
   });

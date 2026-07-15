@@ -1,10 +1,5 @@
 import type { AuthResponse } from '@fitora/shared';
-import {
-  clearAuthSession,
-  getAccessToken,
-  getRefreshToken,
-  saveAuthSession,
-} from './auth';
+import { clearAuthSession, getAccessToken, getRefreshToken, saveAuthSession } from './auth';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api/v1';
 
@@ -16,6 +11,29 @@ export class ApiError extends Error {
     super(message);
     this.name = 'ApiError';
   }
+}
+
+function getErrorMessage(body: unknown, fallback: string): string {
+  if (!body || typeof body !== 'object') {
+    return fallback;
+  }
+
+  const { message, error } = body as { message?: unknown; error?: unknown };
+
+  if (Array.isArray(message)) {
+    const messages = message.filter((item): item is string => typeof item === 'string');
+    return messages.length > 0 ? messages.join(', ') : fallback;
+  }
+
+  if (typeof message === 'string' && message.length > 0) {
+    return message;
+  }
+
+  if (typeof error === 'string' && error.length > 0) {
+    return error;
+  }
+
+  return fallback;
 }
 
 let refreshPromise: Promise<string | null> | null = null;
@@ -78,10 +96,7 @@ export async function apiFetch<T>(
     let message = 'Something went wrong';
     try {
       const body = await response.json();
-      message = body.message ?? body.error ?? message;
-      if (Array.isArray(body.message)) {
-        message = body.message.join(', ');
-      }
+      message = getErrorMessage(body, message);
     } catch {
       message = response.statusText || message;
     }

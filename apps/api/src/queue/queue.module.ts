@@ -5,7 +5,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { EmailProvider } from '../notifications/providers/email.provider';
 import { PushProvider } from '../notifications/providers/push.provider';
-import { SmsProvider } from '../notifications/providers/sms.provider';
+import { smsProviderProviders } from '../notifications/providers/sms.provider';
 import { QueueController } from './queue.controller';
 import { QueueJobsService } from './queue-jobs.service';
 import { QueueManagerService } from './queue-manager.service';
@@ -23,7 +23,7 @@ import { QueueManagerService } from './queue-manager.service';
     QueueManagerService,
     QueueJobsService,
     EmailProvider,
-    SmsProvider,
+    ...smsProviderProviders,
     PushProvider,
   ],
   exports: [QueueManagerService, QueueJobsService],

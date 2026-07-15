@@ -1,0 +1,378 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>FitOra - Premium Court Booking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "deep-navy": "#171A26",
+                    "on-primary-fixed": "#351000",
+                    "secondary-container": "#d6e0f3",
+                    "background": "#f8f9fa",
+                    "on-tertiary-fixed-variant": "#00497b",
+                    "secondary": "#555f6f",
+                    "primary": "#a04100",
+                    "on-surface-variant": "#5a4136",
+                    "secondary-fixed": "#d9e3f6",
+                    "primary-fixed": "#ffdbcc",
+                    "surface-container-high": "#e7e8e9",
+                    "tertiary": "#0062a1",
+                    "surface-tint": "#a04100",
+                    "on-surface": "#191c1d",
+                    "surface": "#f8f9fa",
+                    "inverse-primary": "#ffb693",
+                    "on-background": "#191c1d",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-variant": "#e1e3e4",
+                    "outline-variant": "#e2bfb0",
+                    "surface-dim": "#d9dadb",
+                    "surface-container-low": "#f3f4f5",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#ff6b00",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#9ccaff",
+                    "surface-container": "#edeeef",
+                    "inverse-surface": "#2e3132",
+                    "vibrant-pink": "#FF3278",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#8e7164",
+                    "on-secondary-fixed": "#121c2a",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#059eff",
+                    "surface-bright": "#f8f9fa",
+                    "on-tertiary-fixed": "#001d35",
+                    "on-secondary-fixed-variant": "#3d4756",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#596373",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "tertiary-fixed": "#d0e4ff",
+                    "secondary-fixed-dim": "#bdc7d9",
+                    "primary-fixed-dim": "#ffb693",
+                    "on-primary-container": "#572000",
+                    "error-container": "#ffdad6",
+                    "electric-yellow": "#FFDB17",
+                    "on-tertiary-container": "#003357",
+                    "inverse-on-surface": "#f0f1f2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-mobile": "20px",
+                    "base": "8px",
+                    "margin-desktop": "64px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "label-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["36px", {"lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .category-chip {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .category-chip:active {
+            transform: scale(0.95);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="font-label-lg text-label-lg text-on-surface">Hyderabad</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-extrabold text-primary">FitOra</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="pt-20 pb-32 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<!-- Search Section -->
+<section class="mb-8">
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-secondary" data-icon="search">search</span>
+</div>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary-container transition-all text-body-md placeholder:text-secondary shadow-sm" placeholder="Search courts, sports or location" type="text">
+</div>
+</section>
+<!-- Categories Horizontal Scroll -->
+<section class="mb-10 -mx-margin-mobile px-margin-mobile overflow-x-auto no-scrollbar flex gap-4">
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-2xl" data-icon="badminton">sports_tennis</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-primary">Badminton</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-secondary flex items-center justify-center group-hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="cricket">sports_cricket</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Cricket</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-secondary flex items-center justify-center group-hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="football">sports_soccer</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Football</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-secondary flex items-center justify-center group-hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="tennis">sports_tennis</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Tennis</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-secondary flex items-center justify-center group-hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="swimming">pool</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Swimming</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-secondary flex items-center justify-center group-hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="gym">fitness_center</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Gym</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-secondary flex items-center justify-center group-hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="yoga">self_improvement</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">Yoga</span>
+</div>
+</section>
+<!-- Featured Banner Carousel -->
+<section class="mb-12">
+<div class="relative w-full h-56 md:h-80 rounded-3xl overflow-hidden shadow-2xl group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A professional athlete in high-performance sports gear mid-action in a modern, high-contrast indoor stadium. The lighting is dramatic and focused, highlighting the intensity of movement. The color palette features vibrant orange and deep charcoal tones against a clean, premium background. The aesthetic is corporate yet energetic, capturing the essence of elite athletic performance." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCkjcoqlN-ovnlagxEZTNLFeiHlsxxZ8-Ij6YT_aWz9l2t9SBBnrjQMlHsDv4XW9jKikA3NNpfozMdx_w56_fq-WJ3AiiASPcVrp0Mns2BTd87UUQK6k1OVCuaaNzStg2MfggvAtWfREqmRAwIji4TwnDbjiGIH-8938fVuz4BAULdbb5hscrGDwd4R8GfwA9zbACpKlWU972EBICXzjfegv20XwqIYlOsD47Sv522FZ6qCo4Q0-TpD')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+</div>
+<div class="absolute bottom-6 left-6 right-6 text-white">
+<div class="bg-vibrant-pink/90 backdrop-blur-md px-3 py-1 rounded-full w-fit mb-3">
+<span class="text-[10px] font-extrabold tracking-widest uppercase">Limited Offer</span>
+</div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg leading-tight mb-2">Summer Slam<br>Membership - 40% OFF</h2>
+<p class="text-white/80 font-body-md text-body-md mb-4 max-w-md">Book any court today and get exclusive access to our training sessions.</p>
+</div>
+</div>
+</section>
+<!-- Nearby Courts Section -->
+<section class="mb-12">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Nearby Courts</h3>
+<p class="text-secondary text-label-md">Based on your current location</p>
+</div>
+<button class="text-primary font-label-lg text-label-lg hover:underline transition-all">View All</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Court Card 1 -->
+<div class="group relative bg-surface-container-lowest rounded-[20px] border border-outline-variant/30 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A high-end indoor badminton arena with multiple professional courts. The flooring is professional green turf with sharp white markings. Bright LED lighting creates a crisp, energetic atmosphere. The shot is taken from a low angle to emphasize the premium quality of the facility. The color scheme is dominated by vibrant sports orange and clean whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAswuzw01hKkiu4-iBfw627RC2dEehJkZsSrr6tnxnucX3GHYdnAIR_fo03IOs5fRrYWZkR_7fm6a-3IdbC-ZL1yIqavKqbQksLfi5oGEcq9z82IJ4rVDpClIVmaIa_ccGFUrjw9SKBHB6UfWTKqyaB_ZmRU03t62VSLxXJ2oUzaDPYYeCK4cEaLuzr3Vw_rqTCCNI8Jj-1v2cC3hqzc9O_UFep-TLPO-rE74zWQPe6HFzc5OfdI9Od">
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-electric-yellow text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="font-bold text-xs text-on-surface">4.8</span>
+</div>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-primary-container text-on-primary text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Premium</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline-md text-xl text-on-surface group-hover:text-primary transition-colors">Smash Hit Arena</h4>
+<span class="text-secondary text-label-md font-medium">2.4 km</span>
+</div>
+<div class="flex items-center gap-2 text-secondary mb-4">
+<span class="material-symbols-outlined text-sm" data-icon="sports_tennis">sports_tennis</span>
+<span class="text-label-md">6 Badminton Courts</span>
+</div>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-outline-variant/20">
+<div>
+<p class="text-secondary text-[10px] uppercase font-bold tracking-widest">Starting from</p>
+<p class="text-on-surface font-headline-md text-lg">₹499<span class="text-secondary text-label-md font-normal">/hr</span></p>
+</div>
+<button class="bg-primary-container hover:bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-lg text-label-lg shadow-lg hover:shadow-primary/30 transition-all active:scale-95">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Court Card 2 -->
+<div class="group relative bg-surface-container-lowest rounded-[20px] border border-outline-variant/30 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A futuristic rooftop football turf overlooking a modern city skyline at dusk. The artificial grass is lush and vibrant green. Warm ambient lighting glows from the sidelines. The scene is high-energy and high-contrast, blending urban sophistication with athletic intensity. The overall mood is premium and inspiring." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCISmLykwXEvjmRlFhgFBOulIOKcCA-UW1isYR8aKvNd1LafqsaxXaYCIxRTiDguT-kCqxjYwuvm0zzKm3yiEHYVC7zthsKAE5W1-cZluyahR6XKiNo2VxTYdsatAzQOLv-yPfbPPOb5f13AJtucgvE2UJbVBSSOxklKGp2cEVscYyu82s2r9yo3SX_-dhtvfofEmLOespoax5JJQF1JLOd6DuIy5RkonWeClkN7jcCoOEuTGXpxgR">
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-electric-yellow text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="font-bold text-xs text-on-surface">4.7</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline-md text-xl text-on-surface group-hover:text-primary transition-colors">Sky-Turf Sports</h4>
+<span class="text-secondary text-label-md font-medium">3.1 km</span>
+</div>
+<div class="flex items-center gap-2 text-secondary mb-4">
+<span class="material-symbols-outlined text-sm" data-icon="sports_soccer">sports_soccer</span>
+<span class="text-label-md">2 5-a-side Turfs</span>
+</div>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-outline-variant/20">
+<div>
+<p class="text-secondary text-[10px] uppercase font-bold tracking-widest">Starting from</p>
+<p class="text-on-surface font-headline-md text-lg">₹800<span class="text-secondary text-label-md font-normal">/hr</span></p>
+</div>
+<button class="bg-primary-container hover:bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-lg text-label-lg shadow-lg hover:shadow-primary/30 transition-all active:scale-95">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Court Card 3 (Hidden on mobile, visible on lg) -->
+<div class="hidden lg:block group relative bg-surface-container-lowest rounded-[20px] border border-outline-variant/30 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A luxury Olympic-sized indoor swimming pool with pristine blue water and sleek, modern architecture. Floor-to-ceiling windows reveal a serene garden view. The lighting is soft and diffused, emphasizing the premium quality and cleanliness of the facility. The aesthetic is athletic minimalism at its finest." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3-qpc4qohmsPftlde1-QuIUbQZ9hWLMnJVNbfduOFN-M1NJ2vRkneTO62nIsyf6QyXu06lF_twpsL_hrwnbiGDK0HQTmSluavmoH9DaY41RMtWgM24ezjZw8Vu3rj3W2Sb0fdTVVF1UpBScczDvg5D-TuNg3099TlY3JefdxrEuKFylg3rmJRuR5p-kGiP_THaBMykCiEQQnitehmYUwIrDRLBa5PtQL41lfTfxj4DRyVeXA7jNWk">
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-electric-yellow text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="font-bold text-xs text-on-surface">4.9</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline-md text-xl text-on-surface group-hover:text-primary transition-colors">Elite Aqua Hub</h4>
+<span class="text-secondary text-label-md font-medium">4.5 km</span>
+</div>
+<div class="flex items-center gap-2 text-secondary mb-4">
+<span class="material-symbols-outlined text-sm" data-icon="pool">pool</span>
+<span class="text-label-md">Olympic Pool</span>
+</div>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-outline-variant/20">
+<div>
+<p class="text-secondary text-[10px] uppercase font-bold tracking-widest">Starting from</p>
+<p class="text-on-surface font-headline-md text-lg">₹650<span class="text-secondary text-label-md font-normal">/hr</span></p>
+</div>
+<button class="bg-primary-container hover:bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-lg text-label-lg shadow-lg hover:shadow-primary/30 transition-all active:scale-95">Book Now</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Popular Venues (Bento Grid) -->
+<section class="mb-12">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Popular Venues</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-[400px]">
+<div class="col-span-2 row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-md">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A grand, multi-sport complex featuring indoor and outdoor facilities under dramatic night lighting. The high-contrast shot emphasizes the massive scale and high-energy atmosphere. Bright orange glowing accents line the architecture. The scene captures the spirit of a professional athletic hub." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRcQW7gi8IKJp-3MGBLdQabw_Se-MUbRpgijHeHl4alv-aufdVEG8NgVYirMqrWWhXDoWwWBEiGV-z-P59ZKR1-NZADGzE6-FlhH5fFiJznJD_B3dYBdUItha7hv5RbXSQ5nVOEhVQfpBXKsHaFDK2Eb4-xIjOCaxZF-o9LvMGJzRiuc6eG_8JZoOhlgb0hkRRv5iSESw9NMu3xfaNMeQDDr-v8768rR7jYLw3ok7u_J9Ad3wjKj9I">
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<p class="text-primary-fixed font-bold text-xs uppercase tracking-widest mb-1">Top Rated</p>
+<h4 class="text-white font-headline-md text-2xl">The Olympic Center</h4>
+</div>
+</div>
+<div class="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group cursor-pointer shadow-md">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A modern, high-tech indoor cricket facility with automated bowling machines and HD cameras for performance analysis. The lighting is clinical and bright. Professional cricketers are seen in the background. The visual style is modern, sleek, and focused on performance science." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVYI5t4R0XCn5sS3ndEmKD39tgeCWLLCG3Cd0inqHClMZTzhDe8fGVyiVd6y22gyo5uoBcC8KhLD_pIhXUlEkDo48srWhjMzDCGGnOCXVzcWLGZlGRo5WKxx-4x1oiTRWhcFmFbJPZO7Sbe-uq080fG4d4tBepx-E1VYPx7zX0wp4BKnurHg22f4GPHAukIsyrfB7ZODeC9bTiJyq9W1JlrhBKde8ou_ocMuQkx98TrW9D8psXlKL1">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h4 class="text-white font-headline-md text-sm">Cricket HQ</h4>
+</div>
+</div>
+<div class="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group cursor-pointer shadow-md">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A serene, minimalist outdoor yoga terrace at sunrise, overlooking a tranquil forest. The lighting is warm and golden. Soft shadows create a peaceful depth. The overall aesthetic is one of discipline and calm, perfectly aligned with the high-performance lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyF1gmpkqBjLrh9P0zsehKliR4piTB6Gx6BeVHphr6fjTr5o8AfCfdApsz-nQyK42vMEOGiL4_fh6ch2FEbJeEDyYEddhTDoFR7vX8Ah6UdqIi1zLRGXZ0qkBTQEHPhW7RxfapnAX4Lx5laa4vHZfqV1-4Z1C683mCtLieiBLakngnpXoARNir-0xJL-myvLI9IwqXKhFt4mdm6jAf4u4hDzA3kmhWOUxBz-WrPNbamPy_mLh4GPq9">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h4 class="text-white font-headline-md text-sm">Zen Terrace</h4>
+</div>
+</div>
+<div class="col-span-2 row-span-1 relative rounded-3xl overflow-hidden group cursor-pointer shadow-md">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A high-intensity crossfit gym with rugged textures, industrial lighting, and premium black equipment. Splashes of vibrant orange on the walls add a high-energy contrast. The mood is gritty yet professional, conveying a sense of momentum and peak physical exertion." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgvhv0MUvr5aQlbC4HpcRE0jKi1LGgRS-nGcKNo72SzKzjUv7h59c_n7YSSmWZGI_veZq_wiyJL6opekvlBq0plXKYs8x2jk8GwjieUDAsdjInQMDTKzthNFylA0Hd45_dBhu9-ItXhMfKTYMcnMZ09oIOPovZLv1uCLnmReJ3I1xJa0MzKeFmFPcYf2KDiS_ybB8Y0GlsRYmOJ-DnqQFmN50u4Fh4IBFomix5RbSc4LTiXKXtR-hI">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h4 class="text-white font-headline-md text-lg">Power Vault Gym</h4>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB: Contextual - Book a Walk/Court -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary-container text-on-primary rounded-full shadow-2xl flex items-center justify-center z-40 md:hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface/80 backdrop-blur-md border-t border-outline-variant/20 shadow-lg"><a class="flex flex-col items-center justify-center gap-1 transition-all duration-300 group" href="#"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1, 'wght' 300;">home</span><span class="font-label-md text-[10px] font-bold text-primary">Home</span><div class="w-1 h-1 rounded-full bg-primary"></div></a><a class="flex flex-col items-center justify-center gap-1 text-secondary hover:text-primary transition-all duration-300 group" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">calendar_today</span><span class="font-label-md text-[10px] font-medium">Bookings</span><div class="w-1 h-1 rounded-full bg-transparent"></div></a><a class="flex flex-col items-center justify-center gap-1 text-secondary hover:text-primary transition-all duration-300 group" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">workspace_premium</span><span class="font-label-md text-[10px] font-medium">Membership</span><div class="w-1 h-1 rounded-full bg-transparent"></div></a><a class="flex flex-col items-center justify-center gap-1 text-secondary hover:text-primary transition-all duration-300 group" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">fitness_center</span><span class="font-label-md text-[10px] font-medium">Training</span><div class="w-1 h-1 rounded-full bg-transparent"></div></a><a class="flex flex-col items-center justify-center gap-1 text-secondary hover:text-primary transition-all duration-300 group" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">person</span><span class="font-label-md text-[10px] font-medium">Profile</span><div class="w-1 h-1 rounded-full bg-transparent"></div></a></nav>
+<script>
+        // Simple scroll behavior for TopAppBar
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 50) {
+                header.classList.add('shadow-lg');
+            } else {
+                header.classList.remove('shadow-lg');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Category Selection
+        const categories = document.querySelectorAll('.category-chip');
+        categories.forEach(cat => {
+            cat.addEventListener('click', () => {
+                categories.forEach(c => {
+                    c.classList.remove('bg-primary-container', 'text-on-primary');
+                    c.classList.add('bg-surface-container-high', 'text-secondary');
+                });
+                cat.classList.remove('bg-surface-container-high', 'text-secondary');
+                cat.classList.add('bg-primary-container', 'text-on-primary');
+            });
+        });
+    </script>
+
+
+
+</body></html>

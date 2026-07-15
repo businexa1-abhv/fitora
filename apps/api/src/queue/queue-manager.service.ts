@@ -1,6 +1,12 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  type OnModuleDestroy,
+  type OnModuleInit,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Job, JobsOptions, Queue, Worker } from 'bullmq';
+import { type Job, type JobsOptions, Queue, Worker } from 'bullmq';
 import { RedisService } from '../common/redis/redis.service';
 import {
   ALL_WORKER_QUEUES,
@@ -9,7 +15,7 @@ import {
   QUEUES,
   QUEUE_LABELS,
   SCHEDULED_JOBS,
-  ScheduledJobName,
+  type ScheduledJobName,
 } from './queue.constants';
 import type { DeadLetterJobData, QueueJobHandler } from './queue.types';
 
@@ -23,7 +29,9 @@ export class QueueManagerService implements OnModuleInit, OnModuleDestroy {
   private handlers = new Map<string, QueueJobHandler>();
 
   constructor(
+    @Inject(RedisService)
     private redisService: RedisService,
+    @Inject(ConfigService)
     private configService: ConfigService,
   ) {}
 
@@ -48,8 +56,7 @@ export class QueueManagerService implements OnModuleInit, OnModuleDestroy {
       const queue = new Queue(queueName, { connection });
       this.queues.set(queueName, queue);
 
-      const concurrency =
-        queueName === QUEUES.SCHEDULED ? 1 : queueName === QUEUES.REFUND ? 2 : 5;
+      const concurrency = queueName === QUEUES.SCHEDULED ? 1 : queueName === QUEUES.REFUND ? 2 : 5;
 
       const worker = new Worker(
         queueName,
@@ -85,7 +92,7 @@ export class QueueManagerService implements OnModuleInit, OnModuleDestroy {
         { name },
         {
           repeat: { pattern },
-          jobId: `cron:${name}`,
+          jobId: `cron-${name}`,
           ...DEFAULT_JOB_OPTIONS,
         },
       );
@@ -98,7 +105,7 @@ export class QueueManagerService implements OnModuleInit, OnModuleDestroy {
         { name: SCHEDULED_JOBS.PAYMENT_RETRY },
         {
           repeat: { pattern: CRON_PATTERNS[SCHEDULED_JOBS.PAYMENT_RETRY] },
-          jobId: 'cron:payment-retry-worker',
+          jobId: 'cron-payment-retry-worker',
           ...DEFAULT_JOB_OPTIONS,
         },
       );
@@ -221,7 +228,11 @@ export class QueueManagerService implements OnModuleInit, OnModuleDestroy {
     }
 
     const start = (page - 1) * pageSize;
-    const jobs = await this.deadLetterQueue.getJobs(['waiting', 'delayed', 'failed'], start, start + pageSize - 1);
+    const jobs = await this.deadLetterQueue.getJobs(
+      ['waiting', 'delayed', 'failed'],
+      start,
+      start + pageSize - 1,
+    );
     const total = await this.deadLetterQueue.getJobCounts('waiting', 'delayed', 'failed');
 
     return {
