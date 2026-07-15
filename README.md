@@ -4,6 +4,25 @@
 
 Book courts, manage memberships, enroll kids in training, shop gear, and book sports services — all in one platform.
 
+## Enterprise Scaffold (Single Monorepo)
+
+The repository now includes an enterprise architecture scaffold for the expanded multi-surface SaaS model:
+
+- Mobile apps: `apps/player-app`, `apps/owner-app`
+- Web apps: `apps/admin-web`, `apps/partner-web`, `apps/shop-partner-web`
+- Shared packages: `packages/design-system`, `packages/api`, `packages/auth`, `packages/hooks`, `packages/utils`, `packages/validation`, `packages/theme`, `packages/constants`
+- Backend services: `backend/services/*`
+- Backend shared modules: `backend/shared/*`
+
+Architecture and platform design docs:
+
+- `docs/enterprise/MONOREPO_ENTERPRISE_ARCHITECTURE.md`
+- `docs/enterprise/API_COMMUNICATION_FLOW.md`
+- `docs/enterprise/AUTH_AND_NAVIGATION_FLOW.md`
+- `docs/enterprise/CI_CD_PIPELINE.md`
+- `docs/enterprise/ENVIRONMENT_CONFIGURATION.md`
+- `docs/enterprise/DEVELOPMENT_SCRIPTS.md`
+
 ---
 
 ## Monorepo Structure
@@ -34,16 +53,16 @@ fitora/
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Monorepo** | Turborepo + pnpm workspaces |
-| **API** | NestJS 11, Prisma 6, PostgreSQL 16 |
-| **Web / Admin** | Next.js 15, React 19, Tailwind CSS 4 |
-| **Mobile** | Expo 52, React Native, Expo Router |
-| **Cache** | Redis 7 |
-| **Payments** | Razorpay (mock mode for local dev) |
-| **API Docs** | Swagger UI at `/api/docs` |
-| **Tooling** | TypeScript, ESLint, Prettier, Husky, lint-staged, Commitlint |
+| Layer           | Technology                                                   |
+| --------------- | ------------------------------------------------------------ |
+| **Monorepo**    | Turborepo + pnpm workspaces                                  |
+| **API**         | NestJS 11, Prisma 6, PostgreSQL 16                           |
+| **Web / Admin** | Next.js 15, React 19, Tailwind CSS 4                         |
+| **Mobile**      | Expo 52, React Native, Expo Router                           |
+| **Cache**       | Redis 7                                                      |
+| **Payments**    | Razorpay (mock mode for local dev)                           |
+| **API Docs**    | Swagger UI at `/api/docs`                                    |
+| **Tooling**     | TypeScript, ESLint, Prettier, Husky, lint-staged, Commitlint |
 
 ---
 
@@ -99,40 +118,40 @@ pnpm db:seed
 pnpm dev
 ```
 
-| App | URL |
-|-----|-----|
-| Web | http://localhost:3000 |
-| API | http://localhost:3001 |
-| Swagger | http://localhost:3001/api/docs |
-| Admin | http://localhost:3002 |
-| Mobile | `pnpm dev:mobile` → Expo DevTools |
+| App     | URL                               |
+| ------- | --------------------------------- |
+| Web     | http://localhost:3000             |
+| API     | http://localhost:3001             |
+| Swagger | http://localhost:3001/api/docs    |
+| Admin   | http://localhost:3002             |
+| Mobile  | `pnpm dev:mobile` → Expo DevTools |
 
 ---
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start all apps in development |
-| `pnpm dev:api` | API only |
-| `pnpm dev:web` | Web only |
-| `pnpm dev:admin` | Admin only |
-| `pnpm dev:mobile` | Expo mobile app |
-| `pnpm build` | Build all apps & packages |
-| `pnpm lint` | ESLint across monorepo |
-| `pnpm lint:fix` | ESLint with auto-fix |
-| `pnpm typecheck` | TypeScript check all packages |
-| `pnpm format` | Prettier write |
-| `pnpm format:check` | Prettier check (CI) |
-| `pnpm clean` | Remove build artifacts |
-| `pnpm docker:up` | Start PostgreSQL + Redis |
-| `pnpm docker:down` | Stop containers |
-| `pnpm docker:build` | Build API Docker image |
-| `pnpm db:generate` | Generate Prisma client |
-| `pnpm db:push` | Push schema to database |
-| `pnpm db:migrate` | Run migrations |
-| `pnpm db:seed` | Seed demo data |
-| `pnpm db:studio` | Open Prisma Studio |
+| Command             | Description                   |
+| ------------------- | ----------------------------- |
+| `pnpm dev`          | Start all apps in development |
+| `pnpm dev:api`      | API only                      |
+| `pnpm dev:web`      | Web only                      |
+| `pnpm dev:admin`    | Admin only                    |
+| `pnpm dev:mobile`   | Expo mobile app               |
+| `pnpm build`        | Build all apps & packages     |
+| `pnpm lint`         | ESLint across monorepo        |
+| `pnpm lint:fix`     | ESLint with auto-fix          |
+| `pnpm typecheck`    | TypeScript check all packages |
+| `pnpm format`       | Prettier write                |
+| `pnpm format:check` | Prettier check (CI)           |
+| `pnpm clean`        | Remove build artifacts        |
+| `pnpm docker:up`    | Start PostgreSQL + Redis      |
+| `pnpm docker:down`  | Stop containers               |
+| `pnpm docker:build` | Build API Docker image        |
+| `pnpm db:generate`  | Generate Prisma client        |
+| `pnpm db:push`      | Push schema to database       |
+| `pnpm db:migrate`   | Run migrations                |
+| `pnpm db:seed`      | Seed demo data                |
+| `pnpm db:studio`    | Open Prisma Studio            |
 
 ---
 
@@ -180,12 +199,12 @@ Shared React components (`Button`, `Input`, `Card`) for web and admin.
 
 See [`.env.example`](.env.example) for the full reference.
 
-| App | File | Key variables |
-|-----|------|---------------|
-| API | `apps/api/.env` | `DATABASE_URL`, `JWT_SECRET`, `RAZORPAY_*`, `REDIS_URL` |
-| Web | `apps/web/.env.local` | `NEXT_PUBLIC_API_URL` |
-| Admin | `apps/admin/.env.local` | `NEXT_PUBLIC_API_URL` |
-| Mobile | `apps/mobile/.env` | `EXPO_PUBLIC_API_URL` |
+| App    | File                    | Key variables                                           |
+| ------ | ----------------------- | ------------------------------------------------------- |
+| API    | `apps/api/.env`         | `DATABASE_URL`, `JWT_SECRET`, `RAZORPAY_*`, `REDIS_URL` |
+| Web    | `apps/web/.env.local`   | `NEXT_PUBLIC_API_URL`                                   |
+| Admin  | `apps/admin/.env.local` | `NEXT_PUBLIC_API_URL`                                   |
+| Mobile | `apps/mobile/.env`      | `EXPO_PUBLIC_API_URL`                                   |
 
 **Payments:** Set `PAYMENT_MODE=mock` in `apps/api/.env` for local dev without Razorpay keys.
 
@@ -231,6 +250,7 @@ Once the API is running:
 **http://localhost:3001/api/docs**
 
 Features:
+
 - All modules tagged (auth, courts, shop, marketplace, payments, …)
 - Bearer JWT auth with persistent authorization
 - Request duration display
@@ -242,10 +262,10 @@ Features:
 
 ### Husky
 
-| Hook | Action |
-|------|--------|
+| Hook         | Action                                               |
+| ------------ | ---------------------------------------------------- |
 | `pre-commit` | Runs lint-staged (ESLint + Prettier on staged files) |
-| `commit-msg` | Validates commit message via Commitlint |
+| `commit-msg` | Validates commit message via Commitlint              |
 
 ### Commit message format
 
@@ -264,20 +284,20 @@ Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `buil
 
 ## CI/CD (GitHub Actions)
 
-| Workflow | File | Purpose |
-|----------|------|---------|
-| **CI** | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Lint, typecheck, build, tests on every push/PR |
+| Workflow   | File                                                           | Purpose                                              |
+| ---------- | -------------------------------------------------------------- | ---------------------------------------------------- |
+| **CI**     | [`.github/workflows/ci.yml`](.github/workflows/ci.yml)         | Lint, typecheck, build, tests on every push/PR       |
 | **Deploy** | [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) | Build & push images to GHCR; optional AWS ECS deploy |
 
 ### CI jobs
 
-| Job | Runs on | Steps |
-|-----|---------|-------|
+| Job                  | Runs on       | Steps                                                                        |
+| -------------------- | ------------- | ---------------------------------------------------------------------------- |
 | **Lint & Typecheck** | Every push/PR | install → prisma generate → build packages → lint → typecheck → format check |
-| **Build Apps** | After lint | Full monorepo build |
-| **Tests** | After build | API unit/integration tests with coverage floor |
-| **Commitlint** | PRs only | Validates all commits in PR |
-| **Docker Build** | `main` branch | Builds production Docker images (no push) |
+| **Build Apps**       | After lint    | Full monorepo build                                                          |
+| **Tests**            | After build   | API unit/integration tests with coverage floor                               |
+| **Commitlint**       | PRs only      | Validates all commits in PR                                                  |
+| **Docker Build**     | `main` branch | Builds production Docker images (no push)                                    |
 
 Enable ECS deployment by setting repository variable `AWS_DEPLOY_ENABLED=true` and AWS/GitHub secrets — details in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
@@ -285,14 +305,14 @@ Enable ECS deployment by setting repository variable `AWS_DEPLOY_ENABLED=true` a
 
 ## Roles
 
-| Role | Description |
-|------|-------------|
-| `ADMIN` | Platform-wide administration |
-| `COURT_OWNER` | Manages courts, slots, memberships |
-| `TRAINER` | Kids training, attendance |
-| `PLAYER` | Books courts, buys memberships, shops |
+| Role               | Description                             |
+| ------------------ | --------------------------------------- |
+| `ADMIN`            | Platform-wide administration            |
+| `COURT_OWNER`      | Manages courts, slots, memberships      |
+| `TRAINER`          | Kids training, attendance               |
+| `PLAYER`           | Books courts, buys memberships, shops   |
 | `SERVICE_PROVIDER` | Sports services (stringing, bat repair) |
-| `PRINTER` | Custom t-shirt printing |
+| `PRINTER`          | Custom t-shirt printing                 |
 
 ---
 
@@ -302,12 +322,12 @@ Enable ECS deployment by setting repository variable `AWS_DEPLOY_ENABLED=true` a
 pnpm db:seed
 ```
 
-| Email | Password | Role |
-|-------|----------|------|
-| `admin@fitora.com` | `AdminPass123!` | Admin |
-| `trainer@fitora.com` | `TrainerPass123!` | Trainer |
+| Email                 | Password           | Role             |
+| --------------------- | ------------------ | ---------------- |
+| `admin@fitora.com`    | `AdminPass123!`    | Admin            |
+| `trainer@fitora.com`  | `TrainerPass123!`  | Trainer          |
 | `provider@fitora.com` | `ProviderPass123!` | Service Provider |
-| `printer@fitora.com` | `PrinterPass123!` | Printer |
+| `printer@fitora.com`  | `PrinterPass123!`  | Printer          |
 
 ---
 
@@ -323,4 +343,5 @@ pnpm db:seed
 ## License
 
 Private — FitOra © 2026
+
 # fitora

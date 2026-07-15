@@ -1,0 +1,11 @@
+{
+  "name": "@fitora/notification-service",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node src/main.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  }
+}

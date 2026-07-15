@@ -1,0 +1,10 @@
+{
+  "extends": "@fitora/config/typescript/nestjs.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
+}

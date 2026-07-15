@@ -1,0 +1,9 @@
+{
+  "name": "@fitora/backend",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev --filter=@fitora/*-service",
+    "build": "turbo run build --filter=@fitora/*-service",
+    "typecheck": "turbo run typecheck --filter=@fitora/*-service"
+  }
+}

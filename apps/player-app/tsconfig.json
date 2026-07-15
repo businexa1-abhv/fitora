@@ -1,0 +1,3 @@
+{
+  "extends": "@fitora/config/typescript/react-native.json"
+}
