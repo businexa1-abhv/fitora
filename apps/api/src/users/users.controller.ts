@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Put, Req } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Put, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { type Request } from 'express';
 import { CurrentUser, Roles, type AuthUserPayload } from '../common/decorators';
 import { CompletePlayerOnboardingDto } from './dto/complete-player-onboarding.dto';
-import { type UsersService } from './users.service';
+import { UsersService } from './users.service';
 
 interface AuthRequest extends Request {
   user: { id: string; email: string; roles: UserRole[] };
@@ -14,7 +14,7 @@ interface AuthRequest extends Request {
 @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(@Inject(UsersService) private usersService: UsersService) {}
 
   @Get('me')
   @ApiOperation({ summary: 'Get current user profile' })

@@ -1,10 +1,10 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { type PrismaService } from '../prisma/prisma.module';
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.module';
 import { type CompletePlayerOnboardingDto } from './dto/complete-player-onboarding.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   async findById(id: string) {
     const user = await this.prisma.user.findUnique({
