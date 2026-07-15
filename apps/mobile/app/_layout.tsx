@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
 import * as Notifications from 'expo-notifications';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from '@/providers/theme-provider';
@@ -10,22 +10,21 @@ import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { parseDeepLink } from '@/lib/push';
 
-function AuthGate({ children }: { children: React.ReactNode }) {
+void SplashScreen.preventAutoHideAsync().catch(() => undefined);
+
+function AppNavigator() {
+  const { isDark, colors } = useTheme();
   const { isLoading, isAuthenticated } = useAuth();
-  const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
-    const inAuth = segments[0] === '(auth)';
-    if (!isAuthenticated && !inAuth) {
-      router.replace('/(auth)/login');
-    } else if (isAuthenticated && inAuth) {
-      router.replace('/(tabs)');
-    }
-  }, [isAuthenticated, isLoading, segments, router]);
+    SplashScreen.hideAsync().catch(() => undefined);
+  }, [isLoading]);
 
   useEffect(() => {
+    if (isLoading || !isAuthenticated) return undefined;
+
     function handleUrl(event: { url: string }) {
       const link = parseDeepLink(event.url) ?? parseUniversalLink(event.url);
       if (!link) return;
@@ -52,17 +51,52 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       linkSub.remove();
       notificationSub.remove();
     };
-  }, [router]);
+  }, [isAuthenticated, isLoading, router]);
 
   if (isLoading) {
+    return null;
+  }
+
+  const commonOptions = {
+    headerShown: false,
+    contentStyle: { backgroundColor: colors.background },
+    animation: 'slide_from_right' as const,
+  };
+
+  if (!isAuthenticated) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" />
-      </View>
+      <>
+        <StatusBar style={isDark ? 'light' : 'dark'} />
+        <Stack initialRouteName="(auth)" screenOptions={commonOptions}>
+          <Stack.Screen name="(auth)" />
+        </Stack>
+      </>
     );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <Stack initialRouteName="(tabs)" screenOptions={commonOptions}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="booking/[courtId]" />
+        <Stack.Screen name="booking/success" />
+        <Stack.Screen name="court/[id]" />
+        <Stack.Screen name="membership/index" />
+        <Stack.Screen name="notification-settings" />
+        <Stack.Screen name="notifications" />
+        <Stack.Screen name="print/[id]" />
+        <Stack.Screen name="services/index" />
+        <Stack.Screen name="services/[id]" />
+        <Stack.Screen name="shop/[slug]" />
+        <Stack.Screen name="shop/cart" />
+        <Stack.Screen name="shop/checkout" />
+        <Stack.Screen name="training/[programId]" />
+        <Stack.Screen name="training/enroll/[batchId]" />
+        <Stack.Screen name="wallet" />
+      </Stack>
+    </>
+  );
 }
 
 function parseUniversalLink(url: string) {
@@ -72,32 +106,13 @@ function parseUniversalLink(url: string) {
   return path ? { path, params: {} } : null;
 }
 
-function RootNavigator() {
-  const { isDark, colors } = useTheme();
-
-  return (
-    <>
-      <StatusBar style={isDark ? 'light' : 'dark'} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.background },
-          animation: 'slide_from_right',
-        }}
-      />
-    </>
-  );
-}
-
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <QueryProvider>
         <AuthProvider>
           <ThemeProvider>
-            <AuthGate>
-              <RootNavigator />
-            </AuthGate>
+            <AppNavigator />
           </ThemeProvider>
         </AuthProvider>
       </QueryProvider>

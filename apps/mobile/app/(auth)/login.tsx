@@ -1,4 +1,4 @@
-import { useEffect, useState, type ComponentProps } from 'react';
+import { useState, type ComponentProps } from 'react';
 import {
   Image,
   ImageBackground,
@@ -24,8 +24,7 @@ import { completePlayerOnboarding, loginWithPhone, sendOtp } from '@/lib/auth-ap
 import lifestyleImage from '../../assets/auth/sports-lifestyle-court.jpg';
 import courtImage from '../../assets/auth/tennis-racket-ball-court.jpg';
 
-type AuthStep =
-  'splash' | 'welcome' | 'phone' | 'otp' | 'profile' | 'city' | 'sports' | 'notifications';
+type AuthStep = 'welcome' | 'phone' | 'otp' | 'profile' | 'city' | 'sports' | 'notifications';
 type SportIcon = ComponentProps<typeof MaterialCommunityIcons>['name'];
 type ProfilePhoto = { uri: string; fileName?: string | null; mimeType?: string | null };
 type CityOption = { label: string; landmark: string; icon: SportIcon };
@@ -112,7 +111,7 @@ export default function LoginScreen() {
   const { signIn } = useAuth();
   const insets = useSafeAreaInsets();
 
-  const [step, setStep] = useState<AuthStep>('splash');
+  const [step, setStep] = useState<AuthStep>('welcome');
   const [phoneDigits, setPhoneDigits] = useState('');
   const [otp, setOtp] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -137,12 +136,6 @@ export default function LoginScreen() {
         : step === 'notifications'
           ? 1
           : 0;
-
-  useEffect(() => {
-    if (step !== 'splash') return undefined;
-    const timer = setTimeout(() => setStep('welcome'), 1400);
-    return () => clearTimeout(timer);
-  }, [step]);
 
   function goBack() {
     setError(null);
@@ -311,10 +304,6 @@ export default function LoginScreen() {
     }
   }
 
-  if (step === 'splash') {
-    return <SplashStep bottomInset={insets.bottom} />;
-  }
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -401,37 +390,6 @@ export default function LoginScreen() {
         )}
       </View>
     </KeyboardAvoidingView>
-  );
-}
-
-function SplashStep({ bottomInset }: { bottomInset: number }) {
-  return (
-    <LinearGradient
-      colors={[design.primaryHot, design.background, design.surfaceLow]}
-      style={styles.splashRoot}
-    >
-      <ImageBackground
-        source={courtImage}
-        resizeMode="cover"
-        style={StyleSheet.absoluteFill}
-        imageStyle={styles.splashImage}
-      >
-        <View style={styles.splashScrim} />
-      </ImageBackground>
-      <View style={styles.splashContent}>
-        <View style={styles.logoMark}>
-          <MaterialCommunityIcons color={design.onPrimary} name="tennis-ball" size={58} />
-        </View>
-        <Text style={styles.splashBrand}>{APP_NAME}</Text>
-        <Text style={styles.splashTitle}>One app for everything sports</Text>
-      </View>
-      <View style={[styles.splashFooter, { paddingBottom: bottomInset + 32 }]}>
-        <View style={styles.loadingTrack}>
-          <View style={styles.loadingFill} />
-        </View>
-        <Text style={styles.loadingText}>Initializing player experience</Text>
-      </View>
-    </LinearGradient>
   );
 }
 
@@ -1135,64 +1093,6 @@ const styles = StyleSheet.create({
   keyboardRoot: { flex: 1, backgroundColor: design.background },
   container: { flex: 1, backgroundColor: design.background },
   scrollContent: { paddingHorizontal: 16, paddingTop: 8 },
-  splashRoot: { flex: 1, justifyContent: 'center', overflow: 'hidden' },
-  splashImage: { opacity: 0.2 },
-  splashScrim: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(255, 248, 246, 0.52)' },
-  splashContent: { alignItems: 'center', paddingHorizontal: 32 },
-  logoMark: {
-    alignItems: 'center',
-    backgroundColor: design.primary,
-    borderColor: 'rgba(255,255,255,0.38)',
-    borderRadius: 34,
-    borderWidth: 1,
-    height: 124,
-    justifyContent: 'center',
-    shadowColor: design.primary,
-    shadowOffset: { width: 0, height: 18 },
-    shadowOpacity: 0.24,
-    shadowRadius: 22,
-    width: 124,
-  },
-  splashBrand: {
-    color: design.onSurface,
-    fontSize: 42,
-    fontWeight: '800',
-    letterSpacing: 0,
-    marginTop: 28,
-  },
-  splashTitle: {
-    color: design.onSurfaceVariant,
-    fontSize: 26,
-    fontWeight: '700',
-    lineHeight: 34,
-    marginTop: 8,
-    maxWidth: 310,
-    textAlign: 'center',
-  },
-  splashFooter: {
-    alignItems: 'center',
-    bottom: 0,
-    gap: 12,
-    left: 0,
-    paddingHorizontal: 48,
-    position: 'absolute',
-    right: 0,
-  },
-  loadingTrack: {
-    backgroundColor: 'rgba(140, 113, 100, 0.26)',
-    borderRadius: 999,
-    height: 3,
-    overflow: 'hidden',
-    width: 210,
-  },
-  loadingFill: { backgroundColor: design.primary, borderRadius: 999, height: 3, width: '78%' },
-  loadingText: {
-    color: design.onSurfaceVariant,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
   topBar: {
     alignItems: 'center',
     borderBottomColor: 'rgba(224, 192, 177, 0.45)',
