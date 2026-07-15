@@ -7,7 +7,7 @@ import {
   type ListPartnerApplicationsQueryDto,
   type RejectPartnerApplicationDto,
 } from './dto/admin-partner.dto';
-import { type PartnerOnboardingService } from './partner-onboarding.service';
+import { PartnerOnboardingService } from './partner-onboarding.service';
 
 @ApiTags('Admin Partner Applications')
 @ApiBearerAuth('access-token')

@@ -13,11 +13,11 @@ import {
   UserRole,
 } from '@prisma/client';
 import { randomBytes } from 'crypto';
-import { type PrismaService } from '../prisma/prisma.module';
-import { type OtpService } from '../auth/services/otp.service';
-import { type PasswordService } from '../auth/services/password.service';
-import { type TokenService } from '../auth/services/token.service';
-import { type CacheService } from '../common/redis/cache.service';
+import { PrismaService } from '../prisma/prisma.module';
+import { OtpService } from '../auth/services/otp.service';
+import { PasswordService } from '../auth/services/password.service';
+import { TokenService } from '../auth/services/token.service';
+import { CacheService } from '../common/redis/cache.service';
 import { CACHE_PREFIX } from '../common/redis/cache.constants';
 import { getPermissionsForRoles } from '@fitora/types';
 import type { UserRole as TypesUserRole } from '@fitora/types';

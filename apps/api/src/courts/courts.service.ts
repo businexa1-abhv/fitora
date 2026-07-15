@@ -11,13 +11,13 @@ import {
   TenantStatus,
   UserRole,
 } from '@prisma/client';
-import { type PrismaService } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.module';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
-import { type CacheService } from '../common/redis/cache.service';
+import { CacheService } from '../common/redis/cache.service';
 import { CACHE_KEYS, CACHE_PREFIX, CACHE_TTL } from '../common/redis/cache.constants';
 import { optimizeImageUrl } from '../common/utils/cdn.util';
 import { hashQueryParams } from '../common/utils/cursor-pagination.util';
-import { type TenantsService } from '../tenants/tenants.service';
+import { TenantsService } from '../tenants/tenants.service';
 import { COURT_AMENITIES } from './constants/court.constants';
 import {
   type AddCourtImageDto,

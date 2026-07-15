@@ -11,7 +11,7 @@ import {
   type PartnerVerifyPhoneDto,
   type PartnerVisualsDto,
 } from './dto/partner-onboarding.dto';
-import { type PartnerOnboardingService } from './partner-onboarding.service';
+import { PartnerOnboardingService } from './partner-onboarding.service';
 
 @ApiTags('Partner Onboarding')
 @Controller('partner/onboarding')

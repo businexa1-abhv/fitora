@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CourtApprovalStatus, type Prisma, TenantStatus } from '@prisma/client';
-import { type PrismaService } from '../prisma/prisma.module';
-import { type CacheService } from '../common/redis/cache.service';
+import { PrismaService } from '../prisma/prisma.module';
+import { CacheService } from '../common/redis/cache.service';
 import { CACHE_PREFIX, CACHE_TTL } from '../common/redis/cache.constants';
 import { hashQueryParams } from '../common/utils/cursor-pagination.util';
 import { optimizeImageUrl } from '../common/utils/cdn.util';
