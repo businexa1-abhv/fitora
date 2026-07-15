@@ -10,6 +10,9 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      // Nest DI needs runtime class tokens (emitDecoratorMetadata). Autofixing
+      // constructor injectables to `import type` erases them to Function.
+      '@typescript-eslint/consistent-type-imports': 'off',
     },
   },
 ];

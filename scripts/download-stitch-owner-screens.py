@@ -25,6 +25,13 @@ SCREENS = [
     ("73f3cba098a743f69f2072b4faf61102", "welcome-to-fitora-owner", "Welcome to FitOra Owner"),
     ("8586acb54a57409bbbda0819aaeba8f7", "court-inventory-status", "Court Inventory & Status"),
     ("76f59adf85ec4f43b240efa842c6bc2e", "venue-executive-dashboard", "Venue Executive Dashboard"),
+    ("f181e3cc6372425db3520c8b95b888d7", "academy-dashboard", "Academy Dashboard"),
+    ("39a094cf8b5d4c94ab2225b6c4c1e6cb", "notifications-center", "Notifications Center"),
+    ("134ed14cc5434abaa5d4b2dee15b4df2", "performance-analytics", "Performance Analytics"),
+    ("530aa17448854ad2bfcfd2cd37f0634e", "court-list", "Court List"),
+    ("c72a96495bea4759b76b687d274abea7", "add-edit-court", "Add/Edit Court"),
+    ("0196a34992e043fc9fb451dbc545d69f", "court-availability-maintenance", "Court Availability & Maintenance"),
+    ("7cb17fb8ecd94b2a82d358ba27035893", "court-detail-view", "Court Detail View"),
 ]
 
 
