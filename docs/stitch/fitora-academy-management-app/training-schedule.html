@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Coach - Training Schedule</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#a04100",
+                    "on-tertiary-fixed": "#002204",
+                    "surface-container-high": "#e7e8e9",
+                    "on-primary-container": "#572000",
+                    "background": "#f8f9fa",
+                    "surface-dim": "#d9dadb",
+                    "surface-bright": "#f8f9fa",
+                    "surface-container-low": "#f3f4f5",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "inverse-primary": "#ffb693",
+                    "tertiary": "#006e1c",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-surface-variant": "#5a4136",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "surface": "#f8f9fa",
+                    "on-tertiary-fixed-variant": "#005313",
+                    "primary-fixed-dim": "#ffb693",
+                    "tertiary-fixed-dim": "#78dc77",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#636262",
+                    "secondary-container": "#e2dfde",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "primary-container": "#ff6b00",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed": "#94f990",
+                    "on-background": "#191c1d",
+                    "outline-variant": "#e2bfb0",
+                    "tertiary-container": "#4aad4e",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#edeeef",
+                    "on-surface": "#191c1d",
+                    "on-secondary": "#ffffff",
+                    "primary": "#a04100",
+                    "on-tertiary-container": "#003a0b",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "inverse-on-surface": "#f0f1f2",
+                    "primary-fixed": "#ffdbcc",
+                    "on-primary-fixed": "#351000",
+                    "secondary": "#5f5e5e",
+                    "outline": "#8e7164"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "container-margin-desktop": "48px",
+                    "md": "16px",
+                    "base": "8px",
+                    "lg": "24px",
+                    "gutter": "16px",
+                    "sm": "12px",
+                    "xl": "32px",
+                    "container-margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "headline-md": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["11px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-shadow {
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+        .kinetic-shadow:hover {
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.08);
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2bfb0;
+            z-index: 0;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-lg min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm docked full-width top-0 z-40 sticky">
+<div class="flex justify-between items-center w-full px-container-margin-mobile h-16 md:px-container-margin-desktop">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of an athletic coach in their 30s, wearing high-performance navy training gear. The lighting is bright and crisp against a clean, minimalist sports facility background. High-quality corporate aesthetic with natural skin tones and a focused, energetic expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA90mrMGXCLjInVrn1GQwLA9PnQjWhWkqU_aUc4QhTgOMFi4xOfSOEDaCwmIcQMONGD7OtE41Sm2poshcwbSk0lkBPg2wZBb0x-gsjFTZlwx2rLTri9-sjXdWuI-XP1K5nGCiWKDRkhgeBHqkmsxPMxPB7Jbu5cA3nzuynNN4tT-HD6EdmwXymFuY2wJttevUB-Seau4LmU6URTzTnC10vNsQcU4lnjf2LVtir2dvyyPQIVzLprfAJr"/>
+</div>
+<h1 class="font-display-lg text-headline-md-mobile md:text-headline-md text-primary dark:text-primary-fixed">FitOra Coach</h1>
+</div>
+<div class="flex items-center gap-4">
+<a class="hidden md:block font-label-lg text-label-lg text-primary font-bold hover:underline" href="#">View Monthly</a>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-5xl mx-auto px-container-margin-mobile md:px-container-margin-desktop py-lg space-y-lg">
+<!-- Weekly Calendar Strip -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-center mb-md">
+<h2 class="font-headline-md text-title-lg text-on-surface">Weekly Schedule</h2>
+<div class="flex gap-2">
+<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant"><span class="material-symbols-outlined">chevron_left</span></button>
+<span class="font-label-lg text-label-lg self-center">Oct 23 - Oct 29</span>
+<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-2">
+<!-- Days of the week -->
+<div class="flex flex-col items-center p-2 rounded-lg transition-colors cursor-pointer hover:bg-surface-container-high group">
+<span class="font-label-md text-label-md text-secondary">MON</span>
+<span class="font-headline-md text-headline-md-mobile text-on-surface">23</span>
+</div>
+<div class="flex flex-col items-center p-2 rounded-lg transition-colors cursor-pointer hover:bg-surface-container-high group">
+<span class="font-label-md text-label-md text-secondary">TUE</span>
+<span class="font-headline-md text-headline-md-mobile text-on-surface">24</span>
+</div>
+<!-- Highlighted Active Day (Wednesday) -->
+<div class="flex flex-col items-center p-2 rounded-xl bg-primary-container text-on-primary-container shadow-md transform scale-105">
+<span class="font-label-md text-label-md opacity-90">WED</span>
+<span class="font-headline-md text-headline-md-mobile">25</span>
+<div class="w-1.5 h-1.5 bg-on-primary-container rounded-full mt-1"></div>
+</div>
+<div class="flex flex-col items-center p-2 rounded-lg transition-colors cursor-pointer hover:bg-surface-container-high group">
+<span class="font-label-md text-label-md text-secondary">THU</span>
+<span class="font-headline-md text-headline-md-mobile text-on-surface">26</span>
+</div>
+<div class="flex flex-col items-center p-2 rounded-lg transition-colors cursor-pointer hover:bg-surface-container-high group">
+<span class="font-label-md text-label-md text-secondary">FRI</span>
+<span class="font-headline-md text-headline-md-mobile text-on-surface">27</span>
+</div>
+<div class="flex flex-col items-center p-2 rounded-lg transition-colors cursor-pointer hover:bg-surface-container-high group">
+<span class="font-label-md text-label-md text-secondary">SAT</span>
+<span class="font-headline-md text-headline-md-mobile text-on-surface">28</span>
+</div>
+<div class="flex flex-col items-center p-2 rounded-lg transition-colors cursor-pointer hover:bg-surface-container-high group" onclick="toggleEmptyState()">
+<span class="font-label-md text-label-md text-secondary">SUN</span>
+<span class="font-headline-md text-headline-md-mobile text-on-surface">29</span>
+</div>
+</div>
+</section>
+<!-- Timeline View -->
+<div class="relative timeline-line space-y-lg pb-12" id="schedule-content">
+<!-- Session 1 -->
+<div class="relative pl-12 group">
+<div class="absolute left-3 top-1 w-5 h-5 rounded-full bg-primary ring-4 ring-background z-10"></div>
+<div class="text-secondary font-label-lg mb-2">08:00 AM — 09:30 AM</div>
+<div class="kinetic-shadow bg-surface-container-lowest rounded-xl p-md border-l-4 border-primary overflow-hidden relative">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md-mobile text-on-surface mb-1">Morning Cardio Blast</h3>
+<div class="flex flex-wrap gap-sm mt-2">
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Court 2
+                                </span>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">groups</span> 12 Players
+                                </span>
+</div>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+</div>
+<!-- Session 2 -->
+<div class="relative pl-12 group">
+<div class="absolute left-3 top-1 w-5 h-5 rounded-full bg-secondary ring-4 ring-background z-10 group-hover:bg-primary transition-colors"></div>
+<div class="text-secondary font-label-lg mb-2">11:00 AM — 12:00 PM</div>
+<div class="kinetic-shadow bg-surface-container-lowest rounded-xl p-md border-l-4 border-secondary-fixed-dim hover:border-primary">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md-mobile text-on-surface mb-1">Elite Strength Training</h3>
+<div class="flex flex-wrap gap-sm mt-2">
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Gym Floor
+                                </span>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">groups</span> 8 Players
+                                </span>
+</div>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+</div>
+<!-- Session 3 -->
+<div class="relative pl-12 group">
+<div class="absolute left-3 top-1 w-5 h-5 rounded-full bg-secondary ring-4 ring-background z-10 group-hover:bg-primary transition-colors"></div>
+<div class="text-secondary font-label-lg mb-2">03:30 PM — 05:00 PM</div>
+<div class="kinetic-shadow bg-surface-container-lowest rounded-xl p-md border-l-4 border-secondary-fixed-dim hover:border-primary">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md-mobile text-on-surface mb-1">Youth Tennis Fundamentals</h3>
+<div class="flex flex-wrap gap-sm mt-2">
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Court 2
+                                </span>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">groups</span> 15 Players
+                                </span>
+</div>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Container (Hidden by default) -->
+<div class="hidden flex flex-col items-center justify-center py-20 text-center space-y-md" id="empty-state">
+<div class="w-64 h-64 bg-surface-container-low rounded-full flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 bg-gradient-to-tr from-primary to-tertiary animate-pulse"></div>
+<span class="material-symbols-outlined text-[120px] text-outline-variant select-none" style="font-variation-settings: 'FILL' 1;">bedtime</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">No sessions for Sunday</h3>
+<p class="text-on-surface-variant font-body-lg">Enjoy your rest! Recovery is part of the training.</p>
+</div>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-xl font-headline-md text-label-lg uppercase tracking-widest kinetic-shadow active:scale-95 transition-all" onclick="toggleEmptyState()">Back to Today</button>
+</div>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-24 right-container-margin-mobile md:bottom-12 md:right-container-margin-desktop w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-40">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 md:hidden">
+<div class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant flex justify-around items-center py-2 shadow-lg h-20 px-2">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high dark:hover:bg-secondary-container transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high dark:hover:bg-secondary-container transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md mt-1">Students</span>
+</a>
+<!-- Active: Training -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-xl px-4 py-2 transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span class="font-label-md text-label-md mt-1">Training</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high dark:hover:bg-secondary-container transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md mt-1">Analytics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high dark:hover:bg-secondary-container transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</a>
+</div>
+</nav>
+<script>
+        function toggleEmptyState() {
+            const content = document.getElementById('schedule-content');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+            } else {
+                content.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            }
+        }
+        
+        // Add a nice staggered entrance animation for cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.pl-12');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body></html>

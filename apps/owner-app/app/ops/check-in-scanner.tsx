@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -8,7 +8,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { CameraView, useCameraPermissions, type BarcodeScanningResult } from 'expo-camera';
+import CameraView from 'expo-camera/build/CameraView';
+import CameraManager from 'expo-camera/build/ExpoCameraManager';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,6 +20,8 @@ import { checkInBooking, getOwnerBookings } from '@/lib/owner-api';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 type ParsedQr = { bookingId: string; checkInCode: string };
+type BarcodeScanningResult = { data: string };
+type CameraPermission = { granted: boolean };
 
 function parseCheckInPayload(raw: string): ParsedQr | null {
   const trimmed = raw.trim();
@@ -48,11 +51,31 @@ export default function QrCheckInScannerActiveScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [permission, requestPermission] = useCameraPermissions();
+  const [permission, setPermission] = useState<CameraPermission | null>(null);
   const [torch, setTorch] = useState(false);
   const [manualId, setManualId] = useState('');
   const [manualCode, setManualCode] = useState('');
   const scanningLock = useRef(false);
+
+  const requestPermission = useCallback(async () => {
+    const result = (await CameraManager.requestCameraPermissionsAsync()) as CameraPermission;
+    setPermission(result);
+    return result;
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    CameraManager.getCameraPermissionsAsync()
+      .then((result: CameraPermission) => {
+        if (mounted) setPermission(result);
+      })
+      .catch(() => {
+        if (mounted) setPermission({ granted: false });
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const bookingsQuery = useQuery({
     queryKey: ['owner', 'bookings'],

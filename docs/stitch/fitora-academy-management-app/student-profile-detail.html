@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Profile - Rahul Sharma | FitOra Coach</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#572000",
+                    "primary-fixed-dim": "#ffb693",
+                    "on-tertiary-fixed": "#002204",
+                    "surface-dim": "#d9dadb",
+                    "secondary": "#5f5e5e",
+                    "surface-variant": "#e1e3e4",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "outline": "#8e7164",
+                    "tertiary-fixed": "#94f990",
+                    "primary-fixed": "#ffdbcc",
+                    "inverse-surface": "#2e3132",
+                    "background": "#f8f9fa",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "secondary-fixed": "#e5e2e1",
+                    "surface-bright": "#f8f9fa",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary": "#a04100",
+                    "on-tertiary-container": "#003a0b",
+                    "on-primary-fixed": "#351000",
+                    "on-background": "#191c1d",
+                    "on-secondary-fixed-variant": "#474746",
+                    "secondary-container": "#e2dfde",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#e2bfb0",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#191c1d",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f3f4f5",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#4aad4e",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-secondary-container": "#636262",
+                    "tertiary-fixed-dim": "#78dc77",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#ffb693",
+                    "surface-tint": "#a04100",
+                    "surface-container": "#edeeef",
+                    "primary-container": "#ff6b00",
+                    "on-tertiary-fixed-variant": "#005313",
+                    "tertiary": "#006e1c",
+                    "on-error": "#ffffff",
+                    "surface": "#f8f9fa",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#5a4136",
+                    "surface-container-high": "#e7e8e9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin-mobile": "16px",
+                    "container-margin-desktop": "48px",
+                    "gutter": "16px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "lg": "24px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Lexend"],
+                    "display-lg": ["Lexend"],
+                    "headline-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["11px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+        .tab-active { border-bottom: 3px solid #a04100; color: #a04100; }
+        .tab-inactive { color: #5f5e5e; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .performance-gradient { background: linear-gradient(180deg, rgba(255, 107, 0, 0.1) 0%, rgba(255, 255, 255, 0) 100%); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface shadow-sm h-16 px-container-margin-mobile flex justify-between items-center">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Student Profile</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary">qr_code_scanner</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-secondary-container">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fit athletic coach in their 30s with a warm smile, wearing a technical navy training polo. The background is a slightly blurred high-performance tennis court with clean white lines and a vibrant green surface, matching the professional and energetic FitOra brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAioo_7QxGT9MqCadUzUNXfGHHMwXuJqQvE0M9NZk8Mnplks49Ox4HXtSRkaEDi7SrYvqpFWaBEVVqr-FV6x0i5on02Uo4Tnwh8oSkV998wwHjoze2GAqx3JMiZ69D6qhUnh-hnFPn63pzpuQ6Hf1q-deZswR__2aN7o1tk91PTpE5bxCwqczld6DzXUZAo0Ng3bWcJD4hyGg66lhtsFHuCdhFQ7RejexcLCUITStnr3rx9_g93oI3C"/>
+</div>
+</div>
+</header>
+<main class="pt-20 px-container-margin-mobile max-w-5xl mx-auto">
+<!-- Profile Header Section -->
+<section class="mt-4 mb-8">
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/30 flex flex-col md:flex-row items-center md:items-start gap-lg relative overflow-hidden">
+<!-- Background Accent Circle -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<!-- Profile Image -->
+<div class="relative">
+<div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-primary-container p-1 shadow-lg">
+<img class="w-full h-full object-cover rounded-full" data-alt="A energetic 14-year-old boy named Rahul Sharma with dark hair and a determined expression, holding a tennis racket on his shoulder. He is wearing a breathable orange and white athletic jersey. The scene is shot with high-performance studio lighting that emphasizes momentum and clarity, set against a clean, minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCohiw-Y1y4uBb4JiNAawKynAshNdRLt3fsU76XI-xngk-Fr6fA2PYNLQHcFWM6UADa-4fXqrQPHESYjN5Z5t9ZOVNR_hlyC5Y4Y8-e-oXHoTQBIE7PmU_gXzb4KTWvVqfbYJn7dJ5udodvp_z9-ITYezwLUMcjvFmajqFwOMOWdGBKM9h4qcx3xyL-dtnmv5VIx8RrM-nM1ZlKR0UjsMofpOn6IbR51stQzxvsoYjyIyR1s1cXl18e"/>
+</div>
+<div class="absolute bottom-1 right-1 bg-tertiary-container text-white p-1 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<!-- Info & Actions -->
+<div class="flex-1 text-center md:text-left">
+<div class="mb-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">Rahul Sharma</h2>
+<div class="flex flex-wrap justify-center md:justify-start gap-2 mt-1">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary font-label-lg text-label-lg">
+                                Intermediate Level
+                            </span>
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-lg text-label-lg gap-1">
+<span class="material-symbols-outlined text-[14px]">sports_tennis</span> Tennis
+                            </span>
+</div>
+</div>
+<div class="flex flex-wrap justify-center md:justify-start gap-3">
+<button class="bg-primary-container hover:bg-primary transition-colors text-white px-6 py-2 rounded-xl font-label-lg text-label-lg flex items-center gap-2 shadow-sm active:scale-95 duration-150">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+                            Message Parent
+                        </button>
+<button class="bg-surface-container border border-outline-variant hover:bg-surface-container-high transition-colors text-on-surface px-6 py-2 rounded-xl font-label-lg text-label-lg flex items-center gap-2 shadow-sm active:scale-95 duration-150">
+<span class="material-symbols-outlined text-sm">call</span>
+                            Call
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Tabs Navigation -->
+<nav class="flex border-b border-outline-variant/30 mb-6 overflow-x-auto scrollbar-hide">
+<button class="tab-active py-4 px-6 font-title-lg text-title-lg whitespace-nowrap transition-all duration-200" id="tab-bio" onclick="switchTab('bio')">Bio</button>
+<button class="tab-inactive py-4 px-6 font-title-lg text-title-lg whitespace-nowrap transition-all duration-200" id="tab-progress" onclick="switchTab('progress')">Progress</button>
+<button class="tab-inactive py-4 px-6 font-title-lg text-title-lg whitespace-nowrap transition-all duration-200" id="tab-attendance" onclick="switchTab('attendance')">Attendance</button>
+<button class="tab-inactive py-4 px-6 font-title-lg text-title-lg whitespace-nowrap transition-all duration-200" id="tab-awards" onclick="switchTab('awards')">Awards</button>
+</nav>
+<!-- Content Panels -->
+<div class="tab-panel space-y-6" id="panel-bio">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Personal Info Card -->
+<div class="bg-surface rounded-xl p-md shadow-sm border border-outline-variant/20">
+<h3 class="font-headline-md text-headline-md text-on-surface-variant mb-4 border-b border-outline-variant/10 pb-2">Details</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-secondary font-body-md text-body-md">Age</span>
+<span class="text-on-surface font-title-lg text-title-lg">14 Years</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-secondary font-body-md text-body-md">Sport</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">sports_tennis</span>
+<span class="text-on-surface font-title-lg text-title-lg">Tennis</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-error/5 rounded-lg border border-error/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error">medical_information</span>
+<span class="text-error font-label-lg text-label-lg">Medical History</span>
+</div>
+<span class="text-error font-body-lg text-body-lg font-bold">Asthma (Mild)</span>
+</div>
+</div>
+</div>
+<!-- Family & Emergency Card -->
+<div class="bg-surface rounded-xl p-md shadow-sm border border-outline-variant/20">
+<h3 class="font-headline-md text-headline-md text-on-surface-variant mb-4 border-b border-outline-variant/10 pb-2">Contacts</h3>
+<div class="space-y-4">
+<div class="p-3 bg-surface-container-low rounded-lg">
+<p class="text-secondary font-label-lg text-label-lg mb-1">Parent (Primary)</p>
+<div class="flex justify-between items-center">
+<span class="text-on-surface font-title-lg text-title-lg">Amit Sharma</span>
+<a class="text-primary font-body-md text-body-md flex items-center gap-1 hover:underline" href="tel:+919876543210">
+<span class="material-symbols-outlined text-[16px]">call</span>
+                                    +91 98765-43210
+                                </a>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg">
+<p class="text-secondary font-label-lg text-label-lg mb-1">Emergency Contact</p>
+<div class="flex justify-between items-center">
+<span class="text-on-surface font-title-lg text-title-lg">Deepika Sharma (Mother)</span>
+<span class="text-secondary font-body-md text-body-md">On File</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-panel hidden space-y-6" id="panel-progress">
+<!-- Performance Graph Placeholder -->
+<div class="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/20 overflow-hidden relative">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface-variant">Performance Improvement</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-tertiary/10 text-tertiary rounded-full text-xs font-bold">+12% vs last month</span>
+</div>
+</div>
+<!-- Simulated Chart -->
+<div class="h-48 w-full flex items-end gap-2 px-2 performance-gradient">
+<div class="flex-1 bg-primary/20 rounded-t-md h-[40%] hover:bg-primary/40 transition-all duration-300"></div>
+<div class="flex-1 bg-primary/30 rounded-t-md h-[55%] hover:bg-primary/40 transition-all duration-300"></div>
+<div class="flex-1 bg-primary/40 rounded-t-md h-[45%] hover:bg-primary/40 transition-all duration-300"></div>
+<div class="flex-1 bg-primary/50 rounded-t-md h-[65%] hover:bg-primary/40 transition-all duration-300"></div>
+<div class="flex-1 bg-primary/60 rounded-t-md h-[80%] hover:bg-primary/40 transition-all duration-300"></div>
+<div class="flex-1 bg-primary-container rounded-t-md h-[92%] hover:brightness-110 transition-all duration-300"></div>
+</div>
+<div class="flex justify-between mt-4 text-secondary font-label-md text-label-md px-2">
+<span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span>
+</div>
+</div>
+<!-- Timeline -->
+<div class="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/20">
+<h3 class="font-headline-md text-headline-md text-on-surface-variant mb-6">Recent Achievements</h3>
+<div class="space-y-6 relative before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-0 before:w-[2px] before:bg-outline-variant/30">
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 bg-tertiary-container rounded-full flex items-center justify-center border-4 border-surface">
+<span class="material-symbols-outlined text-[12px] text-white" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<h4 class="font-title-lg text-title-lg text-on-surface">Advanced Backhand Mastery</h4>
+<p class="text-secondary font-body-md text-body-md">Completed 20/20 sessions with consistent 85% accuracy.</p>
+<p class="text-outline font-label-lg text-label-lg mt-1">Oct 12, 2023</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 bg-primary-container rounded-full flex items-center justify-center border-4 border-surface">
+<span class="material-symbols-outlined text-[12px] text-white" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<h4 class="font-title-lg text-title-lg text-on-surface">Endurance Milestone</h4>
+<p class="text-secondary font-body-md text-body-md">Maintained high intensity play for 90 continuous minutes.</p>
+<p class="text-outline font-label-lg text-label-lg mt-1">Sep 28, 2023</p>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-panel hidden" id="panel-attendance">
+<div class="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/20 text-center py-20">
+<span class="material-symbols-outlined text-outline text-6xl mb-4">calendar_today</span>
+<p class="text-secondary font-body-lg text-body-lg">Attendance history loading...</p>
+</div>
+</div>
+<div class="tab-panel hidden" id="panel-awards">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container rounded-xl p-md flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-4xl text-yellow-500 mb-2">emoji_events</span>
+<span class="font-label-lg text-label-lg">Summer Open Finalist</span>
+</div>
+<div class="bg-surface-container rounded-xl p-md flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-4xl text-primary mb-2">military_tech</span>
+<span class="font-label-lg text-label-lg">Best Backhand</span>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for quick log -->
+<button class="fixed right-6 bottom-24 bg-primary-container text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-primary active:scale-90 transition-all duration-200 z-40">
+<span class="material-symbols-outlined text-2xl">add_task</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-16 flex justify-around items-center bg-surface border-t border-outline-variant px-2 pb-safe z-50">
+<a class="flex flex-col items-center justify-center text-on-secondary-container" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary-container/10 rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-label-md text-label-md">Training</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<script>
+        function switchTab(tabId) {
+            // Update Tab Buttons
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('tab-inactive');
+            });
+            document.getElementById('tab-' + tabId).classList.add('tab-active');
+            document.getElementById('tab-' + tabId).classList.remove('tab-inactive');
+
+            // Update Content Panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            document.getElementById('panel-' + tabId).classList.remove('hidden');
+        }
+
+        // Add some interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Haptic feedback logic could go here
+            });
+        });
+    </script>
+</body></html>

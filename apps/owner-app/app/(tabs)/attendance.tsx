@@ -9,7 +9,9 @@ import {
   View,
 } from 'react-native';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { EnrollmentStatus, type TrainingBatch } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
@@ -21,6 +23,7 @@ import {
 } from '@/lib/trainer-api';
 import { todayString } from '@/lib/trainer-utils';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
+import { CoachColors } from '@/constants/coach-theme';
 
 type MarkedState = Record<string, 'present' | 'absent'>;
 
@@ -198,8 +201,9 @@ function BatchAttendanceCard({
 
 export default function AttendanceScreen() {
   const { colors } = useTheme();
-  const { token } = useAuth();
+  const { token, isCoachMode } = useAuth();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [date, setDate] = useState(todayString());
 
   const batchesQuery = useQuery({
@@ -217,10 +221,23 @@ export default function AttendanceScreen() {
         paddingHorizontal: Spacing.lg,
       }}
     >
-      <Text style={[styles.title, { color: colors.foreground }]}>Attendance</Text>
-      <Text style={{ color: colors.muted, fontSize: FontSize.sm, marginTop: 4 }}>
-        Mark daily attendance for your batches
-      </Text>
+      <View style={styles.headerRow}>
+        <View style={{ flex: 1 }}>
+          <Text style={[styles.title, { color: colors.foreground }]}>Attendance</Text>
+          <Text style={{ color: colors.muted, fontSize: FontSize.sm, marginTop: 4 }}>
+            Mark daily attendance for your batches
+          </Text>
+        </View>
+        {isCoachMode ? (
+          <Pressable
+            style={styles.qrBtn}
+            onPress={() => router.push('/coach/qr-attendance' as never)}
+          >
+            <Ionicons name="qr-code-outline" size={18} color="#fff" />
+            <Text style={styles.qrBtnText}>Scan QR</Text>
+          </Pressable>
+        ) : null}
+      </View>
 
       <View style={[styles.dateRow, { borderColor: colors.border, backgroundColor: colors.card }]}>
         <Text style={{ color: colors.muted, fontSize: FontSize.sm, fontWeight: '700' }}>Date</Text>
@@ -257,7 +274,19 @@ export default function AttendanceScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerRow: { alignItems: 'flex-start', flexDirection: 'row', gap: Spacing.md },
   title: { fontSize: FontSize.xxl, fontWeight: '800' },
+  qrBtn: {
+    alignItems: 'center',
+    backgroundColor: CoachColors.primary,
+    borderRadius: Radius.full,
+    flexDirection: 'row',
+    gap: 6,
+    marginTop: 4,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+  },
+  qrBtnText: { color: '#fff', fontSize: FontSize.xs, fontWeight: '800' },
   dateRow: {
     alignItems: 'center',
     borderRadius: Radius.lg,

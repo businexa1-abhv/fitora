@@ -34,9 +34,8 @@ function formatCompactMoney(amount: number) {
 }
 
 export default function DashboardScreen() {
-  const { isOwner, isTrainer } = useAuth();
-  const isCoachOnly = isTrainer && !isOwner;
-  if (isCoachOnly) return <CoachDashboardScreen />;
+  const { isCoachMode } = useAuth();
+  if (isCoachMode) return <CoachDashboardScreen />;
   return <AcademyDashboardScreen />;
 }
 

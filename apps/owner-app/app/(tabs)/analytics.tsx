@@ -5,6 +5,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { formatCurrency } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
+import { CoachAnalyticsScreen } from '@/components/coach-analytics';
 import { Card, QueryState } from '@/components/ui';
 import { getMyCourts, getOwnerDashboard } from '@/lib/owner-api';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
@@ -39,6 +40,12 @@ function sportUtilFromCourts(names: string[]) {
 }
 
 export default function PerformanceAnalyticsScreen() {
+  const { isCoachMode } = useAuth();
+  if (isCoachMode) return <CoachAnalyticsScreen />;
+  return <OwnerAnalyticsScreen />;
+}
+
+function OwnerAnalyticsScreen() {
   const { colors } = useTheme();
   const { token, user } = useAuth();
   const insets = useSafeAreaInsets();

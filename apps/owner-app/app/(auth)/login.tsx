@@ -25,6 +25,11 @@ const PARTNER_URL = process.env.EXPO_PUBLIC_PARTNER_WEB_URL ?? 'http://localhost
 
 type RoleTab = 'owner' | 'coach';
 
+const DEMO_CREDENTIALS: Record<RoleTab, { email: string; password: string }> = {
+  owner: { email: 'businexa1@gmail.com', password: 'OwnerPass123!' },
+  coach: { email: 'trainer@fitora.com', password: 'TrainerPass123!' },
+};
+
 export default function LoginScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -32,12 +37,24 @@ export default function LoginScreen() {
   const { signIn } = useAuth();
 
   const [role, setRole] = useState<RoleTab>('owner');
-  const [email, setEmail] = useState('businexa1@gmail.com');
-  const [password, setPassword] = useState('OwnerPass123!');
+  const [email, setEmail] = useState(DEMO_CREDENTIALS.owner.email);
+  const [password, setPassword] = useState(DEMO_CREDENTIALS.owner.password);
   const [showPassword, setShowPassword] = useState(false);
   const [keepLoggedIn, setKeepLoggedIn] = useState(true);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+
+  function selectRole(next: RoleTab) {
+    setRole(next);
+    setError('');
+    const demo = DEMO_CREDENTIALS[next];
+    // Swap demo credentials when switching roles if fields still match the other role's demo.
+    const other = DEMO_CREDENTIALS[next === 'owner' ? 'coach' : 'owner'];
+    if (email === other.email || password === other.password) {
+      setEmail(demo.email);
+      setPassword(demo.password);
+    }
+  }
 
   async function handleLogin() {
     setError('');
@@ -52,12 +69,14 @@ export default function LoginScreen() {
         setError('This account is not a venue owner. Switch to Coach or use owner credentials.');
         return;
       }
-      if (role === 'coach' && !isTrainer && !isOwner) {
-        setError('This account is not a coach/trainer.');
+      if (role === 'coach' && !isTrainer) {
+        setError(
+          'This account is not a coach/trainer. Switch to Owner or use trainer credentials.',
+        );
         return;
       }
 
-      await signIn(response);
+      await signIn(response, role);
       void keepLoggedIn;
       router.replace('/(tabs)');
     } catch (err) {
@@ -98,11 +117,11 @@ export default function LoginScreen() {
 
           <View style={[styles.roleToggle, { backgroundColor: colors.mutedBg }]}>
             <Pressable
-              onPress={() => setRole('owner')}
+              onPress={() => selectRole('owner')}
               style={[styles.roleBtn, role === 'owner' && { backgroundColor: colors.primary }]}
             >
               <Ionicons
-                name="key-outline"
+                name="shield-checkmark-outline"
                 size={16}
                 color={role === 'owner' ? '#fff' : colors.primary}
               />
@@ -113,7 +132,7 @@ export default function LoginScreen() {
               </Text>
             </Pressable>
             <Pressable
-              onPress={() => setRole('coach')}
+              onPress={() => selectRole('coach')}
               style={[styles.roleBtn, role === 'coach' && { backgroundColor: colors.primary }]}
             >
               <MaterialCommunityIcons
@@ -128,6 +147,12 @@ export default function LoginScreen() {
               </Text>
             </Pressable>
           </View>
+
+          <Text style={[styles.roleHint, { color: colors.muted }]}>
+            {role === 'owner'
+              ? 'Owner mode — courts, ops, finance, and academy management.'
+              : 'Coach mode — students, training schedule, attendance, and analytics.'}
+          </Text>
 
           <MonoLabel style={{ marginTop: Spacing.lg }}>Institutional Email</MonoLabel>
           <View style={[styles.inputWrap, { borderColor: colors.border }]}>
@@ -266,6 +291,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
   },
   roleText: { fontSize: FontSize.sm, fontWeight: '700' },
+  roleHint: { fontSize: FontSize.xs, lineHeight: 16, marginTop: Spacing.sm },
   inputWrap: {
     alignItems: 'center',
     borderRadius: Radius.md,

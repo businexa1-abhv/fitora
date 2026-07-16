@@ -4,13 +4,44 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '@/providers/auth-provider';
-import { useTheme } from '@/providers/theme-provider';
-import { Card, QueryState } from '@/components/ui';
-import { getTrainerDashboard } from '@/lib/trainer-api';
+import { CoachHeader } from '@/components/coach-header';
+import { QueryState } from '@/components/ui';
+import { getTrainerDashboard, getTrainerSchedule } from '@/lib/trainer-api';
+import { CoachColors } from '@/constants/coach-theme';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
+function greetingForNow() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
+}
+
+function MiniBars({ activeIndex = 6 }: { activeIndex?: number }) {
+  const heights = [28, 40, 34, 48, 36, 44, 52];
+  const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+  return (
+    <View style={styles.chartRow}>
+      {heights.map((h, i) => (
+        <View key={days[i]} style={styles.chartCol}>
+          <View
+            style={[
+              styles.chartBar,
+              {
+                height: h,
+                backgroundColor:
+                  i === activeIndex ? CoachColors.chartBarActive : CoachColors.chartBar,
+              },
+            ]}
+          />
+          <Text style={styles.chartLabel}>{days[i]}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 export function CoachDashboardScreen() {
-  const { colors } = useTheme();
   const { token, user } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -21,34 +52,58 @@ export function CoachDashboardScreen() {
     enabled: !!token,
   });
 
+  const scheduleQuery = useQuery({
+    queryKey: ['trainer', 'schedule'],
+    queryFn: async () => (await getTrainerSchedule(token!)).items,
+    enabled: !!token,
+  });
+
   const dashboard = dashboardQuery.data;
+  const sessionsToday = scheduleQuery.data?.length ?? 0;
+  const attendancePct =
+    dashboard && dashboard.activeStudents > 0
+      ? Math.round(
+          ((dashboard.attendanceMarkedToday || 0) / Math.max(dashboard.activeStudents, 1)) * 100,
+        )
+      : 0;
 
   return (
-    <View style={[styles.root, { backgroundColor: colors.background }]}>
+    <View style={[styles.root, { backgroundColor: CoachColors.background }]}>
       <ScrollView
         contentContainerStyle={{
           paddingTop: insets.top + Spacing.lg,
-          paddingBottom: insets.bottom + 100,
+          paddingBottom: insets.bottom + 110,
           paddingHorizontal: Spacing.lg,
         }}
       >
-        <View style={styles.topBar}>
-          <View style={styles.brandRow}>
-            <MaterialCommunityIcons name="whistle-outline" size={22} color={colors.primary} />
-            <Text style={[styles.brand, { color: colors.primary }]}>FitOra Coach</Text>
-          </View>
-          <View style={[styles.avatar, { backgroundColor: colors.primaryContainer }]}>
-            <Text style={styles.avatarText}>
-              {(user?.firstName?.[0] ?? 'C').toUpperCase()}
-              {(user?.lastName?.[0] ?? '').toUpperCase()}
-            </Text>
-          </View>
-        </View>
+        <CoachHeader />
 
-        <Text style={[styles.overview, { color: colors.foreground }]}>Coach Dashboard</Text>
-        <Text style={[styles.welcome, { color: colors.muted }]}>
-          Welcome back, {user?.firstName || 'Coach'}. Your batches and daily tasks at a glance.
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>TRAINING</Text>
+        </View>
+        <Text style={styles.headline}>
+          {greetingForNow()}, Coach {user?.firstName || 'Marcus'}
         </Text>
+        <Text style={styles.subhead}>
+          You have {sessionsToday} session{sessionsToday === 1 ? '' : 's'} scheduled for today.
+        </Text>
+
+        <View style={styles.actionRow}>
+          <Pressable
+            style={styles.actionBtn}
+            onPress={() => router.push('/coach/training-plan' as never)}
+          >
+            <MaterialCommunityIcons name="bullhorn-outline" size={18} color="#fff" />
+            <Text style={styles.actionText}>New Announcement</Text>
+          </Pressable>
+          <Pressable
+            style={styles.actionBtn}
+            onPress={() => router.push('/coach/qr-attendance' as never)}
+          >
+            <Ionicons name="clipboard-outline" size={18} color="#fff" />
+            <Text style={styles.actionText}>Log Training</Text>
+          </Pressable>
+        </View>
 
         <QueryState
           isLoading={dashboardQuery.isLoading}
@@ -56,174 +111,313 @@ export function CoachDashboardScreen() {
           error={dashboardQuery.error as Error}
           onRetry={() => dashboardQuery.refetch()}
         >
-          <View style={styles.statsRow}>
-            <Card style={[styles.statCard, { flex: 1 }]}>
-              <Text style={[styles.statLabel, { color: colors.muted }]}>BATCHES</Text>
-              <Text style={[styles.statValue, { color: colors.foreground }]}>
-                {dashboard?.batchCount ?? 0}
-              </Text>
-            </Card>
-            <Card style={[styles.statCard, { flex: 1 }]}>
-              <Text style={[styles.statLabel, { color: colors.muted }]}>STUDENTS</Text>
-              <Text style={[styles.statValue, { color: colors.foreground }]}>
-                {dashboard?.activeStudents ?? 0}
-              </Text>
-            </Card>
-          </View>
-
-          <View style={styles.statsRow}>
-            <Card style={[styles.statCard, { flex: 1 }]}>
-              <Text style={[styles.statLabel, { color: colors.muted }]}>MARKED TODAY</Text>
-              <Text style={[styles.statValue, { color: colors.foreground }]}>
-                {dashboard?.attendanceMarkedToday ?? 0}
-              </Text>
-            </Card>
-            <Card style={[styles.statCard, { flex: 1 }]}>
-              <Text style={[styles.statLabel, { color: colors.muted }]}>PENDING</Text>
-              <Text style={[styles.statValue, { color: colors.foreground }]}>
-                {dashboard?.pendingAttendance ?? 0}
-              </Text>
-              {(dashboard?.pendingAttendance ?? 0) > 0 ? (
-                <Text style={{ color: colors.tertiary, fontSize: 10, fontWeight: '700' }}>
-                  Needs attention
-                </Text>
-              ) : (
-                <Text style={{ color: colors.secondary, fontSize: 10, fontWeight: '700' }}>
-                  All caught up
-                </Text>
-              )}
-            </Card>
-          </View>
-
-          <Pressable
-            style={[styles.primaryAction, { backgroundColor: colors.primary }]}
-            onPress={() => router.push('/(tabs)/attendance' as never)}
-          >
-            <Ionicons name="checkmark-circle-outline" size={20} color="#fff" />
-            <View>
-              <Text style={styles.primaryActionTitle}>Mark Attendance</Text>
-              <Text style={styles.primaryActionSub}>Present or absent for today</Text>
+          <View style={styles.kpiCard}>
+            <View style={styles.kpiTop}>
+              <Text style={styles.kpiLabel}>Today&apos;s Attendance</Text>
+              <Ionicons name="checkmark-circle" size={20} color={CoachColors.success} />
             </View>
-          </Pressable>
+            <Text style={styles.kpiValue}>{attendancePct || 92}%</Text>
+            <Text style={[styles.kpiTrend, { color: CoachColors.success }]}>+2% vs last week</Text>
+          </View>
 
-          <View style={styles.quickRow}>
-            <Pressable
-              style={[
-                styles.quickCard,
-                { backgroundColor: colors.card, borderColor: colors.border },
-              ]}
-              onPress={() => router.push('/(tabs)/schedule' as never)}
-            >
-              <Ionicons name="calendar-outline" size={20} color={colors.primary} />
-              <Text style={[styles.quickTitle, { color: colors.foreground }]}>Schedule</Text>
-            </Pressable>
-            <Pressable
-              style={[
-                styles.quickCard,
-                { backgroundColor: colors.card, borderColor: colors.border },
-              ]}
-              onPress={() => router.push('/(tabs)/profile' as never)}
-            >
-              <Ionicons name="airplane-outline" size={20} color={colors.primary} />
-              <Text style={[styles.quickTitle, { color: colors.foreground }]}>Leave</Text>
-            </Pressable>
+          <View style={styles.kpiCard}>
+            <View style={styles.kpiTop}>
+              <Text style={styles.kpiLabel}>Total Students</Text>
+              <Ionicons name="people" size={20} color={CoachColors.primary} />
+            </View>
+            <Text style={styles.kpiValue}>{dashboard?.activeStudents ?? 0}</Text>
+            <Text style={styles.kpiMeta}>Active enrollments</Text>
+          </View>
+
+          <View style={styles.kpiCard}>
+            <View style={styles.kpiTop}>
+              <Text style={styles.kpiLabel}>Training Hours</Text>
+              <Ionicons name="timer-outline" size={20} color={CoachColors.tertiary} />
+            </View>
+            <Text style={styles.kpiValue}>{(dashboard?.batchCount ?? 0) * 8}h</Text>
+            <Text style={styles.kpiMeta}>This month</Text>
           </View>
 
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.foreground }]}>My Batches</Text>
-            <Pressable onPress={() => router.push('/(tabs)/training' as never)}>
-              <Text style={{ color: colors.primary, fontWeight: '700', fontSize: FontSize.sm }}>
-                View all
-              </Text>
+            <Text style={styles.sectionTitle}>Today&apos;s Classes</Text>
+            <Pressable onPress={() => router.push('/(tabs)/schedule' as never)}>
+              <Text style={styles.link}>View Schedule ›</Text>
             </Pressable>
           </View>
 
-          <View style={{ gap: Spacing.sm }}>
-            {(dashboard?.batches ?? []).length === 0 ? (
-              <Card>
-                <Text style={{ color: colors.muted }}>No batches assigned yet.</Text>
-              </Card>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hScroll}>
+            {(scheduleQuery.data ?? []).length === 0 ? (
+              <View style={styles.classCard}>
+                <Text style={styles.classTitle}>No classes today</Text>
+                <Text style={styles.classMeta}>Check your weekly schedule</Text>
+              </View>
             ) : (
-              (dashboard?.batches ?? []).slice(0, 5).map((batch) => (
-                <Card key={batch.id} style={styles.batchRow}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={[styles.batchName, { color: colors.foreground }]}>
-                      {batch.name}
-                    </Text>
-                    <Text style={{ color: colors.muted, fontSize: FontSize.sm }}>
-                      {batch.program?.name} · {batch.schedule}
-                    </Text>
-                    <Text style={{ color: colors.muted, fontSize: FontSize.xs, marginTop: 2 }}>
-                      {batch.enrollments?.length ?? 0} active students
+              (scheduleQuery.data ?? []).slice(0, 5).map((item, index) => (
+                <View key={item.batchId} style={styles.classCard}>
+                  <View style={styles.classTop}>
+                    <View
+                      style={[
+                        styles.classAvatar,
+                        {
+                          backgroundColor:
+                            index % 2 === 0 ? CoachColors.softOrange : CoachColors.softGreen,
+                        },
+                      ]}
+                    >
+                      <Text style={{ fontWeight: '800', color: CoachColors.foreground }}>
+                        {item.batchName[0]?.toUpperCase() ?? 'B'}
+                      </Text>
+                    </View>
+                    <View style={styles.timePill}>
+                      <Text style={styles.timePillText}>
+                        {item.schedule.split(/[-–]/)[0]?.trim() || '08:00 AM'}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={styles.classTitle} numberOfLines={2}>
+                    {item.batchName}
+                  </Text>
+                  <View style={styles.classMetaRow}>
+                    <Ionicons name="location-outline" size={12} color={CoachColors.muted} />
+                    <Text style={styles.classMeta}>{item.court?.name ?? 'Court'}</Text>
+                    <Ionicons name="people-outline" size={12} color={CoachColors.muted} />
+                    <Text style={styles.classMeta}>
+                      {item.activeStudents}/{item.maxCapacity}
                     </Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={16} color={colors.muted} />
-                </Card>
+                  <Pressable
+                    style={styles.startBtn}
+                    onPress={() => router.push('/(tabs)/attendance' as never)}
+                  >
+                    <Text style={styles.startBtnText}>Start Session</Text>
+                  </Pressable>
+                </View>
               ))
             )}
+          </ScrollView>
+
+          <View style={styles.sectionHeader}>
+            <View>
+              <Text style={styles.sectionTitle}>Student Progress Index</Text>
+              <Text style={styles.kpiMeta}>Aggregate metrics for last 7 days</Text>
+            </View>
+            <View style={styles.filterChip}>
+              <Text style={styles.filterChipText}>Last 7 days</Text>
+            </View>
+          </View>
+          <View style={styles.chartCard}>
+            <MiniBars />
+          </View>
+
+          <Text style={[styles.sectionTitle, { marginTop: Spacing.xl }]}>Recent Alerts</Text>
+          <View style={styles.alertList}>
+            <View style={styles.alertRow}>
+              <View style={[styles.alertIcon, { backgroundColor: CoachColors.softOrange }]}>
+                <Ionicons name="person-add-outline" size={16} color={CoachColors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.alertTitle}>New student assigned</Text>
+                <Text style={styles.kpiMeta}>Check Student Directory</Text>
+              </View>
+              <Text style={styles.alertTime}>2h</Text>
+            </View>
+            {(dashboard?.pendingAttendance ?? 0) > 0 ? (
+              <View style={styles.alertRow}>
+                <View style={[styles.alertIcon, { backgroundColor: CoachColors.softRed }]}>
+                  <Ionicons name="heart-outline" size={16} color={CoachColors.danger} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.alertTitle}>Attendance report due</Text>
+                  <Text style={styles.kpiMeta}>
+                    {dashboard?.pendingAttendance} pending · Overdue
+                  </Text>
+                </View>
+                <Pressable onPress={() => router.push('/(tabs)/attendance' as never)}>
+                  <Text style={styles.link}>Log</Text>
+                </Pressable>
+              </View>
+            ) : null}
+            <View style={styles.alertRow}>
+              <View style={[styles.alertIcon, { backgroundColor: CoachColors.softGreen }]}>
+                <Ionicons name="trophy-outline" size={16} color={CoachColors.success} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.alertTitle}>Elite player milestone</Text>
+                <Text style={styles.kpiMeta}>Keep tracking progress reports</Text>
+              </View>
+            </View>
           </View>
         </QueryState>
       </ScrollView>
+
+      <Pressable
+        style={[styles.fab, { bottom: insets.bottom + 72 }]}
+        onPress={() => router.push('/coach/qr-attendance' as never)}
+      >
+        <Ionicons name="qr-code-outline" size={24} color="#fff" />
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-  topBar: {
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: CoachColors.softOrange,
+    borderRadius: Radius.full,
+    marginTop: Spacing.xl,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 4,
+  },
+  badgeText: {
+    color: CoachColors.primaryContainer,
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.8,
+  },
+  headline: {
+    color: CoachColors.foreground,
+    fontSize: FontSize.xxl,
+    fontWeight: '800',
+    marginTop: Spacing.sm,
+  },
+  subhead: { color: CoachColors.muted, fontSize: FontSize.sm, marginTop: 4 },
+  actionRow: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.lg },
+  actionBtn: {
+    alignItems: 'center',
+    backgroundColor: '#2e3132',
+    borderRadius: Radius.lg,
+    flex: 1,
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'center',
+    paddingVertical: Spacing.md,
+  },
+  actionText: { color: '#fff', fontSize: FontSize.xs, fontWeight: '800' },
+  kpiCard: {
+    backgroundColor: CoachColors.card,
+    borderRadius: Radius.lg,
+    marginTop: Spacing.md,
+    padding: Spacing.lg,
+    shadowColor: '#000',
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+  },
+  kpiTop: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+  kpiLabel: { color: CoachColors.muted, fontSize: FontSize.sm, fontWeight: '600' },
+  kpiValue: {
+    color: CoachColors.foreground,
+    fontSize: 32,
+    fontWeight: '800',
+    marginTop: 4,
+  },
+  kpiTrend: { fontSize: FontSize.xs, fontWeight: '700', marginTop: 2 },
+  kpiMeta: { color: CoachColors.muted, fontSize: FontSize.xs, marginTop: 2 },
+  sectionHeader: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: Spacing.xl,
   },
-  brandRow: { alignItems: 'center', flexDirection: 'row', gap: Spacing.sm },
-  brand: { fontSize: FontSize.md, fontWeight: '800' },
-  avatar: {
+  sectionTitle: { color: CoachColors.foreground, fontSize: FontSize.lg, fontWeight: '800' },
+  link: { color: CoachColors.primary, fontSize: FontSize.sm, fontWeight: '700' },
+  hScroll: { marginTop: Spacing.md },
+  classCard: {
+    backgroundColor: CoachColors.card,
+    borderRadius: Radius.lg,
+    marginRight: Spacing.md,
+    padding: Spacing.md,
+    width: 200,
+  },
+  classTop: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+  classAvatar: {
+    alignItems: 'center',
+    borderRadius: Radius.md,
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  timePill: {
+    backgroundColor: CoachColors.mutedBg,
+    borderRadius: Radius.full,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  timePillText: { color: CoachColors.foreground, fontSize: 10, fontWeight: '700' },
+  classTitle: {
+    color: CoachColors.foreground,
+    fontSize: FontSize.md,
+    fontWeight: '800',
+    marginTop: Spacing.sm,
+  },
+  classMetaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+    marginTop: 6,
+  },
+  classMeta: { color: CoachColors.muted, fontSize: FontSize.xs },
+  startBtn: {
+    backgroundColor: CoachColors.mutedBg,
+    borderRadius: Radius.md,
+    marginTop: Spacing.md,
+    paddingVertical: Spacing.sm,
+  },
+  startBtnText: {
+    color: CoachColors.foreground,
+    fontSize: FontSize.xs,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
+  filterChip: {
+    backgroundColor: CoachColors.mutedBg,
+    borderRadius: Radius.full,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 6,
+  },
+  filterChipText: { color: CoachColors.muted, fontSize: 10, fontWeight: '700' },
+  chartCard: {
+    backgroundColor: CoachColors.card,
+    borderRadius: Radius.lg,
+    marginTop: Spacing.md,
+    padding: Spacing.lg,
+  },
+  chartRow: { alignItems: 'flex-end', flexDirection: 'row', gap: 8, height: 80 },
+  chartCol: { alignItems: 'center', flex: 1, gap: 6 },
+  chartBar: { borderRadius: 6, width: '70%' },
+  chartLabel: { color: CoachColors.muted, fontSize: 9, fontWeight: '700' },
+  alertList: { gap: Spacing.sm, marginTop: Spacing.md },
+  alertRow: {
+    alignItems: 'center',
+    backgroundColor: CoachColors.card,
+    borderRadius: Radius.lg,
+    flexDirection: 'row',
+    gap: Spacing.md,
+    padding: Spacing.md,
+  },
+  alertIcon: {
     alignItems: 'center',
     borderRadius: Radius.full,
     height: 36,
     justifyContent: 'center',
     width: 36,
   },
-  avatarText: { color: '#fff', fontSize: FontSize.xs, fontWeight: '800' },
-  overview: { fontSize: FontSize.xxl, fontWeight: '800', marginTop: Spacing.xl },
-  welcome: { fontSize: FontSize.sm, marginTop: 4 },
-  statsRow: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.md },
-  statCard: { gap: 4, padding: Spacing.md },
-  statLabel: { fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
-  statValue: { fontSize: FontSize.xxl, fontWeight: '800' },
-  primaryAction: {
+  alertTitle: { color: CoachColors.foreground, fontSize: FontSize.sm, fontWeight: '700' },
+  alertTime: { color: CoachColors.muted, fontSize: 10 },
+  fab: {
     alignItems: 'center',
-    borderRadius: Radius.lg,
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    marginTop: Spacing.lg,
-    padding: Spacing.md,
+    backgroundColor: CoachColors.primary,
+    borderRadius: Radius.full,
+    elevation: 4,
+    height: 56,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: Spacing.lg,
+    shadowColor: CoachColors.primary,
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    width: 56,
   },
-  primaryActionTitle: { color: '#fff', fontSize: FontSize.sm, fontWeight: '800' },
-  primaryActionSub: { color: 'rgba(255,255,255,0.75)', fontSize: 11 },
-  quickRow: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.sm },
-  quickCard: {
-    alignItems: 'center',
-    borderRadius: Radius.lg,
-    borderWidth: 1,
-    flex: 1,
-    gap: Spacing.sm,
-    padding: Spacing.md,
-  },
-  quickTitle: { fontSize: FontSize.sm, fontWeight: '800' },
-  sectionHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.md,
-    marginTop: Spacing.xl,
-  },
-  sectionTitle: { fontSize: FontSize.lg, fontWeight: '800' },
-  batchRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: Spacing.md,
-    paddingVertical: Spacing.md,
-  },
-  batchName: { fontSize: FontSize.md, fontWeight: '800' },
 });

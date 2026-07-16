@@ -1,15 +1,22 @@
 import type {
   AttendanceRecord,
   LeaveRequest,
+  ProgressReport,
   TrainerDashboard,
+  TrainerPerformance,
   TrainerProfileView,
   TrainerScheduleItem,
   TrainingBatch,
+  TrainingNote,
 } from '@fitora/shared';
 import { apiFetch } from './api';
 
 export function getTrainerDashboard(token: string) {
   return apiFetch<TrainerDashboard>('/training/dashboard/trainer', {}, token);
+}
+
+export function getTrainerPerformance(token: string) {
+  return apiFetch<TrainerPerformance>('/trainers/me/performance', {}, token);
 }
 
 export function getTrainerBatches(token: string) {
@@ -85,6 +92,82 @@ export function markBatchAttendance(
 ) {
   return apiFetch<{ marked: number; records: AttendanceRecord[] }>(
     `/training/batches/${batchId}/attendance`,
+    { method: 'POST', body: JSON.stringify(data) },
+    token,
+  );
+}
+
+export function getEnrollmentAttendance(token: string, enrollmentId: string) {
+  return apiFetch<AttendanceRecord[]>(
+    `/training/enrollments/${enrollmentId}/attendance`,
+    {},
+    token,
+  );
+}
+
+export function markEnrollmentAttendance(
+  token: string,
+  enrollmentId: string,
+  data: { date: string; present: boolean; notes?: string },
+) {
+  return apiFetch<AttendanceRecord>(
+    `/training/enrollments/${enrollmentId}/attendance`,
+    { method: 'POST', body: JSON.stringify(data) },
+    token,
+  );
+}
+
+export function getProgressReports(token: string, enrollmentId: string) {
+  return apiFetch<ProgressReport[]>(
+    `/training/enrollments/${enrollmentId}/progress-reports`,
+    {},
+    token,
+  );
+}
+
+export function createProgressReport(
+  token: string,
+  data: {
+    enrollmentId: string;
+    periodStart: string;
+    periodEnd: string;
+    summary: string;
+    skills?: { skill: string; rating: number }[];
+    rating?: number;
+    publish?: boolean;
+  },
+) {
+  return apiFetch<ProgressReport>(
+    '/training/progress-reports',
+    { method: 'POST', body: JSON.stringify(data) },
+    token,
+  );
+}
+
+export function listTrainingNotes(
+  token: string,
+  params?: { batchId?: string; enrollmentId?: string },
+) {
+  const qs = new URLSearchParams();
+  if (params?.batchId) qs.set('batchId', params.batchId);
+  if (params?.enrollmentId) qs.set('enrollmentId', params.enrollmentId);
+  const query = qs.toString();
+  return apiFetch<TrainingNote[]>(`/trainers/me/notes${query ? `?${query}` : ''}`, {}, token);
+}
+
+export function createTrainingNote(
+  token: string,
+  data: {
+    content: string;
+    title?: string;
+    enrollmentId?: string;
+    batchId?: string;
+    sessionDate?: string;
+    isPrivate?: boolean;
+  },
+) {
+  return apiFetch<TrainingNote>(
+    '/trainers/me/notes',
     { method: 'POST', body: JSON.stringify(data) },
     token,
   );

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Coach Analytics &amp; Performance | FitOra Coach</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#a04100",
+            "on-tertiary-fixed": "#002204",
+            "surface-container-high": "#e7e8e9",
+            "on-primary-container": "#572000",
+            "background": "#f8f9fa",
+            "surface-dim": "#d9dadb",
+            "surface-bright": "#f8f9fa",
+            "surface-container-low": "#f3f4f5",
+            "secondary-fixed-dim": "#c8c6c5",
+            "inverse-primary": "#ffb693",
+            "tertiary": "#006e1c",
+            "on-secondary-fixed-variant": "#474746",
+            "on-surface-variant": "#5a4136",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "inverse-surface": "#2e3132",
+            "surface": "#f8f9fa",
+            "on-tertiary-fixed-variant": "#005313",
+            "primary-fixed-dim": "#ffb693",
+            "tertiary-fixed-dim": "#78dc77",
+            "error-container": "#ffdad6",
+            "error": "#ba1a1a",
+            "on-secondary-container": "#636262",
+            "secondary-container": "#e2dfde",
+            "secondary-fixed": "#e5e2e1",
+            "on-primary": "#ffffff",
+            "surface-variant": "#e1e3e4",
+            "on-secondary-fixed": "#1c1b1b",
+            "primary-container": "#ff6b00",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#94f990",
+            "on-background": "#191c1d",
+            "outline-variant": "#e2bfb0",
+            "tertiary-container": "#4aad4e",
+            "on-error-container": "#93000a",
+            "surface-container": "#edeeef",
+            "on-surface": "#191c1d",
+            "on-secondary": "#ffffff",
+            "primary": "#a04100",
+            "on-tertiary-container": "#003a0b",
+            "surface-container-highest": "#e1e3e4",
+            "on-primary-fixed-variant": "#7a3000",
+            "inverse-on-surface": "#f0f1f2",
+            "primary-fixed": "#ffdbcc",
+            "on-primary-fixed": "#351000",
+            "secondary": "#5f5e5e",
+            "outline": "#8e7164"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "xs": "4px",
+            "container-margin-desktop": "48px",
+            "md": "16px",
+            "base": "8px",
+            "lg": "24px",
+            "gutter": "16px",
+            "sm": "12px",
+            "xl": "32px",
+            "container-margin-mobile": "16px"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Lexend"],
+            "display-lg": ["Lexend"],
+            "label-lg": ["Inter"],
+            "headline-lg-mobile": ["Lexend"],
+            "headline-md": ["Lexend"],
+            "body-md": ["Inter"],
+            "title-lg": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "label-md": ["11px", {"lineHeight": "16px", "fontWeight": "500"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #f8f9fa;
+      color: #191c1d;
+      font-family: 'Inter', sans-serif;
+    }
+    .kinetic-gradient {
+      background: linear-gradient(135deg, #a04100 0%, #ff6b00 100%);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .shadow-soft {
+      box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
+    }
+    .chart-container {
+      position: relative;
+    }
+    .momentum-card:hover {
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background pb-20 md:pb-0 md:pl-64">
+<!-- Shared TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm docked full-width top-0 sticky z-50 flex justify-between items-center w-full px-container-margin-mobile md:px-container-margin-desktop h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fit, athletic coach in their 30s wearing a high-performance orange and navy moisture-wicking polo shirt. The background is a brightly lit, modern fitness studio with clean lines and blurred gym equipment. The lighting is crisp and motivating, reflecting a light-mode corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1dWDk0hiumtsKvEUbnf1_EL0DAA7ErOhiV2PWvTRJ__nSJS-mKSripP7mlFPQsP-4sLeicJLKA9ngwjgKp2pP5iuCnSoUc5RLfdo24UYGoZLBnT3EPZgwckFoVCQfAblxj3ufnKWcMWcXemjz-BmIpIqR6XORRoVhEOz1oJu7LkjG9Gqv_39kpNQ_cufttBABCq7x5BIfowMTWYbtwxu_DZeb1Tmgz1ZiO_Txjdr_C3eCvVFFWDsE"/>
+</div>
+<h1 class="font-display-lg text-primary dark:text-primary-fixed text-headline-md-mobile md:text-headline-md">FitOra Coach</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed p-2 hover:bg-surface-container-high transition-colors rounded-full active:scale-95 duration-200">
+        notifications
+      </button>
+</div>
+</header>
+<!-- Desktop Navigation Rail (Simulated SideNav) -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant flex-col py-8 px-4 z-40">
+<div class="mb-8 px-4">
+<h2 class="font-headline-md text-primary">Insights</h2>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 text-secondary hover:bg-surface-container-high rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg">Home</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary hover:bg-surface-container-high rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg">Students</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary hover:bg-surface-container-high rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-label-lg">Training</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-bold transition-colors shadow-sm" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg">Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary hover:bg-surface-container-high rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-lg">Profile</span>
+</a>
+</nav>
+</aside>
+<main class="p-container-margin-mobile md:p-container-margin-desktop max-w-7xl mx-auto space-y-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Performance Insights</h2>
+<p class="font-body-md text-on-surface-variant">Real-time data on your coaching impact and student progress.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg font-label-lg flex items-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+          Last 30 Days
+        </button>
+<button class="kinetic-gradient text-on-primary px-4 py-2 rounded-lg font-label-lg flex items-center gap-2 shadow-soft hover:shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]">download</span>
+          Export Report
+        </button>
+</div>
+</div>
+<!-- KPI Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Attendance -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-soft momentum-card border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">how_to_reg</span>
+</div>
+<span class="text-tertiary font-label-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 2%
+          </span>
+</div>
+<div class="mt-4">
+<p class="font-label-lg text-on-surface-variant uppercase tracking-wider">Average Attendance</p>
+<p class="font-display-lg text-primary mt-1">88%</p>
+</div>
+<div class="mt-4 w-full bg-surface-container rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 88%"></div>
+</div>
+</div>
+<!-- Skill Rate -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-soft momentum-card border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-tertiary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">speed</span>
+</div>
+<span class="text-tertiary font-label-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 5%
+          </span>
+</div>
+<div class="mt-4">
+<p class="font-label-lg text-on-surface-variant uppercase tracking-wider">Skill Improvement</p>
+<p class="font-display-lg text-tertiary mt-1">+12%</p>
+</div>
+<p class="font-body-md text-on-surface-variant mt-2">Aggregate across all active students</p>
+</div>
+<!-- Satisfaction -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-soft momentum-card border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-primary-container/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-primary-container">star</span>
+</div>
+<span class="text-secondary font-label-lg">Stable</span>
+</div>
+<div class="mt-4">
+<p class="font-label-lg text-on-surface-variant uppercase tracking-wider">Parent Satisfaction</p>
+<p class="font-display-lg text-on-primary-container mt-1">4.9/5</p>
+</div>
+<div class="flex gap-1 mt-4">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+</div>
+</section>
+<!-- Main Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Attendance Trends -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-soft border border-outline-variant/30">
+<div class="flex justify-between items-center mb-xl">
+<h3 class="font-title-lg text-on-surface">Attendance Trends</h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-label-md text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-primary"></span> Present
+            </span>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-2 px-2 relative">
+<!-- Simplified Visual Chart Bars -->
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[70%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-full rounded-t-sm transition-all duration-500 group-hover:bg-primary-container"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md">Mon</span>
+</div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[85%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-full rounded-t-sm transition-all duration-500 group-hover:bg-primary-container"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md">Tue</span>
+</div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[60%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-full rounded-t-sm transition-all duration-500 group-hover:bg-primary-container"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md">Wed</span>
+</div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[90%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-full rounded-t-sm transition-all duration-500 group-hover:bg-primary-container"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md">Thu</span>
+</div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[75%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-full rounded-t-sm transition-all duration-500 group-hover:bg-primary-container"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md">Fri</span>
+</div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[40%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-full rounded-t-sm transition-all duration-500 group-hover:bg-primary-container"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md">Sat</span>
+</div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[30%] relative group">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-full rounded-t-sm transition-all duration-500 group-hover:bg-primary-container"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-md">Sun</span>
+</div>
+</div>
+</div>
+<!-- Student Skill Distribution -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-soft border border-outline-variant/30 flex flex-col">
+<h3 class="font-title-lg text-on-surface mb-xl">Student Skill Distribution</h3>
+<div class="flex-1 flex flex-col md:flex-row items-center justify-around gap-lg">
+<!-- Donut Chart Visual -->
+<div class="relative w-48 h-48 rounded-full border-[16px] border-surface-container flex items-center justify-center">
+<div class="absolute inset-0 rounded-full" style="background: conic-gradient(#a04100 0% 20%, #ff6b00 20% 70%, #006e1c 70% 100%);"></div>
+<div class="absolute inset-[16px] bg-white rounded-full flex flex-col items-center justify-center">
+<span class="font-display-lg text-on-surface">100%</span>
+<span class="font-label-md text-on-surface-variant">Total</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="space-y-sm">
+<div class="flex items-center gap-3">
+<span class="w-4 h-4 rounded bg-primary"></span>
+<div>
+<p class="font-label-lg">Beginner</p>
+<p class="font-title-lg">20%</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-4 h-4 rounded bg-primary-container"></span>
+<div>
+<p class="font-label-lg">Intermediate</p>
+<p class="font-title-lg">50%</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-4 h-4 rounded bg-tertiary"></span>
+<div>
+<p class="font-label-lg">Advanced</p>
+<p class="font-title-lg">30%</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Lists Section -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter">
+<!-- Top Performing Students -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-soft border border-outline-variant/30 xl:col-span-1">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-title-lg text-on-surface">Top Performers</h3>
+<span class="material-symbols-outlined text-primary">emoji_events</span>
+</div>
+<div class="space-y-md">
+<!-- Student 1 -->
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border-l-4 border-tertiary">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-bold text-on-surface-variant">JD</div>
+<div>
+<p class="font-label-lg">Julian Davies</p>
+<p class="font-body-md text-on-surface-variant">Level: Advanced</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-tertiary">+24</p>
+<p class="font-label-md text-on-surface-variant">Growth Score</p>
+</div>
+</div>
+<!-- Student 2 -->
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border-l-4 border-primary">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-bold text-on-surface-variant">SM</div>
+<div>
+<p class="font-label-lg">Sarah Miller</p>
+<p class="font-body-md text-on-surface-variant">Level: Intermediate</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-primary">+18</p>
+<p class="font-label-md text-on-surface-variant">Growth Score</p>
+</div>
+</div>
+<!-- Student 3 -->
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border-l-4 border-primary-container">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-bold text-on-surface-variant">RK</div>
+<div>
+<p class="font-label-lg">Ryan Kim</p>
+<p class="font-body-md text-on-surface-variant">Level: Beginner</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-primary-container">+15</p>
+<p class="font-label-md text-on-surface-variant">Growth Score</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Upcoming Renewals -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-soft border border-outline-variant/30 xl:col-span-2">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-title-lg text-on-surface">Upcoming Renewals</h3>
+<span class="font-label-lg text-on-surface-variant">Next 14 Days</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="pb-4 font-label-lg text-secondary uppercase tracking-wider">Student</th>
+<th class="pb-4 font-label-lg text-secondary uppercase tracking-wider">Plan</th>
+<th class="pb-4 font-label-lg text-secondary uppercase tracking-wider text-center">Expiry</th>
+<th class="pb-4 font-label-lg text-secondary uppercase tracking-wider text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/50">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4">
+<div class="font-label-lg">Emma Thompson</div>
+<div class="text-xs text-on-surface-variant">Parent: Mark T.</div>
+</td>
+<td class="py-4 font-body-md">Quarterly Performance</td>
+<td class="py-4 text-center font-body-md">Oct 24, 2023</td>
+<td class="py-4 text-right">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-md">2 Days Left</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4">
+<div class="font-label-lg">Liam O'Connor</div>
+<div class="text-xs text-on-surface-variant">Parent: Fiona O.</div>
+</td>
+<td class="py-4 font-body-md">Monthly Elite</td>
+<td class="py-4 text-center font-body-md">Oct 27, 2023</td>
+<td class="py-4 text-right">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md">5 Days Left</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4">
+<div class="font-label-lg">Sofia Garcia</div>
+<div class="text-xs text-on-surface-variant">Parent: Elena G.</div>
+</td>
+<td class="py-4 font-body-md">Semi-Annual</td>
+<td class="py-4 text-center font-body-md">Oct 30, 2023</td>
+<td class="py-4 text-right">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md">8 Days Left</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4">
+<div class="font-label-lg">Noah Wilson</div>
+<div class="text-xs text-on-surface-variant">Parent: David W.</div>
+</td>
+<td class="py-4 font-body-md">Monthly Standard</td>
+<td class="py-4 text-center font-body-md">Nov 02, 2023</td>
+<td class="py-4 text-right">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-secondary font-label-md">11 Days Left</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4">
+<div class="font-label-lg">Ava Chen</div>
+<div class="text-xs text-on-surface-variant">Parent: Wei C.</div>
+</td>
+<td class="py-4 font-body-md">Quarterly Performance</td>
+<td class="py-4 text-center font-body-md">Nov 05, 2023</td>
+<td class="py-4 text-right">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-secondary font-label-md">14 Days Left</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Shared BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center py-2 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant z-50 shadow-lg">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md">Students</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-label-md">Training</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-xl px-3 py-1 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md">Analytics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-3 py-1 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md">Profile</span>
+</a>
+</nav>
+<!-- Quick Action FAB (Hidden on Mobile Analytics for focus, usually visible elsewhere) -->
+<button class="hidden md:flex fixed bottom-lg right-lg w-16 h-16 rounded-full kinetic-gradient text-on-primary items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+<script>
+    // Micro-interactions and chart animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const bars = document.querySelectorAll('.group .bg-primary');
+      bars.forEach(bar => {
+        const height = bar.parentElement.style.height;
+        bar.style.height = '0';
+        setTimeout(() => {
+          bar.style.height = '100%';
+        }, 100);
+      });
+    });
+  </script>
+</body></html>

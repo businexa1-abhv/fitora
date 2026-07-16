@@ -8,7 +8,7 @@
     "dev:web": "turbo run dev --filter=@fitora/web",
     "dev:admin": "turbo run dev --filter=@fitora/admin",
     "dev:player": "turbo run dev --filter=@fitora/player-app",
-    "dev:owner": "turbo run dev --filter=@fitora/owner-app",
+    "dev:owner": "node scripts/owner-app-dev-banner.mjs && turbo run dev --filter=@fitora/owner-app",
     "dev:admin-web": "turbo run dev --filter=@fitora/admin-web",
     "dev:partner": "turbo run dev --filter=@fitora/partner-web",
     "dev:shop-partner": "turbo run dev --filter=@fitora/shop-partner-web",

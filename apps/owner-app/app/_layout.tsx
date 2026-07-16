@@ -12,7 +12,7 @@ void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 function OwnerNavigator() {
   const { colors } = useTheme();
-  const { isAuthenticated, isLoading, isOwner, isTrainer } = useAuth();
+  const { isAuthenticated, isLoading, isOwner, isTrainer, isCoachMode } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
@@ -36,11 +36,10 @@ function OwnerNavigator() {
       }
     }
 
-    const isCoachOnly = isTrainer && !isOwner;
-    if (isAuthenticated && isCoachOnly && (firstSegment === 'ops' || firstSegment === 'manage')) {
+    if (isAuthenticated && isCoachMode && (firstSegment === 'ops' || firstSegment === 'manage')) {
       router.replace('/(tabs)');
     }
-  }, [isAuthenticated, isLoading, isOwner, isTrainer, router, segments]);
+  }, [isAuthenticated, isLoading, isOwner, isTrainer, isCoachMode, router, segments]);
 
   if (isLoading) {
     return (
@@ -69,6 +68,7 @@ function OwnerNavigator() {
       >
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="coach" />
         <Stack.Screen name="court" />
         <Stack.Screen name="ops" />
         <Stack.Screen name="manage" />

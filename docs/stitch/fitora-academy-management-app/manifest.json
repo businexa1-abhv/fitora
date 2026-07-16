@@ -13,8 +13,9 @@
       "meta": "design-system.json"
     },
     {
-      "title": "Owner Login",
       "id": "24f087d55e18418f8ce47153927301c6",
+      "slug": "owner-login",
+      "title": "Owner Login",
       "html": "owner-login.html",
       "screenshot": "owner-login.png"
     },
@@ -221,6 +222,62 @@
       "id": "88c9fbc60873467db59af32d350a65bf",
       "html": "discounts-promotions.html",
       "screenshot": "discounts-promotions.png"
+    },
+    {
+      "id": "dddd713230954ce28686a94dd468437f",
+      "slug": "coach-dashboard",
+      "title": "Coach Dashboard",
+      "html": "coach-dashboard.html",
+      "screenshot": "coach-dashboard.png"
+    },
+    {
+      "id": "6f5df6dd3bd3429cb4dd4fadc37ba8ab",
+      "slug": "student-directory",
+      "title": "Student Directory",
+      "html": "student-directory.html",
+      "screenshot": "student-directory.png"
+    },
+    {
+      "id": "f95826ea670a471d9cfd677381302318",
+      "slug": "training-schedule",
+      "title": "Training Schedule",
+      "html": "training-schedule.html",
+      "screenshot": "training-schedule.png"
+    },
+    {
+      "id": "fbb1f2e452a94e0ca6571913671377b5",
+      "slug": "analytics-overview",
+      "title": "Analytics Overview",
+      "html": "analytics-overview.html",
+      "screenshot": "analytics-overview.png"
+    },
+    {
+      "id": "c135b424bd494c2f8726705e2dcb5d83",
+      "slug": "student-profile-detail",
+      "title": "Student Profile Detail",
+      "html": "student-profile-detail.html",
+      "screenshot": "student-profile-detail.png"
+    },
+    {
+      "id": "405e0f76367f411e9564b82f2a100c06",
+      "slug": "training-plan-builder",
+      "title": "Training Plan Builder",
+      "html": "training-plan-builder.html",
+      "screenshot": "training-plan-builder.png"
+    },
+    {
+      "id": "74253a9f6fb84825a47cdcb914110c4a",
+      "slug": "qr-attendance-scanner",
+      "title": "QR Attendance Scanner",
+      "html": "qr-attendance-scanner.html",
+      "screenshot": "qr-attendance-scanner.png"
+    },
+    {
+      "id": "85b8ce6510434c958af828804e66ab9a",
+      "slug": "performance-report",
+      "title": "Performance Report",
+      "html": "performance-report.html",
+      "screenshot": "performance-report.png"
     }
   ]
 }

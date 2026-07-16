@@ -1,0 +1,32 @@
+/** FitOra Coach — Stitch design tokens (Warm orange academy coach pack) */
+export const CoachColors = {
+  background: '#f3f4f5',
+  foreground: '#1c1b1b',
+  card: '#ffffff',
+  border: '#e2dfde',
+  muted: '#636262',
+  mutedBg: '#edeeef',
+  surfaceContainer: '#e7e8e9',
+  primary: '#ff6b00',
+  primaryContainer: '#a04100',
+  primaryForeground: '#ffffff',
+  accent: '#ff6b00',
+  secondary: '#006e1c',
+  secondaryContainer: '#94f990',
+  tertiary: '#5a4136',
+  tertiaryContainer: '#ffdbcc',
+  danger: '#ba1a1a',
+  warning: '#a04100',
+  tabBar: '#ffffff',
+  tabBarActive: '#ff6b00',
+  tabBarInactive: '#8e7164',
+  success: '#4aad4e',
+  brand: '#5a4136',
+  softOrange: '#ffdbcc',
+  softGreen: '#e8f8e8',
+  softRed: '#ffdad6',
+  chartBar: '#ffb693',
+  chartBarActive: '#ff6b00',
+} as const;
+
+export type CoachThemeColors = typeof CoachColors;
