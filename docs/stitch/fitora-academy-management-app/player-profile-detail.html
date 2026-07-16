@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Player Profile | FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-primary-container": "#9da1ff",
+                  "background": "#f9f9ff",
+                  "tertiary-fixed-dim": "#ffb95f",
+                  "surface-tint": "#4f54b4",
+                  "on-tertiary-fixed-variant": "#653e00",
+                  "on-surface-variant": "#464652",
+                  "surface-container-highest": "#d8e3fb",
+                  "primary": "#15157d",
+                  "surface-container": "#e7eeff",
+                  "error": "#ba1a1a",
+                  "surface-dim": "#cfdaf2",
+                  "on-tertiary-container": "#ec9700",
+                  "inverse-surface": "#263143",
+                  "on-primary": "#ffffff",
+                  "primary-fixed-dim": "#c0c1ff",
+                  "on-secondary": "#ffffff",
+                  "inverse-on-surface": "#ecf1ff",
+                  "surface-container-low": "#f0f3ff",
+                  "primary-container": "#2e3192",
+                  "on-background": "#111c2d",
+                  "surface-container-high": "#dee8ff",
+                  "on-tertiary-fixed": "#2a1700",
+                  "tertiary-fixed": "#ffddb8",
+                  "secondary-fixed": "#6ffbbe",
+                  "outline-variant": "#c7c5d4",
+                  "on-tertiary": "#ffffff",
+                  "on-secondary-container": "#00714d",
+                  "on-error-container": "#93000a",
+                  "inverse-primary": "#c0c1ff",
+                  "on-surface": "#111c2d",
+                  "on-secondary-fixed": "#002113",
+                  "secondary-fixed-dim": "#4edea3",
+                  "on-primary-fixed-variant": "#373a9b",
+                  "on-primary-fixed": "#04006d",
+                  "outline": "#777683",
+                  "tertiary-container": "#5a3700",
+                  "error-container": "#ffdad6",
+                  "surface-bright": "#f9f9ff",
+                  "surface-variant": "#d8e3fb",
+                  "surface": "#f9f9ff",
+                  "on-secondary-fixed-variant": "#005236",
+                  "on-error": "#ffffff",
+                  "secondary-container": "#6cf8bb",
+                  "surface-container-lowest": "#ffffff",
+                  "tertiary": "#3c2300",
+                  "secondary": "#006c49",
+                  "primary-fixed": "#e1e0ff"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "stack-sm": "8px",
+                  "margin-mobile": "16px",
+                  "stack-lg": "24px",
+                  "gutter-mobile": "12px",
+                  "stack-md": "16px",
+                  "unit": "4px"
+          },
+          "fontFamily": {
+                  "headline-sm": ["Inter"],
+                  "display-lg": ["Inter"],
+                  "body-md": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "headline-md": ["Inter"],
+                  "headline-lg-mobile": ["Inter"],
+                  "label-lg": ["JetBrains Mono"],
+                  "title-md": ["Inter"],
+                  "headline-lg": ["Inter"],
+                  "title-lg": ["Inter"]
+          },
+          "fontSize": {
+                  "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                  "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                  "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                  "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                  "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                  "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                  "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                  "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                  "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                  "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    .active-pill {
+      font-variation-settings: 'FILL' 1;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(226, 232, 240, 1);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c7c5d4;
+      border-radius: 10px;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile w-full z-50 sticky top-0 bg-surface border-b border-outline-variant h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container transition-colors">notifications</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A professional high-resolution headshot of a corporate athletic director wearing a navy blazer over a performance polo shirt. The background is a brightly lit, modern sports facility with clean lines and soft daylight. The overall lighting is sophisticated and warm, reflecting a high-end management environment in shades of indigo and soft white." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaOWI_U9c81FMzvsLoQX6fWQeSMqrPZeNXtC69EPSqICwrjFveJMOLENxfD1_y-uB2JbAk7ZlKiw_1YIIqhFsGTup32M2qKrept32EUV-sffeTro0dKpxXeT2iqZwYdRFuhfJ3seeoTEZ0QASXCXFR3qcwnsvcJ_J414ure3R87lw2iYaJQEHY-CPAmEbNTX3alPBGCCQoyYI0PKpFbL-QAYJhqS-iQC-5l-hnGwTz6i5TcUF1upUb"/>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto p-margin-mobile grid grid-cols-1 md:grid-cols-12 gap-gutter-mobile lg:gap-stack-lg">
+<!-- Left Column: Profile Card & Quick Info -->
+<div class="md:col-span-4 lg:col-span-3 space-y-gutter-mobile">
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-outline-variant shadow-sm text-center">
+<div class="relative inline-block mb-stack-md">
+<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-primary ring-4 ring-primary-container/10 mx-auto">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a young, athletic male player with a determined expression, wearing a high-performance white tennis shirt. He is outdoors on a professional court with soft morning light illuminating his face. The style is crisp and modern with a focus on vitality and sports excellence, utilizing the brand's primary indigo and emerald color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCx8le9-92lQS_sWYPRfnzowu7IEWK-C5DPd-aEgsdjOev28w3AWSZCf_p7LmpSBNstkyoP6K8wvSPCAktrjw4hRb5BHudAyKu3GkCFqeIVwFRrvBqzT1dY_L0fkqWOenY66G4wBN9WET6ifKJ9Qr_TrIOLNzWfG5LXsln6CO4NubZDKoho98IiNC7eUYnqoQ9Fn32ynKXJdnQofR1IN9amVlu7qLcX7weqFutDDTu-d1fpcV-DGHDz"/>
+</div>
+<span class="absolute bottom-0 right-0 bg-secondary text-on-secondary px-2 py-0.5 rounded-full text-label-lg font-label-lg border-2 border-surface-container-lowest">Pro</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Alex Rivera</h2>
+<p class="text-on-surface-variant font-body-md mb-stack-md">Member since Oct 2023</p>
+<div class="flex flex-wrap gap-2 justify-center mb-stack-lg">
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-title-md hover:bg-primary-container transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+            Edit Profile
+          </button>
+<button class="bg-surface-container-high text-primary px-4 py-2 rounded-lg font-title-md hover:bg-surface-container-highest transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">send</span>
+            Message
+          </button>
+</div>
+<div class="space-y-stack-sm text-left border-t border-outline-variant pt-stack-md">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">mail</span>
+<span class="font-body-md">alex.r@fitora.com</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">call</span>
+<span class="font-body-md">+1 (555) 0123 456</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-body-md">San Francisco, CA</span>
+</div>
+</div>
+</div>
+<!-- Membership Tier -->
+<div class="bg-primary-container p-stack-md rounded-xl text-on-primary shadow-md relative overflow-hidden">
+
+<div class="relative z-10">
+<h3 class="font-label-lg text-label-lg uppercase tracking-wider text-on-primary-container mb-2">Membership Tier</h3>
+<p class="font-headline-sm text-headline-sm mb-1">Elite Performer</p>
+<p class="font-body-md opacity-80">Next renewal: Jan 15, 2025</p>
+<div class="mt-4 bg-white/20 h-1.5 rounded-full w-full">
+<div class="bg-secondary-fixed h-full rounded-full w-4/5"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Center/Right Column: Main Content -->
+<div class="md:col-span-8 lg:col-span-9 space-y-gutter-mobile">
+<!-- Stats Row -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-gutter-mobile">
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant">
+<span class="text-on-surface-variant font-label-lg text-label-lg block mb-1">Total Bookings</span>
+<span class="font-headline-sm text-headline-sm text-primary">124</span>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant">
+<span class="text-on-surface-variant font-label-lg text-label-lg block mb-1">Coaching Hours</span>
+<span class="font-headline-sm text-headline-sm text-primary">48h</span>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant">
+<span class="text-on-surface-variant font-label-lg text-label-lg block mb-1">Win Rate</span>
+<span class="font-headline-sm text-headline-sm text-secondary">68%</span>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant">
+<span class="text-on-surface-variant font-label-lg text-label-lg block mb-1">Active Streaks</span>
+<span class="font-headline-sm text-headline-sm text-tertiary">12 Days</span>
+</div>
+</div>
+<!-- Bento Grid for Activity & Bookings -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter-mobile">
+<!-- Active Bookings -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col h-full">
+<div class="p-stack-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">event_available</span>
+              Active Bookings
+            </h3>
+<span class="text-primary font-label-lg text-label-lg cursor-pointer hover:underline">View All</span>
+</div>
+<div class="p-stack-md space-y-stack-sm flex-1 overflow-y-auto">
+<div class="flex items-center justify-between p-stack-sm bg-surface-container rounded-lg border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-fixed text-primary rounded flex items-center justify-center font-bold">18</div>
+<div>
+<p class="font-title-md text-title-md">Advanced Tennis Clinic</p>
+<p class="font-body-md text-on-surface-variant">Court 4 • 10:00 AM</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-stack-sm bg-surface-container rounded-lg border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-variant text-on-surface-variant rounded flex items-center justify-center font-bold">20</div>
+<div>
+<p class="font-title-md text-title-md">Squash Friendly</p>
+<p class="font-body-md text-on-surface-variant">Main Hall • 05:30 PM</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Coaching History -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col h-full">
+<div class="p-stack-md border-b border-outline-variant">
+<h3 class="font-title-lg text-title-lg text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">school</span>
+              Coaching History
+            </h3>
+</div>
+<div class="p-stack-md space-y-stack-md">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional athletic coach with short graying hair and a confident, friendly smile. He is wearing a black FitOra Academy performance jacket. The setting is a bright, airy indoor training center with modern equipment visible in the blurred background. Corporate modern style, soft even lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4BDryAwgloxq89baVkhZT5ImB5NVKy6NDNlUYa1JWFzL0cDrUnJLcU8N4-G3S_MksCHWmph6zJyo9fbUd54OYpXHamGrODlSa71JA3vCGdcBjNGPk8eZnrP8eEPD8zE-ILsaKVgreKe00DiUnPQdZWoUYHaumSY15gwUqwhrNL9RQAXhNrkTqvERgKHFYJqscfYon4JuEjsH2bTuyHfyxmX0rDfRnuMj8J1YRNGaT867ZWqOgQugo"/>
+</div>
+<div class="flex-1">
+<p class="font-title-md text-title-md">Coach Marcus Thorne</p>
+<p class="font-body-md text-on-surface-variant">Backhand Masterclass • Oct 2024</p>
+</div>
+<div class="flex gap-1 text-tertiary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A young female athletic coach with her hair tied back in a professional ponytail, wearing an emerald green performance polo. She is holding a tablet, looking focused yet approachable. The background is a clean, minimalist sports clinic lobby with indigo accents. High-quality corporate aesthetic, bright and crisp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIFVAEsvyKRJyEIGBRZgVm_xfudcVp9L6ESu-hrClsILxqA60ZUAM2s0mRcOpC2ZX-RF92MaYOPLxemIT-8YFPJACVU66qaZOf7JHRTTamDTKAuYjPp-9VaRGIAq5Dt0u7n6KJ0hFTHv0BjhMR-stYT0ICHxYPKbZ2NaBIIpSYOAijKyrEYy-lT99koY-gwXqj5N0zvXMmbQrVKTwKKRjNd9xo5A5UYTYT78fDSrSuXTS-ab3vmeW7"/>
+</div>
+<div class="flex-1">
+<p class="font-title-md text-title-md">Coach Sarah Jenkins</p>
+<p class="font-body-md text-on-surface-variant">Endurance Training • Sept 2024</p>
+</div>
+<div class="flex gap-1 text-tertiary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">star</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Achievements & Notes -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-mobile">
+<!-- Achievements -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-md">
+<h3 class="font-title-lg text-title-lg text-primary mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined">emoji_events</span>
+            Recent Achievements
+          </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary text-headline-sm">workspace_premium</span>
+<div>
+<p class="font-title-md text-title-md">Tournament Winner</p>
+<p class="font-body-md text-on-surface-variant">Autumn Singles Open</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-tertiary-container text-headline-sm">fitness_center</span>
+<div>
+<p class="font-title-md text-title-md">100 Workouts</p>
+<p class="font-body-md text-on-surface-variant">Consistency is key</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary text-headline-sm">bolt</span>
+<div>
+<p class="font-title-md text-title-md">Quick Learner</p>
+<p class="font-body-md text-on-surface-variant">Completed level 5 agility</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-on-surface-variant text-headline-sm">group</span>
+<div>
+<p class="font-title-md text-title-md">Team Spirit</p>
+<p class="font-body-md text-on-surface-variant">Most valuable teammate</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Notes Section -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-md flex flex-col">
+<h3 class="font-title-lg text-title-lg text-primary mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined">sticky_note_2</span>
+            Staff Notes
+          </h3>
+<div class="flex-1 bg-surface-container-low rounded-lg p-stack-sm mb-stack-md text-on-surface-variant italic font-body-md border border-dashed border-outline">
+            "Player is focusing on improving lateral movement and explosive starts. Responding well to high-intensity interval drills. Recommended for Tier 2 competition next month."
+          </div>
+<button class="w-full py-2 border border-primary text-primary rounded-lg font-title-md hover:bg-primary-fixed transition-colors">
+            Add New Note
+          </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined active-pill">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</div>
+</nav>
+<script>
+    // Subtle interactivity
+    document.querySelectorAll('.hover\\:bg-surface-container').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        el.classList.add('duration-200');
+      });
+    });
+
+    // Handle smooth transitions for buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        let ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        this.appendChild(ripple);
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+  </script>
+</body></html>

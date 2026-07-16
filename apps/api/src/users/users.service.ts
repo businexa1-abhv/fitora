@@ -1,10 +1,14 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.module';
+import { SlotEventsService } from '../realtime/slot-events.service';
 import { type CompletePlayerOnboardingDto } from './dto/complete-player-onboarding.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private prisma: PrismaService,
+    private events: SlotEventsService,
+  ) {}
 
   async findById(id: string) {
     const user = await this.prisma.user.findUnique({
@@ -73,6 +77,11 @@ export class UsersService {
         },
       });
     }
+
+    await this.events.emitPlayerUpdated({
+      userId: id,
+      action: 'onboarding_completed',
+    });
 
     return {
       ...user,

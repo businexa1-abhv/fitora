@@ -11,6 +11,10 @@ export default function CourtStackLayout() {
         contentStyle: { backgroundColor: colors.background },
         animation: 'slide_from_right',
       }}
-    />
+    >
+      <Stack.Screen name="form" />
+      <Stack.Screen name="[id]" />
+      <Stack.Screen name="availability" />
+    </Stack>
   );
 }

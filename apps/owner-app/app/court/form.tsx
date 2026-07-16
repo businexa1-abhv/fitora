@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Image,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -15,6 +17,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import type { SportSummary } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
 import {
@@ -29,20 +32,52 @@ import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 const FORM_AMENITIES = [
   { key: 'Floodlights', icon: 'bulb-outline' as const, label: 'Floodlights' },
-  { key: 'AC', icon: 'home-outline' as const, label: 'Indoor / AC' },
-  { key: 'Lockers', icon: 'shirt-outline' as const, label: 'Locker Rooms' },
+  { key: 'AC', icon: 'home-outline' as const, label: 'Indoor' },
+  { key: 'Lockers', icon: 'lock-closed-outline' as const, label: 'Locker Rooms' },
   { key: 'Showers', icon: 'water-outline' as const, label: 'Showers' },
   { key: 'Parking', icon: 'car-outline' as const, label: 'Parking' },
 ];
 
+const FALLBACK_AMENITY_KEYS = FORM_AMENITIES.map((a) => a.key);
+
+function asStringArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === 'string');
+  }
+  if (value && typeof value === 'object' && Array.isArray((value as { items?: unknown }).items)) {
+    return (value as { items: unknown[] }).items.filter(
+      (item): item is string => typeof item === 'string',
+    );
+  }
+  return [];
+}
+
+function asSportList(value: unknown): SportSummary[] {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is SportSummary =>
+        !!item &&
+        typeof item === 'object' &&
+        typeof (item as SportSummary).id === 'string' &&
+        typeof (item as SportSummary).slug === 'string' &&
+        typeof (item as SportSummary).name === 'string',
+    );
+  }
+  if (value && typeof value === 'object' && Array.isArray((value as { items?: unknown }).items)) {
+    return asSportList((value as { items: unknown }).items);
+  }
+  return [];
+}
+
 export default function CourtFormScreen() {
   const { colors } = useTheme();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const params = useLocalSearchParams<{ id?: string }>();
-  const courtId = typeof params.id === 'string' ? params.id : undefined;
+  const params = useLocalSearchParams<{ id?: string | string[] }>();
+  const courtIdParam = params.id;
+  const courtId = Array.isArray(courtIdParam) ? courtIdParam[0] : courtIdParam;
   const isEdit = Boolean(courtId);
 
   const [name, setName] = useState('');
@@ -51,20 +86,23 @@ export default function CourtFormScreen() {
   const [price, setPrice] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
-  const [state, setState] = useState('');
+  const [stateValue, setStateValue] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
+  const [showPhotoUrl, setShowPhotoUrl] = useState(false);
+  const [sportPickerOpen, setSportPickerOpen] = useState(false);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(['Lockers']);
   const [error, setError] = useState<string | null>(null);
+  const [seededLocation, setSeededLocation] = useState(false);
 
   const sportsQuery = useQuery({
     queryKey: ['sports'],
-    queryFn: () => listSports(token!),
+    queryFn: () => listSports(token ?? undefined),
     enabled: !!token,
   });
 
   const amenitiesQuery = useQuery({
     queryKey: ['amenities'],
-    queryFn: () => listAmenities(token!),
+    queryFn: () => listAmenities(token ?? undefined),
     enabled: !!token,
   });
 
@@ -80,55 +118,60 @@ export default function CourtFormScreen() {
     enabled: !!token && !!courtId,
   });
 
+  const sports = useMemo(() => asSportList(sportsQuery.data), [sportsQuery.data]);
+  const selectedSport = sports.find((s) => s.slug === sportSlug);
+
+  const validAmenitySet = useMemo(() => {
+    const fromApi = asStringArray(amenitiesQuery.data);
+    return new Set(fromApi.length > 0 ? fromApi : FALLBACK_AMENITY_KEYS);
+  }, [amenitiesQuery.data]);
+
   useEffect(() => {
-    const sports = sportsQuery.data ?? [];
     if (!sportSlug && sports.length > 0) {
       setSportSlug(sports[0].slug);
     }
-  }, [sportsQuery.data, sportSlug]);
+  }, [sports, sportSlug]);
 
   useEffect(() => {
-    if (!isEdit && courtsQuery.data?.items?.[0]) {
-      const seed = courtsQuery.data.items[0];
-      if (!address) setAddress(seed.address);
-      if (!city) setCity(seed.city);
-      if (!state && seed.state) setState(seed.state);
-    }
-  }, [isEdit, courtsQuery.data, address, city, state]);
+    if (isEdit || seededLocation) return;
+    const seed = courtsQuery.data?.items?.[0];
+    if (!seed) return;
+    if (typeof seed.address === 'string' && seed.address) setAddress(seed.address);
+    if (typeof seed.city === 'string' && seed.city) setCity(seed.city);
+    if (typeof seed.state === 'string' && seed.state) setStateValue(seed.state);
+    setSeededLocation(true);
+  }, [isEdit, seededLocation, courtsQuery.data]);
 
   useEffect(() => {
     const court = courtQuery.data;
     if (!court) return;
-    setName(court.name);
+    setName(typeof court.name === 'string' ? court.name : '');
     setSportSlug(court.sport?.slug ?? '');
     setPrice(court.defaultSlotPrice ? String(Number(court.defaultSlotPrice)) : '');
-    setAddress(court.address);
-    setCity(court.city);
-    setState(court.state ?? '');
-    setSelectedAmenities(court.amenities ?? []);
-    const imgs = court.images ?? [];
+    setAddress(typeof court.address === 'string' ? court.address : '');
+    setCity(typeof court.city === 'string' ? court.city : '');
+    setStateValue(typeof court.state === 'string' ? court.state : '');
+    setSelectedAmenities(asStringArray(court.amenities));
+    const imgs = Array.isArray(court.images) ? court.images : [];
     if (imgs.length > 0) {
       const first = imgs[0];
-      setPhotoUrl(typeof first === 'string' ? first : first.url);
+      setPhotoUrl(typeof first === 'string' ? first : (first?.url ?? ''));
     }
-    const maxMatch = court.rules?.match(/Max\s+(\d+)\s+players/i);
-    if (maxMatch) setMaxPlayers(maxMatch[1]);
+    const maxMatch =
+      typeof court.rules === 'string' ? court.rules.match(/Max\s+(\d+)\s+players/i) : null;
+    if (maxMatch?.[1]) setMaxPlayers(maxMatch[1]);
   }, [courtQuery.data]);
-
-  const validAmenitySet = useMemo(
-    () => new Set(amenitiesQuery.data ?? FORM_AMENITIES.map((a) => a.key)),
-    [amenitiesQuery.data],
-  );
 
   const mutation = useMutation({
     mutationFn: async () => {
+      if (!token) throw new Error('Please sign in again');
       const amenities = selectedAmenities.filter((a) => validAmenitySet.has(a));
       const payload = {
         name: name.trim(),
         sportSlug: sportSlug || undefined,
         address: address.trim(),
         city: city.trim(),
-        state: state.trim() || undefined,
+        state: stateValue.trim() || undefined,
         amenities,
         defaultSlotPrice: price ? Number(price) : undefined,
         rules: maxPlayers ? `Max ${maxPlayers} players per court.` : undefined,
@@ -139,15 +182,25 @@ export default function CourtFormScreen() {
       if (!payload.name) throw new Error('Court name is required');
       if (!payload.address) throw new Error('Address is required');
       if (!payload.city) throw new Error('City is required');
-      if (isEdit) return updateCourt(token!, courtId!, payload);
-      return createCourt(token!, payload);
+      if (price && !Number.isFinite(Number(price))) {
+        throw new Error('Enter a valid hourly price');
+      }
+      if (isEdit) {
+        if (!courtId) throw new Error('Missing court id');
+        return updateCourt(token, courtId, payload);
+      }
+      return createCourt(token, payload);
     },
     onSuccess: async (court) => {
       await queryClient.invalidateQueries({ queryKey: ['owner', 'courts'] });
-      await queryClient.invalidateQueries({ queryKey: ['owner', 'court', court.id] });
-      router.replace(`/court/${court.id}`);
+      if (court?.id) {
+        await queryClient.invalidateQueries({ queryKey: ['owner', 'court', court.id] });
+        router.replace(`/court/${court.id}`);
+        return;
+      }
+      router.replace('/(tabs)/courts');
     },
-    onError: (err: Error) => setError(err.message),
+    onError: (err: Error) => setError(err.message || 'Could not save court'),
   });
 
   function toggleAmenity(key: string) {
@@ -170,45 +223,74 @@ export default function CourtFormScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.topBar}>
-          <Pressable onPress={() => router.back()} hitSlop={8}>
-            <Ionicons name="arrow-back" size={24} color={colors.foreground} />
+          <Pressable onPress={() => router.back()} hitSlop={8} style={styles.iconBtn}>
+            <Ionicons name="arrow-back" size={22} color={colors.foreground} />
           </Pressable>
-          <Text style={[styles.title, { color: colors.foreground }]}>
+          <Text style={[styles.title, { color: colors.primary }]}>
             {isEdit ? 'Edit Court' : 'Add New Court'}
           </Text>
-          <View style={{ width: 24 }} />
+          <View style={[styles.avatar, { backgroundColor: colors.primaryContainer }]}>
+            <Text style={styles.avatarText}>{(user?.firstName?.[0] ?? 'O').toUpperCase()}</Text>
+          </View>
         </View>
 
         <Text style={[styles.sectionLabel, { color: colors.muted }]}>Court Photos</Text>
         <View style={styles.photoRow}>
-          <View
+          <Pressable
+            onPress={() => setShowPhotoUrl((v) => !v)}
             style={[
               styles.uploadBox,
-              { borderColor: colors.primary, backgroundColor: colors.surfaceContainer },
+              { borderColor: '#9da1ff', backgroundColor: colors.surfaceContainer },
             ]}
           >
-            <Ionicons name="camera-outline" size={28} color={colors.primary} />
+            <Ionicons name="camera" size={26} color={colors.primary} />
             <Text style={{ color: colors.primary, fontSize: FontSize.xs, fontWeight: '700' }}>
-              Photo URL
+              Upload Photo
             </Text>
-          </View>
+          </Pressable>
+
+          {photoUrl.trim() ? (
+            <View style={styles.thumbWrap}>
+              <Image source={{ uri: photoUrl.trim() }} style={styles.thumb} />
+              <Pressable
+                style={[styles.thumbClose, { backgroundColor: colors.card }]}
+                onPress={() => setPhotoUrl('')}
+                hitSlop={6}
+              >
+                <Ionicons name="close" size={14} color={colors.foreground} />
+              </Pressable>
+            </View>
+          ) : (
+            <View
+              style={[
+                styles.thumbPlaceholder,
+                { backgroundColor: colors.mutedBg, borderColor: colors.border },
+              ]}
+            >
+              <Ionicons name="image-outline" size={28} color={colors.muted} />
+            </View>
+          )}
+        </View>
+
+        {showPhotoUrl ? (
           <TextInput
             value={photoUrl}
             onChangeText={setPhotoUrl}
-            placeholder="https://…"
+            placeholder="Paste image URL (https://…)"
             placeholderTextColor={colors.muted}
+            autoCapitalize="none"
+            autoCorrect={false}
             style={[
               styles.input,
-              styles.photoInput,
               {
                 borderColor: colors.border,
                 color: colors.foreground,
                 backgroundColor: colors.card,
+                marginBottom: Spacing.lg,
               },
             ]}
-            autoCapitalize="none"
           />
-        </View>
+        ) : null}
 
         <View
           style={[styles.formCard, { backgroundColor: colors.card, borderColor: colors.border }]}
@@ -221,100 +303,59 @@ export default function CourtFormScreen() {
             style={[styles.input, { borderColor: colors.border, color: colors.foreground }]}
           />
 
-          <Text style={[styles.fieldLabel, { color: colors.muted }]}>Sport Type</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{ marginBottom: Spacing.md }}
-          >
-            <View style={styles.chipRow}>
-              {(sportsQuery.data ?? []).map((sport) => {
-                const active = sport.slug === sportSlug;
-                return (
-                  <Pressable
-                    key={sport.id}
-                    onPress={() => setSportSlug(sport.slug)}
-                    style={[
-                      styles.chip,
-                      {
-                        backgroundColor: active ? colors.primary : colors.mutedBg,
-                        borderColor: active ? colors.primary : colors.border,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={{
-                        color: active ? '#fff' : colors.foreground,
-                        fontWeight: '700',
-                        fontSize: FontSize.sm,
-                      }}
-                    >
-                      {sport.name}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </ScrollView>
-
           <View style={styles.row}>
+            <View style={{ flex: 1.2 }}>
+              <Text style={[styles.fieldLabel, { color: colors.muted }]}>Sport Type</Text>
+              <Pressable
+                onPress={() => setSportPickerOpen(true)}
+                style={[
+                  styles.input,
+                  styles.dropdown,
+                  { borderColor: colors.border, backgroundColor: colors.card },
+                ]}
+              >
+                <Text
+                  style={{
+                    color: selectedSport ? colors.foreground : colors.muted,
+                    fontSize: FontSize.md,
+                    fontWeight: '600',
+                    flex: 1,
+                  }}
+                  numberOfLines={1}
+                >
+                  {selectedSport?.name ?? (sportsQuery.isLoading ? 'Loading…' : 'Select sport')}
+                </Text>
+                <Ionicons name="chevron-down" size={18} color={colors.muted} />
+              </Pressable>
+            </View>
             <View style={{ flex: 1 }}>
               <Text style={[styles.fieldLabel, { color: colors.muted }]}>Max Players</Text>
               <TextInput
                 value={maxPlayers}
                 onChangeText={setMaxPlayers}
                 keyboardType="number-pad"
+                placeholder="4"
+                placeholderTextColor={colors.muted}
                 style={[styles.input, { borderColor: colors.border, color: colors.foreground }]}
               />
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.fieldLabel, { color: colors.muted }]}>Base Hourly Price</Text>
-              <View style={styles.priceRow}>
-                <Text style={{ color: colors.muted, fontWeight: '700' }}>₹</Text>
-                <TextInput
-                  value={price}
-                  onChangeText={setPrice}
-                  keyboardType="decimal-pad"
-                  placeholder="500"
-                  placeholderTextColor={colors.muted}
-                  style={[
-                    styles.input,
-                    styles.priceInput,
-                    { borderColor: colors.border, color: colors.foreground },
-                  ]}
-                />
-              </View>
-            </View>
           </View>
 
-          <Text style={[styles.fieldLabel, { color: colors.muted }]}>Address</Text>
-          <TextInput
-            value={address}
-            onChangeText={setAddress}
-            placeholder="Street address"
-            placeholderTextColor={colors.muted}
-            style={[styles.input, { borderColor: colors.border, color: colors.foreground }]}
-          />
-          <View style={styles.row}>
+          <Text style={[styles.fieldLabel, { color: colors.muted }]}>Base Hourly Price</Text>
+          <View
+            style={[
+              styles.priceField,
+              { borderColor: colors.border, backgroundColor: colors.card },
+            ]}
+          >
+            <Text style={{ color: colors.muted, fontWeight: '800', fontSize: FontSize.md }}>₹</Text>
             <TextInput
-              value={city}
-              onChangeText={setCity}
-              placeholder="City"
+              value={price}
+              onChangeText={setPrice}
+              keyboardType="decimal-pad"
+              placeholder="Base Hourly Price"
               placeholderTextColor={colors.muted}
-              style={[
-                styles.input,
-                { flex: 1, borderColor: colors.border, color: colors.foreground },
-              ]}
-            />
-            <TextInput
-              value={state}
-              onChangeText={setState}
-              placeholder="State"
-              placeholderTextColor={colors.muted}
-              style={[
-                styles.input,
-                { flex: 1, borderColor: colors.border, color: colors.foreground },
-              ]}
+              style={[styles.priceInput, { color: colors.foreground }]}
             />
           </View>
         </View>
@@ -356,9 +397,47 @@ export default function CourtFormScreen() {
                 >
                   {item.label}
                 </Text>
+                {active ? <Ionicons name="checkmark" size={14} color={colors.secondary} /> : null}
               </Pressable>
             );
           })}
+        </View>
+
+        <Text style={[styles.sectionLabel, { color: colors.muted, marginTop: Spacing.xl }]}>
+          Venue Location
+        </Text>
+        <View
+          style={[styles.formCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+        >
+          <TextInput
+            value={address}
+            onChangeText={setAddress}
+            placeholder="Street address"
+            placeholderTextColor={colors.muted}
+            style={[styles.input, { borderColor: colors.border, color: colors.foreground }]}
+          />
+          <View style={styles.row}>
+            <TextInput
+              value={city}
+              onChangeText={setCity}
+              placeholder="City"
+              placeholderTextColor={colors.muted}
+              style={[
+                styles.input,
+                { flex: 1, borderColor: colors.border, color: colors.foreground },
+              ]}
+            />
+            <TextInput
+              value={stateValue}
+              onChangeText={setStateValue}
+              placeholder="State"
+              placeholderTextColor={colors.muted}
+              style={[
+                styles.input,
+                { flex: 1, borderColor: colors.border, color: colors.foreground },
+              ]}
+            />
+          </View>
         </View>
 
         <View
@@ -372,7 +451,7 @@ export default function CourtFormScreen() {
             style={{ color: colors.foreground, flex: 1, fontSize: FontSize.sm, lineHeight: 18 }}
           >
             Courts are set to <Text style={{ fontWeight: '800' }}>Available</Text> by default. You
-            can manage maintenance blackout periods in{' '}
+            can manage specific maintenance blackout periods in the{' '}
             <Text
               style={{ fontWeight: '700', textDecorationLine: 'underline' }}
               onPress={() => {
@@ -414,6 +493,57 @@ export default function CourtFormScreen() {
           )}
         </Pressable>
       </ScrollView>
+
+      <Modal
+        visible={sportPickerOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSportPickerOpen(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={() => setSportPickerOpen(false)} />
+          <View style={[styles.modalCard, { backgroundColor: colors.card }]}>
+            <Text style={[styles.modalTitle, { color: colors.foreground }]}>Sport Type</Text>
+            <ScrollView style={{ maxHeight: 320 }}>
+              {sports.length === 0 ? (
+                <Text style={{ color: colors.muted, padding: Spacing.md }}>
+                  {sportsQuery.isError ? 'Could not load sports' : 'No sports available'}
+                </Text>
+              ) : (
+                sports.map((sport) => {
+                  const active = sport.slug === sportSlug;
+                  return (
+                    <Pressable
+                      key={sport.id}
+                      onPress={() => {
+                        setSportSlug(sport.slug);
+                        setSportPickerOpen(false);
+                      }}
+                      style={[
+                        styles.modalRow,
+                        active && { backgroundColor: colors.surfaceContainer },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          color: colors.foreground,
+                          fontWeight: active ? '800' : '600',
+                          fontSize: FontSize.md,
+                        }}
+                      >
+                        {sport.name}
+                      </Text>
+                      {active ? (
+                        <Ionicons name="checkmark" size={18} color={colors.primary} />
+                      ) : null}
+                    </Pressable>
+                  );
+                })
+              )}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -424,9 +554,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.xl,
+  },
+  iconBtn: {
+    alignItems: 'center',
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
   },
   title: { fontSize: FontSize.xl, fontWeight: '800' },
+  avatar: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  avatarText: { color: '#fff', fontSize: 13, fontWeight: '800' },
   sectionLabel: {
     fontSize: 11,
     fontWeight: '800',
@@ -434,25 +578,50 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     textTransform: 'uppercase',
   },
-  photoRow: { flexDirection: 'row', gap: Spacing.md, marginBottom: Spacing.lg },
+  photoRow: { flexDirection: 'row', gap: Spacing.md, marginBottom: Spacing.md },
   uploadBox: {
     alignItems: 'center',
     borderRadius: Radius.lg,
     borderStyle: 'dashed',
     borderWidth: 1.5,
     gap: 4,
-    height: 88,
+    height: 96,
     justifyContent: 'center',
-    width: 96,
+    width: 110,
   },
-  photoInput: { flex: 1, height: 88, textAlignVertical: 'top' },
+  thumbWrap: {
+    borderRadius: Radius.lg,
+    height: 96,
+    overflow: 'hidden',
+    width: 110,
+  },
+  thumb: { height: '100%', width: '100%' },
+  thumbClose: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    height: 22,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 6,
+    top: 6,
+    width: 22,
+  },
+  thumbPlaceholder: {
+    alignItems: 'center',
+    borderRadius: Radius.lg,
+    borderStyle: 'dashed',
+    borderWidth: 1,
+    height: 96,
+    justifyContent: 'center',
+    width: 110,
+  },
   formCard: {
     borderRadius: Radius.lg,
     borderWidth: 1,
-    gap: Spacing.sm,
+    gap: Spacing.md,
     padding: Spacing.lg,
   },
-  fieldLabel: { fontSize: 11, fontWeight: '700', marginBottom: 4, marginTop: 4 },
+  fieldLabel: { fontSize: 11, fontWeight: '700', marginBottom: 6 },
   input: {
     borderRadius: Radius.md,
     borderWidth: 1,
@@ -460,9 +629,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Platform.OS === 'ios' ? Spacing.md : Spacing.sm,
   },
+  dropdown: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
   row: { flexDirection: 'row', gap: Spacing.md },
-  priceRow: { alignItems: 'center', flexDirection: 'row', gap: 6 },
-  priceInput: { flex: 1 },
+  priceField: {
+    alignItems: 'center',
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 8,
+    paddingHorizontal: Spacing.md,
+  },
+  priceInput: {
+    flex: 1,
+    fontSize: FontSize.md,
+    paddingVertical: Platform.OS === 'ios' ? Spacing.md : Spacing.sm,
+  },
   amenityHeader: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -471,12 +656,6 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
   },
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
-  chip: {
-    borderRadius: Radius.xl,
-    borderWidth: 1,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-  },
   amenityChip: {
     alignItems: 'center',
     borderRadius: Radius.xl,
@@ -504,4 +683,24 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.lg,
   },
   saveText: { color: '#fff', fontSize: FontSize.md, fontWeight: '800' },
+  modalBackdrop: {
+    backgroundColor: 'rgba(17,28,45,0.45)',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalCard: {
+    borderTopLeftRadius: Radius.xl,
+    borderTopRightRadius: Radius.xl,
+    padding: Spacing.xl,
+    paddingBottom: Spacing.xxxl,
+  },
+  modalTitle: { fontSize: FontSize.lg, fontWeight: '800', marginBottom: Spacing.md },
+  modalRow: {
+    alignItems: 'center',
+    borderRadius: Radius.md,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+  },
 });

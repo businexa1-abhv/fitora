@@ -19,6 +19,8 @@ export const SCHEDULED_JOBS = {
   DAILY_REPORTS: 'daily-reports',
   ANALYTICS_AGGREGATION: 'analytics-aggregation',
   PROCESS_SCHEDULED_BROADCASTS: 'process-scheduled-broadcasts',
+  SLOT_GENERATION: 'slot-generation',
+  RELEASE_EXPIRED_LOCKS: 'release-expired-locks',
 } as const;
 
 export type ScheduledJobName = (typeof SCHEDULED_JOBS)[keyof typeof SCHEDULED_JOBS];
@@ -32,6 +34,8 @@ export const CRON_PATTERNS: Record<ScheduledJobName, string> = {
   [SCHEDULED_JOBS.DAILY_REPORTS]: '0 6 * * *',
   [SCHEDULED_JOBS.ANALYTICS_AGGREGATION]: '0 5 * * *',
   [SCHEDULED_JOBS.PROCESS_SCHEDULED_BROADCASTS]: '*/5 * * * *',
+  [SCHEDULED_JOBS.SLOT_GENERATION]: '0 2 * * *',
+  [SCHEDULED_JOBS.RELEASE_EXPIRED_LOCKS]: '*/5 * * * *',
 };
 
 export const DEFAULT_JOB_OPTIONS = {

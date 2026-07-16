@@ -1,10 +1,10 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import type { Court, CourtSlot } from '@fitora/shared';
+import type { Court } from '@fitora/shared';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
 import { OwnerStatusBadge } from '@/components/owner/owner-status-badge';
 import { FormField, inputClassName, buttonClassName } from '@/components/auth-layout';
@@ -13,6 +13,9 @@ import { getAccessToken } from '@/lib/auth';
 import { generateSlots, getCourt, getCourtSlots } from '@/lib/courts';
 import { formatCurrency, formatTime } from '@/lib/owner-utils';
 import { SPORT_EMOJI } from '@/lib/constants';
+import { useCourtSlotsLive } from '@/hooks/use-court-slots-live';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthToken } from '@/hooks/use-auth-token';
 
 function todayString() {
   return new Date().toISOString().split('T')[0];
@@ -21,8 +24,9 @@ function todayString() {
 export default function ManageCourtSlotsPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const token = useAuthToken();
+  const queryClient = useQueryClient();
   const [court, setCourt] = useState<Court | null>(null);
-  const [slots, setSlots] = useState<CourtSlot[]>([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -34,35 +38,43 @@ export default function ManageCourtSlotsPage() {
     price: 500,
   });
 
+  const slotsQuery = useQuery({
+    queryKey: ['slots', id, form.date],
+    queryFn: () => getCourtSlots(id, form.date),
+    enabled: !!id && !!form.date,
+  });
+
+  useCourtSlotsLive(id, form.date, token);
+  const slots = slotsQuery.data ?? [];
+
   useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
+    const access = getAccessToken();
+    if (!access) {
       router.replace('/login');
       return;
     }
-    getCourt(id, token).then(setCourt).catch(() => setCourt(null));
+    getCourt(id, access)
+      .then(setCourt)
+      .catch(() => setCourt(null));
   }, [id, router]);
 
-  useEffect(() => {
-    if (form.date && id) {
-      getCourtSlots(id, form.date).then(setSlots).catch(() => setSlots([]));
-    }
-  }, [id, form.date]);
+  const refreshSlots = useCallback(() => {
+    void queryClient.invalidateQueries({ queryKey: ['slots', id, form.date] });
+  }, [form.date, id, queryClient]);
 
   async function handleGenerate(e: FormEvent) {
     e.preventDefault();
-    const token = getAccessToken();
-    if (!token) return;
+    const access = getAccessToken();
+    if (!access) return;
 
     setLoading(true);
     setError('');
     setMessage('');
 
     try {
-      const result = await generateSlots(token, id, form);
-      setMessage(`Created ${result.created} of ${result.total} slots`);
-      const updated = await getCourtSlots(id, form.date);
-      setSlots(updated);
+      const result = await generateSlots(access, id, form);
+      setMessage(`Generated ${result.created} slots`);
+      refreshSlots();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to generate slots');
     } finally {
@@ -80,7 +92,10 @@ export default function ManageCourtSlotsPage() {
 
   return (
     <div className="max-w-4xl">
-      <Link href="/owner/slots" className="inline-flex items-center gap-1 text-sm text-muted hover:text-primary mb-4">
+      <Link
+        href="/owner/slots"
+        className="inline-flex items-center gap-1 text-sm text-muted hover:text-primary mb-4"
+      >
         <ArrowLeft className="h-4 w-4" />
         All courts
       </Link>
@@ -91,11 +106,16 @@ export default function ManageCourtSlotsPage() {
       />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <form onSubmit={handleGenerate} className="rounded-2xl border border-border bg-card p-6 shadow-sm space-y-5">
+        <form
+          onSubmit={handleGenerate}
+          className="rounded-2xl border border-border bg-card p-6 shadow-sm space-y-5"
+        >
           <h2 className="font-bold">Generate slots</h2>
 
           {error && (
-            <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">{error}</div>
+            <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+              {error}
+            </div>
           )}
           {message && (
             <div className="rounded-xl bg-primary-light border border-primary/20 px-4 py-3 text-sm text-primary font-medium">

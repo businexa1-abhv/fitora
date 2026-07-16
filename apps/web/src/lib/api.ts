@@ -97,3 +97,5 @@ export function getMe(accessToken: string) {
 export function getUsers(accessToken: string) {
   return apiFetch<AuthUser[]>('/users', {}, accessToken);
 }
+
+export { API_URL };

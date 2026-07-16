@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -16,12 +17,13 @@ function OwnerNavigator() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading) SplashScreen.hideAsync().catch(() => undefined);
-  }, [isLoading]);
+    SplashScreen.hideAsync().catch(() => undefined);
+  }, []);
 
   useEffect(() => {
-    if (isLoading) return;
-    const inAuth = segments[0] === '(auth)';
+    const firstSegment = segments[0];
+    if (typeof firstSegment !== 'string') return;
+    const inAuth = firstSegment === '(auth)';
 
     if (!isAuthenticated && !inAuth) {
       router.replace('/(auth)/welcome');
@@ -33,9 +35,27 @@ function OwnerNavigator() {
         router.replace('/(tabs)');
       }
     }
+
+    const isCoachOnly = isTrainer && !isOwner;
+    if (isAuthenticated && isCoachOnly && (firstSegment === 'ops' || firstSegment === 'manage')) {
+      router.replace('/(tabs)');
+    }
   }, [isAuthenticated, isLoading, isOwner, isTrainer, router, segments]);
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: colors.background,
+        }}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -50,6 +70,8 @@ function OwnerNavigator() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="court" />
+        <Stack.Screen name="ops" />
+        <Stack.Screen name="manage" />
       </Stack>
     </>
   );

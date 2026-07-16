@@ -15,7 +15,16 @@ type PlayerLink = {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
   subtitle: string;
-  href: '/bookings' | '/search';
+  href:
+    | '/bookings'
+    | '/search'
+    | '/membership'
+    | '/wallet'
+    | '/training'
+    | '/shop'
+    | '/services'
+    | '/notifications'
+    | '/notification-settings';
 };
 
 const PLAYER_LINKS: PlayerLink[] = [
@@ -30,6 +39,48 @@ const PLAYER_LINKS: PlayerLink[] = [
     label: 'Find courts',
     subtitle: 'Search sports, cities and premium venues',
     href: '/search',
+  },
+  {
+    icon: 'ribbon',
+    label: 'Memberships',
+    subtitle: 'Active plans and venue memberships',
+    href: '/membership',
+  },
+  {
+    icon: 'wallet',
+    label: 'Wallet',
+    subtitle: 'Balance, top-ups and transactions',
+    href: '/wallet',
+  },
+  {
+    icon: 'fitness',
+    label: 'Training',
+    subtitle: 'Programs, batches and enrollments',
+    href: '/training',
+  },
+  {
+    icon: 'bag-handle',
+    label: 'Marketplace',
+    subtitle: 'Shop gear and apparel',
+    href: '/shop',
+  },
+  {
+    icon: 'construct',
+    label: 'Services & Print',
+    subtitle: 'Stringing, repair and custom print orders',
+    href: '/services',
+  },
+  {
+    icon: 'notifications',
+    label: 'Notifications',
+    subtitle: 'Alerts and booking updates',
+    href: '/notifications',
+  },
+  {
+    icon: 'settings-outline',
+    label: 'Notification settings',
+    subtitle: 'Push, email and SMS preferences',
+    href: '/notification-settings',
   },
 ];
 
@@ -73,7 +124,10 @@ export default function ProfileScreen() {
           <Text style={[styles.locationText, { color: colors.foreground }]}>Hyderabad</Text>
         </View>
         <Text style={[styles.brand, { color: colors.primary }]}>FitOra</Text>
-        <Pressable style={[styles.headerIcon, { backgroundColor: colors.card }]}>
+        <Pressable
+          style={[styles.headerIcon, { backgroundColor: colors.card }]}
+          onPress={() => router.push('/notifications')}
+        >
           <Ionicons name="notifications-outline" size={21} color={colors.primary} />
         </Pressable>
       </View>

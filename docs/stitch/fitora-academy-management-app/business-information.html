@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Business Information - FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#e1e0ff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "on-background": "#111c2d",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-secondary-fixed": "#002113",
+                    "tertiary": "#3c2300",
+                    "on-primary-container": "#9da1ff",
+                    "surface-container-high": "#dee8ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-fixed": "#ffddb8",
+                    "primary": "#15157d",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-surface": "#111c2d",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container": "#e7eeff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "background": "#f9f9ff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "surface-variant": "#d8e3fb",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-tint": "#4f54b4",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary-container": "#ec9700",
+                    "surface": "#f9f9ff",
+                    "surface-container-low": "#f0f3ff",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#263143",
+                    "on-primary-fixed": "#04006d",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#5a3700",
+                    "surface-dim": "#cfdaf2",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "secondary-container": "#6cf8bb",
+                    "on-surface-variant": "#464652",
+                    "secondary": "#006c49",
+                    "outline-variant": "#c7c5d4",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#2e3192",
+                    "outline": "#777683"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "stack-lg": "24px",
+                    "gutter-mobile": "12px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9ff;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        .management-card {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.75rem;
+            padding: 24px;
+            transition: all 0.2s ease-in-out;
+        }
+        .management-card:hover {
+            border-color: #15157d;
+        }
+        .input-group label {
+            transition: all 0.2s ease;
+        }
+        .input-field:focus-within label {
+            color: #15157d;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #777683;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface custom-scrollbar pb-24">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile w-full z-50 docked full-width top-0 bg-surface border-b border-outline-variant h-16 sticky">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-headline-md text-headline-md">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container transition-colors p-2 rounded-full">search</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a business owner in a modern corporate setting. The lighting is soft and professional, emphasizing a high-performance management atmosphere. The overall aesthetic is clean, with a neutral background and professional attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEY2pPAkS8nCUxbqsvjjDosD-Sr6yapyOVbAO_Qx6yz5VxVrEYcX869d-62xyFMbvFdVaZFU2FRil9kry_m5osM0FkZ560C2mS0OfyYA6qRrqGLYPi10lIh5FXmEXLBhfrjH737dvP5qKB0AJP3JLedgU45PVVQ989sY70oqQcWy-vzh_V3_YkwV0eVxG_xbCVNkzfWQfY44CCdZ9zH_5qU9Ca16JU75bg1Vyw0x9vmOBCA7lHc43t"/>
+</div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-margin-mobile pt-8 space-y-stack-lg">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Business Information</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage your academy's public identity, contact details, and legal status.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-title-md text-title-md hover:opacity-90 active:scale-95 transition-all flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined">save</span>
+                Save Changes
+            </button>
+</section>
+<!-- Main Content Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-stack-md">
+<!-- Branding & Identity -->
+<div class="md:col-span-8 management-card">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">badge</span>
+<h3 class="font-title-lg text-title-lg text-primary">Branding & Identity</h3>
+</div>
+<div class="flex flex-col md:flex-row gap-8">
+<div class="flex-shrink-0 group relative">
+<div class="w-32 h-32 rounded-xl bg-surface-container-low border-2 border-dashed border-outline-variant flex flex-col items-center justify-center text-on-surface-variant overflow-hidden">
+<img class="hidden w-full h-full object-cover" data-alt="A minimalist and modern sports academy logo featuring abstract geometric shapes. The logo is rendered in high-contrast indigo and emerald green against a clean white background. The style is corporate modernism with sharp lines and professional aesthetic." id="logo-preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWXYBSl1ev0dIlPFfYUjIm05s4_EDnmQCtPEjhWz3J8bmqkyE1-23mh4fuhRYNMub0qUxfFmN0RYjw4leP2MPP_0hhrOJKeBlA7vSF8f9DEiSPTSNlrD8jNHxbJ5VkhaS2ESFyge4DPcssvvYCmpjhiypqkhfIQMSo0UcsinUdd4XZIhhL_07bpoaRle4eQSQvmdghBId0Vw4KI8oKrPyDy_-HRhEtHWPE-thbNlM6mp-t7FWeSN1b"/>
+<div class="flex flex-col items-center" id="upload-placeholder">
+<span class="material-symbols-outlined text-4xl mb-1">add_a_photo</span>
+<span class="font-label-lg text-label-lg">Upload Logo</span>
+</div>
+</div>
+<label class="absolute -bottom-2 -right-2 bg-primary text-on-primary p-2 rounded-full cursor-pointer shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-sm">edit</span>
+<input class="hidden" onchange="document.getElementById('logo-preview').classList.remove('hidden'); document.getElementById('upload-placeholder').classList.add('hidden');" type="file"/>
+</label>
+</div>
+<div class="flex-grow space-y-4">
+<div class="input-group">
+<label class="font-label-lg text-label-lg text-on-surface-variant mb-1 block">Academy Name</label>
+<input class="w-full bg-white border border-outline focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-3 font-body-lg text-body-lg outline-none transition-all" type="text" value="FitOra Academy"/>
+</div>
+<div class="input-group">
+<label class="font-label-lg text-label-lg text-on-surface-variant mb-1 block">Tagline (Optional)</label>
+<input class="w-full bg-white border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-3 font-body-lg text-body-lg outline-none transition-all" placeholder="Peak Performance, Proven Excellence" type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Legal & Tax -->
+<div class="md:col-span-4 management-card">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">gavel</span>
+<h3 class="font-title-lg text-title-lg text-primary">Legal & Tax</h3>
+</div>
+<div class="space-y-4">
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant mb-1 block">Tax ID / EIN</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-label-lg text-label-lg text-on-surface outline-none font-mono" type="text" value="88-234567X"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant text-sm">lock</span>
+</div>
+</div>
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant mb-1 block">Business Entity Type</label>
+<select class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md outline-none">
+<option>Limited Liability Company (LLC)</option>
+<option>S-Corporation</option>
+<option>Sole Proprietorship</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Physical Location -->
+<div class="md:col-span-6 management-card">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<h3 class="font-title-lg text-title-lg text-primary">Physical Address</h3>
+</div>
+<div class="space-y-4">
+<input class="w-full border border-outline-variant rounded-lg px-4 py-3 font-body-lg text-body-lg" placeholder="Street Address" type="text" value="742 Academy Drive"/>
+<div class="grid grid-cols-2 gap-4">
+<input class="w-full border border-outline-variant rounded-lg px-4 py-3 font-body-lg text-body-lg" placeholder="City" type="text" value="Palo Alto"/>
+<input class="w-full border border-outline-variant rounded-lg px-4 py-3 font-body-lg text-body-lg" placeholder="State" type="text" value="CA"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<input class="w-full border border-outline-variant rounded-lg px-4 py-3 font-body-lg text-body-lg" placeholder="Postal Code" type="text" value="94301"/>
+<input class="w-full border border-outline-variant rounded-lg px-4 py-3 font-body-lg text-body-lg" placeholder="Country" type="text" value="United States"/>
+</div>
+<div class="mt-4 h-32 rounded-lg bg-surface-container overflow-hidden border border-outline-variant relative">
+<div class="absolute inset-0 flex items-center justify-center bg-black/5">
+<span class="material-symbols-outlined text-primary-container text-4xl">map</span>
+</div>
+<img class="w-full h-full object-cover opacity-60" data-location="Palo Alto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtdHkk0ruSCPXwtYzHEasuWLF1nZmV8gAOrwGZ_PJGSFUCaWp9XymvTXCw1l0i4bcrXrFFdVnDvJZ-F6BhRmuLM7JKWcWvkTMggbeCUXG1QsoG-Ui54r-EUPyKv2r1g0wP3Rn9M6KmoC8FCgrJ_sYiLi-qeVo3X9MsAdHUr_X-yvv6QvIAjKV-FKO1WgM_YzB3cORs527V7QmwoYuP6M0HrB9Lr_NlaiMuGXGGPIsFSzfvvcJKkRqS"/>
+</div>
+</div>
+</div>
+<!-- Contact Information -->
+<div class="md:col-span-6 management-card">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">contact_mail</span>
+<h3 class="font-title-lg text-title-lg text-primary">Contact Channels</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3 bg-surface-container-low p-1 rounded-lg border border-outline-variant focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined px-3 text-on-surface-variant">mail</span>
+<input class="flex-grow bg-transparent border-none focus:ring-0 py-2 font-body-md text-body-md" placeholder="Official Email" type="email" value="official@fitora.academy"/>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low p-1 rounded-lg border border-outline-variant focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined px-3 text-on-surface-variant">language</span>
+<input class="flex-grow bg-transparent border-none focus:ring-0 py-2 font-body-md text-body-md" placeholder="Website URL" type="url" value="https://fitora.academy"/>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low p-1 rounded-lg border border-outline-variant focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined px-3 text-on-surface-variant">call</span>
+<input class="flex-grow bg-transparent border-none focus:ring-0 py-2 font-body-md text-body-md" placeholder="Support Line" type="tel" value="+1 (555) 012-3456"/>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low p-1 rounded-lg border border-outline-variant focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined px-3 text-on-surface-variant">emergency</span>
+<input class="flex-grow bg-transparent border-none focus:ring-0 py-2 font-body-md text-body-md" placeholder="Emergency Contact" type="tel"/>
+</div>
+</div>
+</div>
+<!-- Social Media Presence -->
+<div class="md:col-span-12 management-card">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">share</span>
+<h3 class="font-title-lg text-title-lg text-primary">Social Media Presence</h3>
+</div>
+<button class="text-primary font-label-lg text-label-lg flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">add</span> Add Platform
+                    </button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">public</span>
+</div>
+<div class="flex-grow">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Instagram</label>
+<input class="w-full border-b border-outline-variant focus:border-primary bg-transparent py-1 outline-none font-body-md text-body-md" type="text" value="@fitora_academy"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">video_library</span>
+</div>
+<div class="flex-grow">
+<label class="font-label-lg text-label-lg text-on-surface-variant">LinkedIn</label>
+<input class="w-full border-b border-outline-variant focus:border-primary bg-transparent py-1 outline-none font-body-md text-body-md" type="text" value="linkedin.com/company/fitora"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">groups</span>
+</div>
+<div class="flex-grow">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Facebook</label>
+<input class="w-full border-b border-outline-variant focus:border-primary bg-transparent py-1 outline-none font-body-md text-body-md" placeholder="fb.com/fitora" type="text"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Danger Zone -->
+<div class="bg-error-container/10 border border-error/20 rounded-xl p-6 mt-12 flex items-center justify-between">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-error mt-1">report_problem</span>
+<div>
+<h4 class="font-title-md text-title-md text-error">Archive Business Profile</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Archiving will hide your academy from public search but keep your data for records.</p>
+</div>
+</div>
+<button class="border border-error text-error px-6 py-2 rounded-lg font-title-md text-title-md hover:bg-error/5 transition-colors">Archive</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button -->
+<!-- Suppressed on Settings page per relevance check instructions -->
+<script>
+        // Micro-interactions for form feedback
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('border-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('border-primary');
+            });
+        });
+
+        // Toggle mobile nav visibility logic
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const bottomNav = document.querySelector('nav');
+            if (width >= 768) {
+                bottomNav.classList.add('hidden');
+            } else {
+                bottomNav.classList.remove('hidden');
+                bottomNav.classList.add('flex');
+            }
+        });
+        
+        // Initial call
+        if (window.innerWidth >= 768) {
+            document.querySelector('nav').classList.add('hidden');
+        }
+    </script>
+</body></html>

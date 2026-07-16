@@ -100,6 +100,71 @@ export type SubmitResult = {
   tokens: { accessToken: string; refreshToken: string };
 };
 
+const APP_KEY = 'fitora.partner.applicationId';
+const AUTH_KEY = 'fitora.partner.auth';
+
+export function getStoredApplicationId(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem(APP_KEY);
+}
+
+export function setStoredApplicationId(id: string) {
+  localStorage.setItem(APP_KEY, id);
+}
+
+export function saveAuthSession(result: SubmitResult) {
+  localStorage.setItem(
+    AUTH_KEY,
+    JSON.stringify({
+      accessToken: result.tokens.accessToken,
+      refreshToken: result.tokens.refreshToken,
+      user: result.user,
+      generatedPassword: result.generatedPassword,
+      tenantId: result.tenantId,
+    }),
+  );
+}
+
+export function getAuthSession(): {
+  accessToken: string;
+  refreshToken?: string;
+  user: SubmitResult['user'];
+  generatedPassword?: string;
+  tenantId?: string;
+} | null {
+  if (typeof window === 'undefined') return null;
+  const raw = localStorage.getItem(AUTH_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as {
+      accessToken: string;
+      refreshToken?: string;
+      user: SubmitResult['user'];
+      generatedPassword?: string;
+      tenantId?: string;
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function clearAuthSession() {
+  localStorage.removeItem(AUTH_KEY);
+}
+
+export function getAccessToken(): string | null {
+  return getAuthSession()?.accessToken ?? null;
+}
+
+export function saveLoginSession(session: {
+  accessToken: string;
+  refreshToken: string;
+  user: SubmitResult['user'];
+  tenantId?: string;
+}) {
+  localStorage.setItem(AUTH_KEY, JSON.stringify(session));
+}
+
 export const partnerApi = {
   createDraft: () => apiFetch<PartnerApplication>('/partner/onboarding', { method: 'POST' }),
   get: (id: string) => apiFetch<PartnerApplication>(`/partner/onboarding/${id}`),
@@ -148,50 +213,28 @@ export const partnerApi = {
       method: 'POST',
       body: JSON.stringify(password ? { password } : {}),
     }),
-};
-
-const APP_KEY = 'fitora.partner.applicationId';
-const AUTH_KEY = 'fitora.partner.auth';
-
-export function getStoredApplicationId(): string | null {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem(APP_KEY);
-}
-
-export function setStoredApplicationId(id: string) {
-  localStorage.setItem(APP_KEY, id);
-}
-
-export function saveAuthSession(result: SubmitResult) {
-  localStorage.setItem(
-    AUTH_KEY,
-    JSON.stringify({
-      accessToken: result.tokens.accessToken,
-      refreshToken: result.tokens.refreshToken,
-      user: result.user,
-      generatedPassword: result.generatedPassword,
-      tenantId: result.tenantId,
-    }),
-  );
-}
-
-export function getAuthSession(): {
-  accessToken: string;
-  user: SubmitResult['user'];
-  generatedPassword?: string;
-  tenantId?: string;
-} | null {
-  if (typeof window === 'undefined') return null;
-  const raw = localStorage.getItem(AUTH_KEY);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as {
-      accessToken: string;
+  login: (email: string, password: string) =>
+    apiFetch<{
       user: SubmitResult['user'];
-      generatedPassword?: string;
-      tenantId?: string;
-    };
-  } catch {
-    return null;
-  }
-}
+      tokens: { accessToken: string; refreshToken: string };
+    }>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
+  forgotPassword: (email: string) =>
+    apiFetch<{ message: string }>('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    }),
+  resetPassword: (token: string, newPassword: string) =>
+    apiFetch<{ message: string }>('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, newPassword }),
+    }),
+  getTenantMe: (accessToken: string) =>
+    apiFetch<{ id: string; name: string; status: string; brandName?: string | null }>(
+      '/tenants/me',
+      {},
+      accessToken,
+    ),
+};

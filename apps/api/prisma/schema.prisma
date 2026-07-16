@@ -243,6 +243,33 @@ enum ClosureReason {
   BLOCKED
   MAINTENANCE
   HOLIDAY
+  TOURNAMENT
+}
+
+enum WaitlistStatus {
+  WAITING
+  OFFERED
+  CONVERTED
+  CANCELLED
+  EXPIRED
+}
+
+enum RecurringBookingStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
+enum SlotBookingMode {
+  EXCLUSIVE
+  SHARED
+}
+
+enum BookingSource {
+  PLAYER_APP
+  OWNER_WALK_IN
+  OWNER_MANUAL
+  ADMIN
 }
 
 enum SettingScope {
@@ -256,6 +283,13 @@ enum TenantStatus {
   PENDING
   ACTIVE
   SUSPENDED
+}
+
+enum SupportTicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
 }
 
 enum PartnerApplicationStatus {
@@ -309,6 +343,13 @@ model Tenant {
   printListings     PrintListing[]
   auditLogs         AuditLog[]
   partnerApplications PartnerApplication[]
+  expenses            Expense[]
+  slotTypes           SlotTypeConfig[]
+  staffShifts         StaffShift[]
+  payrollPeriods      PayrollPeriod[]
+  playerNotes         PlayerNote[]
+  playerProfiles      PlayerCrmProfile[]
+  supportTickets      SupportTicket[]
 
   @@index([ownerId])
   @@index([slug])
@@ -418,6 +459,8 @@ model User {
   wallet                Wallet?
   courts                Court[]              @relation("CourtOwner")
   bookings              Booking[]
+  waitlistEntries       SlotWaitlistEntry[]
+  recurringBookings     RecurringBooking[]
   membershipPurchases   MembershipPurchase[]
   payments              Payment[]
   paymentInvoices       PaymentInvoice[]
@@ -449,6 +492,14 @@ model User {
   tenantMemberships     TenantMember[]
   tenantTrainerLinks    TenantTrainer[]    @relation("TenantTrainerUser")
   partnerApplications   PartnerApplication[]
+  expensesCreated       Expense[]            @relation("ExpenseCreator")
+  staffShifts           StaffShift[]         @relation("StaffShiftUser")
+  payrollLines          PayrollLine[]        @relation("PayrollTrainer")
+  playerNotesAuthored   PlayerNote[]         @relation("PlayerNoteAuthor")
+  playerNotesAbout      PlayerNote[]         @relation("PlayerNoteSubject")
+  playerCrmProfiles     PlayerCrmProfile[]
+  assignedSupportTickets SupportTicket[] @relation("SupportTicketAssignee")
+  createdSupportTickets  SupportTicket[] @relation("SupportTicketCreator")
 
   @@index([email])
   @@index([phone])
@@ -700,8 +751,9 @@ model Court {
   longitude     Decimal?  @db.Decimal(10, 7)
   amenities         String[]            @default([])
   rules             String?             @db.Text
-  defaultSlotPrice  Decimal?            @map("default_slot_price") @db.Decimal(12, 2)
-  approvalStatus    CourtApprovalStatus @default(PENDING) @map("approval_status")
+  defaultSlotPrice     Decimal?            @map("default_slot_price") @db.Decimal(12, 2)
+  defaultSlotCapacity  Int?                @map("default_slot_capacity")
+  approvalStatus       CourtApprovalStatus @default(PENDING) @map("approval_status")
   rejectionReason   String?             @map("rejection_reason") @db.VarChar(500)
   approvedAt        DateTime?           @map("approved_at")
   rejectedAt        DateTime?           @map("rejected_at")
@@ -722,8 +774,10 @@ model Court {
   closures      CourtClosure[]
   plans         MembershipPlan[]
   coupons       Coupon[]
-  bookings Booking[]
-  programs TrainingProgram[]
+  bookings          Booking[]
+  waitlistEntries   SlotWaitlistEntry[]
+  recurringBookings RecurringBooking[]
+  programs          TrainingProgram[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -754,22 +808,28 @@ model CourtImage {
 }
 
 model CourtSlot {
-  id          String         @id @default(uuid()) @db.Uuid
-  courtId     String         @map("court_id") @db.Uuid
-  scheduleId  String?        @map("schedule_id") @db.Uuid
-  startTime   DateTime       @map("start_time")
-  endTime     DateTime       @map("end_time")
-  price       Decimal        @db.Decimal(12, 2)
-  isBlocked   Boolean        @default(false) @map("is_blocked")
-  blockReason ClosureReason? @map("block_reason")
-  notes       String?        @db.VarChar(500)
-  deletedAt   DateTime?      @map("deleted_at")
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @updatedAt @map("updated_at")
+  id              String          @id @default(uuid()) @db.Uuid
+  courtId         String          @map("court_id") @db.Uuid
+  scheduleId      String?         @map("schedule_id") @db.Uuid
+  startTime       DateTime        @map("start_time")
+  endTime         DateTime        @map("end_time")
+  price           Decimal         @db.Decimal(12, 2)
+  capacity        Int             @default(1)
+  reservedCount   Int             @default(0) @map("reserved_count")
+  confirmedCount  Int             @default(0) @map("confirmed_count")
+  bookingMode     SlotBookingMode @default(EXCLUSIVE) @map("booking_mode")
+  version         Int             @default(0)
+  isBlocked       Boolean         @default(false) @map("is_blocked")
+  blockReason     ClosureReason?  @map("block_reason")
+  notes           String?         @db.VarChar(500)
+  deletedAt       DateTime?       @map("deleted_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
 
   court    Court         @relation(fields: [courtId], references: [id], onDelete: Cascade)
-  schedule SlotSchedule? @relation(fields: [scheduleId], references: [id], onDelete: SetNull)
-  booking  Booking?
+  schedule        SlotSchedule?      @relation(fields: [scheduleId], references: [id], onDelete: SetNull)
+  bookings        Booking[]
+  waitlistEntries SlotWaitlistEntry[]
 
   @@index([courtId, startTime])
   @@index([courtId, startTime, endTime])
@@ -797,8 +857,9 @@ model SlotSchedule {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  court Court       @relation(fields: [courtId], references: [id], onDelete: Cascade)
-  slots CourtSlot[]
+  court             Court              @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  slots             CourtSlot[]
+  recurringBookings RecurringBooking[]
 
   @@index([courtId, isActive, deletedAt])
   @@map("slot_schedules")
@@ -854,8 +915,13 @@ model Booking {
   id             String        @id @default(uuid()) @db.Uuid
   userId         String        @map("user_id") @db.Uuid
   courtId        String        @map("court_id") @db.Uuid
-  slotId         String        @unique @map("slot_id") @db.Uuid
+  slotId         String        @map("slot_id") @db.Uuid
   couponId       String?       @map("coupon_id") @db.Uuid
+  seats          Int           @default(1)
+  source         BookingSource @default(PLAYER_APP)
+  holdToken      String?       @unique @map("hold_token") @db.Uuid
+  guestName      String?       @map("guest_name") @db.VarChar(200)
+  guestPhone     String?       @map("guest_phone") @db.VarChar(20)
   status         BookingStatus @default(PENDING)
   paymentStatus  PaymentStatus @default(PENDING) @map("payment_status")
   subtotalAmount Decimal       @map("subtotal_amount") @db.Decimal(12, 2)
@@ -878,12 +944,69 @@ model Booking {
 
   @@index([userId])
   @@index([courtId])
+  @@index([slotId])
+  @@index([slotId, status, paymentStatus])
+  @@index([slotId, lockedUntil])
   @@index([status])
   @@index([paymentStatus])
   @@index([userId, status, createdAt(sort: Desc)])
   @@index([courtId, status, createdAt(sort: Desc)])
   @@index([deletedAt])
   @@map("bookings")
+}
+
+model SlotWaitlistEntry {
+  id           String         @id @default(uuid()) @db.Uuid
+  slotId       String         @map("slot_id") @db.Uuid
+  courtId      String         @map("court_id") @db.Uuid
+  userId       String         @map("user_id") @db.Uuid
+  seats        Int            @default(1)
+  status       WaitlistStatus @default(WAITING)
+  offeredUntil DateTime?      @map("offered_until")
+  position     Int
+  deletedAt    DateTime?      @map("deleted_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  slot  CourtSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  court Court     @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([slotId, status, position])
+  @@index([userId, status])
+  @@index([courtId])
+  @@index([offeredUntil])
+  @@index([deletedAt])
+  @@map("slot_waitlist_entries")
+}
+
+model RecurringBooking {
+  id             String                 @id @default(uuid()) @db.Uuid
+  userId         String                 @map("user_id") @db.Uuid
+  courtId        String                 @map("court_id") @db.Uuid
+  slotScheduleId String?                @map("slot_schedule_id") @db.Uuid
+  dayOfWeek      Int?                   @map("day_of_week")
+  startHour      Int?                   @map("start_hour")
+  startMinute    Int                    @default(0) @map("start_minute")
+  endHour        Int?                   @map("end_hour")
+  endMinute      Int                    @default(0) @map("end_minute")
+  seats          Int                    @default(1)
+  startDate      DateTime               @map("start_date") @db.Date
+  endDate        DateTime?              @map("end_date") @db.Date
+  status         RecurringBookingStatus @default(ACTIVE)
+  deletedAt      DateTime?              @map("deleted_at")
+  createdAt      DateTime               @default(now()) @map("created_at")
+  updatedAt      DateTime               @updatedAt @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  court        Court         @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  slotSchedule SlotSchedule? @relation(fields: [slotScheduleId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([courtId, status])
+  @@index([slotScheduleId])
+  @@index([deletedAt])
+  @@map("recurring_bookings")
 }
 
 // ─── Memberships ─────────────────────────────────────────────────────────────
@@ -1824,6 +1947,204 @@ model Setting {
   @@index([key])
   @@index([deletedAt])
   @@map("settings")
+}
+
+// ─── Venue ops (expenses, staff, payroll, slot types, player CRM) ─────────────
+
+enum ExpensePaymentMethod {
+  CASH
+  CARD
+  UPI
+}
+
+enum StaffShiftRole {
+  FRONT_DESK
+  COACH
+  MAINTENANCE
+}
+
+enum PayrollPeriodStatus {
+  OPEN
+  CLOSED
+}
+
+enum PayrollLineStatus {
+  PENDING
+  PAID
+}
+
+model Expense {
+  id            String                 @id @default(uuid()) @db.Uuid
+  tenantId      String                 @map("tenant_id") @db.Uuid
+  courtId       String?                @map("court_id") @db.Uuid
+  createdById   String                 @map("created_by_id") @db.Uuid
+  title         String                 @db.VarChar(200)
+  category      String                 @db.VarChar(100)
+  amount        Decimal                @db.Decimal(12, 2)
+  date          DateTime               @db.Date
+  notes         String?                @db.Text
+  paymentMethod ExpensePaymentMethod?  @map("payment_method")
+  receiptUrl    String?                @map("receipt_url") @db.VarChar(500)
+  deletedAt     DateTime?              @map("deleted_at")
+  createdAt     DateTime               @default(now()) @map("created_at")
+  updatedAt     DateTime               @updatedAt @map("updated_at")
+
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy User   @relation("ExpenseCreator", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, date(sort: Desc)])
+  @@index([tenantId, category])
+  @@index([deletedAt])
+  @@map("expenses")
+}
+
+model SlotTypeConfig {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  name         String    @db.VarChar(100)
+  description  String    @db.Text
+  durationMin  Int       @map("duration_min")
+  multiplier   Decimal   @db.Decimal(6, 2)
+  color        String    @db.VarChar(40)
+  sortOrder    Int       @default(0) @map("sort_order")
+  isActive     Boolean   @default(true) @map("is_active")
+  deletedAt    DateTime? @map("deleted_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, name])
+  @@index([tenantId, isActive, deletedAt])
+  @@map("slot_type_configs")
+}
+
+model StaffShift {
+  id          String         @id @default(uuid()) @db.Uuid
+  tenantId    String         @map("tenant_id") @db.Uuid
+  staffUserId String?        @map("staff_user_id") @db.Uuid
+  staffName   String         @map("staff_name") @db.VarChar(200)
+  role        StaffShiftRole
+  date        DateTime       @db.Date
+  startTime   String         @map("start_time") @db.VarChar(10)
+  endTime     String         @map("end_time") @db.VarChar(10)
+  area        String         @db.VarChar(200)
+  notes       String?        @db.Text
+  deletedAt   DateTime?      @map("deleted_at")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  staffUser User?  @relation("StaffShiftUser", fields: [staffUserId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, date])
+  @@index([staffUserId])
+  @@index([deletedAt])
+  @@map("staff_shifts")
+}
+
+model PayrollPeriod {
+  id        String               @id @default(uuid()) @db.Uuid
+  tenantId  String               @map("tenant_id") @db.Uuid
+  startDate DateTime             @map("start_date") @db.Date
+  endDate   DateTime             @map("end_date") @db.Date
+  status    PayrollPeriodStatus  @default(OPEN)
+  deletedAt DateTime?            @map("deleted_at")
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+
+  tenant Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  lines  PayrollLine[]
+
+  @@index([tenantId, startDate, endDate])
+  @@index([deletedAt])
+  @@map("payroll_periods")
+}
+
+model PayrollLine {
+  id             String            @id @default(uuid()) @db.Uuid
+  periodId       String            @map("period_id") @db.Uuid
+  trainerId      String            @map("trainer_id") @db.Uuid
+  sessions       Int               @default(0)
+  ratePerSession Decimal           @map("rate_per_session") @db.Decimal(12, 2)
+  commission     Decimal           @db.Decimal(12, 2)
+  status         PayrollLineStatus @default(PENDING)
+  paidAt         DateTime?         @map("paid_at")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  period  PayrollPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  trainer User          @relation("PayrollTrainer", fields: [trainerId], references: [id], onDelete: Restrict)
+
+  @@unique([periodId, trainerId])
+  @@index([trainerId])
+  @@index([status])
+  @@map("payroll_lines")
+}
+
+model PlayerNote {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  playerUserId String    @map("player_user_id") @db.Uuid
+  authorId     String    @map("author_id") @db.Uuid
+  title        String?   @db.VarChar(200)
+  content      String    @db.Text
+  isPrivate    Boolean   @default(true) @map("is_private")
+  deletedAt    DateTime? @map("deleted_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  player User   @relation("PlayerNoteSubject", fields: [playerUserId], references: [id], onDelete: Cascade)
+  author User   @relation("PlayerNoteAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, playerUserId, deletedAt])
+  @@index([authorId])
+  @@map("player_notes")
+}
+
+model PlayerCrmProfile {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  medicalNotes String?   @map("medical_notes") @db.Text
+  skillLevel   String?   @map("skill_level") @db.VarChar(100)
+  skillNotes   String?   @map("skill_notes") @db.Text
+  deletedAt    DateTime? @map("deleted_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([deletedAt])
+  @@map("player_crm_profiles")
+}
+
+model SupportTicket {
+  id              String               @id @default(uuid()) @db.Uuid
+  subject         String               @db.VarChar(300)
+  body            String               @db.Text
+  status          SupportTicketStatus  @default(OPEN)
+  requesterEmail  String               @map("requester_email") @db.VarChar(255)
+  requesterName   String               @map("requester_name") @db.VarChar(200)
+  assignedToId    String?              @map("assigned_to_id") @db.Uuid
+  tenantId        String?              @map("tenant_id") @db.Uuid
+  createdById     String?              @map("created_by_id") @db.Uuid
+  deletedAt       DateTime?            @map("deleted_at")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+
+  assignedTo User?   @relation("SupportTicketAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  createdBy  User?   @relation("SupportTicketCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  tenant     Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([assignedToId])
+  @@index([tenantId])
+  @@index([deletedAt])
+  @@map("support_tickets")
 }
 
 // ─── Legacy compatibility views (API migration aliases) ───────────────────────

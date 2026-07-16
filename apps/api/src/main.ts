@@ -5,6 +5,7 @@ import compression from 'compression';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { initSentry } from './instrumentation';
+import { RedisIoAdapter } from './realtime/redis-io.adapter';
 
 async function bootstrap() {
   await initSentry();
@@ -16,6 +17,22 @@ async function bootstrap() {
     logger: isProduction ? ['error', 'warn', 'log'] : undefined,
     rawBody: true,
   });
+
+  const redisUrl = process.env.REDIS_URL;
+  if (redisUrl) {
+    try {
+      const redisIoAdapter = new RedisIoAdapter(app);
+      await redisIoAdapter.connectToRedis(redisUrl);
+      app.useWebSocketAdapter(redisIoAdapter);
+    } catch (error) {
+      if (isProduction) throw error;
+      logger.warn(
+        `Socket.IO Redis adapter unavailable (${String(error)}) — using in-memory adapter`,
+      );
+    }
+  } else if (isProduction) {
+    logger.warn('REDIS_URL unset — Socket.IO using in-memory adapter (not multi-instance safe)');
+  }
 
   if (isProduction) {
     app.getHttpAdapter().getInstance().set('trust proxy', 1);

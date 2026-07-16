@@ -3,19 +3,13 @@ import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { ClosureReason, SlotPricingRuleType, UserRole } from '@prisma/client';
 import { SlotsService } from './slots.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { SlotEventsService } from '../realtime/slot-events.service';
 
 describe('SlotsService', () => {
   let service: SlotsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'court'
-      | 'courtSlot'
-      | 'slotSchedule'
-      | 'slotPricingRule'
-      | 'courtClosure'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
+  const events = { emitSlotUpdated: jest.fn().mockResolvedValue(undefined) };
 
   const ownerUser = { id: 'owner-1', email: 'o@f.com', roles: [UserRole.COURT_OWNER] };
   const mockCourt = {
@@ -54,13 +48,18 @@ describe('SlotsService', () => {
         create: jest.fn(),
         update: jest.fn(),
       },
-    } as unknown as typeof prisma;
+    } as any;
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [SlotsService, { provide: PrismaService, useValue: prisma }],
+      providers: [
+        SlotsService,
+        { provide: PrismaService, useValue: prisma },
+        { provide: SlotEventsService, useValue: events },
+      ],
     }).compile();
 
     service = module.get(SlotsService);
+    events.emitSlotUpdated.mockClear();
   });
 
   describe('generateSlots', () => {
@@ -191,6 +190,10 @@ describe('SlotsService', () => {
           blockReason: null,
           notes: null,
           booking: null,
+          bookings: [],
+          capacity: 1,
+          reservedCount: 0,
+          confirmedCount: 0,
         },
       ] as never);
       prisma.courtClosure.findMany.mockResolvedValue([]);

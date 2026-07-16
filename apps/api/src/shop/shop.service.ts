@@ -393,13 +393,76 @@ export class ShopService {
     return { success: true };
   }
 
-  async getAllProductsAdmin() {
+  async getAllProductsAdmin(user: AuthUserPayload) {
+    const tenantId = await this.requirePartnerTenantId(user);
     const products = await this.prisma.product.findMany({
-      where: { deletedAt: null },
+      where: {
+        deletedAt: null,
+        ...(tenantId ? { tenantId } : {}),
+      },
       include: PRODUCT_INCLUDE,
       orderBy: { createdAt: 'desc' },
     });
     return products.map((p) => this.formatProduct(p));
+  }
+
+  async getPartnerDashboard(user: AuthUserPayload) {
+    const tenantId = await this.requirePartnerTenantId(user);
+    const productWhere: Prisma.ProductWhereInput = {
+      deletedAt: null,
+      ...(tenantId ? { tenantId } : {}),
+    };
+    const orderWhere = this.buildPartnerOrderWhere(tenantId);
+
+    const [productCount, activeProducts, ordersTotal, ordersPending, ordersShipped] =
+      await Promise.all([
+        this.prisma.product.count({ where: productWhere }),
+        this.prisma.product.count({ where: { ...productWhere, isActive: true } }),
+        this.prisma.shopOrder.count({ where: orderWhere }),
+        this.prisma.shopOrder.count({
+          where: {
+            ...orderWhere,
+            status: {
+              in: [ShopOrderStatus.PENDING, ShopOrderStatus.CONFIRMED, ShopOrderStatus.PROCESSING],
+            },
+          },
+        }),
+        this.prisma.shopOrder.count({
+          where: { ...orderWhere, status: ShopOrderStatus.SHIPPED },
+        }),
+      ]);
+
+    const lowStock = await this.getLowStockProducts(user);
+    const lowStockCount = lowStock.products.length + lowStock.variants.length;
+
+    let revenue = 0;
+    if (tenantId) {
+      const items = await this.prisma.shopOrderItem.findMany({
+        where: {
+          product: { tenantId },
+          order: { paymentStatus: PaymentStatus.PAID, deletedAt: null },
+        },
+        select: { lineTotal: true },
+      });
+      revenue = items.reduce((sum, item) => sum + Number(item.lineTotal), 0);
+    } else {
+      const agg = await this.prisma.shopOrder.aggregate({
+        where: { paymentStatus: PaymentStatus.PAID, deletedAt: null },
+        _sum: { totalAmount: true },
+      });
+      revenue = Number(agg._sum.totalAmount ?? 0);
+    }
+
+    return {
+      tenantId,
+      productCount,
+      activeProducts,
+      lowStockCount,
+      ordersTotal,
+      ordersPending,
+      ordersShipped,
+      revenue,
+    };
   }
 
   // ─── Variants ───────────────────────────────────────────────────────────────
@@ -908,9 +971,10 @@ export class ShopService {
     };
   }
 
-  async getAllOrdersAdmin() {
+  async getAllOrdersAdmin(user: AuthUserPayload) {
+    const tenantId = await this.requirePartnerTenantId(user);
     const orders = await this.prisma.shopOrder.findMany({
-      where: { paymentStatus: PaymentStatus.PAID, deletedAt: null },
+      where: this.buildPartnerOrderWhere(tenantId),
       include: {
         items: true,
         invoice: true,
@@ -925,9 +989,7 @@ export class ShopService {
   }
 
   async updateOrderStatus(orderId: string, dto: UpdateOrderStatusDto, user: AuthUserPayload) {
-    if (!user.roles.includes(UserRole.ADMIN)) {
-      throw new ForbiddenException('Admin only');
-    }
+    await this.assertPartnerOrderAccess(orderId, user);
 
     const data: Prisma.ShopOrderUpdateInput = {
       status: dto.status,
@@ -1050,15 +1112,25 @@ export class ShopService {
 
   // ─── Inventory ──────────────────────────────────────────────────────────────
 
-  async getLowStockProducts() {
+  async getLowStockProducts(user: AuthUserPayload) {
+    const tenantId = await this.requirePartnerTenantId(user);
     const products = await this.prisma.product.findMany({
-      where: { deletedAt: null, isActive: true },
+      where: {
+        deletedAt: null,
+        isActive: true,
+        ...(tenantId ? { tenantId } : {}),
+      },
       include: PRODUCT_INCLUDE,
     });
 
     const lowStock = products.filter((p) => p.stock <= p.lowStockThreshold);
     const lowVariants = await this.prisma.productVariant.findMany({
-      where: { deletedAt: null, isActive: true, stock: { lte: 5 } },
+      where: {
+        deletedAt: null,
+        isActive: true,
+        stock: { lte: 5 },
+        ...(tenantId ? { product: { tenantId } } : {}),
+      },
       include: { product: { select: { id: true, name: true, slug: true } } },
     });
 
@@ -1068,11 +1140,16 @@ export class ShopService {
     };
   }
 
-  async listInventoryMovements(params?: { productId?: string; page?: number; pageSize?: number }) {
+  async listInventoryMovements(
+    user: AuthUserPayload,
+    params?: { productId?: string; page?: number; pageSize?: number },
+  ) {
+    const tenantId = await this.requirePartnerTenantId(user);
     const page = params?.page ?? 1;
     const pageSize = params?.pageSize ?? 50;
     const where: Prisma.InventoryMovementWhereInput = {
       ...(params?.productId && { productId: params.productId }),
+      ...(tenantId ? { product: { tenantId } } : {}),
     };
 
     const [items, total] = await Promise.all([
@@ -1093,9 +1170,7 @@ export class ShopService {
   }
 
   async adjustInventory(dto: AdjustInventoryDto, user: AuthUserPayload) {
-    if (!user.roles.includes(UserRole.ADMIN)) {
-      throw new ForbiddenException('Admin only');
-    }
+    await this.assertPartnerProductAccess(dto.productId, user);
 
     if (dto.variantId) {
       const variant = await this.getVariantOrThrow(dto.variantId);
@@ -1157,6 +1232,65 @@ export class ShopService {
     });
     if (!category) throw new NotFoundException('Category not found');
     return category;
+  }
+
+  private async requirePartnerTenantId(user: AuthUserPayload): Promise<string | null> {
+    if (user.roles.includes(UserRole.ADMIN)) {
+      return this.tenantsService.resolveTenantIdFromContext() ?? null;
+    }
+
+    const tenant = await this.prisma.tenant.findFirst({
+      where: {
+        deletedAt: null,
+        OR: [
+          { ownerId: user.id },
+          { members: { some: { userId: user.id, isActive: true, deletedAt: null } } },
+        ],
+      },
+      orderBy: { createdAt: 'asc' },
+      select: { id: true },
+    });
+
+    if (!tenant) {
+      throw new NotFoundException('No tenant found for this account');
+    }
+
+    return tenant.id;
+  }
+
+  private buildPartnerOrderWhere(tenantId: string | null): Prisma.ShopOrderWhereInput {
+    return {
+      paymentStatus: PaymentStatus.PAID,
+      deletedAt: null,
+      ...(tenantId ? { items: { some: { product: { tenantId } } } } : {}),
+    };
+  }
+
+  private async assertPartnerProductAccess(productId: string, user: AuthUserPayload) {
+    const product = await this.findProductEntity(productId);
+    const tenantId = await this.requirePartnerTenantId(user);
+    if (tenantId && product.tenantId !== tenantId) {
+      throw new ForbiddenException('You do not have access to this product');
+    }
+    return product;
+  }
+
+  private async assertPartnerOrderAccess(orderId: string, user: AuthUserPayload) {
+    const order = await this.prisma.shopOrder.findFirst({
+      where: { id: orderId, deletedAt: null },
+      include: { items: { include: { product: { select: { tenantId: true } } } } },
+    });
+    if (!order) throw new NotFoundException('Order not found');
+
+    const tenantId = await this.requirePartnerTenantId(user);
+    if (tenantId) {
+      const hasTenantItem = order.items.some((item) => item.product.tenantId === tenantId);
+      if (!hasTenantItem) {
+        throw new ForbiddenException('You do not have access to this order');
+      }
+    }
+
+    return order;
   }
 
   private async resolveShopTenantId(requireExplicit = false): Promise<string> {

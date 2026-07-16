@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Financial Settings | FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus ~ label, input:not(:placeholder-shown) ~ label {
+            transform: translateY(-1.5rem) scale(0.85);
+            background-color: white;
+            padding-left: 4px;
+            padding-right: 4px;
+            color: #15157d;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7c5d4;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#dee8ff",
+                    "surface-bright": "#f9f9ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-primary-fixed": "#04006d",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#c0c1ff",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-tint": "#4f54b4",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "outline-variant": "#c7c5d4",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-surface": "#111c2d",
+                    "tertiary": "#3c2300",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-tertiary-container": "#ec9700",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#464652",
+                    "on-error": "#ffffff",
+                    "outline": "#777683",
+                    "primary-fixed": "#e1e0ff",
+                    "on-primary": "#ffffff",
+                    "secondary": "#006c49",
+                    "tertiary-container": "#5a3700",
+                    "primary": "#15157d",
+                    "inverse-surface": "#263143",
+                    "surface-dim": "#cfdaf2",
+                    "surface": "#f9f9ff",
+                    "on-primary-container": "#9da1ff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "surface-container": "#e7eeff",
+                    "on-secondary-fixed": "#002113",
+                    "surface-container-highest": "#d8e3fb",
+                    "surface-container-low": "#f0f3ff",
+                    "primary-container": "#2e3192",
+                    "background": "#f9f9ff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "error": "#ba1a1a",
+                    "surface-variant": "#d8e3fb",
+                    "on-background": "#111c2d",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#6cf8bb",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-secondary-container": "#00714d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "gutter-mobile": "12px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile w-full z-50 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline fixed top-0 h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-6 items-center">
+<span class="font-label-lg text-label-lg text-on-surface-variant dark:outline-variant cursor-pointer hover:text-primary transition-colors">Support</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant dark:outline-variant cursor-pointer hover:text-primary transition-colors">Docs</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold border border-outline-variant">
+                JD
+            </div>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-4xl mx-auto">
+<!-- Header Section -->
+<div class="mb-stack-lg">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-1">Financial Configuration</h2>
+<p class="font-body-md text-on-surface-variant">Manage your academy's tax rates, currency, and automated billing workflows.</p>
+</div>
+<div class="grid grid-cols-1 gap-gutter-mobile">
+<!-- Currency & Region Section -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-md">
+<div class="flex items-center gap-2 mb-stack-md text-primary">
+<span class="material-symbols-outlined">payments</span>
+<h3 class="font-title-md text-title-md">Currency &amp; Regional Standards</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div class="relative">
+<select class="w-full h-12 px-4 rounded border border-outline bg-transparent focus:border-primary focus:ring-0 peer appearance-none">
+<option value="USD">USD - US Dollar</option>
+<option value="EUR">EUR - Euro</option>
+<option value="GBP">GBP - British Pound</option>
+<option value="AUD">AUD - Australian Dollar</option>
+<option value="INR">INR - Indian Rupee</option>
+</select>
+<label class="absolute left-3 -top-2 px-1 bg-white text-xs font-medium text-outline peer-focus:text-primary transition-all">Base Currency</label>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="w-full h-12 px-4 rounded border border-outline bg-transparent focus:border-primary focus:ring-0 peer appearance-none">
+<option value="MM/DD/YYYY">MM/DD/YYYY</option>
+<option value="DD/MM/YYYY">DD/MM/YYYY</option>
+<option value="YYYY-MM-DD">YYYY-MM-DD</option>
+</select>
+<label class="absolute left-3 -top-2 px-1 bg-white text-xs font-medium text-outline peer-focus:text-primary transition-all">Date Format</label>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none">calendar_today</span>
+</div>
+</div>
+</section>
+<!-- Tax Configuration Section -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-md">
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined">account_balance</span>
+<h3 class="font-title-md text-title-md">Tax Configuration (GST/VAT)</h3>
+</div>
+<button class="flex items-center gap-1 text-primary font-label-lg hover:underline transition-all">
+<span class="material-symbols-outlined text-sm">add</span> Add Tax Rule
+                    </button>
+</div>
+<div class="space-y-stack-sm">
+<!-- Tax Row 1 -->
+<div class="flex items-center gap-stack-md p-3 border border-outline-variant rounded-lg bg-surface-container-low">
+<div class="flex-1">
+<p class="font-title-md text-sm font-semibold">Standard VAT</p>
+<p class="text-xs text-on-surface-variant">Applied to all memberships</p>
+</div>
+<div class="w-24 relative">
+<input class="w-full h-10 px-3 font-label-lg text-label-lg border border-outline rounded text-center focus:ring-0 focus:border-primary" type="text" value="20%"/>
+</div>
+<button class="p-2 text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Tax Row 2 -->
+<div class="flex items-center gap-stack-md p-3 border border-outline-variant rounded-lg bg-surface-container-low">
+<div class="flex-1">
+<p class="font-title-md text-sm font-semibold">Equipment GST</p>
+<p class="text-xs text-on-surface-variant">Applied to shop purchases</p>
+</div>
+<div class="w-24 relative">
+<input class="w-full h-10 px-3 font-label-lg text-label-lg border border-outline rounded text-center focus:ring-0 focus:border-primary" type="text" value="5%"/>
+</div>
+<button class="p-2 text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Payment & Billing Terms -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-md">
+<div class="flex items-center gap-2 mb-stack-md text-primary">
+<span class="material-symbols-outlined">receipt_long</span>
+<h3 class="font-title-md text-title-md">Payment &amp; Billing Terms</h3>
+</div>
+<div class="space-y-stack-md">
+<div class="relative">
+<select class="w-full h-12 px-4 rounded border border-outline bg-transparent focus:border-primary focus:ring-0 peer appearance-none">
+<option value="net0">Due on Receipt (Net 0)</option>
+<option value="net7">Net 7 Days</option>
+<option value="net15">Net 15 Days</option>
+<option selected="" value="net30">Net 30 Days</option>
+</select>
+<label class="absolute left-3 -top-2 px-1 bg-white text-xs font-medium text-outline peer-focus:text-primary transition-all">Default Payment Terms</label>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none">schedule</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Toggle 1 -->
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg transition-all hover:bg-surface-container">
+<div>
+<p class="font-title-md text-sm font-semibold">Auto-generate Invoices</p>
+<p class="text-xs text-on-surface-variant">Create and send invoices automatically on enrollment</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Toggle 2 -->
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg transition-all hover:bg-surface-container">
+<div>
+<p class="font-title-md text-sm font-semibold">Low Balance Alerts</p>
+<p class="text-xs text-on-surface-variant">Notify players when credit falls below $20.00</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Decorative Visual / Insights Card -->
+<div class="bg-primary overflow-hidden rounded-lg relative min-h-[160px] flex items-center p-stack-lg border border-outline">
+
+<div class="relative z-10 text-white max-w-sm">
+<p class="font-label-lg text-label-lg uppercase tracking-wider opacity-80 mb-2">Pro Tip</p>
+<p class="font-title-lg text-title-lg mb-2">Optimize Cash Flow</p>
+<p class="font-body-md opacity-90">Auto-generating invoices reduces late payments by 34% on average for sports academies.</p>
+</div>
+<div class="absolute right-[-20px] bottom-[-20px] opacity-10">
+<span class="material-symbols-outlined text-[160px]" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex justify-end items-center gap-stack-md py-stack-lg">
+<button class="px-6 py-2 rounded-full font-label-lg text-label-lg border border-outline text-on-surface-variant hover:bg-surface-container transition-colors">Discard Changes</button>
+<button class="px-8 py-2 rounded-full font-label-lg text-label-lg bg-primary text-white shadow-lg active:scale-95 transition-transform">Save Configuration</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg dark:shadow-none md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed-dim dark:text-on-primary-fixed-variant rounded-full px-4 py-1 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-lg text-label-lg font-bold">Settings</span>
+</a>
+</nav>
+<!-- Desktop Sidebar Simulation (Optional floating indicator) -->
+<div class="hidden md:block fixed left-6 top-1/2 -translate-y-1/2 space-y-6">
+<div class="p-3 bg-white border border-outline-variant rounded-full shadow-sm cursor-pointer hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</div>
+</div>
+<script>
+        // Simple Interaction logic for toggles
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const parent = this.closest('.bg-surface-container-low');
+                if(this.checked) {
+                    parent.classList.add('border-secondary/20');
+                } else {
+                    parent.classList.remove('border-secondary/20');
+                }
+            });
+        });
+
+        // Numerical input formatting for tax
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            if(input.value.includes('%')) {
+                input.addEventListener('focus', () => {
+                    input.value = input.value.replace('%', '');
+                });
+                input.addEventListener('blur', () => {
+                    if(!input.value.includes('%') && input.value !== '') {
+                        input.value = input.value + '%';
+                    }
+                });
+            }
+        });
+    </script>
+</body></html>

@@ -89,9 +89,11 @@ function AppNavigator() {
         <Stack.Screen name="print/[id]" />
         <Stack.Screen name="services/index" />
         <Stack.Screen name="services/[id]" />
+        <Stack.Screen name="shop/index" />
         <Stack.Screen name="shop/[slug]" />
         <Stack.Screen name="shop/cart" />
         <Stack.Screen name="shop/checkout" />
+        <Stack.Screen name="training/index" />
         <Stack.Screen name="training/[programId]" />
         <Stack.Screen name="training/enroll/[batchId]" />
         <Stack.Screen name="wallet" />

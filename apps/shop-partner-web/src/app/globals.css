@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fff5f1;
+  --foreground: #1d1b1a;
+  --primary: #9d4300;
+  --primary-container: #f97316;
+  --primary-foreground: #ffffff;
+  --secondary: #006c4a;
+  --muted: #584237;
+  --border: #e0c0b1;
+  --card: #ffffff;
+  --surface: #fff8f6;
+  --surface-low: #fff1eb;
+  --surface-high: #fce3d9;
+  --sidebar: #ffeae0;
+  --success: #006c4a;
+  --warning: #b54708;
+  --error: #ba1a1a;
+  --info: #006398;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-surface: var(--surface);
+  --color-surface-low: var(--surface-low);
+  --color-surface-high: var(--surface-high);
+  --color-sidebar: var(--sidebar);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-lexend);
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-lexend), var(--font-manrope), system-ui, sans-serif;
+}

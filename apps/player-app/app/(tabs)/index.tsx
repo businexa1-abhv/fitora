@@ -69,6 +69,7 @@ export default function HomeScreen() {
         </View>
         <Text style={[styles.appName, { color: colors.primary }]}>{APP_NAME}</Text>
         <Pressable
+          onPress={() => router.push('/notifications')}
           style={[styles.iconBtn, { backgroundColor: colors.card, borderColor: colors.border }]}
         >
           <Ionicons name="notifications-outline" size={22} color={colors.foreground} />
@@ -91,6 +92,35 @@ export default function HomeScreen() {
             style={[styles.searchInput, { color: colors.foreground }]}
             value={search}
           />
+        </View>
+
+        <View style={styles.shortcutGrid}>
+          {(
+            [
+              { label: 'Memberships', icon: 'ribbon' as const, href: '/membership' },
+              { label: 'Wallet', icon: 'wallet' as const, href: '/wallet' },
+              { label: 'Training', icon: 'fitness' as const, href: '/training' },
+              { label: 'Shop', icon: 'bag-handle' as const, href: '/shop' },
+              { label: 'Services', icon: 'construct' as const, href: '/services' },
+              { label: 'Alerts', icon: 'notifications' as const, href: '/notifications' },
+            ] as const
+          ).map((item) => (
+            <Pressable
+              key={item.href}
+              onPress={() => router.push(item.href)}
+              style={[
+                styles.shortcutItem,
+                { backgroundColor: colors.card, borderColor: colors.border },
+              ]}
+            >
+              <View style={[styles.shortcutIcon, { backgroundColor: colors.primaryLight }]}>
+                <Ionicons name={item.icon} size={18} color={colors.primary} />
+              </View>
+              <Text style={[styles.shortcutLabel, { color: colors.foreground }]} numberOfLines={1}>
+                {item.label}
+              </Text>
+            </Pressable>
+          ))}
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.sportsScroll}>
@@ -123,7 +153,7 @@ export default function HomeScreen() {
         </ScrollView>
 
         <Pressable
-          onPress={() => router.push('/search')}
+          onPress={() => router.push('/membership')}
           style={({ pressed }) => [styles.offerCard, pressed && styles.pressed]}
         >
           <View style={styles.offerScrim} />
@@ -301,6 +331,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   searchInput: { flex: 1, fontSize: FontSize.md, fontWeight: '600' },
+  shortcutGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    marginBottom: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  shortcutItem: {
+    alignItems: 'center',
+    borderRadius: Radius.xl,
+    borderWidth: 1,
+    gap: 6,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.md,
+    width: '31.5%',
+  },
+  shortcutIcon: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  shortcutLabel: { fontSize: 11, fontWeight: '800' },
   sportsScroll: {
     marginBottom: Spacing.xl,
     marginHorizontal: -Spacing.xl,

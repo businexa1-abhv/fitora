@@ -182,7 +182,10 @@ export class CreatePricingRuleDto {
   @MaxLength(200)
   name: string;
 
-  @ApiPropertyOptional({ example: 1.5, description: 'Price multiplier (ignored if fixedPrice set)' })
+  @ApiPropertyOptional({
+    example: 1.5,
+    description: 'Price multiplier (ignored if fixedPrice set)',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
@@ -317,6 +320,21 @@ export class SlotResponseDto {
 
   @ApiProperty()
   isBooked: boolean;
+
+  @ApiPropertyOptional()
+  capacity?: number;
+
+  @ApiPropertyOptional()
+  availableSeats?: number;
+
+  @ApiPropertyOptional()
+  reservedSeats?: number;
+
+  @ApiPropertyOptional()
+  confirmedSeats?: number;
+
+  @ApiPropertyOptional()
+  availabilityStatus?: string;
 }
 
 export class CalendarDayDto {

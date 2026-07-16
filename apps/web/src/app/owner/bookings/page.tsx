@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -8,9 +8,11 @@ import { OwnerStatusBadge } from '@/components/owner/owner-status-badge';
 import { QueryBoundary } from '@/components/query/query-boundary';
 import { DataPagination } from '@/components/query/data-pagination';
 import { SortableTh, toggleSort } from '@/components/query/sortable-table-head';
+import { getMyCourts } from '@/lib/courts';
 import { getOwnerBookings } from '@/lib/owner-bookings';
 import { useAuthToken } from '@/hooks/use-auth-token';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { useRealtimeInvalidation } from '@/hooks/use-realtime-invalidation';
 import { formatCurrency, formatTime } from '@/lib/owner-utils';
 
 const PAGE_SIZE = 20;
@@ -25,6 +27,22 @@ export default function OwnerBookingsPage() {
   const debouncedSearch = useDebouncedValue(search);
 
   const status = filter === 'ALL' ? undefined : filter;
+
+  const courtsQuery = useQuery({
+    queryKey: ['owner', 'courts', 'mine'],
+    queryFn: () => getMyCourts(token!),
+    enabled: !!token,
+  });
+
+  const courtIds = useMemo(() => courtsQuery.data?.map((c) => c.id) ?? [], [courtsQuery.data]);
+  const queryKeys = useMemo(
+    () => [
+      ['owner', 'bookings'],
+      ['owner', 'dashboard'],
+    ],
+    [],
+  );
+  useRealtimeInvalidation(courtIds, token, queryKeys);
 
   const query = useQuery({
     queryKey: ['owner', 'bookings', page, debouncedSearch, status, sortBy, sortOrder],

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy - Billing History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#dee8ff",
+                    "surface-bright": "#f9f9ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-primary-fixed": "#04006d",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#c0c1ff",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-tint": "#4f54b4",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "outline-variant": "#c7c5d4",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-surface": "#111c2d",
+                    "tertiary": "#3c2300",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-tertiary-container": "#ec9700",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#464652",
+                    "on-error": "#ffffff",
+                    "outline": "#777683",
+                    "primary-fixed": "#e1e0ff",
+                    "on-primary": "#ffffff",
+                    "secondary": "#006c49",
+                    "tertiary-container": "#5a3700",
+                    "primary": "#15157d",
+                    "inverse-surface": "#263143",
+                    "surface-dim": "#cfdaf2",
+                    "surface": "#f9f9ff",
+                    "on-primary-container": "#9da1ff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "surface-container": "#e7eeff",
+                    "on-secondary-fixed": "#002113",
+                    "surface-container-highest": "#d8e3fb",
+                    "surface-container-low": "#f0f3ff",
+                    "primary-container": "#2e3192",
+                    "background": "#f9f9ff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "error": "#ba1a1a",
+                    "surface-variant": "#d8e3fb",
+                    "on-background": "#111c2d",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#6cf8bb",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-secondary-container": "#00714d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "gutter-mobile": "12px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            background-color: #f9f9ff;
+            color: #111c2d;
+            -webkit-font-smoothing: antialiased;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7c5d4;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md pb-24 md:pb-0 md:pt-16">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile w-full z-50 fixed top-0 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-size: 24px;">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a sports academy owner, middle-aged with a friendly expression, wearing a navy polo shirt. The background is a clean, softly blurred indoor athletic facility with high-key lighting, maintaining a professional corporate modernism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaJszIydRLP04pm_tzMIVw2zBj8Okc-boLyoILWsMEXeG8-MKfbIE9Q_LE9LCVSMBsDxq5wc3kiNUAAXfWPXqpH6BTqUBV345cPSSn54czGonBnHuRUT7Fi8AaCLSxce3q_tXKzHd2hlaOE7lshAB_q_Wz_I8_Sc4MbFRiSfqLHjjQ2EepWnADvLGFlRzK778JMIs-zAvrNegYI2-ZzkYt-230ym-o17p-g17yrqV5dJYho1kgz0U0"/>
+</div>
+</div>
+</header>
+<main class="max-w-5xl mx-auto px-margin-mobile py-stack-lg mt-16 md:mt-0">
+<!-- Summary Dashboard (Bento Layout) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-mobile mb-stack-lg">
+<!-- Total Revenue Card -->
+<div class="md:col-span-2 p-6 bg-primary-container text-white rounded-xl shadow-sm relative overflow-hidden flex flex-col justify-between h-48">
+<div class="z-10">
+<p class="font-label-lg text-label-lg text-on-primary-container opacity-80 mb-1">TOTAL REVENUE (MTD)</p>
+<h2 class="font-headline-lg text-headline-lg">$42,850.00</h2>
+<div class="flex items-center gap-1 text-secondary-container mt-2">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="font-label-lg text-label-lg">+12.5% from last month</span>
+</div>
+</div>
+<div class="z-10 flex gap-4">
+<button class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg font-label-lg text-label-lg transition-colors border border-white/20">View Report</button>
+</div>
+<!-- Abstract background shape -->
+<div class="absolute -right-8 -bottom-8 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute right-12 top-4 w-24 h-24 border-4 border-white/5 rounded-full"></div>
+</div>
+<!-- Pending Payments Card -->
+<div class="p-6 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm flex flex-col justify-between h-48">
+<div>
+<div class="flex justify-between items-start">
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-1">PENDING PAYMENTS</p>
+<span class="material-symbols-outlined text-tertiary">hourglass_empty</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary">$3,420.00</h2>
+<p class="text-on-surface-variant text-xs mt-1">14 outstanding invoices</p>
+</div>
+<button class="w-full py-2 bg-surface-container-high text-primary font-title-md text-title-md rounded-lg hover:bg-surface-variant transition-colors active:scale-95 duration-100">
+                    Send Reminders
+                </button>
+</div>
+</div>
+<!-- Filter & Search Bar -->
+<div class="flex flex-col md:flex-row gap-4 mb-stack-md items-center justify-between">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md" placeholder="Search by player or transaction ID..." type="text"/>
+</div>
+<div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 custom-scrollbar">
+<div class="flex items-center gap-2 px-3 py-2 bg-secondary-container/20 text-on-secondary-container rounded-full border border-secondary-container cursor-pointer whitespace-nowrap">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span class="font-label-lg text-label-lg">All Status</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full border border-outline-variant hover:border-primary cursor-pointer whitespace-nowrap transition-colors">
+<span class="font-label-lg text-label-lg">Paid</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full border border-outline-variant hover:border-primary cursor-pointer whitespace-nowrap transition-colors">
+<span class="font-label-lg text-label-lg">Pending</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full border border-outline-variant hover:border-primary cursor-pointer whitespace-nowrap transition-colors">
+<span class="font-label-lg text-label-lg">Overdue</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full border border-outline-variant hover:border-primary cursor-pointer whitespace-nowrap transition-colors">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="font-label-lg text-label-lg">Last 30 Days</span>
+</div>
+</div>
+</div>
+<!-- Transactions List -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<div class="hidden md:grid grid-cols-6 px-6 py-3 bg-surface-container text-on-surface-variant border-b border-outline-variant font-label-lg text-label-lg">
+<div class="col-span-2">PLAYER / DESCRIPTION</div>
+<div>DATE</div>
+<div>ID</div>
+<div>AMOUNT</div>
+<div class="text-right">STATUS</div>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Transaction Item 1 -->
+<div class="grid grid-cols-1 md:grid-cols-6 px-6 py-4 hover:bg-surface-container-low transition-colors cursor-pointer group items-center" onclick="console.log('Open details')">
+<div class="col-span-2 flex items-center gap-3 mb-2 md:mb-0">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold">
+                            JD
+                        </div>
+<div>
+<p class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Julian Donato</p>
+<p class="text-xs text-on-surface-variant">Tennis Advanced Coaching (Monthly)</p>
+</div>
+</div>
+<div class="text-on-surface-variant text-sm mb-2 md:mb-0">
+<span class="md:hidden font-bold">Date: </span>Oct 24, 2023
+                    </div>
+<div class="font-label-lg text-label-lg text-on-surface-variant mb-2 md:mb-0">
+<span class="md:hidden font-bold">ID: </span>#FT-92831
+                    </div>
+<div class="font-headline-sm text-headline-sm text-on-surface mb-2 md:mb-0">
+<span class="md:hidden font-bold text-sm block">Amount</span>$450.00
+                    </div>
+<div class="text-right flex md:block justify-end">
+<span class="px-3 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container text-xs font-bold border border-secondary-container/30">Paid</span>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="grid grid-cols-1 md:grid-cols-6 px-6 py-4 hover:bg-surface-container-low transition-colors cursor-pointer group items-center">
+<div class="col-span-2 flex items-center gap-3 mb-2 md:mb-0">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary font-bold">
+                            MA
+                        </div>
+<div>
+<p class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Marcus Aurelius</p>
+<p class="text-xs text-on-surface-variant">Swimming Pool Membership</p>
+</div>
+</div>
+<div class="text-on-surface-variant text-sm mb-2 md:mb-0">
+<span class="md:hidden font-bold">Date: </span>Oct 23, 2023
+                    </div>
+<div class="font-label-lg text-label-lg text-on-surface-variant mb-2 md:mb-0">
+<span class="md:hidden font-bold">ID: </span>#FT-92845
+                    </div>
+<div class="font-headline-sm text-headline-sm text-on-surface mb-2 md:mb-0">
+<span class="md:hidden font-bold text-sm block">Amount</span>$120.00
+                    </div>
+<div class="text-right flex md:block justify-end">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-bold border border-outline-variant">Pending</span>
+</div>
+</div>
+<!-- Transaction Item 3 -->
+<div class="grid grid-cols-1 md:grid-cols-6 px-6 py-4 hover:bg-surface-container-low transition-colors cursor-pointer group items-center">
+<div class="col-span-2 flex items-center gap-3 mb-2 md:mb-0">
+<div class="w-10 h-10 rounded-full bg-error-container/50 flex items-center justify-center text-error font-bold">
+                            ES
+                        </div>
+<div>
+<p class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Elena Smith</p>
+<p class="text-xs text-on-surface-variant">Karate Kids Program</p>
+</div>
+</div>
+<div class="text-on-surface-variant text-sm mb-2 md:mb-0">
+<span class="md:hidden font-bold">Date: </span>Oct 20, 2023
+                    </div>
+<div class="font-label-lg text-label-lg text-on-surface-variant mb-2 md:mb-0">
+<span class="md:hidden font-bold">ID: </span>#FT-92712
+                    </div>
+<div class="font-headline-sm text-headline-sm text-on-surface mb-2 md:mb-0">
+<span class="md:hidden font-bold text-sm block">Amount</span>$280.00
+                    </div>
+<div class="text-right flex md:block justify-end">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-xs font-bold border border-error/20">Overdue</span>
+</div>
+</div>
+<!-- Transaction Item 4 -->
+<div class="grid grid-cols-1 md:grid-cols-6 px-6 py-4 hover:bg-surface-container-low transition-colors cursor-pointer group items-center">
+<div class="col-span-2 flex items-center gap-3 mb-2 md:mb-0">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold">
+                            KL
+                        </div>
+<div>
+<p class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Kevin Levrone</p>
+<p class="text-xs text-on-surface-variant">Personal Training Session x 10</p>
+</div>
+</div>
+<div class="text-on-surface-variant text-sm mb-2 md:mb-0">
+<span class="md:hidden font-bold">Date: </span>Oct 18, 2023
+                    </div>
+<div class="font-label-lg text-label-lg text-on-surface-variant mb-2 md:mb-0">
+<span class="md:hidden font-bold">ID: </span>#FT-92601
+                    </div>
+<div class="font-headline-sm text-headline-sm text-on-surface mb-2 md:mb-0">
+<span class="md:hidden font-bold text-sm block">Amount</span>$750.00
+                    </div>
+<div class="text-right flex md:block justify-end">
+<span class="px-3 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container text-xs font-bold border border-secondary-container/30">Paid</span>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center border-t border-outline-variant">
+<p class="text-on-surface-variant text-xs">Showing 1-4 of 128 transactions</p>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-white transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-14 h-14 bg-primary text-white rounded-xl shadow-lg hover:shadow-xl flex items-center justify-center transition-all active:scale-95 group z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+<span class="absolute right-full mr-4 bg-inverse-surface text-white px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">Create Invoice</span>
+</button>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<!-- Desktop Navigation Side Anchors -->
+<aside class="hidden md:flex fixed left-0 top-16 bottom-0 w-20 flex-col items-center py-8 gap-8 border-r border-outline-variant bg-surface-container-lowest z-40">
+<div class="p-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer rounded-xl hover:bg-surface-container-high">
+<span class="material-symbols-outlined" style="font-size: 28px;">dashboard</span>
+</div>
+<div class="p-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer rounded-xl hover:bg-surface-container-high">
+<span class="material-symbols-outlined" style="font-size: 28px;">sports_tennis</span>
+</div>
+<div class="p-3 bg-primary-container text-on-primary-container rounded-xl shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 28px; font-variation-settings: 'FILL' 1;">event_available</span>
+</div>
+<div class="p-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer rounded-xl hover:bg-surface-container-high">
+<span class="material-symbols-outlined" style="font-size: 28px;">group</span>
+</div>
+<div class="mt-auto p-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer rounded-xl hover:bg-surface-container-high">
+<span class="material-symbols-outlined" style="font-size: 28px;">settings</span>
+</div>
+</aside>
+<script>
+        // Simple search interactivity
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.divide-y > div');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    item.style.display = 'grid';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter chip selection effect
+        const chips = document.querySelectorAll('.flex.gap-2.w-full div');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => {
+                    c.classList.remove('bg-secondary-container/20', 'text-on-secondary-container', 'border-secondary-container');
+                    c.classList.add('bg-surface-container-lowest', 'text-on-surface-variant', 'border-outline-variant');
+                });
+                chip.classList.add('bg-secondary-container/20', 'text-on-secondary-container', 'border-secondary-container');
+                chip.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant', 'border-outline-variant');
+            });
+        });
+    </script>
+</body></html>

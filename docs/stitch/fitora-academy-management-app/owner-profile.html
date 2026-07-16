@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile | FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #E2E8F0;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#e1e0ff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "on-background": "#111c2d",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-secondary-fixed": "#002113",
+                    "tertiary": "#3c2300",
+                    "on-primary-container": "#9da1ff",
+                    "surface-container-high": "#dee8ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-fixed": "#ffddb8",
+                    "primary": "#15157d",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-surface": "#111c2d",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container": "#e7eeff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "background": "#f9f9ff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "surface-variant": "#d8e3fb",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-tint": "#4f54b4",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary-container": "#ec9700",
+                    "surface": "#f9f9ff",
+                    "surface-container-low": "#f0f3ff",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#263143",
+                    "on-primary-fixed": "#04006d",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#5a3700",
+                    "surface-dim": "#cfdaf2",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "secondary-container": "#6cf8bb",
+                    "on-surface-variant": "#464652",
+                    "secondary": "#006c49",
+                    "outline-variant": "#c7c5d4",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#2e3192",
+                    "outline": "#777683"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "stack-lg": "24px",
+                    "gutter-mobile": "12px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-size: 24px;">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a high-level sports academy owner, middle-aged with a confident and welcoming expression. The lighting is crisp and modern, reflecting a premium athletic management environment. The background is a soft-focus athletic facility with indigo and emerald accents, maintaining the Corporate Modernism aesthetic of the FitOra brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMwj0CdEpNZnjWiucBiAGUXj1TbS7jKxQEX_o-0mDsNM0qwguw7kngp-t1m5KAbyL-fYW0S5TMSXdaXHvWxCcwxAHjXsmRuhqwbYPBLMA9TX-BeNJIyTQ6gq3zfosQJ9VqIJa599SWaEA2YrtHLOMBHp2zSx-LbM8T6gt4CVPl1muJVR2Dtu1Cic3pv6Pf62w663Smnrw8MX9pEgsqgaw4VDvhorbxQ-tidWhKDSzlhAGqU45MRZB4"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-5xl mx-auto space-y-stack-lg">
+<!-- Profile Hero Section -->
+<section class="relative">
+<div class="h-32 w-full rounded-xl bg-gradient-to-r from-primary to-primary-container opacity-90 overflow-hidden">
+
+</div>
+<div class="px-gutter-mobile -mt-12 flex flex-col items-center sm:items-start sm:flex-row sm:gap-6">
+<div class="relative group">
+<div class="w-24 h-24 rounded-full border-4 border-surface overflow-hidden shadow-lg">
+<img class="w-full h-full object-cover" data-alt="Close up avatar of the academy owner, professional look, sharp focus, with a slight smile. The lighting is high-key and clean, matching the minimalist light-mode interface. The color palette is dominated by whites and deep indigos." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfHRTfYg0r1RWtZQctOEEGhMrCSC59U6e07fSldawCirJCwxlnP_WXEL53KZ1EVSyfgkO3px1iNZWtpYVN_sHKx8DbXi2iB-rN8mPzU00CLc_k0rCbh-eob-vU_OugTk2nlPfvEw-fnhstW9GZjYHiOYlSIglVAQ4tgI-1eDs-aqcyTfho4Y2aWtBa3OArShhIdbzpXuQsrslf9tw1rBuJWx5hHB-YHTI81qdfcga8WfJSUuRbgvC3"/>
+</div>
+<button class="absolute bottom-0 right-0 p-2 bg-primary text-on-primary rounded-full shadow-md hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<div class="mt-4 sm:mt-14 text-center sm:text-left flex-grow">
+<h2 class="font-headline-sm text-headline-sm text-primary">Marcus Sterling</h2>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center justify-center sm:justify-start gap-1">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+                        Academy Owner &amp; Director
+                    </p>
+</div>
+<div class="mt-6 sm:mt-14 flex gap-2">
+<button class="px-6 py-2 bg-secondary-container text-on-secondary-container font-title-md text-title-md rounded-full flex items-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined">share</span>
+                        Share Profile
+                    </button>
+</div>
+</div>
+</section>
+<!-- Account Statistics (Bento Style) -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-gutter-mobile">
+<div class="glass-card p-stack-md rounded-xl flex flex-col justify-between h-32 hover:border-primary transition-colors cursor-default">
+<span class="material-symbols-outlined text-primary">domain</span>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Total Academies</p>
+<p class="font-headline-sm text-headline-sm text-primary">08</p>
+</div>
+</div>
+<div class="glass-card p-stack-md rounded-xl flex flex-col justify-between h-32 hover:border-primary transition-colors cursor-default">
+<span class="material-symbols-outlined text-secondary">history</span>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Years with FitOra</p>
+<p class="font-headline-sm text-headline-sm text-primary">4.5</p>
+</div>
+</div>
+<div class="glass-card p-stack-md rounded-xl flex flex-col justify-between h-32 hover:border-primary transition-colors cursor-default">
+<span class="material-symbols-outlined text-primary">groups</span>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Total Members</p>
+<p class="font-headline-sm text-headline-sm text-primary">1,240</p>
+</div>
+</div>
+<div class="glass-card p-stack-md rounded-xl flex flex-col justify-between h-32 hover:border-primary transition-colors cursor-default">
+<span class="material-symbols-outlined text-tertiary-container">star</span>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Elite Status</p>
+<p class="font-headline-sm text-headline-sm text-primary">Gold</p>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<!-- Personal Details -->
+<section class="md:col-span-2 space-y-stack-md">
+<div class="flex justify-between items-center px-2">
+<h3 class="font-title-lg text-title-lg text-primary">Personal Details</h3>
+<button class="text-primary font-label-lg text-label-lg flex items-center gap-1 hover:underline">
+                        Edit Information
+                    </button>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg space-y-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Full Name</label>
+<p class="font-body-lg text-body-lg text-on-surface border-b border-surface-container-highest pb-2">Marcus Sterling</p>
+</div>
+<div class="space-y-1">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Role</label>
+<p class="font-body-lg text-body-lg text-on-surface border-b border-surface-container-highest pb-2">Academy Owner</p>
+</div>
+<div class="space-y-1">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Email Address</label>
+<p class="font-body-lg text-body-lg text-on-surface border-b border-surface-container-highest pb-2">m.sterling@fitora.academy</p>
+</div>
+<div class="space-y-1">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Phone Number</label>
+<p class="font-body-lg text-body-lg text-on-surface border-b border-surface-container-highest pb-2">+1 (555) 012-3456</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="space-y-stack-md">
+<h3 class="font-title-lg text-title-lg text-primary px-2">Security &amp; Privacy</h3>
+<div class="space-y-gutter-mobile">
+<button class="w-full flex items-center justify-between p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl hover:bg-surface-container transition-colors active:scale-95">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">lock</span>
+<span class="font-title-md text-title-md">Change Password</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl hover:bg-surface-container transition-colors active:scale-95">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">shield_person</span>
+<div class="text-left">
+<span class="font-title-md text-title-md block">Two-Factor Auth</span>
+<span class="font-label-lg text-label-lg text-secondary">Enabled</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl hover:bg-surface-container transition-colors active:scale-95">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">visibility</span>
+<span class="font-title-md text-title-md">Privacy Settings</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-stack-md bg-error-container text-on-error-container rounded-xl hover:opacity-90 transition-colors active:scale-95">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-title-md text-title-md">Log Out</span>
+</div>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg dark:shadow-none md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-transform">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-transform">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-transform">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-transform">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed-dim dark:text-on-primary-fixed-variant rounded-full px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</button>
+</nav>
+<!-- Floating Action Button - Only for contextually relevant screens, here suppressed for focused profile view as per instructions, but kept as a small edit trigger for demo if needed -->
+<!-- Suppressed per instructions: "You MUST suppress the FAB on Settings, Profile, Details..." -->
+<script>
+        // Micro-interaction for cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.boxShadow = '0 12px 24px -10px rgba(21, 21, 125, 0.1)';
+                card.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body></html>

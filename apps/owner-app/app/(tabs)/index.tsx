@@ -6,14 +6,18 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { formatCurrency } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
+import { CoachDashboardScreen } from '@/components/coach-dashboard';
 import { Card, QueryState } from '@/components/ui';
 import {
   getMyCourts,
   getOwnerBookings,
   getOwnerDashboard,
+  getTenantMe,
   getUnreadNotificationCount,
+  listTenantTrainers,
 } from '@/lib/owner-api';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
+import { useOwnerCalendarLive } from '@/hooks/use-owner-calendar-live';
 
 function formatSlotTime(iso?: string) {
   if (!iso) return '--:--';
@@ -29,7 +33,14 @@ function formatCompactMoney(amount: number) {
   return formatCurrency(amount);
 }
 
-export default function AcademyDashboardScreen() {
+export default function DashboardScreen() {
+  const { isOwner, isTrainer } = useAuth();
+  const isCoachOnly = isTrainer && !isOwner;
+  if (isCoachOnly) return <CoachDashboardScreen />;
+  return <AcademyDashboardScreen />;
+}
+
+function AcademyDashboardScreen() {
   const { colors } = useTheme();
   const { token, user } = useAuth();
   const insets = useSafeAreaInsets();
@@ -63,9 +74,36 @@ export default function AcademyDashboardScreen() {
   const revenue = stats?.revenueMtd ?? 0;
   const members = stats?.activeMembers ?? 0;
   const activeCourts = stats?.activeCourts ?? 0;
-  const totalCourts = courtsQuery.data?.items.length ?? stats?.activeCourts ?? 0;
+  const pendingCourts = stats?.pendingCourts ?? 0;
+  const bookingsToday = stats?.bookingsToday ?? 0;
+  const bookingsMtd = stats?.bookingsMtd ?? 0;
+  const totalCourts = courtsQuery.data?.items?.length ?? stats?.activeCourts ?? 0;
   const occupancy =
     totalCourts > 0 ? Math.min(98, Math.round((activeCourts / Math.max(totalCourts, 1)) * 100)) : 0;
+
+  const tenantQuery = useQuery({
+    queryKey: ['owner', 'tenant'],
+    queryFn: () => getTenantMe(token!),
+    enabled: !!token,
+  });
+
+  const trainersQuery = useQuery({
+    queryKey: ['owner', 'trainers', tenantQuery.data?.id],
+    queryFn: () => listTenantTrainers(token!, tenantQuery.data!.id),
+    enabled: !!token && !!tenantQuery.data?.id,
+  });
+
+  const coachCount = trainersQuery.data?.length ?? 0;
+  const revenueBreakdown = dashboardQuery.data?.revenueBreakdown ?? [];
+  const trend = dashboardQuery.data?.monthlyTrend ?? [];
+  const growthPct =
+    trend.length >= 2
+      ? Math.round(
+          ((trend[trend.length - 1]!.amount - trend[trend.length - 2]!.amount) /
+            Math.max(1, trend[trend.length - 2]!.amount)) *
+            100,
+        )
+      : 12;
 
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
@@ -98,6 +136,8 @@ export default function AcademyDashboardScreen() {
         }));
 
   const facilities = (courtsQuery.data?.items ?? []).slice(0, 4);
+  const liveCourtId = courtsQuery.data?.items?.[0]?.id;
+  useOwnerCalendarLive(liveCourtId, token);
 
   return (
     <View style={[styles.root, { backgroundColor: colors.background }]}>
@@ -129,9 +169,10 @@ export default function AcademyDashboardScreen() {
           </View>
         </View>
 
-        <Text style={[styles.overview, { color: colors.foreground }]}>Academy Overview</Text>
+        <Text style={[styles.overview, { color: colors.foreground }]}>Executive Overview</Text>
         <Text style={[styles.welcome, { color: colors.muted }]}>
-          Welcome back, {user?.firstName || 'Director'}. Here&apos;s your performance snapshot.
+          Welcome back, {user?.firstName || 'Director'}. Academy performance and venue ops in one
+          snapshot.
         </Text>
 
         <QueryState
@@ -146,7 +187,8 @@ export default function AcademyDashboardScreen() {
               <View style={styles.trendPill}>
                 <Ionicons name="trending-up" size={12} color={colors.secondary} />
                 <Text style={{ color: colors.secondary, fontSize: 11, fontWeight: '800' }}>
-                  +12%
+                  {growthPct >= 0 ? '+' : ''}
+                  {growthPct}%
                 </Text>
               </View>
             </View>
@@ -159,12 +201,70 @@ export default function AcademyDashboardScreen() {
                   styles.progressFill,
                   {
                     backgroundColor: colors.primary,
-                    width: `${Math.min(100, revenue ? 72 : 12)}%`,
+                    width: `${Math.min(100, Math.max(12, Math.abs(growthPct) + 40))}%`,
                   },
                 ]}
               />
             </View>
           </Card>
+
+          <View style={styles.execRow}>
+            <Card style={[styles.execCard, { flex: 1 }]}>
+              <Text style={[styles.metricLabel, { color: colors.muted }]}>BOOKINGS TODAY</Text>
+              <Text style={[styles.execValue, { color: colors.foreground }]}>{bookingsToday}</Text>
+              <Text style={{ color: colors.muted, fontSize: 11 }}>{bookingsMtd} MTD</Text>
+            </Card>
+            <Card style={[styles.execCard, { flex: 1 }]}>
+              <Text style={[styles.metricLabel, { color: colors.muted }]}>MEMBERSHIP</Text>
+              <Text style={[styles.execValue, { color: colors.foreground }]}>{members}</Text>
+              <Text style={{ color: colors.muted, fontSize: 11 }}>Active members</Text>
+            </Card>
+          </View>
+
+          <View style={styles.execRow}>
+            <Card style={[styles.execCard, { flex: 1 }]}>
+              <Text style={[styles.metricLabel, { color: colors.muted }]}>COACH STATUS</Text>
+              <Text style={[styles.execValue, { color: colors.foreground }]}>{coachCount}</Text>
+              <Pressable onPress={() => router.push('/manage/coaches')}>
+                <Text style={{ color: colors.primary, fontSize: 11, fontWeight: '700' }}>
+                  View coaches
+                </Text>
+              </Pressable>
+            </Card>
+            <Card style={[styles.execCard, { flex: 1 }]}>
+              <Text style={[styles.metricLabel, { color: colors.muted }]}>PENDING APPROVALS</Text>
+              <Text style={[styles.execValue, { color: colors.foreground }]}>{pendingCourts}</Text>
+              <Text style={{ color: colors.muted, fontSize: 11 }}>Courts awaiting review</Text>
+            </Card>
+          </View>
+
+          {revenueBreakdown.length > 0 ? (
+            <Card style={styles.metricCard}>
+              <Text style={[styles.metricLabel, { color: colors.muted }]}>REVENUE MIX</Text>
+              <View style={{ marginTop: Spacing.sm, gap: 6 }}>
+                {revenueBreakdown.slice(0, 3).map((row) => (
+                  <View key={row.source} style={styles.mixRow}>
+                    <Text style={{ color: colors.foreground, flex: 1, fontSize: FontSize.sm }}>
+                      {row.source}
+                    </Text>
+                    <Text style={{ color: colors.muted, fontSize: FontSize.sm }}>
+                      {Math.round(row.share)}%
+                    </Text>
+                    <Text
+                      style={{
+                        color: colors.foreground,
+                        fontWeight: '800',
+                        minWidth: 64,
+                        textAlign: 'right',
+                      }}
+                    >
+                      {formatCompactMoney(row.amount)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </Card>
+          ) : null}
 
           <Card style={styles.metricCard}>
             <View style={styles.metricHeader}>
@@ -199,20 +299,25 @@ export default function AcademyDashboardScreen() {
               {members.toLocaleString('en-IN')}
             </Text>
             <Text style={{ color: colors.muted, fontSize: FontSize.sm, marginTop: 4 }}>
-              {stats?.bookingsMtd ?? 0} bookings this period
+              {bookingsMtd} bookings this period · Growth {growthPct >= 0 ? '+' : ''}
+              {growthPct}%
             </Text>
           </Card>
 
           <View style={styles.actions}>
-            <Pressable style={[styles.primaryAction, { backgroundColor: colors.primary }]}>
+            <Pressable
+              style={[styles.primaryAction, { backgroundColor: colors.primary }]}
+              onPress={() => router.push('/ops/walk-in')}
+            >
               <Ionicons name="add-circle" size={18} color="#fff" />
               <View>
                 <Text style={styles.primaryActionTitle}>Add Booking</Text>
-                <Text style={styles.primaryActionSub}>Reserve court time</Text>
+                <Text style={styles.primaryActionSub}>Walk-in / reserve</Text>
               </View>
             </Pressable>
             <Pressable
               style={[styles.secondaryAction, { backgroundColor: colors.secondaryContainer }]}
+              onPress={() => router.push('/ops/check-in')}
             >
               <Ionicons name="person-add-outline" size={18} color={colors.secondary} />
               <Text style={[styles.secondaryActionTitle, { color: colors.secondary }]}>
@@ -232,9 +337,11 @@ export default function AcademyDashboardScreen() {
             <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
               Today&apos;s Bookings
             </Text>
-            <Text style={{ color: colors.primary, fontWeight: '700', fontSize: FontSize.sm }}>
-              View All
-            </Text>
+            <Pressable onPress={() => router.push('/ops/calendar')}>
+              <Text style={{ color: colors.primary, fontWeight: '700', fontSize: FontSize.sm }}>
+                View All
+              </Text>
+            </Pressable>
           </View>
 
           <View style={{ gap: Spacing.sm }}>
@@ -383,6 +490,10 @@ const styles = StyleSheet.create({
   },
   metricLabel: { fontSize: 11, fontWeight: '800', letterSpacing: 0.6 },
   metricValue: { fontSize: 36, fontWeight: '800' },
+  execRow: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.md },
+  execCard: { gap: 4, padding: Spacing.md },
+  execValue: { fontSize: FontSize.xxl, fontWeight: '800' },
+  mixRow: { alignItems: 'center', flexDirection: 'row', gap: Spacing.sm },
   trendPill: { alignItems: 'center', flexDirection: 'row', gap: 4 },
   progressTrack: { borderRadius: Radius.full, height: 8, overflow: 'hidden' },
   progressFill: { borderRadius: Radius.full, height: '100%' },

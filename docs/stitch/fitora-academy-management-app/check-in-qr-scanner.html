@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy | Player Check-in</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffddb8",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#3c2300",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#5a3700",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-container": "#2e3192",
+                    "surface-container": "#e7eeff",
+                    "on-secondary-container": "#00714d",
+                    "background": "#f9f9ff",
+                    "primary-fixed": "#e1e0ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#111c2d",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-secondary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#d8e3fb",
+                    "surface-variant": "#d8e3fb",
+                    "inverse-primary": "#c0c1ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "outline-variant": "#c7c5d4",
+                    "on-surface-variant": "#464652",
+                    "on-tertiary-fixed": "#2a1700",
+                    "inverse-on-surface": "#ecf1ff",
+                    "on-primary-fixed": "#04006d",
+                    "surface-container-low": "#f0f3ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "secondary-container": "#6cf8bb",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#cfdaf2",
+                    "surface-tint": "#4f54b4",
+                    "inverse-surface": "#263143",
+                    "surface": "#f9f9ff",
+                    "on-tertiary-container": "#ec9700",
+                    "secondary": "#006c49",
+                    "outline": "#777683",
+                    "on-primary-container": "#9da1ff",
+                    "primary": "#15157d",
+                    "on-surface": "#111c2d",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dee8ff",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "gutter-mobile": "12px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanner-frame {
+            position: relative;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+        }
+        .scanner-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4edea3, transparent);
+            animation: scan 2.5s infinite ease-in-out;
+        }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .corner-border {
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            border-color: #6cf8bb;
+            border-width: 4px;
+        }
+        .top-left { top: -2px; left: -2px; border-right: 0; border-bottom: 0; border-top-left-radius: 12px; }
+        .top-right { top: -2px; right: -2px; border-left: 0; border-bottom: 0; border-top-right-radius: 12px; }
+        .bottom-left { bottom: -2px; left: -2px; border-right: 0; border-top: 0; border-bottom-left-radius: 12px; }
+        .bottom-right { bottom: -2px; right: -2px; border-left: 0; border-top: 0; border-bottom-right-radius: 12px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- TopAppBar from JSON -->
+<header class="flex justify-between items-center px-margin-mobile w-full z-50 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline fixed top-0 h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-size: 28px;">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FitOra Academy</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a sports academy manager in a modern office. The lighting is crisp and natural, with a focus on an authoritative yet welcoming expression. The background is a blurred high-end athletic facility with clean indigo and emerald color accents, reflecting Corporate Modernism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFnKsjaYNhetRFSKdmBzWlqq8zbW7NobPJwf1cctb_NUCTRXw5dEwLYTI0IPfi8zKR4PB9gCSVL8zcmQE6lhvdHYCP5uMMd4olf9tgRy3LXpzDYQWgrd0Yv2igv_S9IGXlupAXbdyWWJ-OJ2L3A6afZb7up2BOUpRD9raMCt8KlWPjKtzrnGj6kUoYWTtFhBR2hZFVyqqP9c9zwuRuITyfMiwNO12E2oF7xiQFoQbclZ8D4Ydy9jcE"/>
+</div>
+</header>
+<main class="pt-20 px-margin-mobile max-w-2xl mx-auto space-y-stack-lg">
+<!-- QR Scanner Viewport -->
+<section class="relative rounded-xl overflow-hidden aspect-square bg-black shadow-2xl group">
+<!-- Simulated Camera Feed -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-80" data-alt="A high-definition view from a mobile camera lens looking at a slightly blurred sports court background. The composition is clean and technical, featuring the geometry of a tennis court with high-contrast lines. The aesthetic is professional and high-tech, using cool indigo and slate tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyZUXf0TJZXBSnSgx31kG-1J-uhmNoM6leS08KfdmpiXUIAeCBqNqGO09WDpirf5q_5jOIvgUsV4bGgnsG1Cfe1oTqF6T_l8GD8vFu-cuJvMmXXWwfQ4wwXBuTQiBcLxwVIylMxgLFkBdnoo6bKc-zKq_MiQ9tB809TpAoBYP2vIS9FDqeMdRPw2f1VPzXa9trIpEvHR7fQkl2HYHj-yKTguF4Kfmru3swRPchXIawLBELfHmE9hJw"/>
+</div>
+<!-- Scanner Overlay -->
+<div class="absolute inset-0 z-10 flex items-center justify-center">
+<div class="scanner-frame w-64 h-64 border-2 border-white/20 rounded-xl relative">
+<!-- Scanning Line -->
+<div class="scanner-line absolute w-full z-20"></div>
+<!-- Decorative Corners -->
+<div class="corner-border top-left"></div>
+<div class="corner-border top-right"></div>
+<div class="corner-border bottom-left"></div>
+<div class="corner-border bottom-right"></div>
+</div>
+</div>
+<!-- Viewfinder Instructions -->
+<div class="absolute bottom-6 left-0 w-full text-center z-20">
+<span class="bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-full font-label-lg text-label-lg">
+                    Align QR code within frame
+                </span>
+</div>
+<!-- Flash & Switch Camera Actions -->
+<div class="absolute top-4 right-4 flex flex-col gap-3 z-20">
+<button class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white active:scale-90 transition-transform">
+<span class="material-symbols-outlined">flashlight_on</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white active:scale-90 transition-transform">
+<span class="material-symbols-outlined">flip_camera_ios</span>
+</button>
+</div>
+</section>
+<!-- Manual Check-in Options -->
+<section class="space-y-stack-md">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">keyboard</span>
+<h2 class="font-title-lg text-title-lg text-primary">Manual Check-in</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-mobile">
+<!-- Phone Search -->
+<div class="bg-surface border border-outline-variant p-4 rounded-xl hover:border-primary transition-colors cursor-pointer group">
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1">Phone Number</label>
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">+1 (555) 000-0000</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary">chevron_right</span>
+</div>
+</div>
+<!-- Booking ID Search -->
+<div class="bg-surface border border-outline-variant p-4 rounded-xl hover:border-primary transition-colors cursor-pointer group">
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1">Booking ID</label>
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">#BK-99283</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary">search</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Check-ins -->
+<section class="space-y-stack-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">history</span>
+<h2 class="font-title-lg text-title-lg text-primary">Recent Check-ins</h2>
+</div>
+<button class="text-secondary font-label-lg text-label-lg hover:underline">View All</button>
+</div>
+<div class="space-y-2">
+<!-- Player 1 -->
+<div class="flex items-center justify-between p-3 bg-surface border border-outline-variant rounded-xl hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-secondary-container">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young athletic tennis player wearing high-end sporting gear. The photo is styled as a professional identification headshot with clean studio lighting and a subtle emerald green background tint, emphasizing the FitOra Academy's vibrant and premium brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaItwAsHQpnlsQd-0qz8JWXEmGene_AqduO2Tibofl1-cfwtWIzunHY_kwMksMma0U_eoJk5WMno2gp3Q2ktilNbHwA-UVzEy2bGPnwYAe5Ui5RA1q9JjBNhmqJ2yfiAgIRGr1z0paKoYiwkvfUHkT1yVnHicJ5zic-81jkWWaxdzARH2oOffQLxO8KKr0Jm4DQply_ie_1fsCQcwN_3Y0KXJJheU4dgxMIM0I4JooACG1m4pvvodE"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface">Marcus Thompson</p>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Court 4 • Tennis Academy</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-lg text-label-lg text-secondary font-bold">CHECKED IN</p>
+<p class="font-label-lg text-label-lg text-outline">09:42 AM</p>
+</div>
+</div>
+<!-- Player 2 -->
+<div class="flex items-center justify-between p-3 bg-surface border border-outline-variant rounded-xl hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A crisp, professional profile photo of a female swimmer in sports attire. The image uses high-key lighting to create a clean, energetic look. The palette features soft indigo and cool grays, fitting the modern management-first visual philosophy of an elite sports club." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDshyapHFxKerMoW_2SGex47vnFnkE0OipTYUzxyMJCcKfULVpd4XM-R-mMgyJ29gbQkd47RYq9_OcCScYlEbPpY6cFWTVql0PqXd8v8g75IyBhajYErdy2DvTzmq9CtmEXM5bMD8yZWDL1Ui9ItTWR5inMIacfN-pTzWU9tHVBSCNZZhCD66g2eWHFrNTyQyuYUO_b6RtPgL-BbK1fe0hfqJwgq2Yw-yjabXiLlWfB0mFsk-m4fWMd"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface">Elena Rodriguez</p>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Lane 2 • Elite Swimming</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-lg text-label-lg text-secondary font-bold">CHECKED IN</p>
+<p class="font-label-lg text-label-lg text-outline">09:38 AM</p>
+</div>
+</div>
+<!-- Player 3 -->
+<div class="flex items-center justify-between p-3 bg-surface border border-outline-variant rounded-xl hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A detailed headshot of an adult male basketball player with an athletic build, wearing a navy blue jersey. The lighting is dramatic yet clear, following a high-performance sports aesthetic. The image is clean and minimalist with a pure white background, ensuring it fits a modern data-centric UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtgcFTfsUZtyKkiZbvqgS0BceHsDMiLemw4kUS4gyvZhEWIuumTEYf3Cg2r-PRv00YM8GcRdVRiZ8WrfjTwSLfDfXbr1uorakPiKqpHEtjmuMN8EspkxTLu8V3EsRO6gzIormbWvQAfN0h5FLmv8md699wzmevKNiW7YJeJV3QpvYBpCqmGQEHd9ubowQkEVD_mWoBVFOvyLfV7huTqxspOz7Nn2BAqMagKf7Yg_3T3L5hXeCfWhU_"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface">David Chen</p>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Court 1 • Men's League</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-lg text-label-lg text-secondary font-bold">CHECKED IN</p>
+<p class="font-label-lg text-label-lg text-outline">09:15 AM</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar from JSON -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg dark:shadow-none">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed-dim dark:text-on-primary-fixed-variant rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+<span class="font-label-lg text-label-lg">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for scanner focus
+        const scannerFrame = document.querySelector('.scanner-frame');
+        
+        // Simple subtle pulse animation simulation
+        setInterval(() => {
+            scannerFrame.style.borderColor = 'rgba(108, 248, 187, 0.4)';
+            setTimeout(() => {
+                scannerFrame.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            }, 1000);
+        }, 2000);
+
+        // Success simulation on click (demo only)
+        scannerFrame.addEventListener('click', () => {
+            scannerFrame.style.borderColor = '#4edea3';
+            scannerFrame.style.backgroundColor = 'rgba(78, 222, 163, 0.1)';
+            alert('Player Checked In Successfully!');
+            setTimeout(() => {
+                scannerFrame.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                scannerFrame.style.backgroundColor = 'transparent';
+            }, 500);
+        });
+    </script>
+</body></html>

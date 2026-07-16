@@ -63,6 +63,12 @@ export const envSchema = z
     GLOBAL_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(100),
     GLOBAL_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60_000),
 
+    AVAILABILITY_ENGINE_V2: z
+      .enum(['true', 'false'])
+      .default('true')
+      .transform((v) => v === 'true'),
+    BOOKING_LOCK_TTL_MINUTES: z.coerce.number().int().positive().optional(),
+
     RUN_MIGRATIONS: z
       .enum(['true', 'false'])
       .default('true')

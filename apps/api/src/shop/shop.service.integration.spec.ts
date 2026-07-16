@@ -1,16 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
-import { InventoryMovementType, PaymentEntityType, PaymentStatus, ShopOrderStatus, UserRole } from '@prisma/client';
+import {
+  InventoryMovementType,
+  PaymentEntityType,
+  PaymentStatus,
+  ShopOrderStatus,
+  UserRole,
+} from '@prisma/client';
 import { ShopService } from './shop.service';
 import { PaymentsService } from '../payments/payments.service';
 import { CouponsService } from '../memberships/coupons.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { CacheService } from '../common/redis/cache.service';
-import { mockCouponsService, mockNotificationsService, mockPaymentsService, mockCacheService } from '../../test/helpers/mock-deps';
+import {
+  mockCouponsService,
+  mockNotificationsService,
+  mockPaymentsService,
+  mockCacheService,
+} from '../../test/helpers/mock-deps';
 import { createShopPrismaMock } from '../../test/helpers/shop-prisma.mock';
 import { mockProduct } from '../../test/helpers/shop.fixtures';
+import { TenantsService } from '../tenants/tenants.service';
 import { asUser } from '../../test/helpers/auth.fixtures';
+
+const adminUser = { id: 'admin-1', email: 'a@f.com', roles: [UserRole.ADMIN] };
 
 describe('ShopService (integration)', () => {
   let service: ShopService;
@@ -61,6 +75,10 @@ describe('ShopService (integration)', () => {
         { provide: CouponsService, useValue: coupons },
         { provide: NotificationsService, useValue: notifications },
         { provide: CacheService, useValue: mockCacheService() },
+        {
+          provide: TenantsService,
+          useValue: { resolveTenantIdFromContext: jest.fn().mockReturnValue(null) },
+        },
       ],
     }).compile();
 
@@ -111,7 +129,7 @@ describe('ShopService (integration)', () => {
 
     it('lists admin products', async () => {
       prisma.product.findMany.mockResolvedValue([mockProduct()] as never);
-      const products = await service.getAllProductsAdmin();
+      const products = await service.getAllProductsAdmin(adminUser);
       expect(products).toHaveLength(1);
     });
   });
@@ -221,8 +239,14 @@ describe('ShopService (integration)', () => {
         ],
       } as never);
 
-      coupons.resolveCoupon.mockResolvedValue({ coupon: null, discountAmount: 0, finalAmount: 599 });
-      prisma.shopOrder.create.mockResolvedValue(orderStub({ id: 'order-1', totalAmount: 599 }) as never);
+      coupons.resolveCoupon.mockResolvedValue({
+        coupon: null,
+        discountAmount: 0,
+        finalAmount: 599,
+      });
+      prisma.shopOrder.create.mockResolvedValue(
+        orderStub({ id: 'order-1', totalAmount: 599 }) as never,
+      );
 
       const result = await service.checkout('u1', {
         shippingName: 'Test User',
@@ -264,7 +288,12 @@ describe('ShopService (integration)', () => {
         finalAmount: 999,
       });
       prisma.shopOrder.create.mockResolvedValue(
-        orderStub({ id: 'order-2', totalAmount: 999, discountAmount: 100, couponId: 'coupon-1' }) as never,
+        orderStub({
+          id: 'order-2',
+          totalAmount: 999,
+          discountAmount: 100,
+          couponId: 'coupon-1',
+        }) as never,
       );
 
       const result = await service.checkout('u1', {
@@ -331,7 +360,9 @@ describe('ShopService (integration)', () => {
 
     it('throws when order not found', async () => {
       prisma.shopOrder.findUnique.mockResolvedValue(null);
-      await expect(service.confirmAfterPayment('missing')).rejects.toBeInstanceOf(NotFoundException);
+      await expect(service.confirmAfterPayment('missing')).rejects.toBeInstanceOf(
+        NotFoundException,
+      );
     });
   });
 
@@ -352,15 +383,16 @@ describe('ShopService (integration)', () => {
     it('getOrder forbids other users', async () => {
       prisma.shopOrder.findFirst.mockResolvedValue(orderStub({ userId: 'other' }) as never);
 
-      await expect(
-        service.getOrder('order-1', asUser('player')),
-      ).rejects.toBeInstanceOf(ForbiddenException);
+      await expect(service.getOrder('order-1', asUser('player'))).rejects.toBeInstanceOf(
+        ForbiddenException,
+      );
     });
 
     it('updateOrderStatus as admin', async () => {
-      prisma.shopOrder.findUnique.mockResolvedValue(
-        orderStub({ userId: 'u1', status: ShopOrderStatus.CONFIRMED }) as never,
-      );
+      prisma.shopOrder.findFirst.mockResolvedValue({
+        ...orderStub({ userId: 'u1', status: ShopOrderStatus.CONFIRMED }),
+        items: [{ product: { tenantId: 'tenant-1' } }],
+      } as never);
       prisma.shopOrder.update.mockResolvedValue(
         orderStub({ status: ShopOrderStatus.PROCESSING }) as never,
       );
@@ -368,7 +400,7 @@ describe('ShopService (integration)', () => {
       const updated = await service.updateOrderStatus(
         'order-1',
         { status: ShopOrderStatus.PROCESSING },
-        { id: 'admin-1', email: 'a@f.com', roles: [UserRole.ADMIN] },
+        adminUser,
       );
       expect(updated.status).toBe(ShopOrderStatus.PROCESSING);
     });
@@ -376,10 +408,12 @@ describe('ShopService (integration)', () => {
 
   describe('inventory and reviews', () => {
     it('getLowStockProducts returns low stock items', async () => {
-      prisma.product.findMany.mockResolvedValue([mockProduct({ stock: 2, lowStockThreshold: 5 })] as never);
+      prisma.product.findMany.mockResolvedValue([
+        mockProduct({ stock: 2, lowStockThreshold: 5 }),
+      ] as never);
       prisma.productVariant.findMany.mockResolvedValue([]);
 
-      const result = await service.getLowStockProducts();
+      const result = await service.getLowStockProducts(adminUser);
       expect(result.products).toHaveLength(1);
     });
 
@@ -404,7 +438,7 @@ describe('ShopService (integration)', () => {
       prisma.inventoryMovement.findMany.mockResolvedValue([]);
       prisma.inventoryMovement.count.mockResolvedValue(0);
 
-      const result = await service.listInventoryMovements({ page: 1 });
+      const result = await service.listInventoryMovements(adminUser, { page: 1 });
       expect(result.total).toBe(0);
     });
 

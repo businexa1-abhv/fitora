@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy | Marketing Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E2E8F0;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#9da1ff",
+                      "background": "#f9f9ff",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "surface-tint": "#4f54b4",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-surface-variant": "#464652",
+                      "surface-container-highest": "#d8e3fb",
+                      "primary": "#15157d",
+                      "surface-container": "#e7eeff",
+                      "error": "#ba1a1a",
+                      "surface-dim": "#cfdaf2",
+                      "on-tertiary-container": "#ec9700",
+                      "inverse-surface": "#263143",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#ecf1ff",
+                      "surface-container-low": "#f0f3ff",
+                      "primary-container": "#2e3192",
+                      "on-background": "#111c2d",
+                      "surface-container-high": "#dee8ff",
+                      "on-tertiary-fixed": "#2a1700",
+                      "tertiary-fixed": "#ffddb8",
+                      "secondary-fixed": "#6ffbbe",
+                      "outline-variant": "#c7c5d4",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#00714d",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#c0c1ff",
+                      "on-surface": "#111c2d",
+                      "on-secondary-fixed": "#002113",
+                      "secondary-fixed-dim": "#4edea3",
+                      "on-primary-fixed-variant": "#373a9b",
+                      "on-primary-fixed": "#04006d",
+                      "outline": "#777683",
+                      "tertiary-container": "#5a3700",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#f9f9ff",
+                      "surface-variant": "#d8e3fb",
+                      "surface": "#f9f9ff",
+                      "on-secondary-fixed-variant": "#005236",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#6cf8bb",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary": "#3c2300",
+                      "secondary": "#006c49",
+                      "primary-fixed": "#e1e0ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "margin-mobile": "16px",
+                      "stack-lg": "24px",
+                      "gutter-mobile": "12px",
+                      "stack-md": "16px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-lg": ["JetBrains Mono"],
+                      "title-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "title-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                      "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                      "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                      "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center px-margin-mobile w-full z-50 sticky top-0 h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-colors">notifications</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold border-2 border-primary">
+                JD
+            </div>
+</div>
+</header>
+<main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-stack-lg gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Marketing Dashboard</h2>
+<p class="text-on-surface-variant font-body-md">Manage your promotions and referral growth strategies.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-title-md flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg">
+<span class="material-symbols-outlined">add_circle</span>
+                Create New Promotion
+            </button>
+</div>
+<!-- Performance Bento Grid -->
+<div class="bento-grid mb-stack-lg">
+<!-- Main Performance Chart (Simulated) -->
+<div class="col-span-1 md:col-span-8 glass-card rounded-xl p-6 min-h-[320px] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-lg text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">analytics</span>
+                        Campaign Conversion Trends
+                    </h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-label-lg">Active</span>
+</div>
+</div>
+<div class="flex-grow relative flex items-end gap-2 px-2">
+<!-- Simple CSS Bar Chart -->
+<div class="flex-grow bg-primary-container/20 rounded-t-md h-[40%] hover:h-[45%] transition-all duration-500 cursor-pointer relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">12%</div>
+</div>
+<div class="flex-grow bg-primary-container/40 rounded-t-md h-[60%] hover:h-[65%] transition-all duration-500 cursor-pointer relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">18%</div>
+</div>
+<div class="flex-grow bg-primary rounded-t-md h-[85%] hover:h-[90%] transition-all duration-500 cursor-pointer relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">24%</div>
+</div>
+<div class="flex-grow bg-primary-container/60 rounded-t-md h-[55%] hover:h-[60%] transition-all duration-500 cursor-pointer relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">16%</div>
+</div>
+<div class="flex-grow bg-primary-container/30 rounded-t-md h-[30%] hover:h-[35%] transition-all duration-500 cursor-pointer relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">9%</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-on-surface-variant font-label-lg text-label-lg border-t pt-4">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+<!-- Total Revenue Stat -->
+<div class="col-span-1 md:col-span-4 bg-primary text-on-primary rounded-xl p-6 flex flex-col justify-between overflow-hidden relative shadow-xl">
+
+<div class="relative z-10">
+<h3 class="font-title-md opacity-80">Campaign Revenue</h3>
+<div class="font-display-lg text-display-lg mt-2">$24,850.00</div>
+<div class="flex items-center gap-1 text-secondary-fixed mt-2">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="font-label-lg text-label-lg">+14.2% from last month</span>
+</div>
+</div>
+<div class="relative z-10 mt-8">
+<button class="w-full py-2 bg-on-primary/10 hover:bg-on-primary/20 border border-on-primary/20 rounded-lg transition-colors font-title-md">View Report</button>
+</div>
+</div>
+<!-- Redemption Rate Stat -->
+<div class="col-span-1 md:col-span-4 glass-card rounded-xl p-6 border-l-4 border-l-secondary-fixed-dim">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-secondary text-3xl">confirmation_number</span>
+<span class="font-label-lg text-label-lg text-secondary bg-secondary-container px-2 py-1 rounded">Target Met</span>
+</div>
+<h3 class="font-title-md text-on-surface-variant">Avg. Redemption Rate</h3>
+<div class="font-headline-lg text-headline-lg text-on-surface mt-1">18.4%</div>
+<div class="w-full bg-surface-container rounded-full h-2 mt-4 overflow-hidden">
+<div class="bg-secondary-fixed-dim h-full w-[18.4%]"></div>
+</div>
+</div>
+<!-- Active Referral Stat -->
+<div class="col-span-1 md:col-span-4 glass-card rounded-xl p-6 border-l-4 border-l-tertiary-fixed-dim">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-tertiary-container text-3xl">group_add</span>
+<span class="font-label-lg text-label-lg text-tertiary-container bg-tertiary-fixed px-2 py-1 rounded">High Growth</span>
+</div>
+<h3 class="font-title-md text-on-surface-variant">New Referrals</h3>
+<div class="font-headline-lg text-headline-lg text-on-surface mt-1">1,204</div>
+<p class="text-on-surface-variant font-label-lg mt-2">Driven by 'Buddy Pass' Promo</p>
+</div>
+<!-- Promo Codes Quick View -->
+<div class="col-span-1 md:col-span-4 glass-card rounded-xl p-6 bg-gradient-to-br from-surface to-surface-container-low">
+<h3 class="font-title-md text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined">speed</span>
+                    Quick Actions
+                </h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center p-3 bg-surface rounded-lg border border-outline-variant hover:border-primary hover:text-primary transition-all gap-2 group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">file_download</span>
+<span class="font-label-lg text-label-lg">Export CSV</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 bg-surface rounded-lg border border-outline-variant hover:border-primary hover:text-primary transition-all gap-2 group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">refresh</span>
+<span class="font-label-lg text-label-lg">Sync Data</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 bg-surface rounded-lg border border-outline-variant hover:border-primary hover:text-primary transition-all gap-2 group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">share</span>
+<span class="font-label-lg text-label-lg">Share Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 bg-surface rounded-lg border border-outline-variant hover:border-primary hover:text-primary transition-all gap-2 group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">settings</span>
+<span class="font-label-lg text-label-lg">Config</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Promo Codes List -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Existing Promo Codes</h3>
+<div class="flex items-center gap-2">
+<input class="bg-surface-container border-none rounded-lg px-4 py-2 font-body-md focus:ring-2 focus:ring-primary w-64" placeholder="Search codes..." type="text"/>
+<button class="material-symbols-outlined bg-surface-container-high p-2 rounded-lg text-on-surface-variant hover:bg-surface-variant">filter_list</button>
+</div>
+</div>
+<div class="overflow-x-auto glass-card rounded-xl">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="p-4 font-title-md text-primary">Code Name</th>
+<th class="p-4 font-title-md text-primary">Type</th>
+<th class="p-4 font-title-md text-primary">Redemptions</th>
+<th class="p-4 font-title-md text-primary">Revenue</th>
+<th class="p-4 font-title-md text-primary">Status</th>
+<th class="p-4 font-title-md text-primary text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-4">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg tracking-widest font-bold text-primary">FITORA25</span>
+<span class="text-xs text-on-surface-variant">Summer Kickoff Promo</span>
+</div>
+</td>
+<td class="p-4">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded font-label-lg text-label-lg uppercase">Percentage</span>
+</td>
+<td class="p-4 font-label-lg">452 / 1000</td>
+<td class="p-4 font-label-lg text-secondary font-bold">$11,300</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="text-xs font-medium">Expires in 12 days</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-4">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg tracking-widest font-bold text-primary">BUDDYPASS</span>
+<span class="text-xs text-on-surface-variant">Referral Program Tier 1</span>
+</div>
+</td>
+<td class="p-4">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded font-label-lg text-label-lg uppercase">Flat Amount</span>
+</td>
+<td class="p-4 font-label-lg">829 / 1500</td>
+<td class="p-4 font-label-lg text-secondary font-bold">$8,290</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="text-xs font-medium">Active - No expiry</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors opacity-60">
+<td class="p-4">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg tracking-widest font-bold text-outline">SPRING50</span>
+<span class="text-xs text-on-surface-variant">Old Spring Season</span>
+</div>
+</td>
+<td class="p-4">
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded font-label-lg text-label-lg uppercase">Percentage</span>
+</td>
+<td class="p-4 font-label-lg">1000 / 1000</td>
+<td class="p-4 font-label-lg text-on-surface-variant">$25,000</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+<span class="text-xs font-medium text-error">Expired Apr 30</span>
+</div>
+</td>
+<td class="p-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant md:hidden">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<!-- Desktop Floating Action Button (Alternative placement) -->
+<button class="fixed right-8 bottom-8 w-16 h-16 bg-primary text-on-primary rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all group hidden md:flex z-50">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform">add</span>
+<span class="absolute right-20 bg-primary text-on-primary px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none font-title-md">New Campaign</span>
+</button>
+<script>
+        // Micro-interaction: Chart hover effects logic
+        document.querySelectorAll('.flex-grow.bg-primary-container').forEach(bar => {
+            bar.addEventListener('mouseenter', () => {
+                bar.style.filter = 'brightness(1.2)';
+            });
+            bar.addEventListener('mouseleave', () => {
+                bar.style.filter = 'none';
+            });
+        });
+
+        // Theme controller (optional toggle)
+        const toggleTheme = () => {
+            document.documentElement.classList.toggle('dark');
+        };
+    </script>
+</body></html>

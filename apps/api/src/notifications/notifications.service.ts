@@ -13,10 +13,7 @@ import {
 import { PrismaService } from '../prisma/prisma.module';
 import { QueueJobsService } from '../queue/queue-jobs.service';
 import { QueueManagerService } from '../queue/queue-manager.service';
-import {
-  buildCursorPaginatedResult,
-  decodeCursor,
-} from '../common/utils/cursor-pagination.util';
+import { buildCursorPaginatedResult, decodeCursor } from '../common/utils/cursor-pagination.util';
 import {
   BroadcastNotificationDto,
   ScheduleNotificationDto,
@@ -56,11 +53,13 @@ export class NotificationsService {
     options?: DispatchOptions,
   ) {
     const prefs = await this.getOrCreatePreferences(userId);
-    const externalChannels = (options?.channels ?? [
-      NotificationChannel.EMAIL,
-      NotificationChannel.SMS,
-      NotificationChannel.PUSH,
-    ]).filter((c) => c !== NotificationChannel.IN_APP);
+    const externalChannels = (
+      options?.channels ?? [
+        NotificationChannel.EMAIL,
+        NotificationChannel.SMS,
+        NotificationChannel.PUSH,
+      ]
+    ).filter((c) => c !== NotificationChannel.IN_APP);
 
     let notification = null as Awaited<ReturnType<typeof this.prisma.notification.create>> | null;
 
@@ -169,9 +168,11 @@ export class NotificationsService {
     };
 
     for (const channel of channels) {
-      const delivery = deliveryByChannel?.get(channel) ?? (await this.prisma.notificationDelivery.findFirst({
-        where: { notificationId, channel },
-      }));
+      const delivery =
+        deliveryByChannel?.get(channel) ??
+        (await this.prisma.notificationDelivery.findFirst({
+          where: { notificationId, channel },
+        }));
       if (!delivery) continue;
 
       if (channel === NotificationChannel.EMAIL && user.email) {
@@ -270,9 +271,7 @@ export class NotificationsService {
         smsEnabled: dto.smsEnabled,
         pushEnabled: dto.pushEnabled,
         inAppEnabled: dto.inAppEnabled,
-        typeOverrides: dto.typeOverrides
-          ? (dto.typeOverrides as Prisma.InputJsonValue)
-          : undefined,
+        typeOverrides: dto.typeOverrides ? (dto.typeOverrides as Prisma.InputJsonValue) : undefined,
       },
     });
     return this.formatPreferences(updated);
@@ -797,6 +796,23 @@ export class NotificationsService {
       'Booking cancelled',
       `Your booking at ${booking.courtName} has been cancelled.${refundText}`,
       { bookingId: booking.id, refundAmount: booking.refundAmount },
+    );
+  }
+
+  async notifyWaitlistOffer(
+    userId: string,
+    data: { waitlistId: string; courtName: string; slotStart: Date; offeredUntil: Date },
+  ) {
+    return this.create(
+      userId,
+      NotificationType.SYSTEM,
+      'Waitlist spot available',
+      `A spot opened at ${data.courtName} for ${data.slotStart.toLocaleString('en-IN')}. Book within 5 minutes.`,
+      {
+        waitlistId: data.waitlistId,
+        slotStart: data.slotStart.toISOString(),
+        offeredUntil: data.offeredUntil.toISOString(),
+      },
     );
   }
 

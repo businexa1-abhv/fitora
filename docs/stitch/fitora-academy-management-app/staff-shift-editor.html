@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Edit Staff Shift | FitOra Owner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#e7eeff",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "primary": "#15157d",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-high": "#dee8ff",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-primary": "#c0c1ff",
+                        "tertiary-container": "#5a3700",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#464652",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-bright": "#f9f9ff",
+                        "primary-container": "#2e3192",
+                        "outline": "#777683",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-container": "#ec9700",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4f54b4",
+                        "on-primary-fixed": "#04006d",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "background": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface-dim": "#cfdaf2",
+                        "tertiary": "#3c2300",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-background": "#111c2d",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#9da1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter-mobile": "12px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "title-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chip-active {
+            background-color: rgba(0, 108, 73, 0.12);
+            color: #006c49;
+            border-color: #006c49;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7c5d4;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0 font-body-md overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface shadow-[0px_12px_32px_rgba(0,0,0,0.05)] h-16 flex justify-between items-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined text-primary active:scale-95 duration-100 p-2 hover:bg-surface-container-high rounded-full transition-colors">arrow_back</button>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">Edit Shift</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-high rounded-full transition-colors active:scale-95">notifications</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-title-md overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fitness club owner in a high-key studio setting. The lighting is soft and flattering, creating a premium feel. The person wears a modern, high-performance athletic polo shirt in a deep indigo color. The background is a clean, minimalist off-white, matching the FitOra brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPRKdKOryNlICNBaWr1u--bigt9Ji4fX81ve1n2rJY3Y89jwgVb9RUiVyLXZUO6YbQ6prNAVuxJVYEmRpx7B2sz4vn6o2R9DLdNGHU7BcSFnU7CMvnO6w5wuXuEJa5c_1RW3VFfC0KGzkiIco14jzz_7_ZHuY2BsgannlZTuD6J-IxNPc74hkDDwUG8LkgIQZmvY_wIoUzC-1E_qeHIzcsSUKcWZgnfR1BdCAuvIpRmlocfGRLygPg"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-2xl mx-auto mb-12">
+<!-- Editor Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<!-- Hero Image / Visual context -->
+<div class="h-32 w-full relative">
+
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+<div class="absolute bottom-4 left-4 flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-secondary uppercase tracking-widest">Shift Details</p>
+<h2 class="font-title-lg text-title-lg text-on-surface">Edit Schedule</h2>
+</div>
+</div>
+</div>
+<form class="p-6 space-y-6">
+<!-- Staff Selection -->
+<div class="space-y-2">
+<label class="block font-label-lg text-label-lg text-outline">Staff Member</label>
+<div class="relative group">
+<select class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 appearance-none focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-lg text-on-surface">
+<option selected="">Coach Marcus</option>
+<option>Sarah Jenkins</option>
+<option>David Chen</option>
+<option>Elena Rodriguez</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none group-focus-within:rotate-180 transition-transform">expand_more</span>
+</div>
+</div>
+<!-- Role Selection (Chips) -->
+<div class="space-y-3">
+<label class="block font-label-lg text-label-lg text-outline">Assignment Role</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant font-title-md text-title-md hover:bg-surface-container-high transition-colors active:scale-95 duration-100" type="button">Front Desk</button>
+<button class="px-4 py-2 rounded-full border border-secondary font-title-md text-title-md chip-active transition-colors active:scale-95 duration-100 flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">check</span>
+                            Coach
+                        </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant font-title-md text-title-md hover:bg-surface-container-high transition-colors active:scale-95 duration-100" type="button">Maintenance</button>
+</div>
+</div>
+<!-- Date & Area Selection (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="block font-label-lg text-label-lg text-outline">Date</label>
+<div class="relative">
+<input class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-label-lg text-label-lg" type="text" value="Oct 25, 2023"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">event</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block font-label-lg text-label-lg text-outline">Court / Area</label>
+<div class="relative">
+<select class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 appearance-none focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-label-lg text-label-lg">
+<option>Court 1</option>
+<option selected="">Court 2</option>
+<option>Gym Floor</option>
+<option>Pool Area</option>
+<option>Yoga Studio</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">location_on</span>
+</div>
+</div>
+</div>
+<!-- Time Selection -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="block font-label-lg text-label-lg text-outline">Start Time</label>
+<div class="relative">
+<input class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-label-lg text-label-lg focus:ring-2 focus:ring-primary outline-none" type="text" value="09:00 AM"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">schedule</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block font-label-lg text-label-lg text-outline">End Time</label>
+<div class="relative">
+<input class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-label-lg text-label-lg focus:ring-2 focus:ring-primary outline-none" type="text" value="01:00 PM"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">schedule</span>
+</div>
+</div>
+</div>
+<!-- Notes / Additional Details -->
+<div class="space-y-2">
+<label class="block font-label-lg text-label-lg text-outline">Shift Notes (Optional)</label>
+<textarea class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-on-surface h-24 resize-none" placeholder="Add specific instructions for this shift..."></textarea>
+</div>
+<!-- Footer Actions -->
+<div class="flex items-center justify-end gap-3 pt-6 border-t border-outline-variant">
+<button class="px-6 py-3 rounded-full font-title-md text-primary hover:bg-surface-container-high transition-colors active:scale-95 duration-100" type="button">Cancel</button>
+<button class="px-8 py-3 rounded-full bg-primary text-on-primary font-title-md shadow-sm hover:shadow-md transition-all active:scale-95 duration-100 flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                        Save Changes
+                    </button>
+</div>
+</form>
+</div>
+<!-- Shift History / Preview -->
+<div class="mt-8">
+<h3 class="font-title-md text-title-md text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">history</span>
+                Recent Schedule for Marcus
+            </h3>
+<div class="space-y-3">
+<div class="bg-white p-4 rounded-xl border border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface">Private Training Session</p>
+<p class="font-body-md text-body-md text-outline">Oct 24 • 10:00 AM - 11:30 AM</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-outline-variant flex justify-between items-center opacity-60">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-outline">
+<span class="material-symbols-outlined">sports_tennis</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface">Tennis Clinic</p>
+<p class="font-body-md text-body-md text-outline">Oct 23 • 04:00 PM - 06:00 PM</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Contextual Check: Active 'Manage') -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-2 bg-surface border-t border-outline-variant z-50 md:hidden">
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
+<span class="font-label-md text-label-md">Manage</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-md text-label-md">More</span>
+</div>
+</nav>
+<!-- Floating Action Button (Suppressed on Editor screen as per "Contextual FAB Suppression" rule) -->
+<script>
+        // Simple Interaction Logic
+        document.querySelectorAll('button[type="button"]').forEach(btn => {
+            if(btn.closest('.flex-wrap')) {
+                btn.addEventListener('click', function() {
+                    const parent = this.closest('.flex-wrap');
+                    parent.querySelectorAll('button').forEach(b => {
+                        b.classList.remove('chip-active', 'border-secondary');
+                        b.classList.add('border-outline-variant');
+                        const check = b.querySelector('.material-symbols-outlined');
+                        if(check) check.remove();
+                    });
+                    this.classList.add('chip-active', 'border-secondary');
+                    this.classList.remove('border-outline-variant');
+                    
+                    const span = document.createElement('span');
+                    span.className = 'material-symbols-outlined text-sm';
+                    span.innerText = 'check';
+                    this.prepend(span);
+                });
+            }
+        });
+
+        // Form Submit Simulation
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Saving...';
+            btn.classList.add('opacity-80', 'pointer-events-none');
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Saved!';
+                btn.classList.replace('bg-primary', 'bg-secondary');
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.replace('bg-secondary', 'bg-primary');
+                    btn.classList.remove('opacity-80', 'pointer-events-none');
+                }, 2000);
+            }, 1500);
+        });
+    </script>
+</body></html>

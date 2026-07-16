@@ -1,20 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Permission } from '@fitora/types';
 import { UserRole } from '@prisma/client';
 import { Public, Roles, RequirePermissions } from '../common/decorators';
@@ -127,16 +112,13 @@ export class MembershipsController {
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Owner membership dashboard stats' })
   @ApiResponse({ status: 200, type: MembershipDashboardDto })
-  getDashboard(
-    @CurrentUser() user: AuthUserPayload,
-    @Query() query: MembershipDashboardQueryDto,
-  ) {
+  getDashboard(@CurrentUser() user: AuthUserPayload, @Query() query: MembershipDashboardQueryDto) {
     return this.membershipsService.getDashboard(user, query);
   }
 
   @Post('memberships/coupons')
   @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
-  @RequirePermissions(Permission.COUPONS_MANAGE)
+  @RequirePermissions(Permission.COUPONS_MANAGE, Permission.MEMBERSHIPS_MANAGE)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Create promo or corporate code' })
   createCoupon(@Body() dto: CreateCouponDto, @CurrentUser() user: AuthUserPayload) {
@@ -145,7 +127,7 @@ export class MembershipsController {
 
   @Get('memberships/coupons')
   @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
-  @RequirePermissions(Permission.COUPONS_MANAGE)
+  @RequirePermissions(Permission.COUPONS_MANAGE, Permission.MEMBERSHIPS_MANAGE)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'List promo & corporate codes' })
   @ApiResponse({ status: 200, type: [CouponResponseDto] })
@@ -155,7 +137,7 @@ export class MembershipsController {
 
   @Put('memberships/coupons/:id')
   @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
-  @RequirePermissions(Permission.COUPONS_MANAGE)
+  @RequirePermissions(Permission.COUPONS_MANAGE, Permission.MEMBERSHIPS_MANAGE)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Update coupon' })
   updateCoupon(
@@ -168,7 +150,7 @@ export class MembershipsController {
 
   @Patch('memberships/coupons/:id/deactivate')
   @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
-  @RequirePermissions(Permission.COUPONS_MANAGE)
+  @RequirePermissions(Permission.COUPONS_MANAGE, Permission.MEMBERSHIPS_MANAGE)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Deactivate coupon' })
   deactivateCoupon(@Param('id') id: string, @CurrentUser() user: AuthUserPayload) {
@@ -219,10 +201,7 @@ export class MembershipsController {
   @RequirePermissions(Permission.MEMBERSHIPS_READ)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'My memberships (all paid, or ?activeOnly=true)' })
-  getMyMemberships(
-    @CurrentUser() user: AuthUserPayload,
-    @Query('activeOnly') activeOnly?: string,
-  ) {
+  getMyMemberships(@CurrentUser() user: AuthUserPayload, @Query('activeOnly') activeOnly?: string) {
     return this.membershipsService.getMyMemberships(user.id, activeOnly === 'true');
   }
 

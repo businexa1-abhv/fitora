@@ -77,6 +77,150 @@
       "id": "7cb17fb8ecd94b2a82d358ba27035893",
       "html": "court-detail-view.html",
       "screenshot": "court-detail-view.png"
+    },
+    {
+      "title": "Games & Services Overview",
+      "id": "b42af0ad7eba489d889d836c76e5b321",
+      "html": "games-services-overview.html",
+      "screenshot": "games-services-overview.png"
+    },
+    {
+      "title": "Membership Plans Setup",
+      "id": "f151404f1aae41a0a9d2329aead78db6",
+      "html": "membership-plans-setup.html",
+      "screenshot": "membership-plans-setup.png"
+    },
+    {
+      "title": "Tennis Setup & Pricing",
+      "id": "2acee018fd31444b99c609cb2c045032",
+      "html": "tennis-setup-pricing.html",
+      "screenshot": "tennis-setup-pricing.png"
+    },
+    {
+      "title": "Operating Hours Config",
+      "id": "d0b84acc3eff460e922fc0f6944d2f9b",
+      "html": "operating-hours-config.html",
+      "screenshot": "operating-hours-config.png"
+    },
+    {
+      "title": "Slot Type Configurator",
+      "id": "2d7b3a4a7f964ab68288396c895f3d29",
+      "html": "slot-type-configurator.html",
+      "screenshot": "slot-type-configurator.png"
+    },
+    {
+      "title": "Slot Master Calendar",
+      "id": "3187e25d46e94feaa877b00eb022f817",
+      "html": "slot-master-calendar.html",
+      "screenshot": "slot-master-calendar.png"
+    },
+    {
+      "title": "Walk-in Booking Form",
+      "id": "89dbaf2918e64ae8be9108fa41a0b4d9",
+      "html": "walk-in-booking-form.html",
+      "screenshot": "walk-in-booking-form.png"
+    },
+    {
+      "title": "Check-in / QR Scanner",
+      "id": "e89f9c0a78fd47cdbab0595eea8f8493",
+      "html": "check-in-qr-scanner.html",
+      "screenshot": "check-in-qr-scanner.png"
+    },
+    {
+      "title": "Player Directory",
+      "id": "06903a992d1d487ea33b133ab22c9ab8",
+      "html": "player-directory.html",
+      "screenshot": "player-directory.png"
+    },
+    {
+      "title": "Player Profile Detail",
+      "id": "810311bb2e7843339330c93438ac21b2",
+      "html": "player-profile-detail.html",
+      "screenshot": "player-profile-detail.png"
+    },
+    {
+      "title": "Staff Shift Roster",
+      "id": "a76011db810d496bb0971c526d6b1123",
+      "html": "staff-shift-roster.html",
+      "screenshot": "staff-shift-roster.png"
+    },
+    {
+      "title": "Coach Directory",
+      "id": "dd3d3e16e7b0490e9a23689a8a84d0fe",
+      "html": "coach-directory.html",
+      "screenshot": "coach-directory.png"
+    },
+    {
+      "title": "Coach Profile Detail",
+      "id": "fe489ead94234627a846544e14ce1fbd",
+      "html": "coach-profile-detail.html",
+      "screenshot": "coach-profile-detail.png"
+    },
+    {
+      "title": "Financial Settings",
+      "id": "98ebfe1a27c54cd79484a9d378369850",
+      "html": "financial-settings.html",
+      "screenshot": "financial-settings.png"
+    },
+    {
+      "title": "Invoice Detail View",
+      "id": "e186dc41eaac465aabcf5a40605f126b",
+      "html": "invoice-detail-view.html",
+      "screenshot": "invoice-detail-view.png"
+    },
+    {
+      "title": "Billing History",
+      "id": "ff11af7478d94e678cac2eb7298f36e6",
+      "html": "billing-history.html",
+      "screenshot": "billing-history.png"
+    },
+    {
+      "title": "Membership Management",
+      "id": "6972d78be7b2429f938644170ffd0c26",
+      "html": "membership-management.html",
+      "screenshot": "membership-management.png"
+    },
+    {
+      "title": "Expense Tracker",
+      "id": "a90d364a414e4c33b930470599e07f32",
+      "html": "expense-tracker.html",
+      "screenshot": "expense-tracker.png"
+    },
+    {
+      "title": "Payroll & Commission Tracker",
+      "id": "cc600fb0a89444b885841f0369485167",
+      "html": "payroll-commission-tracker.html",
+      "screenshot": "payroll-commission-tracker.png"
+    },
+    {
+      "title": "Security & Access",
+      "id": "52cd5622b8094490b55e069ce1b2490a",
+      "html": "security-access.html",
+      "screenshot": "security-access.png"
+    },
+    {
+      "title": "App Preferences",
+      "id": "838ea7996bb94af984e9ab5bc4f0b440",
+      "html": "app-preferences.html",
+      "screenshot": "app-preferences.png"
+    },
+    {
+      "title": "Owner Profile",
+      "id": "c4e5f5c1e3fd4ba38068f3bc8c4abdff",
+      "html": "owner-profile.html",
+      "screenshot": "owner-profile.png"
+    },
+    {
+      "title": "Business Information",
+      "id": "efe7b656a92a4e80aab6e4560148a87f",
+      "html": "business-information.html",
+      "screenshot": "business-information.png"
+    },
+    {
+      "title": "Discounts & Promotions",
+      "id": "88c9fbc60873467db59af32d350a65bf",
+      "html": "discounts-promotions.html",
+      "screenshot": "discounts-promotions.png"
     }
   ]
 }

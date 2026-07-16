@@ -11,11 +11,23 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { QueueJobsService } from '../queue/queue-jobs.service';
 import { WalletService } from '../wallet/wallet.service';
+import { TenantsService } from '../tenants/tenants.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
 
 describe('PaymentsService', () => {
   let service: PaymentsService;
   let prisma: jest.Mocked<
-    Pick<PrismaService, 'payment' | 'paymentInvoice' | 'membershipPurchase' | 'booking' | 'serviceOrder' | 'printOrder' | 'trainingEnrollment' | 'shopInvoice'>
+    Pick<
+      PrismaService,
+      | 'payment'
+      | 'paymentInvoice'
+      | 'membershipPurchase'
+      | 'booking'
+      | 'serviceOrder'
+      | 'printOrder'
+      | 'trainingEnrollment'
+      | 'shopInvoice'
+    >
   >;
 
   beforeEach(async () => {
@@ -49,7 +61,21 @@ describe('PaymentsService', () => {
         { provide: PrintService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: ServicesService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: WalletService, useValue: { creditFromTopup: jest.fn() } },
-        { provide: QueueJobsService, useValue: { enqueueRefund: jest.fn(), enqueuePaymentRetry: jest.fn() } },
+        {
+          provide: QueueJobsService,
+          useValue: { enqueueRefund: jest.fn(), enqueuePaymentRetry: jest.fn() },
+        },
+        {
+          provide: TenantsService,
+          useValue: {
+            resolveTenantIdFromContext: jest.fn().mockReturnValue(null),
+            getPaymentConfig: jest.fn(),
+          },
+        },
+        {
+          provide: SlotEventsService,
+          useValue: { emitPaymentUpdated: jest.fn(), emitMembershipUpdated: jest.fn() },
+        },
       ],
     }).compile();
 
@@ -76,8 +102,20 @@ describe('PaymentsService', () => {
   describe('getPaymentReports', () => {
     it('aggregates revenue by entity type', async () => {
       prisma.payment.findMany.mockResolvedValue([
-        { amount: 500, status: PaymentStatus.PAID, entityType: PaymentEntityType.BOOKING, paidAt: new Date(), createdAt: new Date() },
-        { amount: 300, status: PaymentStatus.PAID, entityType: PaymentEntityType.SHOP_ORDER, paidAt: new Date(), createdAt: new Date() },
+        {
+          amount: 500,
+          status: PaymentStatus.PAID,
+          entityType: PaymentEntityType.BOOKING,
+          paidAt: new Date(),
+          createdAt: new Date(),
+        },
+        {
+          amount: 300,
+          status: PaymentStatus.PAID,
+          entityType: PaymentEntityType.SHOP_ORDER,
+          paidAt: new Date(),
+          createdAt: new Date(),
+        },
       ] as never);
 
       const report = await service.getPaymentReports({ days: 30 });

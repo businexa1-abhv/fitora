@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy - Quick Entry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffddb8",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#3c2300",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#5a3700",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#2e3192",
+                        "surface-container": "#e7eeff",
+                        "on-secondary-container": "#00714d",
+                        "background": "#f9f9ff",
+                        "primary-fixed": "#e1e0ff",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#111c2d",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d8e3fb",
+                        "surface-variant": "#d8e3fb",
+                        "inverse-primary": "#c0c1ff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-surface-variant": "#464652",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-primary-fixed": "#04006d",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "secondary-container": "#6cf8bb",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#cfdaf2",
+                        "surface-tint": "#4f54b4",
+                        "inverse-surface": "#263143",
+                        "surface": "#f9f9ff",
+                        "on-tertiary-container": "#ec9700",
+                        "secondary": "#006c49",
+                        "outline": "#777683",
+                        "on-primary-container": "#9da1ff",
+                        "primary": "#15157d",
+                        "on-surface": "#111c2d",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#dee8ff",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "gutter-mobile": "12px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #E2E8F0;
+            transition: all 0.2s ease;
+        }
+        .chip-active {
+            background-color: rgba(0, 108, 73, 0.12);
+            color: #006c49;
+            border-color: #006c49;
+        }
+        .fab-shadow {
+            box-shadow: 0 4px 12px rgba(21, 21, 125, 0.08);
+        }
+        input:focus {
+            border-color: #15157d !important;
+            box-shadow: none !important;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md text-body-md antialiased min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-headline-sm text-headline-sm" data-icon="sports_kabaddi">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-variant transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, professional close-up portrait of a sports academy manager, wearing a minimalist navy blue uniform. The background is a soft, blurred high-end athletic facility with white and indigo lighting. The aesthetic is modern and corporate, following a premium management-first visual style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCecw7DhqVgzN9KQUBA4IxdAJQo6FiTjSqZwe9vPP4Qvk9cZmRoNSEX7Ux1FqTyaVpiBD1B0VBUYGsqVRwNewcDt03OkX4QZQBHP0G3AZ745IAh8fwtTfDhpl9vT0JWribHeewJ80ZWfv8LRd9LI4KayX1fjIKXb9o5zZV-lNUSa_XkEjyZjCTWY7Ccx6f0-vVanw5pMa_E_fC9PPH6cwtmMk97kxo147fpMD19sgrK_yjsu3pZsCnK"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-2xl mx-auto">
+<div class="flex flex-col gap-stack-lg">
+<!-- Header Section -->
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-sm text-headline-sm text-primary">Quick Entry</h2>
+<p class="text-on-surface-variant font-body-md">Register walk-in players and book courts instantly.</p>
+</div>
+<!-- Main Entry Form Container -->
+<form class="flex flex-col gap-stack-md" id="entryForm">
+<!-- Player Info Section -->
+<div class="bento-card rounded-xl p-stack-md flex flex-col gap-stack-md">
+<div class="flex items-center gap-2 text-primary font-title-md">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-title-md text-title-md">Player Information</span>
+</div>
+<div class="grid grid-cols-1 gap-stack-md">
+<div class="relative">
+<input class="peer w-full border border-outline rounded-lg px-4 pt-6 pb-2 focus:ring-0" id="playerName" placeholder=" " type="text"/>
+<label class="absolute left-4 top-1 text-on-surface-variant text-xs transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs" for="playerName">Player Name</label>
+</div>
+<div class="relative">
+<input class="peer w-full border border-outline rounded-lg px-4 pt-6 pb-2 focus:ring-0" id="playerPhone" placeholder=" " type="tel"/>
+<label class="absolute left-4 top-1 text-on-surface-variant text-xs transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs" for="playerPhone">Phone Number</label>
+</div>
+</div>
+</div>
+<!-- Sport & Selection Chips -->
+<div class="bento-card rounded-xl p-stack-md flex flex-col gap-stack-md">
+<div class="flex items-center gap-2 text-primary font-title-md">
+<span class="material-symbols-outlined" data-icon="sports_tennis">sports_tennis</span>
+<span class="font-title-md text-title-md">Sport & Court Selection</span>
+</div>
+<!-- Sport Selection -->
+<div class="flex flex-col gap-unit">
+<span class="text-label-lg font-label-lg text-on-surface-variant">SELECT SPORT</span>
+<div class="flex flex-wrap gap-2">
+<button class="sport-chip chip-active px-4 py-2 border border-outline-variant rounded-full font-label-lg text-label-lg transition-all" data-sport="tennis" type="button">TENNIS</button>
+<button class="sport-chip px-4 py-2 border border-outline-variant rounded-full font-label-lg text-label-lg transition-all hover:bg-surface-container" data-sport="badminton" type="button">BADMINTON</button>
+<button class="sport-chip px-4 py-2 border border-outline-variant rounded-full font-label-lg text-label-lg transition-all hover:bg-surface-container" data-sport="squash" type="button">SQUASH</button>
+<button class="sport-chip px-4 py-2 border border-outline-variant rounded-full font-label-lg text-label-lg transition-all hover:bg-surface-container" data-sport="pickleball" type="button">PICKLEBALL</button>
+</div>
+</div>
+<!-- Court Grid -->
+<div class="flex flex-col gap-unit">
+<span class="text-label-lg font-label-lg text-on-surface-variant">AVAILABLE COURTS</span>
+<div class="grid grid-cols-4 gap-2">
+<button class="court-btn border border-outline-variant p-3 rounded-lg flex flex-col items-center gap-1 transition-all hover:bg-surface-container active:scale-95" type="button">
+<span class="font-label-lg text-label-lg">C-01</span>
+</button>
+<button class="court-btn border border-outline-variant p-3 rounded-lg flex flex-col items-center gap-1 transition-all bg-primary-container text-on-primary-container" type="button">
+<span class="font-label-lg text-label-lg">C-02</span>
+</button>
+<button class="court-btn border border-outline-variant p-3 rounded-lg flex flex-col items-center gap-1 transition-all hover:bg-surface-container opacity-40 cursor-not-allowed" disabled="" type="button">
+<span class="font-label-lg text-label-lg">C-03</span>
+</button>
+<button class="court-btn border border-outline-variant p-3 rounded-lg flex flex-col items-center gap-1 transition-all hover:bg-surface-container" type="button">
+<span class="font-label-lg text-label-lg">C-04</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Duration Section -->
+<div class="bento-card rounded-xl p-stack-md flex flex-col gap-stack-md">
+<div class="flex items-center gap-2 text-primary font-title-md">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-title-md text-title-md">Session Duration</span>
+</div>
+<div class="grid grid-cols-3 gap-stack-md">
+<button class="duration-btn border border-outline-variant py-4 rounded-lg flex flex-col items-center gap-1 hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="font-label-lg text-label-lg">60 MIN</span>
+</button>
+<button class="duration-btn bg-primary-container text-on-primary-container py-4 rounded-lg flex flex-col items-center gap-1 transition-all" type="button">
+<span class="font-label-lg text-label-lg">90 MIN</span>
+</button>
+<button class="duration-btn border border-outline-variant py-4 rounded-lg flex flex-col items-center gap-1 hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="font-label-lg text-label-lg">120 MIN</span>
+</button>
+</div>
+</div>
+<!-- Summary Section -->
+<div class="bento-card rounded-xl overflow-hidden">
+<div class="bg-surface-container p-stack-md flex justify-between items-center">
+<span class="text-on-surface-variant font-title-md">Booking Summary</span>
+<span class="material-symbols-outlined text-primary" data-icon="receipt_long">receipt_long</span>
+</div>
+<div class="p-stack-md flex flex-col gap-3">
+<div class="flex justify-between items-center font-body-md">
+<span class="text-on-surface-variant">Tennis • Court C-02 • 90m</span>
+<span class="font-label-lg text-label-lg">$45.00</span>
+</div>
+<div class="flex justify-between items-center font-body-md border-b border-outline-variant pb-2">
+<span class="text-on-surface-variant">Equipment Rental (2x Racket)</span>
+<span class="font-label-lg text-label-lg">$10.00</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="font-title-lg text-title-lg text-primary">Total Price</span>
+<span class="font-label-lg text-2xl text-primary">$55.00</span>
+</div>
+</div>
+<div class="px-stack-md pb-stack-md">
+<button class="w-full bg-secondary text-on-secondary py-4 rounded-xl font-title-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-[0.98]" type="submit">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                            Confirm Booking
+                        </button>
+</div>
+</div>
+</form>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="sports_tennis">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</div>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple interactivity for demonstration
+        document.querySelectorAll('.sport-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.sport-chip').forEach(c => c.classList.remove('chip-active'));
+                chip.classList.add('chip-active');
+            });
+        });
+
+        document.querySelectorAll('.duration-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.duration-btn').forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary-container');
+                    b.classList.add('border', 'border-outline-variant');
+                });
+                btn.classList.add('bg-primary-container', 'text-on-primary-container');
+                btn.classList.remove('border', 'border-outline-variant');
+            });
+        });
+
+        document.getElementById('entryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Booking confirmed for ' + (document.getElementById('playerName').value || 'Walk-in Player'));
+        });
+    </script>
+</body></html>

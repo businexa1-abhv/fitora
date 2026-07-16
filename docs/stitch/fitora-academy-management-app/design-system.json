@@ -385,6 +385,14 @@
       "x": 1024
     },
     {
+      "height": 2177,
+      "id": "88c9fbc60873467db59af32d350a65bf",
+      "sourceScreen": "projects/7326153259200245460/screens/88c9fbc60873467db59af32d350a65bf",
+      "width": 390,
+      "x": 1816,
+      "y": 11057
+    },
+    {
       "height": 1073,
       "id": "89dbaf2918e64ae8be9108fa41a0b4d9",
       "sourceScreen": "projects/7326153259200245460/screens/89dbaf2918e64ae8be9108fa41a0b4d9",
@@ -627,6 +635,6 @@
     "name": "projects/7326153259200245460/screens/888cd65cc9dd41c8b394d30c2b5fca5a/fileEntries/screenshot"
   },
   "title": "FitOra Academy Management App",
-  "updateTime": "2026-07-15T15:42:45.695601Z",
+  "updateTime": "2026-07-16T10:30:59.793819Z",
   "visibility": "PRIVATE"
 }

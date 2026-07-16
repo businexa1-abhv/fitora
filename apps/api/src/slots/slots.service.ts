@@ -9,6 +9,7 @@ import {
   ClosureReason,
   PaymentStatus,
   Prisma,
+  SlotBookingMode,
   SlotPricingRuleType,
   UserRole,
 } from '@prisma/client';
@@ -37,16 +38,23 @@ import {
   type ClosureInput,
   type PricingRuleInput,
 } from './utils/slot-pricing.utils';
+import { SlotEventsService } from '../realtime/slot-events.service';
 
 const SLOT_INCLUDE = {
-  booking: { select: { id: true, status: true, paymentStatus: true } },
+  bookings: {
+    where: { deletedAt: null, status: { not: BookingStatus.CANCELLED } },
+    select: { id: true, status: true, paymentStatus: true, seats: true, lockedUntil: true },
+  },
 } as const;
 
 type SlotRow = Prisma.CourtSlotGetPayload<{ include: typeof SLOT_INCLUDE }>;
 
 @Injectable()
 export class SlotsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private events: SlotEventsService,
+  ) {}
 
   // ─── Single & bulk slot creation ────────────────────────────────────────────
 
@@ -65,8 +73,7 @@ export class SlotsService {
     }
 
     const basePrice =
-      dto.price ??
-      (court.defaultSlotPrice ? Number(court.defaultSlotPrice) : undefined);
+      dto.price ?? (court.defaultSlotPrice ? Number(court.defaultSlotPrice) : undefined);
     if (basePrice === undefined) {
       throw new BadRequestException('price is required when court has no defaultSlotPrice');
     }
@@ -76,6 +83,8 @@ export class SlotsService {
     const closure = isSlotClosed(startTime, endTime, closures);
 
     const { price } = resolveSlotPrice(basePrice, startTime, rules);
+    const capacity =
+      court.defaultSlotCapacity && court.defaultSlotCapacity > 0 ? court.defaultSlotCapacity : 1;
 
     const slot = await this.prisma.courtSlot.create({
       data: {
@@ -83,6 +92,8 @@ export class SlotsService {
         startTime,
         endTime,
         price,
+        capacity,
+        bookingMode: capacity > 1 ? SlotBookingMode.SHARED : SlotBookingMode.EXCLUSIVE,
         isBlocked: !!closure,
         blockReason: closure?.reason ?? null,
         notes: closure ? `Closed: ${closure.id}` : null,
@@ -107,7 +118,16 @@ export class SlotsService {
       throw new BadRequestException('price is required when court has no defaultSlotPrice');
     }
 
-    return this.createSlotsForDate(courtId, dto.date, dto.startHour, 0, dto.endHour, 0, dto.durationMinutes, basePrice);
+    return this.createSlotsForDate(
+      courtId,
+      dto.date,
+      dto.startHour,
+      0,
+      dto.endHour,
+      0,
+      dto.durationMinutes,
+      basePrice,
+    );
   }
 
   async generateRecurringSlots(
@@ -145,12 +165,88 @@ export class SlotsService {
     for (const date of dates) {
       for (const schedule of schedules) {
         if (
-          !scheduleAppliesOnDate(
-            schedule.daysOfWeek,
-            date,
-            schedule.validFrom,
-            schedule.validUntil,
-          )
+          !scheduleAppliesOnDate(schedule.daysOfWeek, date, schedule.validFrom, schedule.validUntil)
+        ) {
+          continue;
+        }
+
+        const result = await this.createSlotsForDate(
+          courtId,
+          date,
+          schedule.startHour,
+          schedule.startMinute,
+          schedule.endHour,
+          schedule.endMinute,
+          schedule.durationMinutes,
+          Number(schedule.basePrice),
+          schedule.id,
+        );
+        totalCreated += result.created;
+      }
+    }
+
+    return { created: totalCreated, datesProcessed: dates.length, schedules: schedules.length };
+  }
+
+  /** Cron-safe slot generation for active schedules (no auth). */
+  async autoGenerateUpcomingSlots(daysAhead = 14) {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    const end = new Date(today);
+    end.setUTCDate(end.getUTCDate() + daysAhead);
+
+    const startDate = today.toISOString().slice(0, 10);
+    const endDate = end.toISOString().slice(0, 10);
+
+    const schedules = await this.prisma.slotSchedule.findMany({
+      where: { deletedAt: null, isActive: true },
+      select: { courtId: true },
+      distinct: ['courtId'],
+    });
+
+    let totalCreated = 0;
+    let courtsProcessed = 0;
+
+    for (const { courtId } of schedules) {
+      const court = await this.prisma.court.findFirst({
+        where: { id: courtId, deletedAt: null, isActive: true },
+      });
+      if (!court) continue;
+
+      const result = await this.generateRecurringSlotsInternal(courtId, startDate, endDate);
+      totalCreated += result.created;
+      courtsProcessed += 1;
+    }
+
+    return { totalCreated, courtsProcessed, startDate, endDate };
+  }
+
+  private async generateRecurringSlotsInternal(
+    courtId: string,
+    startDate: string,
+    endDate: string,
+    scheduleIds?: string[],
+  ) {
+    const dates = eachDateInRange(startDate, endDate);
+    const schedules = await this.prisma.slotSchedule.findMany({
+      where: {
+        courtId,
+        deletedAt: null,
+        isActive: true,
+        ...(scheduleIds?.length && { id: { in: scheduleIds } }),
+      },
+    });
+
+    if (schedules.length === 0) {
+      return { created: 0, datesProcessed: dates.length, schedules: 0 };
+    }
+
+    let totalCreated = 0;
+
+    for (const date of dates) {
+      for (const schedule of schedules) {
+        if (
+          !scheduleAppliesOnDate(schedule.daysOfWeek, date, schedule.validFrom, schedule.validUntil)
         ) {
           continue;
         }
@@ -266,19 +362,17 @@ export class SlotsService {
     return { startDate: query.startDate, endDate: query.endDate, days };
   }
 
-  async updateSlot(
-    courtId: string,
-    slotId: string,
-    dto: UpdateSlotDto,
-    user: AuthUserPayload,
-  ) {
+  async updateSlot(courtId: string, slotId: string, dto: UpdateSlotDto, user: AuthUserPayload) {
     const court = await this.getCourt(courtId);
     this.assertOwnerOrAdmin(court.ownerId, user);
 
     const slot = await this.getSlot(courtId, slotId);
 
-    if (dto.isBlocked === false && slot.booking?.paymentStatus === PaymentStatus.PAID) {
-      throw new BadRequestException('Cannot unblock a booked slot');
+    if (
+      dto.isBlocked === false &&
+      slot.bookings.some((b) => b.paymentStatus === PaymentStatus.PAID)
+    ) {
+      throw new BadRequestException('Cannot unblock a slot with paid bookings');
     }
 
     const updated = await this.prisma.courtSlot.update({
@@ -294,7 +388,24 @@ export class SlotsService {
       include: SLOT_INCLUDE,
     });
 
-    return this.formatSlot(updated);
+    const formatted = this.formatSlot(updated);
+    await this.events.emitSlotUpdated({
+      id: formatted.id,
+      courtId: formatted.courtId,
+      capacity: formatted.capacity,
+      reservedSeats: formatted.reservedSeats,
+      confirmedSeats: formatted.confirmedSeats,
+      availableSeats: formatted.availableSeats,
+      availabilityStatus: formatted.availabilityStatus,
+      isBooked: formatted.isBooked,
+      isBlocked: formatted.isBlocked,
+      blockReason: formatted.blockReason,
+      startTime: formatted.startTime,
+      endTime: formatted.endTime,
+      price: formatted.price,
+    });
+
+    return formatted;
   }
 
   async removeSlot(courtId: string, slotId: string, user: AuthUserPayload) {
@@ -302,7 +413,7 @@ export class SlotsService {
     this.assertOwnerOrAdmin(court.ownerId, user);
 
     const slot = await this.getSlot(courtId, slotId);
-    if (slot.booking?.paymentStatus === PaymentStatus.PAID) {
+    if (slot.bookings.some((b) => b.paymentStatus === PaymentStatus.PAID)) {
       throw new BadRequestException('Cannot delete a booked slot');
     }
 
@@ -414,11 +525,7 @@ export class SlotsService {
     });
   }
 
-  async createPricingRule(
-    courtId: string,
-    dto: CreatePricingRuleDto,
-    user: AuthUserPayload,
-  ) {
+  async createPricingRule(courtId: string, dto: CreatePricingRuleDto, user: AuthUserPayload) {
     const court = await this.getCourt(courtId);
     this.assertOwnerOrAdmin(court.ownerId, user);
     this.validatePricingRule(dto);
@@ -585,6 +692,13 @@ export class SlotsService {
 
     let created = 0;
 
+    const court = await this.prisma.court.findFirst({
+      where: { id: courtId, deletedAt: null },
+      select: { defaultSlotCapacity: true },
+    });
+    const capacity =
+      court?.defaultSlotCapacity && court.defaultSlotCapacity > 0 ? court.defaultSlotCapacity : 1;
+
     for (const window of windows) {
       const existing = await this.prisma.courtSlot.findFirst({
         where: { courtId, startTime: window.startTime, deletedAt: null },
@@ -601,6 +715,8 @@ export class SlotsService {
           startTime: window.startTime,
           endTime: window.endTime,
           price,
+          capacity,
+          bookingMode: capacity > 1 ? SlotBookingMode.SHARED : SlotBookingMode.EXCLUSIVE,
           isBlocked: !!closure,
           blockReason: closure?.reason ?? null,
           notes: appliedRule ? `Pricing: ${appliedRule.name}` : null,
@@ -614,7 +730,15 @@ export class SlotsService {
 
   private async applyClosureToExistingSlots(
     courtId: string,
-    closure: { id: string; startDate: Date; endDate: Date; reason: ClosureReason; isFullDay: boolean; startHour: number | null; endHour: number | null },
+    closure: {
+      id: string;
+      startDate: Date;
+      endDate: Date;
+      reason: ClosureReason;
+      isFullDay: boolean;
+      startHour: number | null;
+      endHour: number | null;
+    },
   ) {
     const rangeStart = new Date(closure.startDate);
     rangeStart.setUTCHours(0, 0, 0, 0);
@@ -627,7 +751,12 @@ export class SlotsService {
         deletedAt: null,
         startTime: { gte: rangeStart, lte: rangeEnd },
       },
-      include: { booking: true },
+      include: {
+        bookings: {
+          where: { deletedAt: null, paymentStatus: PaymentStatus.PAID },
+          select: { id: true, paymentStatus: true },
+        },
+      },
     });
 
     const closureInput: ClosureInput = {
@@ -641,7 +770,7 @@ export class SlotsService {
     };
 
     for (const slot of slots) {
-      if (slot.booking?.paymentStatus === PaymentStatus.PAID) continue;
+      if (slot.bookings.some((b) => b.paymentStatus === PaymentStatus.PAID)) continue;
       if (isSlotClosed(slot.startTime, slot.endTime, [closureInput])) {
         await this.prisma.courtSlot.update({
           where: { id: slot.id },
@@ -708,6 +837,24 @@ export class SlotsService {
   }
 
   private formatSlot(slot: SlotRow) {
+    const capacity = slot.capacity ?? 1;
+    const reservedCount = slot.reservedCount ?? 0;
+    const confirmedCount = slot.confirmedCount ?? 0;
+    const availableSeats = Math.max(0, capacity - reservedCount - confirmedCount);
+    const isBooked = this.isBooked(slot) || availableSeats === 0;
+
+    let availabilityStatus:
+      'AVAILABLE' | 'FEW_SPOTS' | 'FULL' | 'BLOCKED' | 'MAINTENANCE' | 'HOLIDAY' = 'AVAILABLE';
+    if (slot.isBlocked) {
+      if (slot.blockReason === ClosureReason.MAINTENANCE) availabilityStatus = 'MAINTENANCE';
+      else if (slot.blockReason === ClosureReason.HOLIDAY) availabilityStatus = 'HOLIDAY';
+      else availabilityStatus = 'BLOCKED';
+    } else if (availableSeats <= 0) {
+      availabilityStatus = 'FULL';
+    } else if (availableSeats <= Math.max(1, Math.floor(capacity * 0.25))) {
+      availabilityStatus = 'FEW_SPOTS';
+    }
+
     return {
       id: slot.id,
       courtId: slot.courtId,
@@ -715,20 +862,30 @@ export class SlotsService {
       startTime: slot.startTime,
       endTime: slot.endTime,
       price: slot.price.toString(),
+      capacity,
+      reservedSeats: reservedCount,
+      confirmedSeats: confirmedCount,
+      availableSeats,
+      availabilityStatus,
       isBlocked: slot.isBlocked,
       blockReason: slot.blockReason,
       notes: slot.notes,
-      isBooked: this.isBooked(slot),
+      isBooked,
     };
   }
 
   private isBooked(slot: SlotRow) {
-    return (
-      !!slot.booking &&
-      slot.booking.status !== BookingStatus.CANCELLED &&
-      (slot.booking.paymentStatus === PaymentStatus.PAID ||
-        slot.booking.status === BookingStatus.PENDING)
-    );
+    const capacity = slot.capacity ?? 1;
+    if (capacity <= 1) {
+      return slot.bookings.some(
+        (b) =>
+          b.status !== BookingStatus.CANCELLED &&
+          (b.paymentStatus === PaymentStatus.PAID || b.status === BookingStatus.PENDING),
+      );
+    }
+    const reserved = slot.reservedCount ?? 0;
+    const confirmed = slot.confirmedCount ?? 0;
+    return reserved + confirmed >= capacity;
   }
 
   private async getCourt(courtId: string) {

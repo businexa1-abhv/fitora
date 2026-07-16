@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Player Directory | FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#9da1ff",
+                    "background": "#f9f9ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface-tint": "#4f54b4",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-surface-variant": "#464652",
+                    "surface-container-highest": "#d8e3fb",
+                    "primary": "#15157d",
+                    "surface-container": "#e7eeff",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#cfdaf2",
+                    "on-tertiary-container": "#ec9700",
+                    "inverse-surface": "#263143",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "surface-container-low": "#f0f3ff",
+                    "primary-container": "#2e3192",
+                    "on-background": "#111c2d",
+                    "surface-container-high": "#dee8ff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary-fixed": "#6ffbbe",
+                    "outline-variant": "#c7c5d4",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#c0c1ff",
+                    "on-surface": "#111c2d",
+                    "on-secondary-fixed": "#002113",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "on-primary-fixed": "#04006d",
+                    "outline": "#777683",
+                    "tertiary-container": "#5a3700",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#f9f9ff",
+                    "surface-variant": "#d8e3fb",
+                    "surface": "#f9f9ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#6cf8bb",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#3c2300",
+                    "secondary": "#006c49",
+                    "primary-fixed": "#e1e0ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "margin-mobile": "16px",
+                    "stack-lg": "24px",
+                    "gutter-mobile": "12px",
+                    "stack-md": "16px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { background-color: #f9f9ff; }
+        .glass-header {
+            backdrop-filter: blur(12px);
+            background: rgba(249, 249, 255, 0.8);
+        }
+        .player-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .player-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio headshot of a sports academy manager, wearing a sleek navy polo shirt with a subtle logo. The lighting is soft and corporate, set against a clean, light grey studio background. The image is crisp, high-resolution, and conveys authority and friendliness in a modern athletic management context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg0J0Knjn1ItUfqegfQEYzodBKvjRbS9QpDWlOtqRS5d-F2FkFt0fFQviK1CMIbst0E8NKn28iuMkxopU3e4lzgzuiYHeSTyDqHVGKoCcf9zRpdEBeUAsSv5HPWGIe7qW5arUK6mkmRnZRndMvm5WoSbAYy3qPLZ1yVeeFr8T1rzq00UmF2jcuJ-hkxGRUH-8e3Ed74DySkz3RJf-Pjwqt_W2WmJVaQTq8telQ4z6W-FfjV2WUgks3"/>
+</div>
+</header>
+<main class="pt-20 px-margin-mobile max-w-5xl mx-auto">
+<!-- Header & Search -->
+<div class="mt-stack-lg mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2">Player Directory</h2>
+<p class="text-on-surface-variant font-body-md">Manage and view all registered academy athletes.</p>
+</div>
+<!-- Search and Filter Bar -->
+<div class="sticky top-16 z-40 py-stack-sm bg-background">
+<div class="flex flex-col gap-stack-sm">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-xl border border-outline-variant bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-body-md" placeholder="Search players by name or ID..." type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-label-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">filter_list</span>
+                        All Sports
+                    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant bg-white text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-low transition-colors">Tennis</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant bg-white text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-low transition-colors">Kabaddi</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant bg-white text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-low transition-colors">Swimming</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant bg-white text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-low transition-colors">Elite Pro</button>
+</div>
+</div>
+</div>
+<!-- Player List (Bento-ish Grid / Modern Card List) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-mobile mt-stack-md">
+<!-- Player Card 1 -->
+<div class="player-card bg-white p-stack-md rounded-xl border border-outline-variant flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-secondary-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a young male tennis player with a focused expression, wearing a white athletic headband and a blue jersey. The lighting is natural outdoor sun with a soft blur of a tennis court in the background. High contrast, sharp detail, professional sports photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuMuoi--2zedh94QgXOfR0zZO7Rmc-7luORHSsfUMtfGJYZUMJ2FuDN0V6pRu9L0o_83K-VdtuM-R4_HWFrjDAKC1pMwHSA-fQ3jMTWxy-OdfU1MUIdFFOhPytzwF5O1fy9rUcmWVHrgxCN3iZNF7qFKigvFxw3pM-N1BoVRNH7OQQNarOhL9gRhaQyh1nh5QSCeJCgvMjF3kuELn9V_0YpI1LMOJoU3hev55IgyrKvEXX5m2AK0rP"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Marcus Thompson</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px] text-primary">sports_tennis</span>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Tennis • Premium</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-[10px] uppercase tracking-wider font-bold">Active</span>
+</div>
+</div>
+<!-- Player Card 2 -->
+<div class="player-card bg-white p-stack-md rounded-xl border border-outline-variant flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-error-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="A portrait of a female athlete in her late 20s, wearing a dark green swimming cap and professional goggles around her neck. The setting is an indoor Olympic pool with shimmering blue water reflections dancing on her face. Cool-toned lighting, high-end commercial sports aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiu-MyyYVlbP4-LVAUg4uoALkSrTUN7ff_WypcJ7EQSQhI01m9fcY59ymX5SNyrQGBPnNP929yQd3kp3inDRa0oP212rIYK07p83rNdHUBShGXWltzbzBxTGNN1lQOtEf1Oj3BuPZBh53ehe53cmnnszW9TSCcg7KE6nKd9VDLyDFCk4vrkwFkUNBMTKmf-OZTVZdB5qlSUZ_uZEe0adfuD4lL9Hc1NLhKgNtDztBnFYWUlUVInUcl"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Elena Rodriguez</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px] text-primary">pool</span>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Swimming • Standard</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-lg text-[10px] uppercase tracking-wider font-bold">Expired</span>
+</div>
+</div>
+<!-- Player Card 3 -->
+<div class="player-card bg-white p-stack-md rounded-xl border border-outline-variant flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-tertiary-fixed shrink-0">
+<img class="w-full h-full object-cover" data-alt="A powerful action-oriented portrait of a male kabaddi player, skin glistening with sweat, wearing a vibrant orange and black team jersey. Intense dramatic side-lighting against a dark, moody gym interior background. Modern, high-performance athletic photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTBu2zfmF3TDhiBpfxdCOoTj6DOhG0WHJHyfjcU7-ufj9hddIvDh9CN3BxlU_Y3uhyFDsjqEm9BPKTcqgtzXEPKo29m-wcZOafEeCg4e3JKtqX0R4787mNn2iHJoC42X5RoKdlJtRiyH6hI5Yodpm8kO6awIUV1fTZ4nYF9Wi05P9aMcYDkTQQ1dgl8Ay11M-t_SwZDZ8x1jK7cMYZacSUDVWVHmGrrmVlVOn0PkRyFv7Xe7IRGybW"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Arjun Sharma</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px] text-primary">sports_kabaddi</span>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Kabaddi • Elite</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-lg text-[10px] uppercase tracking-wider font-bold">Pending</span>
+</div>
+</div>
+<!-- Player Card 4 -->
+<div class="player-card bg-white p-stack-md rounded-xl border border-outline-variant flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-secondary-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="Studio portrait of a smiling teenage girl in a professional white tennis polo, holding a racket over her shoulder. The background is a soft, solid pastel blue, creating a fresh and youthful sports management feel. Bright, even lighting with high clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx1g5aKHiN7efJc84iJq5qIC9mHxuqLWaVxBOqL1iifmGSdFHMvCX0K2wHvkfrI8WnmV-Rsbqdx5DeovnipKP36F01_ygDqUZFXE99W93D07SPBC6Z7V1IlA8-5agzgl57CgvWQ5J2XV2uSNYmzYCkgQjs6Q_r-wuS0MBlzZRkukKSj3AEwW0tOaln7Yfh9pfZqitZtcep0HgJ27BTX2LH2wYIBhC2-I82toBbpejK8YZjEd8IDTJQ"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Sophie Chen</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px] text-primary">sports_tennis</span>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Tennis • Junior</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-[10px] uppercase tracking-wider font-bold">Active</span>
+</div>
+</div>
+<!-- Player Card 5 -->
+<div class="player-card bg-white p-stack-md rounded-xl border border-outline-variant flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-secondary-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="Headshot of a mid-40s male athlete with short hair and a determined gaze, wearing a professional grey performance t-shirt. Clean, bright studio lighting with a subtle depth of field. High-end corporate fitness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApDTig1PEx0IRLdC2cJ08sFMacYVnJnm_OZO7sJVFINbRGs9Zy53SMwjSmYGbZLARTL5slwN9FAGXEUJv7Mj6lOGSsZfXFbzqTQs-ulxsosmEVtRxSW1Vkgs73kwP83L_uqxLQgzPJV1LX-Drqt4wt1zJO52mpKtFA5xcRhd9nkY9-92FqsuBXehe3M2IrNOIVsqxV9wTOiflAgvsN1XVaHpjtd5b3DVXVsRaLvb6EZiusK4Lj5DNT"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-title-md text-title-md text-on-surface truncate">David Miller</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px] text-primary">fitness_center</span>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Gym • Premium</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-[10px] uppercase tracking-wider font-bold">Active</span>
+</div>
+</div>
+<!-- Player Card 6 -->
+<div class="player-card bg-white p-stack-md rounded-xl border border-outline-variant flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-secondary-container shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close-up of a female track athlete with braided hair, looking towards the side with a calm, strong expression. She is wearing a vibrant teal sports top. Soft morning sunlight creates a warm glow on her skin. High-quality lifestyle sports photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWmQSXpNss6-DLPcqO4N-MivRKT7DnR_djA90SmUr0ya-uSOD3WaVaMeM8wOBFSD-BRZtZ6VENpGieG6nFkar9UIKY5cnWazGwlXg1nIK4uL-UO0OMn1iZcDpm1NsUXJZMQJhtrLp3xMHKO69TxtQ4BYUXx_xo606KYGaGv_hcxJPzm8l_vVpMIARyf27P7N2NPMNScVemtg9o9Z2hQHFAiHKDHTqI0l_PKEo1V0IAiFqHy9DuvI97"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Zara Phillips</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px] text-primary">directions_run</span>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Athletics • Pro</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-[10px] uppercase tracking-wider font-bold">Active</span>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-stack-lg flex justify-center">
+<button class="px-6 py-3 rounded-full bg-primary text-on-primary font-title-md flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95">
+                Load More Players
+                <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl">person_add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple search interaction
+        document.querySelector('input').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.player-card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                if(name.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Horizontal chips filter interaction
+        const chips = document.querySelectorAll('.no-scrollbar button');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => {
+                    c.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+                    c.classList.add('border', 'border-outline-variant', 'bg-white', 'text-on-surface-variant');
+                });
+                chip.classList.add('bg-secondary-container', 'text-on-secondary-container');
+                chip.classList.remove('border', 'border-outline-variant', 'bg-white', 'text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

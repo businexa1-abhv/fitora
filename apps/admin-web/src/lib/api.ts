@@ -132,6 +132,86 @@ export type Paginated<T> = {
   totalPages: number;
 };
 
+export type AnalyticsSeriesPoint = { label: string; key: string; value: number };
+
+export type AnalyticsDashboard = {
+  period: string;
+  range: { from: string; to: string };
+  overview: {
+    totalRevenue: number;
+    totalBookings: number;
+    newUsers: number;
+    activeMemberships: number;
+    shopOrders: number;
+    activeCourts: number;
+    pendingCourts: number;
+  };
+  revenue: {
+    total: number;
+    series: AnalyticsSeriesPoint[];
+    byEntityType: Array<{
+      entityType: string;
+      label: string;
+      revenue: number;
+      count: number;
+    }>;
+  };
+};
+
+export type PaymentReports = {
+  periodDays: number;
+  summary: {
+    totalTransactions: number;
+    paidCount: number;
+    failedCount: number;
+    pendingCount: number;
+    refundedCount: number;
+    totalRevenue: number;
+    refundedAmount: number;
+    totalTax?: number;
+  };
+  byEntityType: Array<{
+    entityType: string;
+    label: string;
+    count: number;
+    revenue: number;
+  }>;
+};
+
+export type PaymentRecord = {
+  id: string;
+  amount: number;
+  status: string;
+  entityType: string;
+  createdAt: string;
+  paidAt: string | null;
+  user?: { id: string; firstName: string; lastName: string; email: string };
+  invoiceNumber?: string | null;
+};
+
+export type Sport = {
+  id: string;
+  name: string;
+  slug: string;
+  iconUrl: string | null;
+  description: string | null;
+};
+
+export type SupportTicket = {
+  id: string;
+  subject: string;
+  body: string;
+  status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
+  requesterEmail: string;
+  requesterName: string;
+  assignedToId: string | null;
+  assignedTo?: { id: string; firstName: string; lastName: string; email: string } | null;
+  tenantId: string | null;
+  tenant?: { id: string; name: string; slug: string } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export const adminApi = {
   login: (email: string, password: string) =>
     apiFetch<{
@@ -190,4 +270,67 @@ export const adminApi = {
       token,
     );
   },
+
+  getAnalyticsDashboard: (
+    token: string,
+    params?: { period?: string; from?: string; to?: string },
+  ) => {
+    const qs = new URLSearchParams();
+    if (params?.period) qs.set('period', params.period);
+    if (params?.from) qs.set('from', params.from);
+    if (params?.to) qs.set('to', params.to);
+    const suffix = qs.toString() ? `?${qs}` : '';
+    return apiFetch<AnalyticsDashboard>(`/analytics/dashboard${suffix}`, {}, token);
+  },
+
+  getPaymentReports: (token: string, days?: number) => {
+    const qs = days ? `?days=${days}` : '';
+    return apiFetch<PaymentReports>(`/payments/admin/reports${qs}`, {}, token);
+  },
+
+  listPayments: (token: string, page?: number) => {
+    const qs = page ? `?page=${page}` : '';
+    return apiFetch<Paginated<PaymentRecord>>(`/payments/admin/list${qs}`, {}, token);
+  },
+
+  listSports: (token?: string) => apiFetch<Sport[]>(`/sports`, {}, token ?? undefined),
+
+  listSupportTickets: (
+    token: string,
+    params?: { status?: string; search?: string; page?: number },
+  ) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set('status', params.status);
+    if (params?.search) qs.set('search', params.search);
+    if (params?.page) qs.set('page', String(params.page));
+    const suffix = qs.toString() ? `?${qs}` : '';
+    return apiFetch<Paginated<SupportTicket>>(`/admin/support/tickets${suffix}`, {}, token);
+  },
+
+  createSupportTicket: (
+    token: string,
+    body: {
+      subject: string;
+      body: string;
+      requesterEmail: string;
+      requesterName: string;
+      tenantId?: string;
+    },
+  ) =>
+    apiFetch<SupportTicket>(
+      `/admin/support/tickets`,
+      { method: 'POST', body: JSON.stringify(body) },
+      token,
+    ),
+
+  updateSupportTicket: (
+    token: string,
+    id: string,
+    body: { status?: string; assignedToId?: string | null; subject?: string; body?: string },
+  ) =>
+    apiFetch<SupportTicket>(
+      `/admin/support/tickets/${id}`,
+      { method: 'PATCH', body: JSON.stringify(body) },
+      token,
+    ),
 };

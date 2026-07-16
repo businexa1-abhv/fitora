@@ -12,22 +12,15 @@ import { PrismaService } from '../prisma/prisma.module';
 import { PaymentsService } from '../payments/payments.service';
 import { MembershipsService } from '../memberships/memberships.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
 
 describe('BookingsService', () => {
   let service: BookingsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      'courtSlot' | 'booking' | 'court' | 'auditLog' | '$transaction'
-    >
-  >;
-  let paymentsService: jest.Mocked<Pick<PaymentsService, 'createPaymentOrder' | 'refundBookingPayment'>>;
-  let membershipsService: jest.Mocked<
-    Pick<MembershipsService, 'getActiveMembershipDiscount' | 'getMembershipDiscountDetails'>
-  >;
-  let notificationsService: jest.Mocked<
-    Pick<NotificationsService, 'notifyBookingConfirmed' | 'notifyBookingCancelled'>
-  >;
+  let prisma: any;
+  let paymentsService: any;
+  let membershipsService: any;
+  let notificationsService: any;
 
   const userId = 'player-1';
   const futureStart = new Date(Date.now() + 48 * 60 * 60 * 1000);
@@ -40,6 +33,7 @@ describe('BookingsService', () => {
     startTime: futureStart,
     endTime: new Date(futureStart.getTime() + 60 * 60 * 1000),
     booking: null,
+    bookings: [],
     court: {
       id: 'court-1',
       deletedAt: null,
@@ -97,7 +91,7 @@ describe('BookingsService', () => {
       court: { findFirst: jest.fn(), findUnique: jest.fn() },
       auditLog: { create: jest.fn() },
       $transaction: jest.fn(),
-    } as unknown as typeof prisma;
+    } as any;
 
     paymentsService = {
       createPaymentOrder: jest.fn().mockResolvedValue({
@@ -129,6 +123,28 @@ describe('BookingsService', () => {
         { provide: PaymentsService, useValue: paymentsService },
         { provide: MembershipsService, useValue: membershipsService },
         { provide: NotificationsService, useValue: notificationsService },
+        {
+          provide: SlotAvailabilityService,
+          useValue: {
+            isEngineEnabled: jest.fn().mockReturnValue(false),
+            getLockTtlMinutes: jest.fn().mockReturnValue(15),
+            releaseExpiredLocks: jest.fn().mockResolvedValue({ released: 0 }),
+            reserve: jest.fn(),
+            confirmReservation: jest.fn(),
+            releaseReservation: jest.fn(),
+            releaseConfirmedSeats: jest.fn(),
+            getSlotAvailability: jest.fn(),
+          },
+        },
+        {
+          provide: SlotEventsService,
+          useValue: {
+            emitSlotUpdated: jest.fn(),
+            emitBookingConfirmed: jest.fn(),
+            emitBookingCancelled: jest.fn(),
+            emitAttendanceUpdated: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -138,17 +154,14 @@ describe('BookingsService', () => {
   describe('createBooking', () => {
     it('locks slot and creates pending booking with payment order', async () => {
       prisma.booking.findMany.mockResolvedValue([]);
-      prisma.$transaction.mockImplementation(async (fn) =>
+      prisma.$transaction.mockImplementation(async (fn: any) =>
         fn({
           courtSlot: { findFirst: jest.fn().mockResolvedValue(mockSlot) },
           booking: { create: jest.fn().mockResolvedValue(mockBooking), delete: jest.fn() },
         } as never),
       );
 
-      const result = await service.createBooking(
-        { courtId: 'court-1', slotId: 'slot-1' },
-        userId,
-      );
+      const result = await service.createBooking({ courtId: 'court-1', slotId: 'slot-1' }, userId);
 
       expect(result.booking.id).toBe('booking-1');
       expect(result.lockExpiresAt).toBeInstanceOf(Date);
@@ -163,20 +176,22 @@ describe('BookingsService', () => {
     it('prevents double booking when slot is paid', async () => {
       const slotWithBooking = {
         ...mockSlot,
-        booking: {
-          id: 'existing',
-          userId: 'other',
-          status: BookingStatus.CONFIRMED,
-          paymentStatus: PaymentStatus.PAID,
-          lockedUntil: null,
-        },
+        bookings: [
+          {
+            id: 'existing',
+            userId: 'other',
+            status: BookingStatus.CONFIRMED,
+            paymentStatus: PaymentStatus.PAID,
+            lockedUntil: null,
+          },
+        ],
       };
 
       prisma.booking.findMany.mockResolvedValue([]);
-      prisma.$transaction.mockImplementation(async (fn) =>
+      prisma.$transaction.mockImplementation(async (fn: any) =>
         fn({
           courtSlot: { findFirst: jest.fn().mockResolvedValue(slotWithBooking) },
-          booking: { delete: jest.fn() },
+          booking: { delete: jest.fn(), create: jest.fn() },
         } as never),
       );
 
@@ -188,20 +203,22 @@ describe('BookingsService', () => {
     it('rejects when slot is locked by another player', async () => {
       const slotWithLock = {
         ...mockSlot,
-        booking: {
-          id: 'existing',
-          userId: 'other',
-          status: BookingStatus.PENDING,
-          paymentStatus: PaymentStatus.PENDING,
-          lockedUntil: new Date(Date.now() + 10 * 60 * 1000),
-        },
+        bookings: [
+          {
+            id: 'existing',
+            userId: 'other',
+            status: BookingStatus.PENDING,
+            paymentStatus: PaymentStatus.PENDING,
+            lockedUntil: new Date(Date.now() + 10 * 60 * 1000),
+          },
+        ],
       };
 
       prisma.booking.findMany.mockResolvedValue([]);
-      prisma.$transaction.mockImplementation(async (fn) =>
+      prisma.$transaction.mockImplementation(async (fn: any) =>
         fn({
           courtSlot: { findFirst: jest.fn().mockResolvedValue(slotWithLock) },
-          booking: { delete: jest.fn() },
+          booking: { delete: jest.fn(), create: jest.fn() },
         } as never),
       );
 
@@ -286,7 +303,7 @@ describe('BookingsService', () => {
       const result = await service.getHistory(userId, { page: 1 });
 
       expect(result.items).toHaveLength(1);
-      expect(result.total).toBe(1);
+      expect((result as any).total).toBe(1);
     });
   });
 

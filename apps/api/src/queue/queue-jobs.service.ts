@@ -9,6 +9,9 @@ import { PushProvider } from '../notifications/providers/push.provider';
 import { SMS_PROVIDER, type SmsProvider } from '../notifications/providers/sms.provider';
 import { PaymentsService } from '../payments/payments.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
+import { SlotsService } from '../slots/slots.service';
+import { WaitlistService } from '../bookings/waitlist.service';
 import {
   CHANNEL_JOB_OPTIONS,
   QUEUES,
@@ -49,6 +52,12 @@ export class QueueJobsService implements OnModuleInit {
     private prisma: PrismaService,
     @Inject(RedisService)
     private redisService: RedisService,
+    @Inject(SlotAvailabilityService)
+    private slotAvailabilityService: SlotAvailabilityService,
+    @Inject(SlotsService)
+    private slotsService: SlotsService,
+    @Inject(WaitlistService)
+    private waitlistService: WaitlistService,
   ) {}
 
   onModuleInit() {
@@ -150,6 +159,10 @@ export class QueueJobsService implements OnModuleInit {
         return this.generateDailyReports();
       case SCHEDULED_JOBS.ANALYTICS_AGGREGATION:
         return this.aggregateAnalytics();
+      case SCHEDULED_JOBS.SLOT_GENERATION:
+        return this.slotsService.autoGenerateUpcomingSlots(14);
+      case SCHEDULED_JOBS.RELEASE_EXPIRED_LOCKS:
+        return this.runReleaseExpiredLocks();
       default:
         this.logger.warn(`Unknown scheduled job: ${jobName}`);
     }
@@ -192,5 +205,11 @@ export class QueueJobsService implements OnModuleInit {
 
     this.logger.log('Analytics aggregation complete');
     return payload;
+  }
+
+  private async runReleaseExpiredLocks() {
+    const locks = await this.slotAvailabilityService.releaseExpiredLocks();
+    const waitlist = await this.waitlistService.expireStaleOffers();
+    return { locks, waitlist };
   }
 }

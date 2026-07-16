@@ -11,11 +11,23 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { QueueJobsService } from '../queue/queue-jobs.service';
 import { WalletService } from '../wallet/wallet.service';
+import { TenantsService } from '../tenants/tenants.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
 
 describe('PaymentsService (extended)', () => {
   let service: PaymentsService;
   let prisma: jest.Mocked<
-    Pick<PrismaService, 'payment' | 'paymentInvoice' | 'membershipPurchase' | 'booking' | 'serviceOrder' | 'printOrder' | 'trainingEnrollment' | 'shopInvoice'>
+    Pick<
+      PrismaService,
+      | 'payment'
+      | 'paymentInvoice'
+      | 'membershipPurchase'
+      | 'booking'
+      | 'serviceOrder'
+      | 'printOrder'
+      | 'trainingEnrollment'
+      | 'shopInvoice'
+    >
   >;
 
   beforeEach(async () => {
@@ -42,14 +54,31 @@ describe('PaymentsService (extended)', () => {
       providers: [
         PaymentsService,
         { provide: PrismaService, useValue: prisma },
-        { provide: NotificationsService, useValue: { notifyPaymentSuccess: jest.fn(), notifyPaymentFailed: jest.fn() } },
+        {
+          provide: NotificationsService,
+          useValue: { notifyPaymentSuccess: jest.fn(), notifyPaymentFailed: jest.fn() },
+        },
         { provide: BookingsService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: TrainingService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: ShopService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: PrintService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: ServicesService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: WalletService, useValue: { creditFromTopup: jest.fn() } },
-        { provide: QueueJobsService, useValue: { enqueueRefund: jest.fn(), enqueuePaymentRetry: jest.fn() } },
+        {
+          provide: QueueJobsService,
+          useValue: { enqueueRefund: jest.fn(), enqueuePaymentRetry: jest.fn() },
+        },
+        {
+          provide: TenantsService,
+          useValue: {
+            resolveTenantIdFromContext: jest.fn().mockReturnValue(null),
+            getPaymentConfig: jest.fn(),
+          },
+        },
+        {
+          provide: SlotEventsService,
+          useValue: { emitPaymentUpdated: jest.fn(), emitMembershipUpdated: jest.fn() },
+        },
       ],
     }).compile();
 

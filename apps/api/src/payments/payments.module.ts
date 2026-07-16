@@ -6,6 +6,7 @@ import { ServicesModule } from '../services/services.module';
 import { TrainingModule } from '../training/training.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { WalletModule } from '../wallet/wallet.module';
+import { RealtimeModule } from '../realtime/realtime.module';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 
@@ -18,6 +19,7 @@ import { PaymentsService } from './payments.service';
     forwardRef(() => ServicesModule),
     NotificationsModule,
     forwardRef(() => WalletModule),
+    RealtimeModule,
   ],
   controllers: [PaymentsController],
   providers: [PaymentsService],

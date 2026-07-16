@@ -235,6 +235,11 @@ export interface CourtSlot {
   price: string;
   isBlocked: boolean;
   isBooked: boolean;
+  capacity?: number;
+  availableSeats?: number;
+  reservedSeats?: number;
+  confirmedSeats?: number;
+  availabilityStatus?: 'AVAILABLE' | 'FEW_SPOTS' | 'FULL' | 'BLOCKED' | 'MAINTENANCE' | 'HOLIDAY';
 }
 
 export interface Booking {

@@ -11,6 +11,8 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { QueueJobsService } from '../queue/queue-jobs.service';
 import { WalletService } from '../wallet/wallet.service';
+import { TenantsService } from '../tenants/tenants.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
 
 describe('PaymentsService webhook', () => {
   let service: PaymentsService;
@@ -36,7 +38,21 @@ describe('PaymentsService webhook', () => {
         { provide: PrintService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: ServicesService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: WalletService, useValue: { creditFromTopup: jest.fn() } },
-        { provide: QueueJobsService, useValue: { enqueueRefund: jest.fn(), enqueuePaymentRetry: jest.fn() } },
+        {
+          provide: QueueJobsService,
+          useValue: { enqueueRefund: jest.fn(), enqueuePaymentRetry: jest.fn() },
+        },
+        {
+          provide: TenantsService,
+          useValue: {
+            resolveTenantIdFromContext: jest.fn().mockReturnValue(null),
+            getPaymentConfig: jest.fn(),
+          },
+        },
+        {
+          provide: SlotEventsService,
+          useValue: { emitPaymentUpdated: jest.fn(), emitMembershipUpdated: jest.fn() },
+        },
       ],
     }).compile();
 
@@ -52,9 +68,7 @@ describe('PaymentsService webhook', () => {
     process.env.RAZORPAY_WEBHOOK_SECRET = 'whsec_test';
     const body = JSON.stringify({ event: 'payment.captured' });
 
-    await expect(service.handleWebhook(undefined, body)).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(service.handleWebhook(undefined, body)).rejects.toThrow(UnauthorizedException);
   });
 
   it('rejects webhook with invalid signature', async () => {

@@ -18,6 +18,7 @@ import { type AuthUserPayload } from '../common/decorators/current-user.decorato
 import { NotificationsService } from '../notifications/notifications.service';
 import { PaymentsService } from '../payments/payments.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { SlotEventsService } from '../realtime/slot-events.service';
 import { AGE_GROUP_PRESETS, ageGroupLabel, calculateAge } from './constants/age-groups';
 import {
   type AssignTrainerDto,
@@ -66,6 +67,7 @@ export class TrainingService {
     private paymentsService: PaymentsService,
     @Inject(NotificationsService)
     private notificationsService: NotificationsService,
+    private events: SlotEventsService,
   ) {}
 
   // ─── Programs ───────────────────────────────────────────────────────────────
@@ -198,6 +200,12 @@ export class TrainingService {
       },
     });
 
+    await this.events.emitCoachUpdated({
+      coachId: batch.trainerId,
+      courtId: batch.program.courtId,
+      action: 'batch_assigned',
+    });
+
     return this.formatBatch(batch);
   }
 
@@ -223,6 +231,14 @@ export class TrainingService {
         program: { include: { sport: true, court: true } },
       },
     });
+
+    if (dto.trainerId) {
+      await this.events.emitCoachUpdated({
+        coachId: updated.trainerId,
+        courtId: updated.program.courtId,
+        action: 'batch_updated',
+      });
+    }
 
     return this.formatBatch(updated);
   }

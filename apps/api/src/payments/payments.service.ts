@@ -9,12 +9,7 @@ import {
 } from '@nestjs/common';
 import { addMembershipDuration } from '../memberships/constants/plan-benefits';
 import { QueueJobsService } from '../queue/queue-jobs.service';
-import {
-  PaymentEntityType,
-  PaymentStatus,
-  Prisma,
-  UserRole,
-} from '@prisma/client';
+import { PaymentEntityType, PaymentStatus, Prisma, UserRole } from '@prisma/client';
 import Razorpay from 'razorpay';
 import { createHmac, timingSafeEqual } from 'crypto';
 import { BookingsService } from '../bookings/bookings.service';
@@ -25,6 +20,7 @@ import { TrainingService } from '../training/training.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { WalletService } from '../wallet/wallet.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { SlotEventsService } from '../realtime/slot-events.service';
 import { TenantsService } from '../tenants/tenants.service';
 import { generatePaymentInvoiceNumber, PAYMENT_ENTITY_LABELS } from './payments.constants';
 import { AuthUserPayload } from '../common/decorators/current-user.decorator';
@@ -38,6 +34,7 @@ export class PaymentsService {
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
     private tenantsService: TenantsService,
+    private events: SlotEventsService,
     @Inject(forwardRef(() => BookingsService))
     private bookingsService: BookingsService,
     @Inject(forwardRef(() => TrainingService))
@@ -53,8 +50,7 @@ export class PaymentsService {
     @Inject(forwardRef(() => QueueJobsService))
     private queueJobs: QueueJobsService,
   ) {
-    this.isMockMode =
-      process.env.PAYMENT_MODE === 'mock' || !process.env.RAZORPAY_KEY_ID;
+    this.isMockMode = process.env.PAYMENT_MODE === 'mock' || !process.env.RAZORPAY_KEY_ID;
 
     if (!this.isMockMode) {
       this.razorpay = new Razorpay({
@@ -132,6 +128,64 @@ export class PaymentsService {
     };
   }
 
+  /**
+   * Record an on-site (cash/UPI/card) payment as PAID and issue invoice.
+   * Used for owner walk-in bookings — does not confirm the booking (caller already did).
+   */
+  async recordWalkInPayment(input: {
+    userId: string;
+    bookingId: string;
+    amount: number;
+    paymentMethod: string;
+    tenantId?: string | null;
+  }) {
+    if (input.amount <= 0) {
+      throw new BadRequestException('Payment amount must be positive');
+    }
+
+    const payment = await this.prisma.payment.create({
+      data: {
+        userId: input.userId,
+        tenantId: input.tenantId ?? undefined,
+        amount: input.amount,
+        entityType: PaymentEntityType.BOOKING,
+        entityId: input.bookingId,
+        status: PaymentStatus.PAID,
+        paidAt: new Date(),
+        metadata: {
+          source: 'OWNER_WALK_IN',
+          paymentMethod: input.paymentMethod,
+        },
+        razorpayPaymentId: `walkin_${input.bookingId.slice(0, 8)}_${Date.now()}`,
+      },
+    });
+
+    const invoice = await this.createPaymentInvoice(payment);
+
+    const booking = await this.prisma.booking.findUnique({
+      where: { id: input.bookingId },
+      select: { courtId: true },
+    });
+    await this.events.emitPaymentUpdated({
+      paymentId: payment.id,
+      userId: input.userId,
+      courtId: booking?.courtId ?? null,
+      status: PaymentStatus.PAID,
+      amount: input.amount,
+    });
+
+    return {
+      payment: this.formatPaymentResponse(payment),
+      invoice: invoice
+        ? {
+            id: invoice.id,
+            invoiceNumber: invoice.invoiceNumber,
+            total: String(invoice.total),
+          }
+        : null,
+    };
+  }
+
   private async getRazorpayClient(tenantId?: string): Promise<{
     client: Razorpay | null;
     keyId: string;
@@ -150,8 +204,7 @@ export class PaymentsService {
       }
     }
 
-    const isMock =
-      process.env.PAYMENT_MODE === 'mock' || !process.env.RAZORPAY_KEY_ID;
+    const isMock = process.env.PAYMENT_MODE === 'mock' || !process.env.RAZORPAY_KEY_ID;
 
     if (isMock) {
       return { client: null, keyId: 'mock_key', isMock: true };
@@ -178,7 +231,12 @@ export class PaymentsService {
 
   async getMyPayments(
     userId: string,
-    params?: { status?: PaymentStatus; entityType?: PaymentEntityType; page?: number; pageSize?: number },
+    params?: {
+      status?: PaymentStatus;
+      entityType?: PaymentEntityType;
+      page?: number;
+      pageSize?: number;
+    },
   ) {
     const page = params?.page ?? 1;
     const pageSize = params?.pageSize ?? 20;
@@ -212,7 +270,10 @@ export class PaymentsService {
   async getPaymentById(paymentId: string, user: AuthUserPayload) {
     const payment = await this.prisma.payment.findFirst({
       where: { id: paymentId, deletedAt: null },
-      include: { invoice: true, user: { select: { id: true, firstName: true, lastName: true, email: true } } },
+      include: {
+        invoice: true,
+        user: { select: { id: true, firstName: true, lastName: true, email: true } },
+      },
     });
     if (!payment) throw new NotFoundException('Payment not found');
 
@@ -323,6 +384,13 @@ export class PaymentsService {
       select: { amount: true, status: true, entityType: true, paidAt: true, createdAt: true },
     });
 
+    const taxAgg = await this.prisma.paymentInvoice.aggregate({
+      where: {
+        payment: { deletedAt: null, status: PaymentStatus.PAID, paidAt: { gte: since } },
+      },
+      _sum: { tax: true },
+    });
+
     const paid = payments.filter((p) => p.status === PaymentStatus.PAID);
     const refunded = payments.filter((p) =>
       ([PaymentStatus.REFUNDED, PaymentStatus.PARTIALLY_REFUNDED] as PaymentStatus[]).includes(
@@ -352,6 +420,7 @@ export class PaymentsService {
         refundedCount: refunded.length,
         totalRevenue: paid.reduce((sum, p) => sum + Number(p.amount), 0),
         refundedAmount: refunded.reduce((sum, p) => sum + Number(p.amount), 0),
+        totalTax: Number(taxAgg._sum.tax ?? 0),
       },
       byEntityType: byEntityType.filter((r) => r.count > 0),
     };
@@ -437,11 +506,7 @@ export class PaymentsService {
       }
     }
 
-    const updated = await this.completePayment(
-      paymentId,
-      userId,
-      razorpayPaymentId,
-    );
+    const updated = await this.completePayment(paymentId, userId, razorpayPaymentId);
 
     return {
       success: true,
@@ -464,11 +529,7 @@ export class PaymentsService {
       return { success: true, payment, entity: await this.getEntity(payment) };
     }
 
-    const updated = await this.completePayment(
-      paymentId,
-      userId,
-      `mock_pay_${paymentId}`,
-    );
+    const updated = await this.completePayment(paymentId, userId, `mock_pay_${paymentId}`);
 
     return {
       success: true,
@@ -517,11 +578,7 @@ export class PaymentsService {
     if (!this.isMockMode && payment.razorpayOrderId && this.razorpay) {
       const order = await this.razorpay.orders.fetch(payment.razorpayOrderId);
       if (order.status === 'paid') {
-        await this.completePayment(
-          payment.id,
-          payment.userId,
-          payment.razorpayOrderId,
-        );
+        await this.completePayment(payment.id, payment.userId, payment.razorpayOrderId);
         return { retried: true };
       }
     }
@@ -554,7 +611,8 @@ export class PaymentsService {
 
   async handleWebhook(signature: string | undefined, rawBody: string) {
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
-    const requireSignature = Boolean(secret) || (!this.isMockMode && process.env.PAYMENT_MODE === 'live');
+    const requireSignature =
+      Boolean(secret) || (!this.isMockMode && process.env.PAYMENT_MODE === 'live');
 
     if (requireSignature) {
       if (!secret) {
@@ -592,11 +650,7 @@ export class PaymentsService {
       });
 
       if (payment && payment.status !== PaymentStatus.PAID) {
-        await this.completePayment(
-          payment.id,
-          payment.userId,
-          paymentEntity.id,
-        );
+        await this.completePayment(payment.id, payment.userId, paymentEntity.id);
       }
     }
 
@@ -639,11 +693,7 @@ export class PaymentsService {
     return { received: true };
   }
 
-  private async completePayment(
-    paymentId: string,
-    userId: string,
-    razorpayPaymentId?: string,
-  ) {
+  private async completePayment(paymentId: string, userId: string, razorpayPaymentId?: string) {
     const payment = await this.prisma.payment.findFirst({
       where: { id: paymentId, userId },
     });
@@ -660,16 +710,32 @@ export class PaymentsService {
       },
     });
 
+    let courtId: string | null = null;
+
     switch (payment.entityType) {
-      case PaymentEntityType.BOOKING:
+      case PaymentEntityType.BOOKING: {
         await this.bookingsService.confirmAfterPayment(payment.entityId);
+        const booking = await this.prisma.booking.findUnique({
+          where: { id: payment.entityId },
+          select: { courtId: true },
+        });
+        courtId = booking?.courtId ?? null;
         break;
-      case PaymentEntityType.MEMBERSHIP:
-        await this.confirmMembership(payment.entityId);
+      }
+      case PaymentEntityType.MEMBERSHIP: {
+        const membership = await this.confirmMembership(payment.entityId);
+        courtId = membership.plan.courtId;
         break;
-      case PaymentEntityType.TRAINING:
+      }
+      case PaymentEntityType.TRAINING: {
         await this.confirmTrainingEnrollment(payment.entityId);
+        const enrollment = await this.prisma.trainingEnrollment.findUnique({
+          where: { id: payment.entityId },
+          select: { batch: { select: { program: { select: { courtId: true } } } } },
+        });
+        courtId = enrollment?.batch.program.courtId ?? null;
         break;
+      }
       case PaymentEntityType.SHOP_ORDER:
         await this.confirmShopOrder(payment.entityId);
         break;
@@ -695,6 +761,14 @@ export class PaymentsService {
     );
 
     await this.createPaymentInvoice(updated);
+
+    await this.events.emitPaymentUpdated({
+      paymentId: updated.id,
+      userId,
+      courtId,
+      status: PaymentStatus.PAID,
+      amount: Number(updated.amount),
+    });
 
     return updated;
   }
@@ -804,6 +878,13 @@ export class PaymentsService {
       purchaseId: updated.id,
       planName: updated.plan.name,
       endDate: endDate.toISOString().slice(0, 10),
+    });
+
+    await this.events.emitMembershipUpdated({
+      membershipId: updated.id,
+      userId: updated.userId,
+      courtId: updated.plan.courtId,
+      status: 'ACTIVE',
     });
 
     return updated;

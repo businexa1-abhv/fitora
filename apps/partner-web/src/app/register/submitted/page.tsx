@@ -3,7 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { CheckCircle2, Clock3, FileCheck2, Rocket } from 'lucide-react';
-import { getAuthSession } from '@/lib/api';
+import {
+  getAuthSession,
+  getStoredApplicationId,
+  partnerApi,
+  type PartnerApplication,
+} from '@/lib/api';
 import {
   PartnerFooter,
   RegisterHeader,
@@ -13,10 +18,70 @@ import {
 
 export default function SubmittedPage() {
   const [session, setSession] = useState<ReturnType<typeof getAuthSession>>(null);
+  const [application, setApplication] = useState<PartnerApplication | null>(null);
 
   useEffect(() => {
     setSession(getAuthSession());
+    const id = getStoredApplicationId();
+    if (!id) return;
+    void partnerApi
+      .get(id)
+      .then(setApplication)
+      .catch(() => undefined);
   }, []);
+
+  const status = application?.status ?? 'SUBMITTED';
+  const steps = [
+    {
+      icon: CheckCircle2,
+      label: 'Submitted',
+      status: 'Complete',
+      tone: 'text-secondary',
+      active: true,
+    },
+    {
+      icon: Clock3,
+      label: 'Reviewing',
+      status:
+        status === 'UNDER_REVIEW' || status === 'ACTIVATED'
+          ? status === 'UNDER_REVIEW'
+            ? 'In Progress'
+            : 'Complete'
+          : 'Upcoming',
+      tone:
+        status === 'UNDER_REVIEW' || status === 'ACTIVATED'
+          ? 'text-primary-container'
+          : 'text-muted',
+      active: status === 'UNDER_REVIEW' || status === 'ACTIVATED' || status === 'SUBMITTED',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Verification',
+      status:
+        status === 'ACTIVATED'
+          ? 'Complete'
+          : status === 'UNDER_REVIEW'
+            ? 'In Progress'
+            : 'Upcoming',
+      tone:
+        status === 'ACTIVATED' || status === 'UNDER_REVIEW'
+          ? 'text-primary-container'
+          : 'text-muted',
+      active: status === 'UNDER_REVIEW' || status === 'ACTIVATED',
+    },
+    {
+      icon: Rocket,
+      label: 'Activation',
+      status: status === 'ACTIVATED' ? 'Live' : status === 'REJECTED' ? 'Rejected' : 'Launch',
+      tone:
+        status === 'ACTIVATED'
+          ? 'text-secondary'
+          : status === 'REJECTED'
+            ? 'text-red-600'
+            : 'text-muted',
+      active: status === 'ACTIVATED' || status === 'REJECTED',
+    },
+  ];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -29,28 +94,14 @@ export default function SubmittedPage() {
           Thank You for Joining Us
         </h1>
         <p className="mt-3 max-w-2xl text-muted">
-          Our team is reviewing your application. We’re excited about partnering with your venue to
-          redefine the athletic experience.
+          Current status: <strong>{status}</strong>
+          {application?.businessName ? ` · ${application.businessName}` : ''}. We’ll email you as
+          verification progresses.
         </p>
 
         <div className="mt-10 w-full rounded-3xl border border-border bg-card p-6">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {[
-              {
-                icon: CheckCircle2,
-                label: 'Submitted',
-                status: 'Complete',
-                tone: 'text-secondary',
-              },
-              {
-                icon: Clock3,
-                label: 'Reviewing',
-                status: 'In Progress',
-                tone: 'text-primary-container',
-              },
-              { icon: FileCheck2, label: 'Verification', status: 'Upcoming', tone: 'text-muted' },
-              { icon: Rocket, label: 'Activation', status: 'Launch', tone: 'text-muted' },
-            ].map((step) => (
+            {steps.map((step) => (
               <div key={step.label} className="text-center">
                 <step.icon className={`mx-auto h-7 w-7 ${step.tone}`} />
                 <p className="mt-2 text-sm font-semibold">{step.label}</p>
@@ -82,26 +133,6 @@ export default function SubmittedPage() {
           <button type="button" onClick={() => window.print()} className={secondaryBtnClass}>
             Print Receipt
           </button>
-        </div>
-
-        <div className="mt-12 grid w-full gap-4 text-left sm:grid-cols-2">
-          <div className="rounded-3xl border border-border bg-surface-low p-6">
-            <h2 className="font-semibold">Need help right now?</h2>
-            <p className="mt-2 text-sm text-muted">
-              Our partner success team is available 24/7 for onboarding questions.
-            </p>
-            <p className="mt-4 text-sm">support@fitora.com</p>
-            <p className="text-sm">+1 (800) FIT-ORA</p>
-          </div>
-          <div className="rounded-3xl bg-primary-container p-6 text-white">
-            <h2 className="font-semibold">Check FAQ</h2>
-            <p className="mt-2 text-sm text-white/85">
-              Find answers about payouts, venue listing, and membership tiers.
-            </p>
-            <Link href="/#faq" className={`${secondaryBtnClass} mt-5 border-0`}>
-              Visit Help Center
-            </Link>
-          </div>
         </div>
       </main>
       <PartnerFooter />

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Building2,
@@ -17,6 +18,7 @@ import { QueryBoundary } from '@/components/query/query-boundary';
 import { getStoredUser } from '@/lib/auth';
 import { getOwnerDashboard } from '@/lib/owner-analytics';
 import { useAuthToken } from '@/hooks/use-auth-token';
+import { useRealtimeInvalidation } from '@/hooks/use-realtime-invalidation';
 import { formatCurrency } from '@/lib/owner-utils';
 
 export default function OwnerDashboardPage() {
@@ -30,6 +32,15 @@ export default function OwnerDashboardPage() {
   });
 
   const data = query.data;
+  const courtIds = useMemo(() => data?.courts.map((c) => c.id) ?? [], [data?.courts]);
+  const queryKeys = useMemo(
+    () => [
+      ['owner', 'dashboard'],
+      ['owner', 'bookings'],
+    ],
+    [],
+  );
+  useRealtimeInvalidation(courtIds, token, queryKeys);
 
   return (
     <div className="space-y-8">
@@ -171,7 +182,10 @@ export default function OwnerDashboardPage() {
               <div className="rounded-2xl border border-border bg-card shadow-sm p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="font-bold">Your courts</h2>
-                  <Link href="/owner/courts" className="text-sm text-primary font-medium hover:underline">
+                  <Link
+                    href="/owner/courts"
+                    className="text-sm text-primary font-medium hover:underline"
+                  >
                     Manage all
                   </Link>
                 </div>

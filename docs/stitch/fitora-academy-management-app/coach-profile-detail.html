@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Coach Profile - FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#d8e3fb",
+                    "surface-container-highest": "#d8e3fb",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary-container": "#6cf8bb",
+                    "on-background": "#111c2d",
+                    "surface-container": "#e7eeff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-container-low": "#f0f3ff",
+                    "surface-container-high": "#dee8ff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "surface": "#f9f9ff",
+                    "surface-tint": "#4f54b4",
+                    "on-primary-fixed": "#04006d",
+                    "on-surface-variant": "#464652",
+                    "secondary-fixed": "#6ffbbe",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-secondary-fixed": "#002113",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-tertiary-container": "#ec9700",
+                    "surface-dim": "#cfdaf2",
+                    "outline-variant": "#c7c5d4",
+                    "on-secondary-container": "#00714d",
+                    "on-primary": "#ffffff",
+                    "primary": "#15157d",
+                    "on-surface": "#111c2d",
+                    "primary-container": "#2e3192",
+                    "surface-bright": "#f9f9ff",
+                    "on-error-container": "#93000a",
+                    "secondary": "#006c49",
+                    "inverse-surface": "#263143",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "tertiary": "#3c2300",
+                    "background": "#f9f9ff",
+                    "primary-fixed": "#e1e0ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-container": "#5a3700",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "outline": "#777683",
+                    "on-primary-container": "#9da1ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "gutter-mobile": "12px",
+                    "stack-lg": "24px",
+                    "unit": "4px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "label-lg": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">search</button>
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of an athletic coach for a high-end sports academy. The individual is smiling confidently, wearing a sleek navy blue moisture-wicking polo shirt with a subtle academy logo. The background is a softly blurred, brightly lit modern gymnasium with corporate indigo and emerald green accents. Professional studio lighting emphasizes a clean, light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_jHaoWKr1OYBzcLFXFvbfweaHLaQi-Z310VYYLJfBTFHRmFFmi0UnSJ_Lco3saCnbvK3NwGWzAt3-LFN3QrKszrh3v4_0HIIpPh8x19o24bN0xATmbH_Mgd4wEYKW9GT-pP1rF8tBdG1Yo17CCB7FrTarI-BCDfx1zWe5MlBuJWsg2q9iw5ZnSuq1vdOoPVmCVw8q8doILe0DcMAbxVB8sP2gKmuAS8K9u8frkn8vSl4IzH0yxP8T"/>
+</div>
+</div>
+</header>
+<main class="pt-20 px-margin-mobile max-w-5xl mx-auto">
+<!-- Hero Profile Section -->
+<section class="mt-stack-lg flex flex-col md:flex-row gap-stack-lg items-start">
+<div class="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden border border-outline-variant relative">
+<img class="w-full h-full object-cover" data-alt="A detailed full-length action portrait of a professional tennis coach standing on a pristine indoor court. He is holding a high-quality tennis racket, wearing athletic indigo and white apparel. The setting is bright and spacious with high-key lighting, consistent with a premium corporate sport management identity. Soft emerald green highlights appear in the court markings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASvF5W9uazWnJrno0CqB4PnvNUJm3NJPA9hs26mBXPmgE55yETtbvSjB6lUdOFGDr2Z-9rkadpi5g8XMphD3lk-V4WT4pluk8MTz6dlzoSE9SBqkiHVtiihenfXbeE-sjl-qs35RpJ-gznHT3B-4ZLDo22toDpbnv7nVvqPCwQ32xWf8FfNctOqir8-v6ic5bndyBeenez2-_Q5vc_t515JeRkviZNF8ssaUk7ZFFLSBMV2SjmigCl"/>
+<div class="absolute bottom-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Senior Elite Coach</div>
+</div>
+<div class="flex-1 space-y-stack-md">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Marcus Vance</h2>
+<p class="text-on-surface-variant font-title-md">Elite Performance & Strategy Lead</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">verified</span> ATP CERTIFIED
+                    </span>
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-[10px] font-bold">12Y EXPERIENCE</span>
+</div>
+<p class="text-on-surface leading-relaxed font-body-lg">
+                    With over a decade of experience at the national level, Coach Vance specializes in high-intensity technical refinement and mental conditioning for professional-track athletes. His philosophy centers on 'Kinetic Intelligence'—merging physical prowess with strategic data-driven decision making.
+                </p>
+<div class="flex gap-stack-md pt-2">
+<button class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">mail</span> Message
+                    </button>
+<button class="flex-1 border-2 border-primary text-primary py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-primary-fixed active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">edit_calendar</span> Edit Roster
+                    </button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Stats & Details -->
+<section class="mt-stack-lg grid grid-cols-1 md:grid-cols-3 gap-gutter-mobile">
+<!-- Specialties Card -->
+<div class="md:col-span-2 bg-white border border-outline-variant p-stack-md rounded-xl shadow-sm">
+<h3 class="font-title-lg text-primary flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined">stars</span> Specialties & Focus
+                </h3>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="p-3 bg-surface-container rounded-lg">
+<p class="text-primary font-bold text-sm">Technical Biomechanics</p>
+<p class="text-xs text-on-surface-variant mt-1">Optimization of swing path and power transfer.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-lg">
+<p class="text-primary font-bold text-sm">Match Strategy</p>
+<p class="text-xs text-on-surface-variant mt-1">High-pressure situational tactical analysis.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-lg">
+<div class="flex justify-between items-center">
+<p class="text-primary font-bold text-sm">Elite Junior Development</p>
+<span class="material-symbols-outlined text-secondary text-sm">trending_up</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Pathway planning for collegiate scholarships.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-lg">
+<p class="text-primary font-bold text-sm">Injury Prevention</p>
+<p class="text-xs text-on-surface-variant mt-1">Focus on longevity and sustainable performance.</p>
+</div>
+</div>
+</div>
+<!-- Performance Stats -->
+<div class="bg-primary text-on-primary p-stack-md rounded-xl flex flex-col justify-between overflow-hidden relative group">
+<div class="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-9xl">analytics</span>
+</div>
+<h3 class="font-title-md uppercase tracking-widest text-[10px] opacity-70">Performance Insights</h3>
+<div class="space-y-4 relative z-10">
+<div>
+<div class="flex justify-between items-end">
+<span class="font-label-lg text-label-lg">Student Satisfaction</span>
+<span class="font-display-lg text-3xl font-bold">98%</span>
+</div>
+<div class="w-full bg-primary-container h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-secondary-container h-full w-[98%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end">
+<span class="font-label-lg text-label-lg">Hours Logged</span>
+<span class="font-label-lg text-label-lg">Weekly: 42h</span>
+</div>
+<p class="font-headline-md text-headline-md mt-1">2,480 <span class="text-sm font-normal opacity-70">Total</span></p>
+</div>
+<div>
+<div class="flex justify-between items-end">
+<span class="font-label-lg text-label-lg">Athlete Progress</span>
+<span class="font-label-lg text-label-lg">+14% YoY</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Weekly Roster Section -->
+<section class="mt-stack-lg">
+<div class="flex justify-between items-center mb-stack-md px-1">
+<h3 class="font-headline-sm text-primary">Current Weekly Roster</h3>
+<div class="flex gap-2">
+<button class="p-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="overflow-x-auto hide-scrollbar -mx-margin-mobile px-margin-mobile">
+<table class="w-full text-left border-collapse min-w-[600px]">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="py-3 px-4 font-label-lg text-on-surface-variant uppercase tracking-wider">Time Slot</th>
+<th class="py-3 px-4 font-label-lg text-on-surface-variant uppercase tracking-wider">Student</th>
+<th class="py-3 px-4 font-label-lg text-on-surface-variant uppercase tracking-wider">Program</th>
+<th class="py-3 px-4 font-label-lg text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="py-3 px-4 font-label-lg text-on-surface-variant uppercase tracking-wider">Actions</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors group">
+<td class="py-4 px-4 font-label-lg text-primary">08:00 - 09:30</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up headshot of a young female athlete in her late teens, wearing a white tennis visor. Her expression is one of focus and determination. The lighting is crisp and natural, highlighting a high-performance training environment with indigo and emerald green design elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTlUrjm-16VVbR8QiMgl6djWXJZR5mulADqV1dMfYM5zTPQRzbk63HGwpwL7yRrNKHJ-SRKgJGicpMVzKvt0xoXkA4YdbzBFfVCFVIvrWknJAYMMe0D1m-qY84Pw3EXyUtGsO1-H9fAG-FuhWVfo8MW5TD9PBDGEnOEKl-2NXADajmeY3lWKm2XTtcfuiTQMhMLmednGn6aTrm4nDztW-snJI6qjhDFSCTqg-ixmu815HKDhFTyezc"/>
+</div>
+<span class="font-medium text-on-surface">Alex Rivera</span>
+</div>
+</td>
+<td class="py-4 px-4 text-on-surface-variant">Pro-Prep Track</td>
+<td class="py-4 px-4">
+<span class="bg-secondary-container/30 text-secondary px-2 py-1 rounded text-[10px] font-bold uppercase">Confirmed</span>
+</td>
+<td class="py-4 px-4">
+<button class="text-primary hover:underline font-bold text-xs">DETAILS</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-4 font-label-lg text-primary">10:00 - 11:30</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male athlete, around 20 years old, wearing a black training shirt with emerald accents. He is wiping sweat with a towel, looking ready for a coaching session. The backdrop is a high-tech athletic training center with minimalist clean lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGvyKiZwjBhJ-WGcDQUhf5Bk0OgKuL96y7S_176qc8R2opMybC_rWp4HvQ0ZDv6ysSK81JKKw2gg6lfDoogjxJi2r-AZJdtsmqozC-VTWfYn0P1rghOnipaTaBy2gbZ1c78JZExdV1VQ_MfbVd_PXn2F3l0UAPo5iTiSRnbRrhYQuDQcN0YHOViuFFtkvDPREB5jkVpwV2zmqBrAbQiWre3_g0hnTFdaQmn1ClKxb_smMmgiTYpLGI"/>
+</div>
+<span class="font-medium text-on-surface">Leo Sterling</span>
+</div>
+</td>
+<td class="py-4 px-4 text-on-surface-variant">Core Technical</td>
+<td class="py-4 px-4">
+<span class="bg-secondary-container/30 text-secondary px-2 py-1 rounded text-[10px] font-bold uppercase">Confirmed</span>
+</td>
+<td class="py-4 px-4">
+<button class="text-primary hover:underline font-bold text-xs">DETAILS</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-4 font-label-lg text-primary">13:00 - 14:30</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3 opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<span class="font-medium text-on-surface italic">Available Slot</span>
+</div>
+</td>
+<td class="py-4 px-4 text-on-surface-variant">N/A</td>
+<td class="py-4 px-4">
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded text-[10px] font-bold uppercase">Open</span>
+</td>
+<td class="py-4 px-4">
+<button class="text-primary font-bold text-xs flex items-center gap-1 hover:text-primary-container">
+<span class="material-symbols-outlined text-xs">add</span> ASSIGN
+                                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Certifications Footer -->
+<section class="mt-stack-lg bg-surface-container-low border border-outline-variant rounded-xl p-stack-md">
+<h4 class="font-label-lg text-on-surface-variant uppercase tracking-widest mb-4">Official Certifications</h4>
+<div class="flex flex-wrap gap-stack-md">
+<div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-default">
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+<span class="font-bold text-xs text-on-surface">USPTA Elite Professional</span>
+</div>
+<div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-default">
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+<span class="font-bold text-xs text-on-surface">NASM Performance Enhancement</span>
+</div>
+<div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-default">
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+<span class="font-bold text-xs text-on-surface">IFT Tactical Specialist</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button -->
+<button class="fixed right-6 bottom-24 w-14 h-14 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined text-2xl">add</span>
+</button>
+<script>
+        // Simple micro-interaction for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.add('bg-surface-container-high');
+                setTimeout(() => row.classList.remove('bg-surface-container-high'), 300);
+            });
+        });
+
+        // Atmospheric parallax hint for the profile image
+        window.addEventListener('scroll', () => {
+            const scroll = window.pageYOffset;
+            const heroImg = document.querySelector('section img');
+            if(heroImg) {
+                heroImg.style.transform = `translateY(${scroll * 0.05}px)`;
+            }
+        });
+    </script>
+</body></html>

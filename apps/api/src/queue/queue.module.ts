@@ -1,8 +1,11 @@
 import { Global, Module, forwardRef } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AnalyticsModule } from '../analytics/analytics.module';
+import { AvailabilityModule } from '../availability/availability.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PaymentsModule } from '../payments/payments.module';
+import { SlotsModule } from '../slots/slots.module';
+import { BookingsModule } from '../bookings/bookings.module';
 import { EmailProvider } from '../notifications/providers/email.provider';
 import { PushProvider } from '../notifications/providers/push.provider';
 import { smsProviderProviders } from '../notifications/providers/sms.provider';
@@ -15,6 +18,9 @@ import { QueueManagerService } from './queue-manager.service';
   imports: [
     ConfigModule,
     AnalyticsModule,
+    AvailabilityModule,
+    SlotsModule,
+    forwardRef(() => BookingsModule),
     forwardRef(() => NotificationsModule),
     forwardRef(() => PaymentsModule),
   ],

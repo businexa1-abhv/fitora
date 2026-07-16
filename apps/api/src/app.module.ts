@@ -23,6 +23,10 @@ import { QueueModule } from './queue/queue.module';
 import { AiModule } from './ai/ai.module';
 import { TenantsModule } from './tenants/tenants.module';
 import { PartnerOnboardingModule } from './partner-onboarding/partner-onboarding.module';
+import { AvailabilityModule } from './availability/availability.module';
+import { RealtimeModule } from './realtime/realtime.module';
+import { VenueOpsModule } from './venue-ops/venue-ops.module';
+import { SupportModule } from './support/support.module';
 
 @Module({
   imports: [
@@ -50,6 +54,10 @@ import { PartnerOnboardingModule } from './partner-onboarding/partner-onboarding
     NotificationsModule,
     CourtsModule,
     SlotsModule,
+    AvailabilityModule,
+    RealtimeModule,
+    VenueOpsModule,
+    SupportModule,
     WalletModule,
     AiModule,
   ],

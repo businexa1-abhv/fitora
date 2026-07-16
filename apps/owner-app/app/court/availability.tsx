@@ -26,6 +26,7 @@ import {
   listClosures,
   removeClosure,
 } from '@/lib/owner-api';
+import { useOwnerCalendarLive } from '@/hooks/use-owner-calendar-live';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 function toISODate(d: Date) {
@@ -91,6 +92,8 @@ export default function CourtAvailabilityScreen() {
     queryFn: () => getCourtCalendar(token!, activeCourtId!, startDate, endDate),
     enabled: !!token && !!activeCourtId,
   });
+
+  useOwnerCalendarLive(activeCourtId, token);
 
   const closuresQuery = useQuery({
     queryKey: ['owner', 'closures', activeCourtId],

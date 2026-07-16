@@ -1,10 +1,28 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TrendingUp } from 'lucide-react';
 import { AdminShell, primaryBtnClass } from '@/components/admin-shell';
-import { adminApi, getAccessToken, type PartnerApplicationAdmin } from '@/lib/api';
+import {
+  adminApi,
+  getAccessToken,
+  type AnalyticsDashboard,
+  type PartnerApplicationAdmin,
+} from '@/lib/api';
+import { formatInr } from '@/lib/format';
+import { getRealtimeSocket } from '@/lib/realtime';
+
+const LIVE_EVENTS = [
+  'booking.created',
+  'booking.cancelled',
+  'slot:updated',
+  'attendance.updated',
+  'membership.updated',
+  'payment.updated',
+  'coach.updated',
+  'player.updated',
+] as const;
 
 export default function AdminOverviewPage() {
   const [stats, setStats] = useState({
@@ -14,18 +32,48 @@ export default function AdminOverviewPage() {
     activated: 0,
   });
   const [pending, setPending] = useState<PartnerApplicationAdmin[]>([]);
+  const [analytics, setAnalytics] = useState<AnalyticsDashboard | null>(null);
+  const [livePulse, setLivePulse] = useState(0);
 
-  useEffect(() => {
+  const refresh = useCallback(() => {
     const token = getAccessToken();
     if (!token) return;
     void Promise.all([
       adminApi.partnerStats(token),
       adminApi.listApplications(token, { status: 'UNDER_REVIEW', page: 1 }),
-    ]).then(([s, list]) => {
+      adminApi.getAnalyticsDashboard(token, { period: 'monthly' }),
+    ]).then(([s, list, dashboard]) => {
       setStats(s);
       setPending(list.items.slice(0, 4));
+      setAnalytics(dashboard);
     });
   }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh, livePulse]);
+
+  useEffect(() => {
+    const token = getAccessToken();
+    if (!token || typeof window === 'undefined') return;
+
+    const socket = getRealtimeSocket(token);
+    const onEvent = () => setLivePulse((n) => n + 1);
+    for (const event of LIVE_EVENTS) {
+      socket.on(event, onEvent);
+    }
+    return () => {
+      for (const event of LIVE_EVENTS) {
+        socket.off(event, onEvent);
+      }
+    };
+  }, []);
+
+  const revenueSeries = useMemo(() => analytics?.revenue.series ?? [], [analytics]);
+  const maxRevenue = useMemo(
+    () => Math.max(...revenueSeries.map((p) => p.value), 1),
+    [revenueSeries],
+  );
 
   return (
     <AdminShell>
@@ -34,6 +82,7 @@ export default function AdminOverviewPage() {
           <h1 className="font-display text-3xl font-bold">Platform Overview</h1>
           <p className="mt-1 text-sm text-muted">
             Strategic insights and operational performance for FitOra India.
+            {livePulse > 0 ? ` · Live updates: ${livePulse}` : ''}
           </p>
         </div>
         <div className="flex gap-3">
@@ -41,7 +90,7 @@ export default function AdminOverviewPage() {
             type="button"
             className="rounded-full border border-border bg-white px-4 py-2 text-sm"
           >
-            Last 30 Days
+            Last 12 Months
           </button>
           <button type="button" className={primaryBtnClass}>
             Full Data Export
@@ -72,26 +121,46 @@ export default function AdminOverviewPage() {
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
         <section className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="font-display text-xl font-semibold">Revenue Analytics</h2>
-          <p className="mt-1 text-sm text-muted">
-            Commission vs subscription trends (demo visualization).
-          </p>
-          <div className="mt-8 flex h-56 items-end gap-3 px-2">
-            {[40, 55, 48, 70, 62, 80].map((h, i) => (
-              <div key={i} className="flex flex-1 flex-col items-center gap-2">
-                <div
-                  className="flex w-full items-end justify-center gap-1"
-                  style={{ height: '180px' }}
-                >
-                  <div className="w-3 rounded-t bg-primary-container" style={{ height: `${h}%` }} />
-                  <div className="w-3 rounded-t bg-info" style={{ height: `${h * 0.7}%` }} />
-                </div>
-                <span className="text-[10px] uppercase text-muted">
-                  {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'][i]}
-                </span>
-              </div>
-            ))}
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="font-display text-xl font-semibold">Revenue Analytics</h2>
+              <p className="mt-1 text-sm text-muted">
+                Monthly paid revenue from platform payments.
+              </p>
+            </div>
+            {analytics && (
+              <p className="font-display text-lg font-bold text-primary">
+                {formatInr(analytics.revenue.total, true)}
+              </p>
+            )}
           </div>
+          {revenueSeries.length === 0 ? (
+            <p className="mt-8 text-sm text-muted">No revenue data for this period.</p>
+          ) : (
+            <div className="mt-8 flex h-56 items-end gap-2 overflow-x-auto px-2">
+              {revenueSeries.map((point) => {
+                const heightPct = Math.max(4, (point.value / maxRevenue) * 100);
+                return (
+                  <div
+                    key={point.key}
+                    className="flex min-w-[2.5rem] flex-1 flex-col items-center gap-2"
+                  >
+                    <div
+                      className="flex w-full items-end justify-center"
+                      style={{ height: '180px' }}
+                      title={formatInr(point.value)}
+                    >
+                      <div
+                        className="w-full max-w-8 rounded-t bg-primary-container"
+                        style={{ height: `${heightPct}%` }}
+                      />
+                    </div>
+                    <span className="text-[10px] uppercase text-muted">{point.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         <section className="rounded-3xl border border-border bg-card p-6 shadow-sm">

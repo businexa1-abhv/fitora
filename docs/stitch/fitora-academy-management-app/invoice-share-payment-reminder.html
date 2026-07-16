@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Owner - Invoice Actions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#e7eeff",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "primary": "#15157d",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-high": "#dee8ff",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-primary": "#c0c1ff",
+                        "tertiary-container": "#5a3700",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#464652",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-bright": "#f9f9ff",
+                        "primary-container": "#2e3192",
+                        "outline": "#777683",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-container": "#ec9700",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4f54b4",
+                        "on-primary-fixed": "#04006d",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "background": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface-dim": "#cfdaf2",
+                        "tertiary": "#3c2300",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-background": "#111c2d",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#9da1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter-mobile": "12px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "title-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .action-sheet-enter {
+            animation: slide-up 0.3s ease-out forwards;
+        }
+        @keyframes slide-up {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .scrim-fade {
+            animation: fade-in 0.3s ease-out forwards;
+        }
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface shadow-[0px_12px_32px_rgba(0,0,0,0.05)] h-16 flex justify-between items-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="fitness_center">fitness_center</span>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tighter">FitOra Owner</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100 text-secondary">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-24 px-margin-mobile max-w-xl mx-auto">
+<!-- Invoice Detail Background (Simulated) -->
+<div class="space-y-stack-lg">
+<div class="flex justify-between items-end">
+<div>
+<span class="font-label-lg text-label-lg text-on-tertiary-container bg-tertiary-fixed-dim px-2 py-0.5 rounded-full">#INV-2023-882</span>
+<h2 class="font-headline-sm text-headline-sm mt-1 text-primary">Rahul Sharma</h2>
+</div>
+<div class="text-right">
+<p class="font-label-lg text-label-lg text-outline">DUE DATE</p>
+<p class="font-title-md text-title-md">Oct 24, 2023</p>
+</div>
+</div>
+<!-- Invoice Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-sm">
+<div class="flex justify-between mb-4">
+<span class="font-title-lg text-title-lg text-primary">₹450.00</span>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="pending" style="font-size: 18px;">pending</span>
+<span class="font-label-lg text-label-lg uppercase tracking-wider font-bold">Payment Pending</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-body-md text-on-surface-variant">
+<span>Tennis Court Booking (1hr)</span>
+<span class="font-label-lg">₹400.00</span>
+</div>
+<div class="flex justify-between text-body-md text-on-surface-variant">
+<span>Equipment Rental</span>
+<span class="font-label-lg">₹50.00</span>
+</div>
+<hr class="border-outline-variant"/>
+<div class="flex justify-between font-title-md text-primary">
+<span>Total Due</span>
+<span class="font-label-lg text-lg">₹450.00</span>
+</div>
+</div>
+</div>
+<!-- Decorative Pattern Element -->
+<div class="relative h-32 w-full rounded-xl overflow-hidden bg-primary-container">
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<p class="text-on-primary font-title-md opacity-80 italic">"Focus on the win, we handle the admin."</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Modal Scrim -->
+<div class="fixed inset-0 bg-inverse-surface/40 z-[60] scrim-fade" id="scrim"></div>
+<!-- Action Sheet (Bottom Sheet) -->
+<div class="fixed bottom-0 left-0 w-full z-[70] action-sheet-enter" id="actionSheet">
+<div class="max-w-xl mx-auto bg-surface rounded-t-[28px] shadow-[0px_-8px_40px_rgba(21,21,125,0.15)] pb-safe overflow-hidden border-t border-outline-variant/30">
+<!-- Drag Handle -->
+<div class="flex justify-center pt-3 pb-2">
+<div class="w-8 h-1 rounded-full bg-outline-variant"></div>
+</div>
+<!-- Header -->
+<div class="px-6 pb-4">
+<h3 class="font-headline-sm text-headline-sm text-primary">Manage Invoice</h3>
+<p class="text-body-md text-on-surface-variant">Choose an action for Rahul Sharma's payment.</p>
+</div>
+<!-- Reminder Copy Preview -->
+<div class="mx-6 mb-6 p-4 bg-surface-container-low rounded-xl border border-primary/10">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="chat_bubble" style="font-size: 16px;">chat_bubble</span>
+<span class="font-label-lg text-label-lg uppercase">Reminder Preview</span>
+</div>
+<p class="text-body-md text-on-surface italic">"Hi Rahul, a payment of <span class="font-label-lg text-primary">₹450</span> is due for your Tennis session. Please settle at your earliest convenience. Regards, FitOra."</p>
+</div>
+<!-- Action Grid -->
+<div class="px-6 pb-8 space-y-4">
+<!-- Primary Action -->
+<button class="w-full flex items-center justify-between p-4 bg-primary-container text-on-primary-container rounded-2xl hover:brightness-110 transition-all active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="bg-primary-fixed text-primary p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</div>
+<span class="font-title-md text-white">Mark as Paid</span>
+</div>
+<span class="material-symbols-outlined text-on-primary-container" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Utility Grid -->
+<div class="grid grid-cols-1 gap-3">
+<button class="flex items-center gap-4 p-4 bg-surface-container-highest/30 border border-outline-variant rounded-2xl hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="font-title-md text-on-surface">Share PDF Invoice</span>
+</button>
+<div class="pt-2">
+<p class="font-label-lg text-label-lg text-outline uppercase mb-3 ml-1">Send Reminder Via</p>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-secondary-container/20 border border-secondary/10 hover:bg-secondary-container/40 transition-all group">
+<span class="material-symbols-outlined text-secondary group-hover:scale-110 transition-transform" data-icon="chat">chat</span>
+<span class="font-label-lg text-on-secondary-fixed-variant">WhatsApp</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-surface-container-high border border-outline-variant hover:bg-surface-container-highest transition-all group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="sms">sms</span>
+<span class="font-label-lg text-on-surface-variant">SMS</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-surface-container-high border border-outline-variant hover:bg-surface-container-highest transition-all group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="mail">mail</span>
+<span class="font-label-lg text-on-surface-variant">Email</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Secondary Close -->
+<button class="w-full py-4 text-primary font-title-md hover:bg-surface-container-low rounded-xl transition-colors" onclick="toggleSheet()">
+                    Cancel
+                </button>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-2 bg-surface border-t border-outline-variant z-50">
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-label-md text-label-md">Manage</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-label-md text-label-md">More</span>
+</button>
+</nav>
+<script>
+        function toggleSheet() {
+            const sheet = document.getElementById('actionSheet');
+            const scrim = document.getElementById('scrim');
+            
+            if (sheet.classList.contains('translate-y-0')) {
+                sheet.style.transform = 'translateY(100%)';
+                scrim.style.opacity = '0';
+                setTimeout(() => {
+                    sheet.classList.add('hidden');
+                    scrim.classList.add('hidden');
+                }, 300);
+            } else {
+                sheet.classList.remove('hidden');
+                scrim.classList.remove('hidden');
+                setTimeout(() => {
+                    sheet.style.transform = 'translateY(0)';
+                    scrim.style.opacity = '1';
+                }, 10);
+            }
+        }
+
+        // Initially shown for the user, but handle closing
+        document.getElementById('scrim').addEventListener('click', toggleSheet);
+    </script>
+</body></html>

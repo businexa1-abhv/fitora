@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Payroll Summary | FitOra Owner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-secondary": "#ffffff",
+                "surface-container": "#e7eeff",
+                "secondary": "#006c49",
+                "on-secondary-fixed": "#002113",
+                "primary": "#15157d",
+                "inverse-on-surface": "#ecf1ff",
+                "surface-container-high": "#dee8ff",
+                "secondary-container": "#6cf8bb",
+                "primary-fixed": "#e1e0ff",
+                "tertiary-fixed": "#ffddb8",
+                "inverse-primary": "#c0c1ff",
+                "tertiary-container": "#5a3700",
+                "on-error": "#ffffff",
+                "on-surface-variant": "#464652",
+                "on-tertiary-fixed-variant": "#653e00",
+                "surface-bright": "#f9f9ff",
+                "primary-container": "#2e3192",
+                "outline": "#777683",
+                "on-secondary-container": "#00714d",
+                "on-error-container": "#93000a",
+                "error": "#ba1a1a",
+                "tertiary-fixed-dim": "#ffb95f",
+                "on-tertiary-container": "#ec9700",
+                "error-container": "#ffdad6",
+                "secondary-fixed": "#6ffbbe",
+                "on-surface": "#111c2d",
+                "surface-tint": "#4f54b4",
+                "on-primary-fixed": "#04006d",
+                "surface-container-low": "#f0f3ff",
+                "on-primary": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary-fixed": "#2a1700",
+                "background": "#f9f9ff",
+                "inverse-surface": "#263143",
+                "surface-dim": "#cfdaf2",
+                "tertiary": "#3c2300",
+                "surface": "#f9f9ff",
+                "secondary-fixed-dim": "#4edea3",
+                "on-background": "#111c2d",
+                "primary-fixed-dim": "#c0c1ff",
+                "outline-variant": "#c7c5d4",
+                "on-primary-fixed-variant": "#373a9b",
+                "on-tertiary": "#ffffff",
+                "on-primary-container": "#9da1ff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "stack-lg": "24px",
+                "margin-mobile": "16px",
+                "gutter-mobile": "12px",
+                "stack-md": "16px",
+                "unit": "4px",
+                "stack-sm": "8px"
+            },
+            "fontFamily": {
+                "display-lg": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-sm": ["Inter"],
+                "headline-lg": ["Inter"],
+                "headline-md": ["Inter"],
+                "title-md": ["Inter"],
+                "headline-lg-mobile": ["Inter"],
+                "label-lg": ["JetBrains Mono"],
+                "title-lg": ["Inter"],
+                "body-md": ["Inter"]
+            },
+            "fontSize": {
+                "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9ff;
+            color: #111c2d;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #006c49;
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            transform: translateX(100%);
+        }
+        /* Custom scrollbar for high-density lists */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7c5d4;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-[0px_12px_32px_rgba(0,0,0,0.05)] h-16">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-full max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-display-lg text-headline-lg text-primary dark:text-primary-fixed-dim tracking-tighter">FitOra Owner</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 px-margin-mobile max-w-4xl mx-auto w-full">
+<!-- Period Title -->
+<div class="mb-stack-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Oct 1 - Oct 15 Payroll</h2>
+<p class="font-body-md text-on-surface-variant">Reviewing payout summary for the first half of October.</p>
+</div>
+<!-- Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-mobile mb-stack-lg">
+<!-- Payout Card -->
+<div class="md:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex flex-col justify-between overflow-hidden relative">
+<div class="absolute -right-4 -top-4 opacity-5">
+<span class="material-symbols-outlined text-[120px] text-primary">payments</span>
+</div>
+<div>
+<span class="font-label-lg text-label-lg text-secondary uppercase tracking-widest">Total Payout</span>
+<div class="font-display-lg text-headline-lg mt-unit text-primary">₹1,42,850.00</div>
+</div>
+<div class="mt-stack-md flex items-center gap-4">
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-[18px] mr-1">trending_up</span>
+<span class="font-label-lg text-label-lg">12% vs last cycle</span>
+</div>
+</div>
+</div>
+<!-- Stats Mini Card -->
+<div class="bg-primary text-on-primary rounded-xl p-stack-md flex flex-col justify-center items-center text-center shadow-lg">
+<div class="w-12 h-12 bg-on-primary-container rounded-full flex items-center justify-center mb-stack-sm">
+<span class="material-symbols-outlined text-primary-container">groups</span>
+</div>
+<div class="font-headline-sm text-headline-sm">18</div>
+<div class="font-label-lg text-label-lg opacity-80 uppercase tracking-tighter">Active Coaches</div>
+</div>
+</div>
+<!-- Filters / Search -->
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex gap-2">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-lg text-label-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">filter_list</span>
+                    All Coaches
+                </span>
+<span class="border border-outline-variant text-on-surface-variant px-3 py-1 rounded-full font-label-lg text-label-lg flex items-center gap-1 hover:bg-surface-container-low cursor-pointer transition-colors">
+                    Tennis
+                </span>
+</div>
+<div class="flex items-center gap-2 text-primary font-title-md cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="font-label-lg">Export PDF</span>
+</div>
+</div>
+<!-- Coach List -->
+<div class="space-y-gutter-mobile">
+<!-- Elena -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-stack-md">
+<div class="w-12 h-12 rounded-full border-2 border-primary-fixed overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional headshot of a female athletic coach named Elena, looking confident and smiling. She is wearing high-end navy blue sports apparel. The background is a brightly lit, clean indoor sports academy with soft bokeh. The lighting is crisp and modern, reflecting a premium corporate management aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7vUgTfht1NUdQcE7GB-WJi7R2FH6-xyb3hBdiHyVzY4az9DJNiXzaj5n1bbpQLSYaLfGYGIQp7y_hYkPL6jXLksI1ciVZDRbBeSK-OGliB7-gR_JfoL4vl-WnJSt1iCh6R3jvlb6v3s9PPwTrXmJkAbrcBRljBCjVkAut6tAOCPuDksC1hmZDfkmDzZMhiXLNkW9gOpZoa5Q2OAJ4oeh-iWiIHhEgrnOdlO6y36fA1VtX_f5B8Ax_"/>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary">Coach Elena</div>
+<div class="font-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                            24 sessions
+                        </div>
+</div>
+</div>
+<div class="flex items-center gap-stack-lg">
+<div class="text-right">
+<div class="font-label-lg text-label-lg text-on-surface-variant">Earnings</div>
+<div class="font-title-md text-title-md text-primary">₹1,840.00</div>
+</div>
+<!-- Toggle Switch -->
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface-variant hidden md:block">Unpaid</span>
+<div class="relative inline-block w-12 h-6 transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-2 border-outline-variant appearance-none cursor-pointer z-10 checked:right-0 checked:border-secondary transition-all duration-300" id="toggle-elena" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-high cursor-pointer transition-colors duration-300" for="toggle-elena">
+<span class="toggle-dot block w-6 h-6 rounded-full bg-white shadow-sm transform transition-transform duration-300"></span>
+</label>
+</div>
+<span class="font-label-lg text-label-lg text-secondary font-bold hidden md:block">Paid</span>
+</div>
+</div>
+</div>
+<!-- Marcus -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-stack-md">
+<div class="w-12 h-12 rounded-full border-2 border-primary-fixed overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a male athletic coach named Marcus. He has a focused, professional expression and is wearing a dark grey athletic polo shirt. The scene is set in a modern, well-lit fitness facility with subtle architectural lines in the background. The aesthetic is clean and corporate, matching a premium management platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHcO7X6waGr2NC2brMDjkOuLR3OwwDp9eKB1EaaxwY7IOi357XsUnDoJpEYyJmg6eOdn3SxvN3Mii5FWhuWVj5sjjBq_7ruiVELGd87IsPP9_27GqDsH-XeGemgBBG56nx2GBzbcGVb6zX-UBGPGC4-VU3mJO9xWLBaNN8JYWnNm3hu3oZvxyRg6q-9lj6SF5T1743dXAWpM6m7fB3jLnibvSVQF2tP0GmbOovaGYfPwkBne8psKWH"/>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary">Coach Marcus</div>
+<div class="font-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                            32 sessions
+                        </div>
+</div>
+</div>
+<div class="flex items-center gap-stack-lg">
+<div class="text-right">
+<div class="font-label-lg text-label-lg text-on-surface-variant">Earnings</div>
+<div class="font-title-md text-title-md text-primary">₹2,150.00</div>
+</div>
+<!-- Toggle Switch (Checked for variety) -->
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface-variant hidden md:block">Unpaid</span>
+<div class="relative inline-block w-12 h-6 transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-2 border-outline-variant appearance-none cursor-pointer z-10 checked:translate-x-6 checked:border-secondary transition-all duration-300" id="toggle-marcus" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-secondary cursor-pointer transition-colors duration-300" for="toggle-marcus">
+</label>
+</div>
+<span class="font-label-lg text-label-lg text-secondary font-bold hidden md:block">Paid</span>
+</div>
+</div>
+</div>
+<!-- Additional Placeholder Coaches for density -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex items-center justify-between opacity-60">
+<div class="flex items-center gap-stack-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">person</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary">Coach Sarah</div>
+<div class="font-body-md text-on-surface-variant">18 sessions</div>
+</div>
+</div>
+<div class="flex items-center gap-stack-lg">
+<div class="text-right">
+<div class="font-label-lg text-label-lg text-on-surface-variant">Earnings</div>
+<div class="font-title-md text-title-md text-primary">₹1,240.00</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-12 h-6 rounded-full bg-surface-container-high"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom CTA Area -->
+<div class="fixed bottom-20 left-0 w-full px-margin-mobile md:px-0 pointer-events-none">
+<div class="max-w-4xl mx-auto w-full flex justify-center">
+<button class="pointer-events-auto bg-primary text-on-primary w-full md:w-auto md:min-w-[320px] py-4 rounded-xl shadow-[0px_8px_24px_rgba(21,21,125,0.3)] hover:bg-primary-container transition-all active:scale-95 duration-100 flex items-center justify-center gap-3" id="main-cta">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-title-lg text-title-lg">Mark Cycle as Paid</span>
+</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-surface-dim border-t border-outline-variant dark:border-outline shadow-[0px_-4px_16px_rgba(0,0,0,0.04)] py-2 px-2 flex justify-around items-center">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Manage -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md text-label-md">Manage</span>
+</a>
+<!-- Bookings -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</a>
+<!-- Finance (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<!-- More -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-md text-label-md">More</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for the CTA
+        const cta = document.getElementById('main-cta');
+        cta.addEventListener('click', () => {
+            const originalContent = cta.innerHTML;
+            cta.innerHTML = `<span class="material-symbols-outlined animate-spin">refresh</span> <span class="font-title-lg text-title-lg">Processing...</span>`;
+            cta.classList.add('opacity-80');
+            cta.disabled = true;
+
+            setTimeout(() => {
+                cta.innerHTML = `<span class="material-symbols-outlined">done_all</span> <span class="font-title-lg text-title-lg">Success</span>`;
+                cta.classList.remove('bg-primary', 'shadow-[0px_8px_24px_rgba(21,21,125,0.3)]');
+                cta.classList.add('bg-secondary', 'shadow-[0px_8px_24px_rgba(0,108,73,0.3)]');
+                
+                setTimeout(() => {
+                    cta.innerHTML = originalContent;
+                    cta.classList.remove('bg-secondary', 'shadow-[0px_8px_24px_rgba(0,108,73,0.3)]', 'opacity-80');
+                    cta.classList.add('bg-primary', 'shadow-[0px_8px_24px_rgba(21,21,125,0.3)]');
+                    cta.disabled = false;
+                }, 2000);
+            }, 1200);
+        });
+
+        // Toggle state handlers
+        const toggles = document.querySelectorAll('.toggle-checkbox');
+        toggles.forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const parentCard = this.closest('.bg-surface-container-lowest');
+                if(this.checked) {
+                    parentCard.classList.add('ring-2', 'ring-secondary', 'ring-opacity-20');
+                } else {
+                    parentCard.classList.remove('ring-2', 'ring-secondary', 'ring-opacity-20');
+                }
+            });
+        });
+    </script>
+</body></html>

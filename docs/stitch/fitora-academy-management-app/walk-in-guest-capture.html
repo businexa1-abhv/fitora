@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Owner - Guest Capture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#e7eeff",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "primary": "#15157d",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-high": "#dee8ff",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-primary": "#c0c1ff",
+                        "tertiary-container": "#5a3700",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#464652",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-bright": "#f9f9ff",
+                        "primary-container": "#2e3192",
+                        "outline": "#777683",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-container": "#ec9700",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4f54b4",
+                        "on-primary-fixed": "#04006d",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "background": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface-dim": "#cfdaf2",
+                        "tertiary": "#3c2300",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-background": "#111c2d",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#9da1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter-mobile": "12px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "title-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .segmented-picker-active {
+            background-color: #6cf8bb; /* secondary-container */
+            color: #002113; /* on-secondary-fixed */
+        }
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            transform: translateY(-24px) scale(0.85);
+            background-color: #f9f9ff;
+            padding: 0 4px;
+            color: #15157d;
+        }
+        .form-input-container label {
+            transition: all 0.2s ease-out;
+            pointer-events: none;
+        }
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen flex flex-col">
+<!-- Top AppBar (Back & Header) -->
+<header class="fixed top-0 w-full z-50 bg-surface shadow-sm h-16 flex items-center px-margin-mobile">
+<div class="flex items-center w-full max-w-container-max mx-auto">
+<button aria-label="Go back" class="mr-4 p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-90">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-primary">Guest Capture</h1>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+</div>
+</header>
+<main class="mt-20 flex-grow px-margin-mobile pb-32">
+<!-- Progress Steps -->
+<div class="max-w-xl mx-auto mb-stack-lg flex items-center justify-between px-4">
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-title-md">1</div>
+<span class="text-[10px] font-bold text-primary">DETAILS</span>
+</div>
+<div class="flex-grow h-[2px] bg-outline-variant mx-4 mt-[-16px]"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="w-8 h-8 rounded-full bg-outline-variant text-on-surface flex items-center justify-center font-title-md">2</div>
+<span class="text-[10px] font-bold text-outline">SLOTS</span>
+</div>
+<div class="flex-grow h-[2px] bg-outline-variant mx-4 mt-[-16px]"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="w-8 h-8 rounded-full bg-outline-variant text-on-surface flex items-center justify-center font-title-md">3</div>
+<span class="text-[10px] font-bold text-outline">PAY</span>
+</div>
+</div>
+<!-- Form Card -->
+<div class="max-w-xl mx-auto bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="p-stack-lg bg-surface-container-low border-b border-outline-variant">
+<p class="font-label-lg text-label-lg text-secondary uppercase tracking-widest">New Walk-In</p>
+<h2 class="font-title-lg text-title-lg text-on-surface mt-1">Guest Information</h2>
+</div>
+<form class="p-stack-lg space-y-stack-lg" id="guestForm">
+<!-- Name Field -->
+<div class="relative form-input-container">
+<input class="block w-full px-4 py-4 text-on-surface bg-transparent border border-outline rounded-lg focus:outline-none focus:ring-0 focus:border-primary peer" id="fullName" name="fullName" placeholder=" " required="" type="text"/>
+<label class="absolute left-4 top-4 text-outline font-title-md" for="fullName">Full Name</label>
+<p class="mt-1 text-[11px] text-outline px-1">Example: Amit Patel</p>
+</div>
+<!-- Phone Field -->
+<div class="relative form-input-container">
+<input class="block w-full px-4 py-4 text-on-surface bg-transparent border border-outline rounded-lg focus:outline-none focus:ring-0 focus:border-primary peer" id="phoneNumber" name="phoneNumber" placeholder=" " required="" type="tel"/>
+<label class="absolute left-4 top-4 text-outline font-title-md" for="phoneNumber">Phone Number</label>
+<div class="absolute right-4 top-4 text-outline">
+<span class="material-symbols-outlined text-body-lg">call</span>
+</div>
+<p class="mt-1 text-[11px] text-outline px-1">Example: +91 98765-43210</p>
+</div>
+<!-- Email Field (Optional) -->
+<div class="relative form-input-container">
+<input class="block w-full px-4 py-4 text-on-surface bg-transparent border border-outline rounded-lg focus:outline-none focus:ring-0 focus:border-primary peer" id="email" name="email" placeholder=" " type="email"/>
+<label class="absolute left-4 top-4 text-outline font-title-md" for="email">Email (Optional)</label>
+<div class="absolute right-4 top-4 text-outline">
+<span class="material-symbols-outlined text-body-lg">mail</span>
+</div>
+</div>
+<!-- Sport Preference Segmented Picker -->
+<div class="space-y-stack-sm">
+<label class="font-title-md text-primary block px-1">Sport Preference</label>
+<div class="grid grid-cols-3 gap-2 bg-surface-container-high p-1 rounded-xl">
+<button class="sport-chip px-2 py-3 rounded-lg text-body-md font-medium transition-all duration-200 segmented-picker-active" onclick="selectSport('tennis', this)" type="button">
+                            Tennis
+                        </button>
+<button class="sport-chip px-2 py-3 rounded-lg text-body-md font-medium transition-all duration-200 text-on-surface-variant hover:bg-surface-container" onclick="selectSport('badminton', this)" type="button">
+                            Badminton
+                        </button>
+<button class="sport-chip px-2 py-3 rounded-lg text-body-md font-medium transition-all duration-200 text-on-surface-variant hover:bg-surface-container" onclick="selectSport('pickleball', this)" type="button">
+                            Pickleball
+                        </button>
+</div>
+<input id="sportPreference" name="sportPreference" type="hidden" value="tennis"/>
+</div>
+<!-- Visual Cue -->
+<div class="bg-secondary-container/10 p-4 rounded-xl flex items-start gap-3 border border-secondary-container/30">
+<span class="material-symbols-outlined text-secondary">info</span>
+<p class="text-on-secondary-fixed-variant text-[13px] leading-snug">
+                        Collected details help in generating automated invoices and tracking training progress for recurring walk-ins.
+                    </p>
+</div>
+</form>
+</div>
+<!-- Atmospheric Image -->
+<div class="max-w-xl mx-auto mt-stack-lg h-32 rounded-xl overflow-hidden relative shadow-inner">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A cinematic, high-angle photograph of a modern sports academy interior. The scene features polished blue courts, bright white overhead linear lighting, and a few blurred figures of athletes in the distance. The overall aesthetic is clean, professional, and corporate modern, utilizing a primary indigo and emerald green color palette to convey energy and precision." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAaxC1B4zwn4XB85IyF8DaDYmeP4tt36FeRw8oKYN5JkD7f7ynXLEmxlCHAMCBXV1hqQDEafFyBbpdSaLBzB7VsbXQUOIXN-I89LVjRfafuXePwV476a3iRpe0cwHrB4tR6G6ydhPnhbTl52B4dLj_Z5fF6TMXKmQZoTufEBi6mLeASRsWnziIY06MTr8e7zgeu5_ZoAk15eJ52dz1WvxyCcJSrRQDfmAEZ77g4jAwYyH8o9PsFSh-V')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+</div>
+</main>
+<!-- Fixed Bottom Action Area -->
+<footer class="fixed bottom-0 left-0 w-full glass-effect border-t border-outline-variant p-4 md:px-8 z-50">
+<div class="max-w-xl mx-auto">
+<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-headline-sm flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all hover:bg-primary duration-200" id="submitBtn">
+                Continue to Slot Selection
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</footer>
+<script>
+        function selectSport(sport, btn) {
+            // Update hidden input
+            document.getElementById('sportPreference').value = sport;
+            
+            // Toggle UI classes
+            document.querySelectorAll('.sport-chip').forEach(el => {
+                el.classList.remove('segmented-picker-active');
+                el.classList.add('text-on-surface-variant');
+            });
+            
+            btn.classList.add('segmented-picker-active');
+            btn.classList.remove('text-on-surface-variant');
+        }
+
+        // Simple validation feedback on button click
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const name = document.getElementById('fullName');
+            const phone = document.getElementById('phoneNumber');
+            
+            if (!name.value || !phone.value) {
+                if(!name.value) name.classList.add('border-error');
+                if(!phone.value) phone.classList.add('border-error');
+                
+                // Temporary error visual
+                setTimeout(() => {
+                    name.classList.remove('border-error');
+                    phone.classList.remove('border-error');
+                }, 2000);
+            } else {
+                // Success animation/redirect simulation
+                this.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Validating...';
+                setTimeout(() => {
+                    alert('Details Captured! Moving to Slot Selection.');
+                    window.location.reload(); // Simulate transition
+                }, 1000);
+            }
+        });
+
+        // Add input formatting for phone number
+        document.getElementById('phoneNumber').addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,5})/);
+            if (x[1]) {
+                e.target.value = '+' + x[1] + (x[2] ? ' ' + x[2] : '') + (x[3] ? '-' + x[3] : '');
+            }
+        });
+    </script>
+</body></html>

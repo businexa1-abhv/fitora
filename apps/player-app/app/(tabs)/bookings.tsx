@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -16,7 +16,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { Badge } from '@/components/ui/badge';
 import { QueryState } from '@/components/query-state';
 import { SPORT_COLORS, SPORT_EMOJI } from '@/lib/constants';
-import { getMyBookings } from '@/lib/courts';
+import { cancelBooking, getMyBookings, getRefundPreview } from '@/lib/courts';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 type BookingTab = 'upcoming' | 'completed' | 'cancelled';
@@ -85,6 +85,7 @@ export default function BookingsScreen() {
   const { token } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<BookingTab>('upcoming');
   const activeConfig = TABS.find((tab) => tab.key === activeTab) ?? TABS[0];
 
@@ -93,6 +94,40 @@ export default function BookingsScreen() {
     queryFn: () => getMyBookings(token!, 1, activeConfig.status),
     enabled: !!token,
   });
+
+  const cancelMutation = useMutation({
+    mutationFn: async (bookingId: string) => {
+      if (!token) throw new Error('Not signed in');
+      return cancelBooking(token, bookingId, 'Cancelled by player');
+    },
+    onSuccess: async (result) => {
+      await queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      Alert.alert('Booking cancelled', result.message);
+      setActiveTab('cancelled');
+    },
+    onError: (err: Error) => Alert.alert('Cancel failed', err.message),
+  });
+
+  async function handleCancel(booking: Booking) {
+    if (!token) return;
+    try {
+      const preview = await getRefundPreview(token, booking.id);
+      Alert.alert(
+        'Cancel booking?',
+        `${preview.policyLabel}\nRefund: ${formatCurrency(preview.refundAmount)} (${preview.refundPercent}%)`,
+        [
+          { text: 'Keep booking', style: 'cancel' },
+          {
+            text: 'Cancel booking',
+            style: 'destructive',
+            onPress: () => cancelMutation.mutate(booking.id),
+          },
+        ],
+      );
+    } catch (err) {
+      Alert.alert('Unable to preview refund', (err as Error).message);
+    }
+  }
 
   const bookings = bookingsQuery.data?.items ?? [];
 
@@ -160,14 +195,31 @@ export default function BookingsScreen() {
             </View>
           }
           ListEmptyComponent={<EmptyState config={activeConfig} />}
-          renderItem={({ item }) => <BookingCard booking={item} tab={activeTab} />}
+          renderItem={({ item }) => (
+            <BookingCard
+              booking={item}
+              tab={activeTab}
+              cancelling={cancelMutation.isPending}
+              onCancel={() => void handleCancel(item)}
+            />
+          )}
         />
       </QueryState>
     </View>
   );
 }
 
-function BookingCard({ booking, tab }: { booking: Booking; tab: BookingTab }) {
+function BookingCard({
+  booking,
+  tab,
+  cancelling,
+  onCancel,
+}: {
+  booking: Booking;
+  tab: BookingTab;
+  cancelling?: boolean;
+  onCancel?: () => void;
+}) {
   const { colors } = useTheme();
   const router = useRouter();
   const sport = getSport(booking);
@@ -238,7 +290,11 @@ function BookingCard({ booking, tab }: { booking: Booking; tab: BookingTab }) {
                 onPress={openCheckIn}
               />
               <ActionButton label="Reschedule" />
-              <ActionButton label="Cancel" danger />
+              <ActionButton
+                label={cancelling ? 'Cancelling…' : 'Cancel'}
+                danger
+                onPress={onCancel}
+              />
             </>
           ) : (
             <>

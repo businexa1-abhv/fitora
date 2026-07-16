@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Academy - App Preferences</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#e1e0ff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "on-background": "#111c2d",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-secondary-fixed": "#002113",
+                    "tertiary": "#3c2300",
+                    "on-primary-container": "#9da1ff",
+                    "surface-container-high": "#dee8ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-fixed": "#ffddb8",
+                    "primary": "#15157d",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-surface": "#111c2d",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container": "#e7eeff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "background": "#f9f9ff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "surface-variant": "#d8e3fb",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#c0c1ff",
+                    "surface-tint": "#4f54b4",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary-container": "#ec9700",
+                    "surface": "#f9f9ff",
+                    "surface-container-low": "#f0f3ff",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#263143",
+                    "on-primary-fixed": "#04006d",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#5a3700",
+                    "surface-dim": "#cfdaf2",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "secondary-container": "#6cf8bb",
+                    "on-surface-variant": "#464652",
+                    "secondary": "#006c49",
+                    "outline-variant": "#c7c5d4",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#2e3192",
+                    "outline": "#777683"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "stack-lg": "24px",
+                    "gutter-mobile": "12px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .settings-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toggle-switch {
+            width: 52px;
+            height: 32px;
+            position: relative;
+            display: inline-block;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #777683;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #2e3192; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        
+        .theme-option.active {
+            border: 2px solid #2e3192;
+            background-color: #f0f3ff;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fit athletic woman in her 30s with a confident smile, wearing premium charcoal grey activewear. The lighting is soft and studio-quality, emphasizing a modern corporate wellness aesthetic with a clean, high-key background consistent with a high-performance sports academy brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAonLXHyrelhwyzXm5FhypyY4M9aF7YXPpZmVZRoOb2kef4iWo6GC0hgOij4M9gmAEVxQn_rfnVUXC39kwGVW3Cx9NvRAUvmNltMSIqUTO_BCXhCvwQbM_6YYPwqn5L1xtEMZ8Sic1kbsohMogCGu_Gj5ZFjJqs6SSHb9emhqekusqDZlJSab4sV18BjY_0Y-VLtvRN1EyfT-L2hWnXsD0uxbKIqjSNbc1O6rq4dUQD-UJ9J2FQTZ1b"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 px-margin-mobile max-w-2xl mx-auto space-y-6">
+<!-- Header Section -->
+<section class="py-4">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-1">App Preferences</h2>
+<p class="text-on-surface-variant font-body-md">Manage your system settings and account security.</p>
+</section>
+<!-- Theme Selection (Asymmetric Layout) -->
+<section class="space-y-stack-md">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">palette</span>
+                Appearance
+            </h3>
+<div class="grid grid-cols-3 gap-3">
+<button class="theme-option active flex flex-col items-center gap-2 p-4 rounded-xl bg-white border border-outline-variant hover:bg-surface-container-low transition-colors" id="theme-light" onclick="setTheme('light')">
+<span class="material-symbols-outlined text-2xl">light_mode</span>
+<span class="font-label-lg text-label-lg">Light</span>
+</button>
+<button class="theme-option flex flex-col items-center gap-2 p-4 rounded-xl bg-white border border-outline-variant hover:bg-surface-container-low transition-colors" id="theme-dark" onclick="setTheme('dark')">
+<span class="material-symbols-outlined text-2xl">dark_mode</span>
+<span class="font-label-lg text-label-lg">Dark</span>
+</button>
+<button class="theme-option flex flex-col items-center gap-2 p-4 rounded-xl bg-white border border-outline-variant hover:bg-surface-container-low transition-colors" id="theme-system" onclick="setTheme('system')">
+<span class="material-symbols-outlined text-2xl">settings_brightness</span>
+<span class="font-label-lg text-label-lg">System</span>
+</button>
+</div>
+</section>
+<!-- Localization (Bento-style row) -->
+<section class="space-y-stack-md">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">language</span>
+                Localization
+            </h3>
+<div class="bg-white rounded-xl border border-outline-variant divide-y divide-outline-variant">
+<div class="flex items-center justify-between p-4">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md">App Language</span>
+<span class="text-on-surface-variant text-body-md">Interface display language</span>
+</div>
+<select class="bg-surface-container-low border-none rounded-lg font-label-lg text-label-lg py-2 pl-4 pr-10 focus:ring-2 focus:ring-primary">
+<option>English (US)</option>
+<option>Spanish</option>
+<option>French</option>
+<option>German</option>
+</select>
+</div>
+<div class="flex items-center justify-between p-4">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md">Time Zone</span>
+<span class="text-on-surface-variant text-body-md">Automatic based on location</span>
+</div>
+<span class="text-primary font-label-lg text-label-lg">GMT -5:00</span>
+</div>
+</div>
+</section>
+<!-- Notifications (Glassmorphism inspired clean cards) -->
+<section class="space-y-stack-md">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+                Notifications
+            </h3>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-4 bg-white rounded-xl border border-outline-variant settings-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">mail</span>
+</div>
+<div>
+<p class="font-title-md text-title-md">Email Notifications</p>
+<p class="text-on-surface-variant text-body-md">Weekly reports & booking updates</p>
+</div>
+</div>
+<label class="toggle-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 bg-white rounded-xl border border-outline-variant settings-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">notifications</span>
+</div>
+<div>
+<p class="font-title-md text-title-md">Push Notifications</p>
+<p class="text-on-surface-variant text-body-md">Real-time court availability</p>
+</div>
+</div>
+<label class="toggle-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 bg-white rounded-xl border border-outline-variant settings-card opacity-80">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">sms</span>
+</div>
+<div>
+<p class="font-title-md text-title-md">SMS Notifications</p>
+<p class="text-on-surface-variant text-body-md">Critical alerts only</p>
+</div>
+</div>
+<label class="toggle-switch">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+</div>
+</section>
+<!-- Security -->
+<section class="space-y-stack-md">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">security</span>
+                Security
+            </h3>
+<div class="bg-white rounded-xl border border-outline-variant overflow-hidden">
+<div class="flex items-center justify-between p-4 border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">face</span>
+<p class="font-title-md text-title-md">Biometric Login (FaceID)</p>
+</div>
+<label class="toggle-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+<p class="font-title-md text-title-md">Change Passcode</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">devices</span>
+<p class="font-title-md text-title-md">Active Sessions</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full font-label-lg text-label-lg">2 Active</span>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Sign Out Button -->
+<section class="pt-8">
+<button class="w-full py-4 px-6 rounded-xl bg-error-container text-error font-title-md text-title-md flex items-center justify-center gap-2 active:scale-[0.98] transition-transform hover:bg-red-100">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </button>
+<p class="text-center mt-6 text-on-surface-variant font-label-lg text-label-lg opacity-50">
+                App Version 4.2.1-stable • FitOra Academy 2024
+            </p>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg mt-1">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg mt-1">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg mt-1">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-lg text-label-lg mt-1">Settings</span>
+</a>
+</nav>
+<script>
+        function setTheme(theme) {
+            // Visual feedback for theme selector
+            document.querySelectorAll('.theme-option').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById('theme-' + theme).classList.add('active');
+            
+            // Logic for theme switching
+            const html = document.documentElement;
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            } else if (theme === 'light') {
+                html.classList.remove('dark');
+            } else {
+                // System preference
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    html.classList.add('dark');
+                } else {
+                    html.classList.remove('dark');
+                }
+            }
+        }
+
+        // Ripple Effect/Interaction for cards
+        document.querySelectorAll('.settings-card').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.classList.add('scale-[0.99]');
+            });
+            card.addEventListener('mouseup', () => {
+                card.classList.remove('scale-[0.99]');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('scale-[0.99]');
+            });
+        });
+    </script>
+</body></html>

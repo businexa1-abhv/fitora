@@ -14,6 +14,8 @@ import {
   Settings,
   HelpCircle,
   Zap,
+  Receipt,
+  Percent,
 } from 'lucide-react';
 import { clearAuthSession, getAuthSession } from '@/lib/api';
 import { useEffect, useState } from 'react';
@@ -22,6 +24,8 @@ const NAV = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
   { href: '/owners', label: 'Management', icon: Users },
   { href: '/finance', label: 'Finance', icon: Wallet },
+  { href: '/settlements', label: 'Settlements', icon: Receipt },
+  { href: '/gst', label: 'GST', icon: Percent },
   { href: '/support', label: 'Support', icon: LifeBuoy },
   { href: '/cms', label: 'CMS', icon: FilePenLine },
 ];

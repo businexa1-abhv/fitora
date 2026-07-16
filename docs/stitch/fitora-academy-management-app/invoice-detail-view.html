@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invoice Details - FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-high": "#dee8ff",
+                "surface-bright": "#f9f9ff",
+                "on-secondary-fixed-variant": "#005236",
+                "on-primary-fixed": "#04006d",
+                "on-error-container": "#93000a",
+                "inverse-primary": "#c0c1ff",
+                "tertiary-fixed": "#ffddb8",
+                "surface-tint": "#4f54b4",
+                "on-tertiary-fixed-variant": "#653e00",
+                "outline-variant": "#c7c5d4",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#4edea3",
+                "on-surface": "#111c2d",
+                "tertiary": "#3c2300",
+                "error-container": "#ffdad6",
+                "secondary-fixed": "#6ffbbe",
+                "on-tertiary-container": "#ec9700",
+                "on-tertiary": "#ffffff",
+                "on-surface-variant": "#464652",
+                "on-error": "#ffffff",
+                "outline": "#777683",
+                "primary-fixed": "#e1e0ff",
+                "on-primary": "#ffffff",
+                "secondary": "#006c49",
+                "tertiary-container": "#5a3700",
+                "primary": "#15157d",
+                "inverse-surface": "#263143",
+                "surface-dim": "#cfdaf2",
+                "surface": "#f9f9ff",
+                "on-primary-container": "#9da1ff",
+                "on-primary-fixed-variant": "#373a9b",
+                "surface-container": "#e7eeff",
+                "on-secondary-fixed": "#002113",
+                "surface-container-highest": "#d8e3fb",
+                "surface-container-low": "#f0f3ff",
+                "primary-container": "#2e3192",
+                "background": "#f9f9ff",
+                "inverse-on-surface": "#ecf1ff",
+                "tertiary-fixed-dim": "#ffb95f",
+                "error": "#ba1a1a",
+                "surface-variant": "#d8e3fb",
+                "on-background": "#111c2d",
+                "on-tertiary-fixed": "#2a1700",
+                "surface-container-lowest": "#ffffff",
+                "secondary-container": "#6cf8bb",
+                "primary-fixed-dim": "#c0c1ff",
+                "on-secondary-container": "#00714d"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "stack-sm": "8px",
+                "stack-md": "16px",
+                "unit": "4px",
+                "margin-mobile": "16px",
+                "gutter-mobile": "12px",
+                "stack-lg": "24px"
+            },
+            "fontFamily": {
+                "title-lg": ["Inter"],
+                "display-lg": ["Inter"],
+                "headline-lg-mobile": ["Inter"],
+                "headline-md": ["Inter"],
+                "label-lg": ["JetBrains Mono"],
+                "headline-lg": ["Inter"],
+                "body-md": ["Inter"],
+                "title-md": ["Inter"],
+                "headline-sm": ["Inter"],
+                "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .invoice-canvas { box-shadow: 0 4px 12px rgba(21, 21, 125, 0.08); }
+        .row-hover:hover { background-color: #f0f3ff; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface">
+<!-- Top Navigation Anchor -->
+<header class="flex justify-between items-center px-margin-mobile py-4 w-full z-50 bg-surface border-b border-outline-variant sticky top-0">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-sm" data-icon="sports_kabaddi">sports_kabaddi</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">FitOra Academy</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold border-2 border-surface-container-highest shadow-sm">
+                JD
+            </div>
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-margin-mobile pt-8 pb-24">
+<!-- Breadcrumb & Status Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<div>
+<nav class="flex items-center gap-2 mb-2 text-on-surface-variant font-label-lg text-label-lg">
+<span>Invoices</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">INV-2023-0892</span>
+</nav>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Invoice Details</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-label-lg flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                    Paid
+                </span>
+<span class="text-on-surface-variant font-body-md text-body-md italic">Updated 2h ago</span>
+</div>
+</div>
+<!-- Invoice Main Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden invoice-canvas">
+<!-- Brand Header -->
+<div class="p-8 border-b border-outline-variant bg-surface-container-low flex flex-col md:flex-row justify-between gap-8">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-headline-sm" data-icon="sports_kabaddi">sports_kabaddi</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">FitOra Academy</span>
+</div>
+<div class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+                        128 Elite Sports Plaza<br/>
+                        Emerald District, City 10405<br/>
+                        contact@fitora-academy.com
+                    </div>
+</div>
+<div class="text-left md:text-right flex flex-col gap-1">
+<div class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest">Invoice Number</div>
+<div class="font-headline-sm text-headline-sm text-primary">INV-2023-0892</div>
+<div class="mt-4 flex flex-col gap-1">
+<div class="flex md:justify-end gap-4">
+<span class="text-on-surface-variant font-body-md text-body-md">Issue Date:</span>
+<span class="text-on-surface font-title-md text-title-md">Oct 12, 2023</span>
+</div>
+<div class="flex md:justify-end gap-4">
+<span class="text-on-surface-variant font-body-md text-body-md">Due Date:</span>
+<span class="text-on-surface font-title-md text-title-md">Oct 26, 2023</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Client Info & Summary -->
+<div class="p-8 flex flex-col md:flex-row gap-12">
+<div class="flex-1">
+<div class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest mb-4">Billed To</div>
+<div class="font-title-lg text-title-lg text-on-surface font-bold">Marcus Sterling</div>
+<div class="text-on-surface-variant font-body-md text-body-md mt-2 leading-relaxed">
+                        452 Riverside Drive<br/>
+                        West Wing, Apt 12C<br/>
+                        marcus.sterling@email.com
+                    </div>
+</div>
+<div class="flex-1 bg-primary text-on-primary p-6 rounded-lg flex flex-col justify-center">
+<div class="font-label-lg text-label-lg uppercase tracking-widest opacity-80 mb-2">Total Amount Due</div>
+<div class="font-display-lg text-[40px] leading-tight font-bold">$342.50</div>
+<div class="mt-4 flex items-center gap-2 text-on-primary-container bg-primary-container px-3 py-1 rounded-full w-fit">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-lg text-label-lg">Payment Confirmed</span>
+</div>
+</div>
+</div>
+<!-- Items Table -->
+<div class="px-8 pb-8">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="py-4 font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Description</th>
+<th class="py-4 font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-center">Qty</th>
+<th class="py-4 font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-right">Rate</th>
+<th class="py-4 font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-right">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="row-hover transition-colors">
+<td class="py-5">
+<div class="font-title-md text-title-md text-on-surface">Premium Court Booking</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">Court #4 - Oct 10 (2 Hours)</div>
+</td>
+<td class="py-5 font-label-lg text-label-lg text-center">2</td>
+<td class="py-5 font-label-lg text-label-lg text-right">$45.00</td>
+<td class="py-5 font-label-lg text-label-lg text-right font-bold">$90.00</td>
+</tr>
+<tr class="row-hover transition-colors">
+<td class="py-5">
+<div class="font-title-md text-title-md text-on-surface">Private Coaching Session</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">Coach: Elena Rodriguez</div>
+</td>
+<td class="py-5 font-label-lg text-label-lg text-center">3</td>
+<td class="py-5 font-label-lg text-label-lg text-right">$75.00</td>
+<td class="py-5 font-label-lg text-label-lg text-right font-bold">$225.00</td>
+</tr>
+<tr class="row-hover transition-colors">
+<td class="py-5">
+<div class="font-title-md text-title-md text-on-surface">Pro-Series Racket Rental</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">Titanium X2 Model</div>
+</td>
+<td class="py-5 font-label-lg text-label-lg text-center">1</td>
+<td class="py-5 font-label-lg text-label-lg text-right">$27.50</td>
+<td class="py-5 font-label-lg text-label-lg text-right font-bold">$27.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Calculation Area -->
+<div class="flex flex-col items-end mt-8 gap-3">
+<div class="flex justify-between w-full max-w-[280px]">
+<span class="text-on-surface-variant font-body-md text-body-md">Subtotal</span>
+<span class="text-on-surface font-label-lg text-label-lg">$342.50</span>
+</div>
+<div class="flex justify-between w-full max-w-[280px]">
+<span class="text-on-surface-variant font-body-md text-body-md">Tax (0%)</span>
+<span class="text-on-surface font-label-lg text-label-lg">$0.00</span>
+</div>
+<div class="h-px w-full max-w-[280px] bg-outline-variant my-2"></div>
+<div class="flex justify-between w-full max-w-[280px] items-center">
+<span class="text-primary font-bold text-title-lg">Grand Total</span>
+<span class="text-primary font-bold text-headline-sm">$342.50</span>
+</div>
+</div>
+</div>
+<!-- Note Footer -->
+<div class="p-8 bg-surface-container-low border-t border-outline-variant italic">
+<div class="font-label-lg text-label-lg text-on-surface-variant mb-1">Owner Notes</div>
+<div class="text-on-surface-variant font-body-md text-body-md">Thank you for being a valued member of FitOra Academy. Please note that session cancellations require 24-hour notice.</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+<button class="flex-1 flex items-center justify-center gap-2 bg-primary text-on-primary py-4 px-8 rounded-xl font-title-md text-title-md hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+                Send to Player
+            </button>
+<button class="flex-1 flex items-center justify-center gap-2 bg-surface-container-lowest border border-primary text-primary py-4 px-8 rounded-xl font-title-md text-title-md hover:bg-primary-fixed transition-all">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                Download PDF
+            </button>
+</div>
+<!-- History/Activity Log Section (Premium Detail) -->
+<div class="mt-16">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6">Invoice Timeline</h3>
+<div class="relative pl-8 border-l-2 border-outline-variant flex flex-col gap-8 ml-4">
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-secondary border-4 border-surface ring-4 ring-secondary/20"></div>
+<div class="font-title-md text-title-md text-on-surface">Invoice Paid</div>
+<div class="text-on-surface-variant font-body-md text-body-md">Oct 14, 2023 · 02:15 PM via Stripe</div>
+</div>
+<div class="relative opacity-60">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline border-4 border-surface"></div>
+<div class="font-title-md text-title-md text-on-surface">Sent to Player</div>
+<div class="text-on-surface-variant font-body-md text-body-md">Oct 12, 2023 · 09:30 AM</div>
+</div>
+<div class="relative opacity-60">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline border-4 border-surface"></div>
+<div class="font-title-md text-title-md text-on-surface">Invoice Created</div>
+<div class="text-on-surface-variant font-body-md text-body-md">Oct 12, 2023 · 08:45 AM</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Desktop visible, Mobile optimized) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg md:px-12 lg:px-24">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="dashboard">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="sports_tennis">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1.5 ring-4 ring-primary/10">
+<span class="material-symbols-outlined mb-1" data-icon="event_available">event_available</span>
+<span class="font-label-lg text-label-lg font-bold">Bookings</span>
+</div>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="group">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="settings">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button Contextual (Hidden on Details as per instruction, but placeholder logic for future) -->
+<!-- The FAB is suppressed for this screen as per "Contextual FAB Suppression" rule -->
+<script>
+        // Simple ripple-like effect on buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                let x = e.clientX - e.target.offsetLeft;
+                let y = e.clientY - e.target.offsetTop;
+                let ripples = document.createElement('span');
+                ripples.style.left = x + 'px';
+                ripples.style.top = y + 'px';
+                this.appendChild(ripples);
+                setTimeout(() => { ripples.remove() }, 600);
+            });
+        });
+    </script>
+</body></html>

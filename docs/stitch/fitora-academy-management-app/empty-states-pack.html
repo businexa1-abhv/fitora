@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Owner - Empty States Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .empty-state-card:hover .illustration-container {
+            transform: translateY(-4px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#e7eeff",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "primary": "#15157d",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-high": "#dee8ff",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-primary": "#c0c1ff",
+                        "tertiary-container": "#5a3700",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#464652",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-bright": "#f9f9ff",
+                        "primary-container": "#2e3192",
+                        "outline": "#777683",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-container": "#ec9700",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4f54b4",
+                        "on-primary-fixed": "#04006d",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-variant": "#d8e3fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "background": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface-dim": "#cfdaf2",
+                        "tertiary": "#3c2300",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-background": "#111c2d",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#9da1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter-mobile": "12px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "title-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface shadow-[0px_12px_32px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary text-headline-lg">fitness_center</span>
+<h1 class="font-display-lg text-headline-lg text-primary tracking-tighter">FitOra Owner</h1>
+</div>
+<button class="hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined text-secondary">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-7xl mx-auto">
+<!-- Header Section -->
+<section class="mb-stack-lg">
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Module Management</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Review and initialize your academy modules. Below are the current empty states waiting for your input.</p>
+</section>
+<!-- Bento Grid for Empty States -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Player Directory -->
+<article class="empty-state-card bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col items-center text-center group transition-all hover:shadow-lg">
+<div class="illustration-container w-24 h-24 mb-stack-md flex items-center justify-center rounded-full bg-secondary-container/20 text-secondary">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'wght' 200;">groups</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-primary mb-2">Player Directory</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg">No players found in your roster yet. Start building your sports community today.</p>
+<button class="mt-auto w-full py-3 px-6 bg-secondary text-on-secondary rounded-lg font-title-md flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined">person_add</span>
+                    Add Player
+                </button>
+</article>
+<!-- Coach Directory -->
+<article class="empty-state-card bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col items-center text-center group transition-all hover:shadow-lg">
+<div class="illustration-container w-24 h-24 mb-stack-md flex items-center justify-center rounded-full bg-secondary-container/20 text-secondary">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'wght' 200;">sports</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-primary mb-2">Coach Directory</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg">No coaches yet. Onboard your professional training staff to begin sessions.</p>
+<button class="mt-auto w-full py-3 px-6 bg-secondary text-on-secondary rounded-lg font-title-md flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined">add_moderator</span>
+                    Invite Coach
+                </button>
+</article>
+<!-- Billing History -->
+<article class="empty-state-card bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col items-center text-center group transition-all hover:shadow-lg">
+<div class="illustration-container w-24 h-24 mb-stack-md flex items-center justify-center rounded-full bg-secondary-container/20 text-secondary">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'wght' 200;">receipt_long</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-primary mb-2">Billing History</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg">No transactions recorded. Payment history will appear here once billing begins.</p>
+<button class="mt-auto w-full py-3 px-6 bg-secondary text-on-secondary rounded-lg font-title-md flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined">payments</span>
+                    Generate Invoice
+                </button>
+</article>
+<!-- Expenses -->
+<article class="empty-state-card bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col items-center text-center group transition-all hover:shadow-lg">
+<div class="illustration-container w-24 h-24 mb-stack-md flex items-center justify-center rounded-full bg-secondary-container/20 text-secondary">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'wght' 200;">account_balance_wallet</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-primary mb-2">Expenses</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg">No expenses recorded. Track your facility overheads and equipment costs here.</p>
+<button class="mt-auto w-full py-3 px-6 bg-secondary text-on-secondary rounded-lg font-title-md flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined">add_card</span>
+                    Log Expense
+                </button>
+</article>
+<!-- Promotions -->
+<article class="empty-state-card bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col items-center text-center group transition-all hover:shadow-lg">
+<div class="illustration-container w-24 h-24 mb-stack-md flex items-center justify-center rounded-full bg-secondary-container/20 text-secondary">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'wght' 200;">confirmation_number</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-primary mb-2">Promotions</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg">No active coupons. Create seasonal discounts or referral codes for players.</p>
+<button class="mt-auto w-full py-3 px-6 bg-secondary text-on-secondary rounded-lg font-title-md flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined">local_offer</span>
+                    New Promotion
+                </button>
+</article>
+<!-- Staff Roster -->
+<article class="empty-state-card bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col items-center text-center group transition-all hover:shadow-lg">
+<div class="illustration-container w-24 h-24 mb-stack-md flex items-center justify-center rounded-full bg-secondary-container/20 text-secondary">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'wght' 200;">calendar_month</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-primary mb-2">Staff Roster</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg">No shifts assigned. Use the scheduler to manage your facility staff hours.</p>
+<button class="mt-auto w-full py-3 px-6 bg-secondary text-on-secondary rounded-lg font-title-md flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined">event_note</span>
+                    Set Roster
+                </button>
+</article>
+</div>
+</main>
+<!-- FAB for Global Action -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center hover:bg-primary-container transition-all active:scale-90 z-40 group">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-2 bg-surface border-t border-outline-variant z-50 rounded-t-xl shadow-[0px_-4px_16px_rgba(0,0,0,0.04)]">
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md text-label-md">Manage</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-md text-label-md">More</span>
+</a>
+</nav>
+<script>
+        // Simple ripple effect or active state interaction
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('click', (e) => {
+                // Potential interaction logic
+            });
+        });
+    </script>
+</body></html>

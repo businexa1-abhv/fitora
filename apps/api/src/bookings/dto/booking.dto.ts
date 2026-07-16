@@ -34,6 +34,54 @@ export class CreateBookingDto {
   couponId?: string;
 }
 
+export class CreateWalkInBookingDto {
+  @ApiProperty({ description: 'Court UUID' })
+  @IsUUID()
+  courtId: string;
+
+  @ApiProperty({ description: 'Slot UUID' })
+  @IsUUID()
+  slotId: string;
+
+  @ApiProperty({ example: 'Rahul Sharma' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(200)
+  guestName: string;
+
+  @ApiProperty({ example: '+919876543210' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(20)
+  guestPhone: string;
+
+  @ApiPropertyOptional({ enum: ['Cash', 'UPI', 'Card'], default: 'UPI' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  paymentMethod?: 'Cash' | 'UPI' | 'Card';
+
+  @ApiPropertyOptional({ description: 'Extra equipment fee in INR', default: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  equipmentFee?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  notes?: string;
+
+  @ApiPropertyOptional({ description: 'Seats to reserve', default: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  seats?: number;
+}
+
 export class CancelBookingDto {
   @ApiPropertyOptional({ example: 'Schedule conflict' })
   @IsOptional()

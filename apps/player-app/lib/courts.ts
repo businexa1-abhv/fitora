@@ -41,6 +41,54 @@ export function createBooking(token: string, courtId: string, slotId: string) {
   );
 }
 
+export function joinWaitlist(token: string, courtId: string, slotId: string, seats = 1) {
+  return apiFetch<{
+    id: string;
+    slotId: string;
+    courtId: string;
+    status: string;
+    position: number;
+    offeredUntil: string | null;
+  }>(
+    `/courts/${courtId}/slots/${slotId}/waitlist`,
+    { method: 'POST', body: JSON.stringify({ seats }) },
+    token,
+  );
+}
+
+export function getMyWaitlist(token: string) {
+  return apiFetch<
+    Array<{
+      id: string;
+      slotId: string;
+      courtId: string;
+      status: string;
+      position: number;
+      offeredUntil: string | null;
+      slot: { startTime: string; endTime: string };
+      court: { name: string; city: string };
+    }>
+  >('/waitlist/my', {}, token);
+}
+
+export function getRefundPreview(token: string, bookingId: string) {
+  return apiFetch<{
+    refundPercent: number;
+    refundAmount: number;
+    policyLabel: string;
+    hoursUntilSlot: number;
+  }>(`/bookings/${bookingId}/refund-preview`, {}, token);
+}
+
+export function cancelBooking(token: string, bookingId: string, reason?: string) {
+  return apiFetch<{
+    booking: Booking;
+    refundAmount: number;
+    refundPercent: number;
+    message: string;
+  }>(`/bookings/${bookingId}/cancel`, { method: 'POST', body: JSON.stringify({ reason }) }, token);
+}
+
 export function getMyBookings(token: string, page = 1, status?: string) {
   const query = new URLSearchParams({ page: String(page) });
   if (status) query.set('status', status);

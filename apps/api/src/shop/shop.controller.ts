@@ -122,11 +122,11 @@ export class ShopController {
   }
 
   @Get('shop/products-admin/all')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
   @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
-  getAllProducts() {
-    return this.shopService.getAllProductsAdmin();
+  getAllProducts(@CurrentUser() user: AuthUserPayload) {
+    return this.shopService.getAllProductsAdmin(user);
   }
 
   @Put('shop/products/:id')
@@ -287,17 +287,26 @@ export class ShopController {
     return this.shopService.getInvoice(orderId, user);
   }
 
-  @Get('shop/orders')
-  @Roles(UserRole.ADMIN)
-  @RequirePermissions(Permission.ORDERS_MANAGE)
+  @Get('shop/partner/dashboard')
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
+  @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
-  getAllOrders() {
-    return this.shopService.getAllOrdersAdmin();
+  @ApiOperation({ summary: 'Shop partner dashboard stats for tenant' })
+  getPartnerDashboard(@CurrentUser() user: AuthUserPayload) {
+    return this.shopService.getPartnerDashboard(user);
+  }
+
+  @Get('shop/orders')
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
+  @RequirePermissions(Permission.ORDERS_MANAGE, Permission.SHOP_MANAGE)
+  @ApiBearerAuth('access-token')
+  getAllOrders(@CurrentUser() user: AuthUserPayload) {
+    return this.shopService.getAllOrdersAdmin(user);
   }
 
   @Patch('shop/orders/:id/status')
-  @Roles(UserRole.ADMIN)
-  @RequirePermissions(Permission.ORDERS_MANAGE)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
+  @RequirePermissions(Permission.ORDERS_MANAGE, Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
   updateOrderStatus(
     @Param('id') id: string,
@@ -329,29 +338,30 @@ export class ShopController {
   // ─── Inventory (admin) ──────────────────────────────────────────────────────
 
   @Get('shop/inventory/low-stock')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
   @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
-  getLowStock() {
-    return this.shopService.getLowStockProducts();
+  getLowStock(@CurrentUser() user: AuthUserPayload) {
+    return this.shopService.getLowStockProducts(user);
   }
 
   @Get('shop/inventory/movements')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
   @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
   listMovements(
+    @CurrentUser() user: AuthUserPayload,
     @Query('productId') productId?: string,
     @Query('page') page?: string,
   ) {
-    return this.shopService.listInventoryMovements({
+    return this.shopService.listInventoryMovements(user, {
       productId,
       page: page ? Number(page) : undefined,
     });
   }
 
   @Post('shop/inventory/adjust')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
   @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
   adjustInventory(@CurrentUser() user: AuthUserPayload, @Body() dto: AdjustInventoryDto) {

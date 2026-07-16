@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowUpRight, ClipboardCheck, FileBarChart, Users } from 'lucide-react';
 import { OwnerPageHeader } from '@/components/owner/owner-page-header';
@@ -8,6 +9,7 @@ import { OwnerStatCard } from '@/components/owner/owner-stat-card';
 import { QueryBoundary } from '@/components/query/query-boundary';
 import { getTrainerDashboard } from '@/lib/training';
 import { useAuthToken } from '@/hooks/use-auth-token';
+import { useRealtimeInvalidation } from '@/hooks/use-realtime-invalidation';
 
 export default function TrainerDashboardPage() {
   const token = useAuthToken();
@@ -19,6 +21,15 @@ export default function TrainerDashboardPage() {
   });
 
   const dashboard = query.data;
+  const courtIds = useMemo(() => {
+    const ids =
+      dashboard?.batches
+        .map((b) => b.program?.court?.id)
+        .filter((id): id is string => Boolean(id)) ?? [];
+    return [...new Set(ids)];
+  }, [dashboard?.batches]);
+  const queryKeys = useMemo(() => [['trainer'], ['trainer', 'dashboard']], []);
+  useRealtimeInvalidation(courtIds, token, queryKeys);
 
   return (
     <div className="space-y-8">
@@ -73,7 +84,9 @@ export default function TrainerDashboardPage() {
                 </div>
                 <div className="divide-y divide-border">
                   {dashboard.batches.length === 0 && (
-                    <p className="px-6 py-8 text-sm text-muted text-center">No batches assigned yet</p>
+                    <p className="px-6 py-8 text-sm text-muted text-center">
+                      No batches assigned yet
+                    </p>
                   )}
                   {dashboard.batches.slice(0, 5).map((batch) => (
                     <div key={batch.id} className="px-6 py-4">

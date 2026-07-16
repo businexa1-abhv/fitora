@@ -5,6 +5,7 @@ import { TrainingService } from './training.service';
 import { PaymentsService } from '../payments/payments.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { SlotEventsService } from '../realtime/slot-events.service';
 import { mockNotificationsService, mockPaymentsService } from '../../test/helpers/mock-deps';
 
 describe('TrainingService (extended)', () => {
@@ -30,8 +31,18 @@ describe('TrainingService (extended)', () => {
     prisma = {
       court: { findUnique: jest.fn() },
       sport: { findFirst: jest.fn() },
-      trainingProgram: { create: jest.fn(), findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
-      trainingBatch: { create: jest.fn(), findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
+      trainingProgram: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
+      trainingBatch: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
       trainingEnrollment: {
         create: jest.fn(),
         update: jest.fn(),
@@ -41,10 +52,25 @@ describe('TrainingService (extended)', () => {
         count: jest.fn(),
         aggregate: jest.fn(),
       },
-      kidProfile: { create: jest.fn(), findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
+      kidProfile: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
       user: { findFirst: jest.fn(), findMany: jest.fn() },
-      attendanceRecord: { upsert: jest.fn(), findMany: jest.fn(), count: jest.fn(), groupBy: jest.fn() },
-      progressReport: { create: jest.fn(), findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
+      attendanceRecord: {
+        upsert: jest.fn(),
+        findMany: jest.fn(),
+        count: jest.fn(),
+        groupBy: jest.fn(),
+      },
+      progressReport: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
     } as unknown as typeof prisma;
 
     const module: TestingModule = await Test.createTestingModule({
@@ -53,6 +79,7 @@ describe('TrainingService (extended)', () => {
         { provide: PrismaService, useValue: prisma },
         { provide: PaymentsService, useValue: mockPaymentsService() },
         { provide: NotificationsService, useValue: mockNotificationsService() },
+        { provide: SlotEventsService, useValue: { emitCoachUpdated: jest.fn() } },
       ],
     }).compile();
 
@@ -189,7 +216,14 @@ describe('TrainingService (extended)', () => {
 
     const result = await service.createProgram(
       'court-1',
-      { name: 'Basics', sportId: 'sport-1', fee: 2000, minAge: 6, maxAge: 12, description: 'Learn' },
+      {
+        name: 'Basics',
+        sportId: 'sport-1',
+        fee: 2000,
+        minAge: 6,
+        maxAge: 12,
+        description: 'Learn',
+      },
       owner,
     );
     expect(result.fee).toBe('2000');

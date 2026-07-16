@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import {
   AuditAction,
+  BookingSource,
   BookingStatus,
   CourtApprovalStatus,
   PaymentEntityType,
@@ -19,6 +20,9 @@ import { PrismaService } from '../prisma/prisma.module';
 import { PaymentsService } from '../payments/payments.service';
 import { MembershipsService } from '../memberships/memberships.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
+import { WaitlistService } from './waitlist.service';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { buildCursorPaginatedResult, decodeCursor } from '../common/utils/cursor-pagination.util';
 import { BOOKING_LOCK_TTL_MINUTES } from './constants/refund-rules';
@@ -33,6 +37,7 @@ import {
   type CancelBookingDto,
   type CheckInDto,
   type CreateBookingDto,
+  type CreateWalkInBookingDto,
 } from './dto';
 import { buildQrPayload, generateQrDataUrl } from './utils/qr-code.util';
 
@@ -61,10 +66,237 @@ export class BookingsService {
     private membershipsService: MembershipsService,
     @Inject(NotificationsService)
     private notificationsService: NotificationsService,
+    @Inject(SlotAvailabilityService)
+    private availability: SlotAvailabilityService,
+    @Inject(SlotEventsService)
+    private events: SlotEventsService,
+    @Inject(WaitlistService)
+    private waitlist: WaitlistService,
   ) {}
 
   /** Step 1–3: Select court slot → lock → create PENDING booking + payment order */
   async createBooking(dto: CreateBookingDto, userId: string) {
+    if (this.availability.isEngineEnabled()) {
+      return this.createBookingV2(dto, userId);
+    }
+    return this.createBookingLegacy(dto, userId);
+  }
+
+  /**
+   * Owner walk-in: reserve + confirm PAID immediately, record on-site payment + invoice.
+   */
+  async createWalkInBooking(dto: CreateWalkInBookingDto, owner: AuthUserPayload) {
+    const court = await this.prisma.court.findFirst({
+      where: { id: dto.courtId, deletedAt: null },
+    });
+    if (!court) throw new NotFoundException('Court not found');
+    if (court.ownerId !== owner.id && !owner.roles.includes(UserRole.ADMIN)) {
+      throw new ForbiddenException('Only the court owner can create walk-in bookings');
+    }
+
+    const seats = dto.seats ?? 1;
+    const equipmentFee = dto.equipmentFee ?? 0;
+    const paymentMethod = dto.paymentMethod ?? 'UPI';
+    const guestPhone = dto.guestPhone.trim();
+    const guestName = dto.guestName.trim();
+
+    const slot = await this.prisma.courtSlot.findFirst({
+      where: { id: dto.slotId, deletedAt: null },
+    });
+    if (!slot) throw new NotFoundException('Slot not found');
+    if (slot.courtId !== dto.courtId) {
+      throw new BadRequestException('Slot does not belong to the specified court');
+    }
+
+    const playerUserId = await this.resolveWalkInUserId(guestPhone, owner.id);
+    const subtotal = Number(slot.price) + equipmentFee;
+    const notesParts = [
+      dto.notes?.trim(),
+      equipmentFee > 0 ? `Equipment fee: ₹${equipmentFee}` : null,
+      `Paid on-site via ${paymentMethod}`,
+    ].filter(Boolean);
+    const notes = notesParts.join(' · ') || undefined;
+
+    let booking;
+    const checkInCode = this.generateCheckInCode();
+
+    if (this.availability.isEngineEnabled()) {
+      const reserved = await this.availability.reserve({
+        courtId: dto.courtId,
+        slotId: dto.slotId,
+        userId: playerUserId,
+        seats,
+        source: BookingSource.OWNER_WALK_IN,
+        guestName,
+        guestPhone,
+        notes,
+        subtotalAmount: subtotal,
+        discountAmount: 0,
+        totalAmount: subtotal,
+      });
+      booking = await this.availability.confirmReservation(reserved.booking.id, checkInCode);
+    } else {
+      booking = await this.prisma.$transaction(async (tx) => {
+        const row = await tx.courtSlot.findFirst({
+          where: { id: dto.slotId, deletedAt: null },
+          include: {
+            bookings: {
+              where: { deletedAt: null, status: { not: BookingStatus.CANCELLED } },
+              take: 1,
+            },
+          },
+        });
+        if (!row) throw new NotFoundException('Slot not found');
+        if (row.isBlocked) throw new BadRequestException('Slot is blocked');
+        if (row.bookings.length > 0) throw new BadRequestException('Slot is already booked');
+
+        return tx.booking.create({
+          data: {
+            userId: playerUserId,
+            courtId: dto.courtId,
+            slotId: dto.slotId,
+            seats,
+            source: BookingSource.OWNER_WALK_IN,
+            guestName,
+            guestPhone,
+            notes,
+            status: BookingStatus.CONFIRMED,
+            paymentStatus: PaymentStatus.PAID,
+            subtotalAmount: subtotal,
+            discountAmount: 0,
+            totalAmount: subtotal,
+            checkInCode,
+          },
+          include: BOOKING_INCLUDE,
+        });
+      });
+
+      await this.events.emitSlotUpdated({
+        id: slot.id,
+        courtId: slot.courtId,
+        capacity: slot.capacity ?? 1,
+        reservedSeats: slot.reservedCount ?? 0,
+        confirmedSeats: (slot.confirmedCount ?? 0) + seats,
+        availableSeats: Math.max(
+          0,
+          (slot.capacity ?? 1) - (slot.reservedCount ?? 0) - (slot.confirmedCount ?? 0) - seats,
+        ),
+        availabilityStatus: 'FULL',
+        isBooked: true,
+        isBlocked: slot.isBlocked,
+        blockReason: slot.blockReason,
+        startTime: slot.startTime,
+        endTime: slot.endTime,
+        price: String(slot.price),
+      });
+      await this.events.emitBookingConfirmed({
+        bookingId: booking.id,
+        userId: playerUserId,
+        checkInCode,
+        slotId: slot.id,
+        courtId: court.id,
+      });
+    }
+
+    const paymentResult = await this.paymentsService.recordWalkInPayment({
+      userId: playerUserId,
+      bookingId: booking.id,
+      amount: subtotal,
+      paymentMethod,
+      tenantId: court.tenantId,
+    });
+
+    await this.notificationsService.notifyBookingConfirmed(playerUserId, {
+      id: booking.id,
+      courtName: booking.court.name,
+      slotStart: booking.slot.startTime,
+      checkInCode: booking.checkInCode ?? checkInCode,
+    });
+
+    await this.logAudit(owner.id, AuditAction.CREATE, booking.id, null, booking);
+
+    return {
+      booking: this.formatBooking(booking),
+      payment: paymentResult.payment,
+      invoice: paymentResult.invoice,
+      checkInCode: booking.checkInCode ?? checkInCode,
+      message: 'Walk-in booking confirmed and paid on-site.',
+    };
+  }
+
+  private async resolveWalkInUserId(guestPhone: string, ownerId: string) {
+    const normalized = guestPhone.replace(/\s+/g, '');
+    const digits = normalized.replace(/\D/g, '');
+    const candidates = Array.from(
+      new Set(
+        [normalized, digits, digits.length >= 10 ? `+91${digits.slice(-10)}` : null].filter(
+          Boolean,
+        ) as string[],
+      ),
+    );
+
+    const existing = await this.prisma.user.findFirst({
+      where: { deletedAt: null, phone: { in: candidates } },
+      select: { id: true },
+    });
+
+    return existing?.id ?? ownerId;
+  }
+
+  private async createBookingV2(dto: CreateBookingDto, userId: string) {
+    await this.availability.releaseExpiredLocks();
+
+    const slot = await this.prisma.courtSlot.findFirst({
+      where: { id: dto.slotId, deletedAt: null },
+      include: { court: true },
+    });
+    if (!slot) throw new NotFoundException('Slot not found');
+    if (slot.courtId !== dto.courtId) {
+      throw new BadRequestException('Slot does not belong to the specified court');
+    }
+
+    const discountDetails = await this.membershipsService.getMembershipDiscountDetails(
+      userId,
+      slot.courtId,
+    );
+    const subtotal = Number(slot.price);
+    const discountAmount = Math.round(subtotal * discountDetails.discount * 100) / 100;
+    const totalAmount = Math.round((subtotal - discountAmount) * 100) / 100;
+
+    const { booking, lockedUntil } = await this.availability.reserve({
+      courtId: dto.courtId,
+      slotId: dto.slotId,
+      userId,
+      couponId: dto.couponId,
+      notes: dto.notes,
+      source: BookingSource.PLAYER_APP,
+      seats: 1,
+      subtotalAmount: subtotal,
+      discountAmount,
+      totalAmount,
+    });
+
+    const payment = await this.paymentsService.createPaymentOrder(
+      userId,
+      Number(booking.totalAmount),
+      PaymentEntityType.BOOKING,
+      booking.id,
+    );
+
+    await this.waitlist.markConverted(dto.slotId, userId);
+
+    const ttl = this.availability.getLockTtlMinutes();
+    return {
+      booking: this.formatBooking(booking),
+      payment,
+      lockExpiresAt: lockedUntil,
+      membershipDiscount: discountDetails.discount,
+      bookingsRemaining: discountDetails.bookingsRemaining,
+      message: `Slot locked for ${ttl} minutes. Complete payment to confirm.`,
+    };
+  }
+
+  private async createBookingLegacy(dto: CreateBookingDto, userId: string) {
     await this.releaseExpiredLocks();
 
     const lockedUntil = new Date(Date.now() + BOOKING_LOCK_TTL_MINUTES * 60_000);
@@ -78,7 +310,17 @@ export class BookingsService {
     const booking = await this.prisma.$transaction(async (tx) => {
       const slot = await tx.courtSlot.findFirst({
         where: { id: dto.slotId, deletedAt: null },
-        include: { booking: true, court: { include: { sport: true } } },
+        include: {
+          bookings: {
+            where: {
+              deletedAt: null,
+              status: { not: BookingStatus.CANCELLED },
+            },
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+          },
+          court: { include: { sport: true } },
+        },
       });
 
       if (!slot) throw new NotFoundException('Slot not found');
@@ -94,8 +336,10 @@ export class BookingsService {
       );
       const discount = discountDetails.discount;
 
-      if (slot.booking) {
-        await this.handleExistingBooking(tx, slot.booking, userId);
+      // Legacy capacity=1 semantics using bookings[]
+      const active = slot.bookings[0];
+      if (active) {
+        await this.handleExistingBooking(tx, active, userId);
       }
 
       const subtotal = Number(slot.price);
@@ -126,6 +370,8 @@ export class BookingsService {
       PaymentEntityType.BOOKING,
       booking.id,
     );
+
+    await this.waitlist.markConverted(dto.slotId, userId);
 
     return {
       booking: this.formatBooking(booking),
@@ -313,8 +559,13 @@ export class BookingsService {
   async cancelBooking(id: string, dto: CancelBookingDto, user: AuthUserPayload) {
     const booking = await this.getBookingOrThrow(id);
 
-    if (booking.userId !== user.id && !user.roles.includes(UserRole.ADMIN)) {
-      throw new ForbiddenException('You can only cancel your own bookings');
+    const isBookingOwner = booking.userId === user.id;
+    const isCourtOwner = booking.court.ownerId === user.id;
+    const isAdmin = user.roles.includes(UserRole.ADMIN);
+    if (!isBookingOwner && !isCourtOwner && !isAdmin) {
+      throw new ForbiddenException(
+        'You can only cancel your own bookings or bookings on your courts',
+      );
     }
 
     if (booking.status === BookingStatus.CANCELLED) {
@@ -335,6 +586,49 @@ export class BookingsService {
       }
     }
 
+    // V2 engine: abandon unpaid holds via availability service
+    if (
+      this.availability.isEngineEnabled() &&
+      booking.status === BookingStatus.PENDING &&
+      booking.paymentStatus === PaymentStatus.PENDING
+    ) {
+      await this.availability.releaseReservation(id, { reason: 'cancelled' });
+      await this.events.emitBookingCancelled({
+        bookingId: booking.id,
+        userId: booking.userId,
+        slotId: booking.slotId,
+        courtId: booking.courtId,
+        refundAmount: 0,
+      });
+      await this.notificationsService.notifyBookingCancelled(booking.userId, {
+        id: booking.id,
+        courtName: booking.court.name,
+        refundAmount: 0,
+      });
+      await this.waitlist.offerNext(booking.slotId, booking.courtId, booking.seats ?? 1);
+      return {
+        booking: { ...this.formatBooking(booking), status: BookingStatus.CANCELLED },
+        refundAmount: 0,
+        refundPercent: calculateRefundPercent(hours),
+        message: 'Booking cancelled. No refund applicable per policy.',
+      };
+    }
+
+    if (this.availability.isEngineEnabled() && booking.paymentStatus === PaymentStatus.PAID) {
+      await this.prisma.courtSlot.update({
+        where: { id: booking.slotId },
+        data: {
+          confirmedCount: { decrement: booking.seats ?? 1 },
+          version: { increment: 1 },
+        },
+      });
+      const availability = await this.availability.getSlotAvailability(
+        booking.courtId,
+        booking.slotId,
+      );
+      await this.events.emitSlotUpdated(availability);
+    }
+
     const updated = await this.prisma.booking.update({
       where: { id },
       data: {
@@ -352,11 +646,23 @@ export class BookingsService {
       include: BOOKING_INCLUDE,
     });
 
+    await this.events.emitBookingCancelled({
+      bookingId: booking.id,
+      userId: booking.userId,
+      slotId: booking.slotId,
+      courtId: booking.courtId,
+      refundAmount,
+    });
+
     await this.notificationsService.notifyBookingCancelled(booking.userId, {
       id: booking.id,
       courtName: booking.court.name,
       refundAmount,
     });
+
+    if (this.availability.isEngineEnabled()) {
+      await this.waitlist.offerNext(booking.slotId, booking.courtId, booking.seats ?? 1);
+    }
 
     await this.logAudit(user.id, AuditAction.STATUS_CHANGE, id, booking, updated);
 
@@ -430,12 +736,31 @@ export class BookingsService {
       include: BOOKING_INCLUDE,
     });
 
+    await this.events.emitAttendanceUpdated({
+      bookingId: updated.id,
+      userId: updated.userId,
+      courtId: updated.courtId,
+      slotId: updated.slotId,
+      checkedInAt: updated.checkedInAt ?? new Date(),
+    });
+
     return { booking: this.formatBooking(updated), message: 'Check-in successful' };
   }
 
   /** Called by PaymentsService after successful payment */
   async confirmAfterPayment(bookingId: string) {
     const checkInCode = this.generateCheckInCode();
+
+    if (this.availability.isEngineEnabled()) {
+      const booking = await this.availability.confirmReservation(bookingId, checkInCode);
+      await this.notificationsService.notifyBookingConfirmed(booking.userId, {
+        id: booking.id,
+        courtName: booking.court.name,
+        slotStart: booking.slot.startTime,
+        checkInCode,
+      });
+      return booking;
+    }
 
     const booking = await this.prisma.booking.update({
       where: { id: bookingId },
@@ -459,6 +784,10 @@ export class BookingsService {
   }
 
   async releaseExpiredLocks() {
+    if (this.availability.isEngineEnabled()) {
+      return this.availability.releaseExpiredLocks();
+    }
+
     const now = new Date();
     const expired = await this.prisma.booking.findMany({
       where: {

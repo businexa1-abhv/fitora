@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Membership Management - FitOra Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E2E8F0;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: slideIn 0.4s ease-out forwards;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#9da1ff",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-tint": "#4f54b4",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-surface-variant": "#464652",
+                        "surface-container-highest": "#d8e3fb",
+                        "primary": "#15157d",
+                        "surface-container": "#e7eeff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#cfdaf2",
+                        "on-tertiary-container": "#ec9700",
+                        "inverse-surface": "#263143",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-low": "#f0f3ff",
+                        "primary-container": "#2e3192",
+                        "on-background": "#111c2d",
+                        "surface-container-high": "#dee8ff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "tertiary-fixed": "#ffddb8",
+                        "secondary-fixed": "#6ffbbe",
+                        "outline-variant": "#c7c5d4",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#c0c1ff",
+                        "on-surface": "#111c2d",
+                        "on-secondary-fixed": "#002113",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-primary-fixed": "#04006d",
+                        "outline": "#777683",
+                        "tertiary-container": "#5a3700",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#f9f9ff",
+                        "surface-variant": "#d8e3fb",
+                        "surface": "#f9f9ff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#6cf8bb",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#3c2300",
+                        "secondary": "#006c49",
+                        "primary-fixed": "#e1e0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "margin-mobile": "16px",
+                        "stack-lg": "24px",
+                        "gutter-mobile": "12px",
+                        "stack-md": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md custom-scrollbar">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline docked full-width top-0 flex justify-between items-center px-margin-mobile w-full z-50 h-16 fixed">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed text-headline-md">sports_kabaddi</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">FitOra Academy</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container dark:hover:bg-surface-variant transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fitness academy manager, dressed in premium athletic wear, with a confident and helpful expression. The background is a blurred, high-end gym facility with indigo and emerald lighting accents. The lighting is soft and corporate, maintaining a high-performance management aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAglCUpvpAhApkhdHFhXbiCnZ-PwzKhjMc7wCJRD03V7XMdcBYsdhvTfDdp4YdTc5LrZKzYEWWNCCOU7DZJMKLxCsvhxh2Z2xivp4xE5VZ1taSfw855qieaaCZOwc3642tJXpgrn9ROW4fSDjAYk9yf8JBIu6_4oGu_PGJMmkoL0qxKS7Zust_8jvDHz9tDHuHsqG8W2aejrSoLSp6CAt3vbSTWmnyPjkZfvbefSv6_R-8u60aRVxCr"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24 px-margin-mobile max-w-7xl mx-auto space-y-stack-lg">
+<!-- Header Actions -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in" style="animation-delay: 0.1s;">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Membership Management</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg">Overview of tiers, growth, and upcoming renewals.</p>
+</div>
+<div class="flex gap-stack-sm">
+<button class="flex items-center gap-2 px-6 py-2.5 bg-surface-container-high text-primary font-title-md text-title-md rounded-lg hover:bg-surface-container-highest transition-all border border-outline-variant active:scale-95">
+<span class="material-symbols-outlined">file_download</span>
+                    Export Data
+                </button>
+<button class="flex items-center gap-2 px-6 py-2.5 bg-primary text-on-primary font-title-md text-title-md rounded-lg shadow-md hover:bg-primary-container transition-all active:scale-95">
+<span class="material-symbols-outlined">person_add</span>
+                    New Enrollment
+                </button>
+</div>
+</section>
+<!-- Bento Grid: Key Metrics & Revenue -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter-mobile md:gap-stack-md animate-fade-in" style="animation-delay: 0.2s;">
+<!-- Main Revenue Card -->
+<div class="md:col-span-2 glass-card p-stack-lg rounded-xl flex flex-col justify-between min-h-[180px]">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-on-surface-variant font-label-lg text-label-lg uppercase tracking-wider">Total Monthly Revenue</span>
+<div class="font-display-lg text-display-lg text-primary flex items-baseline gap-2 mt-2">
+<span class="text-headline-sm">$</span>42,850
+                        </div>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full flex items-center gap-1 font-label-lg text-label-lg">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                        +12.4%
+                    </div>
+</div>
+<div class="w-full bg-surface-container-low rounded-full h-1.5 mt-4">
+<div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between mt-2 font-label-lg text-label-lg text-on-surface-variant">
+<span>Target: $55,000</span>
+<span>75% Achieved</span>
+</div>
+</div>
+<!-- Tier Stats -->
+<div class="bg-primary text-on-primary p-stack-md rounded-xl shadow-lg relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg">Elite Tier</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<div class="font-headline-lg text-headline-lg mt-4">124</div>
+<p class="text-primary-fixed-dim text-body-md mt-1">Active Members</p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10 group-hover:scale-110 transition-transform">workspace_premium</span>
+</div>
+<div class="bg-secondary text-on-secondary p-stack-md rounded-xl shadow-lg relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg">Pro Tier</span>
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div class="font-headline-lg text-headline-lg mt-4">342</div>
+<p class="text-secondary-fixed-dim text-body-md mt-1">Active Members</p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10 group-hover:scale-110 transition-transform">fitness_center</span>
+</div>
+</section>
+<!-- Members Table & Auto-Renewal Toggle -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- List of Upcoming Renewals -->
+<div class="lg:col-span-2 glass-card rounded-xl overflow-hidden animate-fade-in" style="animation-delay: 0.3s;">
+<div class="px-stack-lg py-stack-md border-b border-outline-variant flex items-center justify-between">
+<h3 class="font-title-lg text-title-lg text-primary">Upcoming Renewals</h3>
+<div class="flex items-center gap-stack-sm">
+<span class="font-label-lg text-label-lg text-on-surface-variant">Filter by:</span>
+<select class="bg-transparent border-none focus:ring-0 font-body-md text-primary cursor-pointer">
+<option>Next 7 Days</option>
+<option>Next 30 Days</option>
+</select>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-stack-lg py-3 font-label-lg text-label-lg text-on-surface-variant">Member</th>
+<th class="px-stack-lg py-3 font-label-lg text-label-lg text-on-surface-variant">Tier</th>
+<th class="px-stack-lg py-3 font-label-lg text-label-lg text-on-surface-variant">Renewal Date</th>
+<th class="px-stack-lg py-3 font-label-lg text-label-lg text-on-surface-variant">Amount</th>
+<th class="px-stack-lg py-3 font-label-lg text-label-lg text-on-surface-variant">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-stack-lg py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A profile avatar of a fit male athlete with a focused look, high-resolution and clean lighting. Modern corporate sportswear style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD8RBTHP7hk4zvoCrkps5qBgI-WjdkwEDeSAqMwU464lNNf85kqFYucPju_qzwWh5IEwh4I-hxnMHYlxsHWoANmo3nFhEBlTJAYAHVMB4oAIZ0j6c0OS8LOe_-wAS5zK_LdDdwvXGBJ-n6QW6Hdz2Ei0ChEAJ2J2ps5McI10CvnWRfuiw-597vFXk2oQg3OSlHJ1Zc51EAV9KN1YeXchnS2-e6DDI1zcoRBNE8Fntstlh0jKYml0Ou"/>
+</div>
+<span class="font-title-md text-title-md">Alex Rivera</span>
+</td>
+<td class="px-stack-lg py-4">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container font-label-lg text-label-lg">Elite</span>
+</td>
+<td class="px-stack-lg py-4 font-label-lg text-label-lg">Oct 12, 2023</td>
+<td class="px-stack-lg py-4 font-label-lg text-label-lg text-primary">$199.00</td>
+<td class="px-stack-lg py-4">
+<button class="text-primary hover:underline font-label-lg">Send Reminder</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-stack-lg py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A profile avatar of a female tennis player, bright and energetic, with professional sports gear. Studio lighting on a clean white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR9pK5iSeJkKehyzqOjwT9bG6H8lGdlNjX_KdfykSaZNh3JaNPawiJDMHNPDGFvK_ZLVHJV5-2QFv9EInHskkyJRI-Tb18yFgBsOR3IkstnTB93PQnP9jcZPwFacb3VIj0aF1a2cnBmyzEub6KuRx4BgNhczMIH9BdvJD5nUudLE6hYAxORp_l2X2j5waU36YPO0aW_YCW9NdfmniamMbk43MzaiRHZEMeo5iBvHvlFpJjiYCtOUFS"/>
+</div>
+<span class="font-title-md text-title-md">Sarah Jenkins</span>
+</td>
+<td class="px-stack-lg py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-label-lg">Pro</span>
+</td>
+<td class="px-stack-lg py-4 font-label-lg text-label-lg">Oct 14, 2023</td>
+<td class="px-stack-lg py-4 font-label-lg text-label-lg text-primary">$99.00</td>
+<td class="px-stack-lg py-4">
+<button class="text-primary hover:underline font-label-lg">Send Reminder</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-stack-lg py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A diverse professional athlete avatar with a clean-cut look and modern workout attire. Corporate high-performance vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSvlQLKmPTkPVZy1mTWrXAaLGIgN8fRFQ7FjbTAFZ8VT7XPLrmpD_rYaXYCH1RSnnxwbuGpjDkst0MW4yz6uE0dgYMZOcQyJCe0ArIrh0XCvLlGpWnwY7nz1zxA6H_tILdJIlsV3t7wYRqgBo3AHygqlLJvrgGaUkeGebGopvKJk-unAy80OQmsMP_qa-O_8gpujv0srevUv2sG0SjdvuW7TnbbSuV8QZf64HlFLGJqw3iWVY-ZdeE"/>
+</div>
+<span class="font-title-md text-title-md">Marcus Thorne</span>
+</td>
+<td class="px-stack-lg py-4">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant font-label-lg text-label-lg">Standard</span>
+</td>
+<td class="px-stack-lg py-4 font-label-lg text-label-lg">Oct 15, 2023</td>
+<td class="px-stack-lg py-4 font-label-lg text-label-lg text-primary">$49.00</td>
+<td class="px-stack-lg py-4">
+<button class="text-primary hover:underline font-label-lg">Send Reminder</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Settings & Configuration -->
+<div class="space-y-stack-md animate-fade-in" style="animation-delay: 0.4s;">
+<div class="glass-card p-stack-lg rounded-xl">
+<h3 class="font-title-lg text-title-lg text-primary mb-4">Membership Settings</h3>
+<div class="space-y-stack-lg">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-title-md text-title-md text-on-surface">Auto-Renewal</p>
+<p class="text-on-surface-variant text-body-md">Process recurring payments automatically.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-title-md text-title-md text-on-surface">Grace Period</p>
+<p class="text-on-surface-variant text-body-md">Days allowed after expiration.</p>
+</div>
+<span class="font-label-lg text-label-lg bg-surface-container-low px-3 py-1 rounded border border-outline-variant">7 Days</span>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<h4 class="font-label-lg text-label-lg text-on-surface-variant uppercase mb-3">Tier Distribution</h4>
+<div class="space-y-stack-sm">
+<div class="flex items-center justify-between font-body-md">
+<span>Elite</span>
+<span>22%</span>
+</div>
+<div class="w-full bg-surface-container-low rounded-full h-2 overflow-hidden flex">
+<div class="bg-primary h-full" style="width: 22%"></div>
+<div class="bg-secondary h-full" style="width: 48%"></div>
+<div class="bg-outline-variant h-full" style="width: 30%"></div>
+</div>
+<div class="flex justify-between text-on-surface-variant text-body-md mt-1">
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> Elite</div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> Pro</div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-outline-variant"></span> Std</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-tertiary text-on-tertiary p-stack-lg rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="font-title-lg text-title-lg">Optimization Tip</h4>
+<p class="text-tertiary-fixed-dim mt-2 font-body-md">Pro tier conversions are up 15% this month. Consider offering an Elite trial to Pro members.</p>
+<button class="mt-4 px-4 py-2 bg-on-tertiary text-tertiary rounded-lg font-title-md hover:bg-tertiary-fixed-dim transition-colors">Run Campaign</button>
+</div>
+<span class="material-symbols-outlined absolute -bottom-2 -right-2 text-8xl opacity-10 rotate-12 group-hover:rotate-0 transition-transform">lightbulb</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">sports_tennis</span>
+<span class="font-label-lg text-label-lg">Courts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed-dim dark:text-on-primary-fixed-variant rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-lg text-label-lg">Players</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-14 h-14 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 group z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+<span class="absolute right-full mr-4 bg-inverse-surface text-inverse-on-surface px-3 py-1 rounded-md text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">Quick Enrollment</span>
+</button>
+<script>
+        // Micro-interaction for toggles and buttons
+        document.querySelectorAll('input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const isChecked = this.checked;
+                // Toast notification simulation
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-28 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full font-title-md shadow-xl transition-all duration-300 opacity-0 transform translate-y-4 z-[100]';
+                toast.textContent = isChecked ? 'Auto-renewal enabled' : 'Auto-renewal disabled';
+                document.body.appendChild(toast);
+                
+                requestAnimationFrame(() => {
+                    toast.classList.add('opacity-100', 'translate-y-0');
+                });
+
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            });
+        });
+
+        // Hover animation for cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.2s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

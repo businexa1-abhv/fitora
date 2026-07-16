@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Owner - QR Scanner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#e7eeff",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "primary": "#15157d",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-high": "#dee8ff",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-primary": "#c0c1ff",
+                        "tertiary-container": "#5a3700",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#464652",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-bright": "#f9f9ff",
+                        "primary-container": "#2e3192",
+                        "outline": "#777683",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-container": "#ec9700",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4f54b4",
+                        "on-primary-fixed": "#04006d",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#d8e3fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "background": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface-dim": "#cfdaf2",
+                        "tertiary": "#3c2300",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-background": "#111c2d",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#9da1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter-mobile": "12px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-lg": ["JetBrains Mono"],
+                        "title-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanner-frame {
+            background: linear-gradient(to bottom, transparent 0%, transparent 100%) padding-box,
+                        linear-gradient(to bottom, #4edea3 0%, #4edea3 100%) border-box;
+            border: 4px solid transparent;
+            position: relative;
+        }
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4edea3, transparent);
+            box-shadow: 0 0 15px #4edea3;
+            animation: scan 3s ease-in-out infinite;
+        }
+        @keyframes scan {
+            0%, 100% { transform: translateY(0); opacity: 0.2; }
+            50% { transform: translateY(240px); opacity: 1; }
+        }
+        .reticle-corner {
+            width: 40px;
+            height: 40px;
+            border-color: #4edea3;
+            position: absolute;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden">
+<!-- Top Navigation Anchor (Manual Implementation of TopAppBar JSON Logic) -->
+<header class="fixed top-0 w-full z-50 bg-transparent text-white h-16">
+<div class="flex justify-between items-center px-margin-mobile h-full max-w-container-max mx-auto">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/20 active:scale-95 transition-all" onclick="window.history.back()">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md tracking-tight">QR Check-in</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/20 active:scale-95 transition-all" id="flash-toggle">
+<span class="material-symbols-outlined">flashlight_on</span>
+</button>
+</div>
+</header>
+<!-- Full Screen Camera View (Placeholder with Blurry Background Art) -->
+<main class="relative h-screen w-full flex flex-col items-center justify-center">
+<!-- Background Imagery (The "Camera View") -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="A blurry, wide-angle interior view of a high-end sports academy lobby. The atmosphere is professional and energetic with indigo and emerald accents. In the background, modern fitness equipment and sleek architecture are visible but softened by a significant depth-of-field blur. The lighting is bright and clean, suggesting a premium light-mode athletic environment." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA585lI3T7F9QtxrAUzKn3Xt6v30YdC5quJi59Bs5eUIsp5oJFiNNsJ-E7njp1rGLouxUVsncLpI3175xpVnHYLQ--5BZbvKd727_7b46lpmG4JblIUTysRa_FhY-afSIPkhLiLzK71xIPYLDSKguzWuE9Bdcm75ccs7UUttKsz-2O7Iz3Va7A-n9mzAjRoEp2tFeg08F2UGmqfH91bt2oxhVX4lejBgr6pevgWENhzmp7BtZdELNKt')"></div>
+<!-- High-tech Overlay / Scrim -->
+<div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
+</div>
+<!-- Scanning Interface -->
+<div class="relative z-10 flex flex-col items-center">
+<!-- Reticle Container -->
+<div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+<!-- Outer Shadow to isolate reticle -->
+<div class="absolute -inset-[884px] border-[884px] border-primary/40 backdrop-blur-sm pointer-events-none"></div>
+<!-- The Actual Viewport -->
+<div class="w-full h-full rounded-xl overflow-hidden relative border-2 border-white/20">
+<!-- Scanner Line -->
+<div class="scan-line absolute w-full top-0 z-20"></div>
+</div>
+<!-- Corners -->
+<div class="reticle-corner top-0 left-0 border-t-4 border-l-4 rounded-tl-xl"></div>
+<div class="reticle-corner top-0 right-0 border-t-4 border-r-4 rounded-tr-xl"></div>
+<div class="reticle-corner bottom-0 left-0 border-b-4 border-l-4 rounded-bl-xl"></div>
+<div class="reticle-corner bottom-0 right-0 border-b-4 border-r-4 rounded-br-xl"></div>
+</div>
+<!-- Hint Text -->
+<p class="mt-8 text-white font-title-md text-title-md bg-black/40 px-4 py-2 rounded-full backdrop-blur-md">
+                Align QR code within frame
+            </p>
+</div>
+<!-- Manual Entry & Actions Bottom Section -->
+<section class="absolute bottom-0 left-0 w-full z-30 p-margin-mobile pb-12 bg-gradient-to-t from-primary/90 to-transparent backdrop-blur-sm">
+<div class="max-w-md mx-auto space-y-stack-md">
+<!-- Manual ID Entry -->
+<div class="bg-surface/95 backdrop-blur-md p-6 rounded-xl border border-outline-variant shadow-lg transition-all focus-within:ring-2 focus-within:ring-secondary-fixed">
+<label class="block text-primary font-label-lg text-label-lg mb-2" for="booking-id">MANUAL ENTRY</label>
+<div class="flex gap-gutter-mobile">
+<div class="relative flex-grow">
+<input class="w-full bg-surface-container-low border-b-2 border-outline focus:border-primary px-4 py-3 font-label-lg text-label-lg text-on-surface placeholder:text-outline-variant outline-none transition-all rounded-t-lg" id="booking-id" placeholder="Enter Booking ID" type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary-container text-on-primary px-6 rounded-lg font-title-md text-title-md active:scale-95 transition-all shadow-sm">
+                            Check In
+                        </button>
+</div>
+</div>
+<!-- Secondary Info / Quick Actions -->
+<div class="flex justify-center gap-stack-lg">
+<button class="flex flex-col items-center gap-1 text-white/80 hover:text-white transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-white/10 rounded-full backdrop-blur-md border border-white/20">
+<span class="material-symbols-outlined">history</span>
+</div>
+<span class="text-[10px] font-label-lg uppercase tracking-widest">History</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-white/80 hover:text-white transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-white/10 rounded-full backdrop-blur-md border border-white/20">
+<span class="material-symbols-outlined">help</span>
+</div>
+<span class="text-[10px] font-label-lg uppercase tracking-widest">Support</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Success Toast (Hidden by default) -->
+<div class="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-300" id="check-in-success">
+<div class="bg-secondary-container text-on-secondary-container px-8 py-10 rounded-2xl shadow-2xl flex flex-col items-center space-y-4 scale-90 transition-transform duration-500">
+<div class="w-20 h-20 bg-secondary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-4xl">check_circle</span>
+</div>
+<div class="text-center">
+<h3 class="font-headline-sm text-headline-sm">Check-in Successful</h3>
+<p class="font-body-md text-body-md opacity-80">Member: Alex Johnson (Tennis Academy)</p>
+</div>
+</div>
+</div>
+<!-- Floating Action Button Logic (Suppressed as per rules for detailed task screens) -->
+<script>
+        // Micro-interactions and simulation
+        const flashBtn = document.getElementById('flash-toggle');
+        let flashOn = false;
+
+        flashBtn.addEventListener('click', () => {
+            flashOn = !flashOn;
+            const icon = flashBtn.querySelector('.material-symbols-outlined');
+            icon.textContent = flashOn ? 'flashlight_off' : 'flashlight_on';
+            flashBtn.classList.toggle('bg-white/40', flashOn);
+            
+            // Visual feedback for "flash"
+            if(flashOn) {
+                document.body.insertAdjacentHTML('beforeend', '<div id="flash-overlay" class="fixed inset-0 bg-white/30 z-[60] pointer-events-none"></div>');
+                setTimeout(() => document.getElementById('flash-overlay')?.remove(), 100);
+            }
+        });
+
+        // Simulate a successful scan
+        const simulateScan = () => {
+            const toast = document.getElementById('check-in-success');
+            const toastContent = toast.querySelector('div');
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toastContent.classList.remove('scale-90');
+            toastContent.classList.add('scale-100');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+                toastContent.classList.remove('scale-100');
+                toastContent.classList.add('scale-90');
+            }, 3000);
+        };
+
+        // Trigger simulation on Check In button click
+        document.querySelector('button.bg-primary').addEventListener('click', (e) => {
+            const input = document.getElementById('booking-id');
+            if(input.value.trim() !== "") {
+                simulateScan();
+                input.value = "";
+            }
+        });
+
+        // Responsive behavior for scan line height or animation could be tweaked here
+    </script>
+</body></html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Check-in Successful - FitOra Owner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#e7eeff",
+                        "secondary": "#006c49",
+                        "on-secondary-fixed": "#002113",
+                        "primary": "#15157d",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-high": "#dee8ff",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-primary": "#c0c1ff",
+                        "tertiary-container": "#5a3700",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#464652",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-bright": "#f9f9ff",
+                        "primary-container": "#2e3192",
+                        "outline": "#777683",
+                        "on-secondary-container": "#00714d",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-container": "#ec9700",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4f54b4",
+                        "on-primary-fixed": "#04006d",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-variant": "#d8e3fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "background": "#f9f9ff",
+                        "inverse-surface": "#263143",
+                        "surface-dim": "#cfdaf2",
+                        "tertiary": "#3c2300",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-background": "#111c2d",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#9da1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter-mobile": "12px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Lexend", "sans-serif"],
+                        "body-lg": ["Lexend", "sans-serif"],
+                        "headline-sm": ["Lexend", "sans-serif"],
+                        "headline-lg": ["Lexend", "sans-serif"],
+                        "headline-md": ["Lexend", "sans-serif"],
+                        "title-md": ["Lexend", "sans-serif"],
+                        "headline-lg-mobile": ["Lexend", "sans-serif"],
+                        "label-lg": ["JetBrains Mono", "monospace"],
+                        "title-lg": ["Lexend", "sans-serif"],
+                        "body-md": ["Lexend", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Lexend', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .success-confetti-canvas {
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+        }
+        .emerald-glow {
+            box-shadow: 0 0 40px rgba(0, 108, 73, 0.15);
+        }
+        .player-card-glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+        }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background overflow-hidden h-screen flex flex-col">
+<!-- Top App Bar (Suppressing global nav as per Task-Focused/Success Rule) -->
+<header class="fixed top-0 w-full z-50 bg-surface flex justify-between items-center px-margin-mobile h-16 max-w-container-max mx-auto shadow-sm">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary">close</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary">Check-in Details</h1>
+</div>
+<div class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-primary">share</span>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-margin-mobile pt-16 pb-24 overflow-y-auto">
+<!-- Large Check-in Successful Banner -->
+<div class="w-full flex flex-col items-center text-center space-y-stack-md mb-stack-lg animate-slide-up" style="animation-delay: 0.1s">
+<div class="relative">
+<div class="w-24 h-24 bg-secondary-fixed rounded-full flex items-center justify-center emerald-glow">
+<span class="material-symbols-outlined text-on-secondary-fixed text-5xl" style="font-variation-settings: 'wght' 600">check_circle</span>
+</div>
+<!-- Subtle pulsing ring -->
+<div class="absolute inset-0 w-24 h-24 bg-secondary-fixed opacity-20 rounded-full animate-ping"></div>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Check-in Successful</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-unit">Entry processed at 09:58 AM</p>
+</div>
+</div>
+<!-- Player Card: Premium Bento-style -->
+<div class="w-full max-w-md space-y-stack-md animate-slide-up" style="animation-delay: 0.2s">
+<div class="player-card-glass border border-outline-variant rounded-xl p-stack-md overflow-hidden relative shadow-sm">
+<!-- Branding Accent -->
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary-container opacity-[0.03] rounded-bl-full -mr-8 -mt-8"></div>
+<div class="flex items-start gap-stack-md">
+<div class="w-16 h-16 rounded-lg bg-surface-container-high flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a athletic male player with a friendly smile, dressed in premium white tennis apparel. The lighting is bright and clean, mimicking a professional sports photography studio. The background is a soft, out-of-focus emerald green, aligning with the corporate modernism aesthetic of the fitness management app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD13ifT0vtZ-ad0vO6X57dllJZRSNdGv2WKssUwimPV3_tHhudNfGe3sdKTxXKnAvdrTIktoUTlflD4itzXRVaEuanPeQWC1UmA2sDd8QLwZKD5EhkLwLNz6u2PIkMSEF5RQsOUMD9XSODhMKktTEpXgM-Ts_vbTem_VmJj5TTS6WwBRyZ4ePbYcf2jEFjqNOMxvHeFup9M3LTFoB6Rd5JdPRYxizAJQaAD1TXpled13wUdB9WfNihS"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-lg text-title-lg text-primary">Marcus Sterling</h3>
+<div class="flex items-center gap-unit text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">confirmation_number</span>
+<span class="font-label-lg text-label-lg uppercase">#BK-1024</span>
+</div>
+</div>
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container font-label-lg text-label-lg rounded-full">ACTIVE</span>
+</div>
+</div>
+</div>
+<div class="mt-stack-md pt-stack-md border-t border-outline-variant grid grid-cols-2 gap-stack-md">
+<div class="space-y-unit">
+<p class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Facility</p>
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-primary text-lg">sports_tennis</span>
+<p class="font-title-md text-title-md text-on-surface">Court 1 (Tennis)</p>
+</div>
+</div>
+<div class="space-y-unit">
+<p class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Time Slot</p>
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-primary text-lg">schedule</span>
+<p class="font-title-md text-title-md text-on-surface">10:00 - 11:30</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Additional Detail Strip -->
+<div class="flex items-center justify-between px-stack-md py-stack-sm bg-surface-container-low rounded-lg border border-outline-variant border-dashed">
+<span class="font-body-md text-body-md text-on-surface-variant">Membership Tier</span>
+<span class="font-title-md text-title-md text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1">stars</span>
+                    Elite Plus
+                </span>
+</div>
+</div>
+<!-- CTA Section -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile bg-gradient-to-t from-background via-background to-transparent pb-8">
+<div class="max-w-md mx-auto space-y-stack-sm">
+<button class="w-full bg-primary py-4 rounded-xl flex items-center justify-center gap-stack-sm shadow-lg hover:bg-primary-container active:scale-95 transition-all" onclick="handleNextCheckin()">
+<span class="material-symbols-outlined text-on-primary">qr_code_scanner</span>
+<span class="text-on-primary font-title-md text-title-md">Next Check-in</span>
+</button>
+<button class="w-full py-3 rounded-xl flex items-center justify-center gap-stack-sm text-primary font-title-md text-title-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">print</span>
+<span>Print Receipt</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Success Toast Notification -->
+<div class="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 transform transition-all duration-500 opacity-0 translate-y-10" id="success-toast">
+<div class="bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl">
+<span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
+<span class="font-body-md text-body-md">Player database updated successfully</span>
+</div>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Trigger Toast and Canvas effects on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const toast = document.getElementById('success-toast');
+                toast.classList.remove('opacity-0', 'translate-y-10');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                
+                // Vibrate for feedback if supported
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate([10, 30, 10]);
+                }
+            }, 800);
+
+            // Auto-hide toast after 4s
+            setTimeout(() => {
+                const toast = document.getElementById('success-toast');
+                toast.classList.add('opacity-0', 'translate-y-10');
+            }, 4800);
+        });
+
+        function handleNextCheckin() {
+            // Simulate navigation back to scanner
+            const btn = event.currentTarget;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span>';
+            setTimeout(() => {
+                window.location.reload(); // Just refresh for the demo
+            }, 600);
+        }
+    </script>
+</body></html>
