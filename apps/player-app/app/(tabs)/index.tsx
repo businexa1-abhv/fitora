@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { type Href, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   APP_NAME,
@@ -107,7 +107,7 @@ export default function HomeScreen() {
           ).map((item) => (
             <Pressable
               key={item.href}
-              onPress={() => router.push(item.href)}
+              onPress={() => router.push(item.href as Href)}
               style={[
                 styles.shortcutItem,
                 { backgroundColor: colors.card, borderColor: colors.border },

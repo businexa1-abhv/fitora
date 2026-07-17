@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { type Href, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/providers/auth-provider';
@@ -168,7 +168,7 @@ export default function ProfileScreen() {
           {PLAYER_LINKS.map((item) => (
             <Pressable
               key={item.href}
-              onPress={() => router.push(item.href)}
+              onPress={() => router.push(item.href as Href)}
               style={({ pressed }) => [
                 styles.menuCard,
                 { backgroundColor: colors.card, borderColor: colors.border },
