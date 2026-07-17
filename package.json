@@ -12,7 +12,6 @@
     "dev:admin-web": "turbo run dev --filter=@fitora/admin-web",
     "dev:partner": "turbo run dev --filter=@fitora/partner-web",
     "dev:shop-partner": "turbo run dev --filter=@fitora/shop-partner-web",
-    "dev:backend": "turbo run dev --filter=@fitora/*-service",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",

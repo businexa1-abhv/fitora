@@ -6,7 +6,7 @@ export default [
   {
     // Nest DI needs runtime class tokens. Root lint-staged uses this config, so
     // keep Nest injectables as value imports (not erased to Function).
-    files: ['apps/api/**/*.ts', 'backend/services/**/*.ts'],
+    files: ['apps/api/**/*.ts'],
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
     },
@@ -19,6 +19,7 @@ export default [
       '**/.turbo/**',
       '**/.expo/**',
       '**/coverage/**',
+      'archive/**',
     ],
   },
 ];

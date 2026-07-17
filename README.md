@@ -6,13 +6,13 @@ Book courts, manage memberships, enroll kids in training, shop gear, and book sp
 
 ## Enterprise Scaffold (Single Monorepo)
 
-The repository now includes an enterprise architecture scaffold for the expanded multi-surface SaaS model:
+The repository includes an enterprise multi-surface SaaS layout:
 
 - Mobile apps: `apps/player-app`, `apps/owner-app`
-- Web apps: `apps/admin-web`, `apps/partner-web`, `apps/shop-partner-web`
-- Shared packages: `packages/design-system`, `packages/api`, `packages/auth`, `packages/hooks`, `packages/utils`, `packages/validation`, `packages/theme`, `packages/constants`
-- Backend services: `backend/services/*`
-- Backend shared modules: `backend/shared/*`
+- Web apps: `apps/web`, `apps/admin`, `apps/admin-web`, `apps/partner-web`, `apps/shop-partner-web`
+- API: `apps/api` (NestJS + Prisma)
+- Shared packages: `packages/shared`, `packages/types`, `packages/config`
+- Archived scaffolding (not in workspace): `archive/` — unused stub packages, backend microservice stubs, and legacy `database/` tree
 
 Architecture and platform design docs:
 
@@ -30,22 +30,23 @@ Architecture and platform design docs:
 ```
 fitora/
 ├── apps/
-│   ├── api/              # NestJS REST API          → :3001
-│   ├── web/              # Next.js player app       → :3000
-│   ├── admin/            # Next.js admin dashboard  → :3002
-│   └── mobile/           # Expo React Native app
+│   ├── api/                 # NestJS REST API               → :3001
+│   ├── web/                 # Next.js player portal         → :3000
+│   ├── admin/               # Next.js platform admin        → :3002
+│   ├── admin-web/           # Partner-ops admin             → :3010
+│   ├── partner-web/         # Venue partner onboarding      → :3011
+│   ├── shop-partner-web/    # Shop partner console          → :3012
+│   ├── player-app/          # Expo player mobile
+│   └── owner-app/           # Expo owner/coach mobile
 ├── packages/
-│   ├── config/           # Shared ESLint, Prettier, TypeScript configs
-│   ├── types/            # Shared TypeScript types & enums
-│   ├── shared/           # Shared utilities & re-exports
-│   └── ui/               # Shared React UI components
+│   ├── config/              # Shared ESLint, Prettier, TypeScript configs
+│   ├── types/               # Shared TypeScript types & enums
+│   └── shared/              # Shared utilities & re-exports
+├── archive/                 # Unused scaffolding (not in workspace)
 ├── docs/
-│   ├── PRD.md
-│   └── Architecture.md
-├── .github/workflows/    # CI/CD pipelines
-├── .husky/               # Git hooks (pre-commit, commit-msg)
-├── docker-compose.yml    # Local PostgreSQL + Redis
-├── turbo.json            # Turborepo task pipeline
+├── .github/workflows/
+├── docker-compose.yml
+├── turbo.json
 └── pnpm-workspace.yaml
 ```
 
@@ -188,10 +189,6 @@ All shared TypeScript enums, interfaces, and label maps.
 ### `@fitora/shared`
 
 Runtime utilities + re-exports from `@fitora/types`.
-
-### `@fitora/ui`
-
-Shared React components (`Button`, `Input`, `Card`) for web and admin.
 
 ---
 

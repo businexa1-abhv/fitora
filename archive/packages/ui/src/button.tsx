@@ -10,8 +10,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const variants = {
   primary: 'bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50',
   secondary: 'bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-50',
-  outline:
-    'border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 disabled:opacity-50',
+  outline: 'border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 disabled:opacity-50',
   ghost: 'bg-transparent text-slate-700 hover:bg-slate-100 disabled:opacity-50',
 };
 
