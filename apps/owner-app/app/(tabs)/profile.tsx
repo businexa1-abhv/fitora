@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LeaveRequestStatus } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
+import { CoachProfileSettingsScreen } from '@/components/coach-profile-settings';
 import { Card, MonoLabel, QueryState } from '@/components/ui';
 import {
   cancelLeaveRequest,
@@ -41,6 +42,12 @@ function statusColor(
 }
 
 export default function CoachProfileScreen() {
+  const { isCoachMode } = useAuth();
+  if (isCoachMode) return <CoachProfileSettingsScreen />;
+  return <LegacyCoachProfileScreen />;
+}
+
+function LegacyCoachProfileScreen() {
   const { colors } = useTheme();
   const { token, user, signOut } = useAuth();
   const insets = useSafeAreaInsets();

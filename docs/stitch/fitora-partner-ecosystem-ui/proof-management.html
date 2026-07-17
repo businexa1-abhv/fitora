@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Pro - Proof Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .proof-canvas {
+            background-image: radial-gradient(#e2bfb0 0.5px, transparent 0.5px);
+            background-size: 16px 16px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#565e74",
+                        "primary-fixed-dim": "#ffb693",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#fff1eb",
+                        "on-background": "#261812",
+                        "surface-container-highest": "#f8ddd2",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "on-primary-fixed-variant": "#7a3000",
+                        "on-surface-variant": "#5a4136",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "secondary-fixed": "#dae2fd",
+                        "primary-fixed": "#ffdbcc",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#5c647a",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "primary-container": "#ff6b00",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#efd5ca",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#d3e4fe",
+                        "surface-bright": "#fff8f6",
+                        "primary": "#a04100",
+                        "surface-container": "#ffeae1",
+                        "inverse-surface": "#3d2d26",
+                        "background": "#fff8f6",
+                        "tertiary-container": "#8a9ab2",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "outline-variant": "#e2bfb0",
+                        "on-primary-fixed": "#351000",
+                        "tertiary": "#505f76",
+                        "on-surface": "#261812",
+                        "on-secondary-fixed": "#131b2e",
+                        "inverse-on-surface": "#ffede6",
+                        "inverse-primary": "#ffb693",
+                        "surface-tint": "#a04100",
+                        "secondary-container": "#dae2fd",
+                        "outline": "#8e7164",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#572000",
+                        "surface-container-high": "#fee3d8",
+                        "on-tertiary-container": "#223246",
+                        "surface-variant": "#f8ddd2",
+                        "surface": "#fff8f6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "xl": "32px",
+                        "base": "8px",
+                        "gutter": "20px",
+                        "sm": "12px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant shadow-sm flex flex-col py-lg z-50">
+<div class="px-lg mb-xl">
+<h1 class="text-headline-md font-headline-md text-primary">FitOra Pro</h1>
+<p class="text-xs text-secondary font-label-md">Service Portal</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto">
+<!-- Active State on Proofs/Listings context -->
+<a class="flex items-center px-lg py-3 text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center px-lg py-3 text-primary font-bold border-l-4 border-primary bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">inventory_2</span>
+<span class="font-label-md text-label-md">Listings</span>
+</a>
+<a class="flex items-center px-lg py-3 text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">receipt_long</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center px-lg py-3 text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">calendar_today</span>
+<span class="font-label-md text-label-md">Schedule</span>
+</a>
+<a class="flex items-center px-lg py-3 text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">star</span>
+<span class="font-label-md text-label-md">Reviews</span>
+</a>
+<a class="flex items-center px-lg py-3 text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">payments</span>
+<span class="font-label-md text-label-md">Payouts</span>
+</a>
+<a class="flex items-center px-lg py-3 text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</a>
+<a class="flex items-center px-lg py-3 text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-lg">
+<button class="w-full bg-primary-container text-on-primary-container py-3 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span> New Listing
+            </button>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center">
+<div class="bg-surface-container-high rounded-full px-4 py-1.5 flex items-center gap-2 border border-outline-variant">
+<span class="material-symbols-outlined text-secondary text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64 h-full" placeholder="Search orders..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-xl">
+<div class="hidden md:flex items-center gap-2 text-secondary">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-label-md font-label-md">System Status: Active</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">monitor_heart</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary-fixed-dim overflow-hidden ml-2">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a service provider for FitOra, set in a bright, modern office with soft daylight. The person is wearing a high-quality athletic polo, looking confident and smiling. The background is slightly blurred showing gym equipment and brand colors like FitOra orange and deep navy, emphasizing a corporate-modern professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCy23maW8SS4btG11UNemsMW2hxzFw3O8sSKaUev11BRqlUzwFNQm_rpIqeCtFVLg3kNdOMIpbgQ2zm56pOmWbxqghta8OS7vedn9Hy1_hlvItXhGigwZPPLUTgsiyolv_EIVvJ3Gtabh9xeNXSEUoVjSy1c3XDHWqLmbbU2kZk7zzR3DJJavu-W7prb7PWr0ASs7Fp25L-LoM-__64Xrfr3aV-Uzbd1wxhg5T5JYEhdLQ8PjbwQIRxA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[240px] pt-16 min-h-screen p-margin-desktop bg-background">
+<!-- Breadcrumbs & Status -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-lg gap-lg">
+<div>
+<nav class="flex text-secondary text-sm mb-2 gap-2 items-center">
+<a class="hover:text-primary" href="#">Orders</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<a class="hover:text-primary" href="#">#ORD-2024-8812</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-on-surface font-bold">Proof Management</span>
+</nav>
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Premium Performance Tee <span class="text-secondary font-normal">v2.4</span></h2>
+</div>
+<div class="flex items-center gap-md">
+<div class="bg-primary-fixed text-on-primary-fixed px-4 py-2 rounded-full flex items-center gap-2 border border-primary">
+<span class="material-symbols-outlined text-md" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Awaiting Approval</span>
+</div>
+</div>
+</div>
+<!-- Lock Warning (Dismissible) -->
+<div class="hidden bg-error-container text-on-error-container p-lg rounded-xl border border-error/20 flex items-center gap-lg mb-lg" id="lock-warning">
+<span class="material-symbols-outlined text-headline-md">lock</span>
+<div class="flex-1">
+<p class="font-label-md text-label-md">Proof Locked</p>
+<p class="text-sm">This proof has been approved by the customer. Further revisions are locked. Contact support to override.</p>
+</div>
+<button class="bg-on-error-container/10 px-4 py-2 rounded-lg font-label-md hover:bg-on-error-container/20">Contact Admin</button>
+</div>
+<!-- Main Workspace: Proofing Bento Grid -->
+<div class="grid grid-cols-12 gap-lg h-auto lg:h-[700px]">
+<!-- Proof Preview Canvas (L) -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-md">
+<div class="flex-1 rounded-xl bg-surface-container-lowest border border-outline-variant shadow-sm proof-canvas relative overflow-hidden flex flex-col">
+<!-- Preview Toolbar -->
+<div class="glass-panel p-md border-b border-outline-variant flex justify-between items-center z-10">
+<div class="flex gap-md">
+<button class="p-2 rounded hover:bg-surface-container"><span class="material-symbols-outlined">zoom_in</span></button>
+<button class="p-2 rounded hover:bg-surface-container"><span class="material-symbols-outlined">zoom_out</span></button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<button class="p-2 rounded hover:bg-surface-container"><span class="material-symbols-outlined">layers</span></button>
+<button class="p-2 rounded hover:bg-surface-container"><span class="material-symbols-outlined">grid_view</span></button>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-caption text-secondary">Render quality: High-Res</span>
+<button class="flex items-center gap-2 bg-surface border border-outline px-4 py-1.5 rounded-lg text-sm font-label-md hover:bg-surface-container">
+<span class="material-symbols-outlined text-md">download</span> Source File
+                            </button>
+</div>
+</div>
+<!-- The Artwork Mockup -->
+<div class="flex-1 flex items-center justify-center p-xl group">
+<div class="relative w-full max-w-lg aspect-square bg-white shadow-xl rounded-lg p-base border border-outline-variant transform group-hover:scale-[1.02] transition-transform duration-500">
+<img class="w-full h-full object-contain" data-alt="A high-fidelity product mockup of a charcoal gray premium performance athletic t-shirt on a crisp white background. The shirt features a vibrant orange FitOra logo on the chest with professional heat-press textures visible. The lighting is crisp studio quality with soft shadows, highlighting the fabric texture and the precision of the printed graphic. Modern, clean, and commercial product photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuscWuvDErsaBzecyocIA97JVWnDL7d8mjfUH5P7WFPM4USNGxMLL9jWxNSnFNjvtOahhjTXjueS1O--XWO_8tyS7xcWtQMYESczt39-5eiWt5eSNQIM15YVI6_atGRTBPdt8NBgc0gH8OKf-jdt_dzU5zYUFQ6ZFDCYRF70CwhF95vZN6MATtXDkTj1TiASCBtXUMhZBGtAJeo1_GGmXucUI59M96pzbH7DNGNgri7OPBHD75Xx3CVw"/>
+<!-- Hotspot Marker Example -->
+<div class="absolute top-1/4 left-1/3 group/hotspot">
+<span class="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping"></span>
+<span class="relative flex h-6 w-6 rounded-full bg-primary border-2 border-white items-center justify-center cursor-pointer shadow-lg">
+<span class="text-[10px] text-white font-bold">1</span>
+</span>
+<div class="absolute top-8 left-0 hidden group-hover/hotspot:block w-48 glass-panel border border-primary p-2 rounded shadow-xl z-20">
+<p class="text-xs font-bold text-primary">Comment #1</p>
+<p class="text-[11px] leading-tight text-on-surface">"Please ensure the orange matches HEX #FF6B00 exactly."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Proof Navigation Footer -->
+<div class="glass-panel p-md border-t border-outline-variant flex justify-center gap-md z-10">
+<button class="flex items-center gap-1 text-sm text-secondary hover:text-primary"><span class="material-symbols-outlined">arrow_back</span> Prev</button>
+<div class="flex gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span>
+</div>
+<button class="flex items-center gap-1 text-sm text-secondary hover:text-primary">Next <span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+<!-- Quick Actions Block -->
+<div class="grid grid-cols-3 gap-md">
+<button class="bg-green-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-green-700 transition-colors shadow-sm">
+<span class="material-symbols-outlined">check_circle</span> Approve Proof
+                    </button>
+<button class="bg-secondary text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-on-background transition-colors shadow-sm">
+<span class="material-symbols-outlined">edit_note</span> Request Changes
+                    </button>
+<button class="bg-white border-2 border-error text-error font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-error-container transition-colors shadow-sm">
+<span class="material-symbols-outlined">cancel</span> Reject
+                    </button>
+</div>
+</div>
+<!-- Side Sidebar: Collaboration & History (R) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-lg h-full overflow-hidden">
+<!-- Version History Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col shadow-sm max-h-[45%]">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span> Version History
+                        </h3>
+<span class="text-xs text-secondary">Last update: 2h ago</span>
+</div>
+<div class="overflow-y-auto p-md space-y-md">
+<!-- Version Item -->
+<div class="flex items-start gap-md p-md bg-surface-container-low border border-primary rounded-lg">
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="font-bold text-sm text-primary">v2.4 (Current)</p>
+<span class="text-[10px] text-secondary">Nov 12, 10:45 AM</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Adjusted logo scaling and saturation.</p>
+</div>
+</div>
+<!-- Version Item -->
+<div class="flex items-start gap-md p-md bg-white border border-outline-variant rounded-lg hover:border-secondary transition-all cursor-pointer">
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="font-bold text-sm text-secondary">v2.3</p>
+<span class="text-[10px] text-secondary">Nov 11, 04:20 PM</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Initial color correction applied.</p>
+</div>
+</div>
+<!-- Version Item -->
+<div class="flex items-start gap-md p-md bg-white border border-outline-variant rounded-lg hover:border-secondary transition-all cursor-pointer">
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="font-bold text-sm text-secondary">v2.2</p>
+<span class="text-[10px] text-secondary">Nov 10, 09:15 AM</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Base layout approval.</p>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container border-t border-outline-variant">
+<label class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-outline text-secondary font-label-md py-4 rounded-lg cursor-pointer hover:bg-white transition-all">
+<input class="hidden" type="file"/>
+<span class="material-symbols-outlined">cloud_upload</span> Upload Revised Proof
+                        </label>
+</div>
+</section>
+<!-- Discussion & Comments -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col shadow-sm flex-1 overflow-hidden">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">chat_bubble</span> Discussion
+                        </h3>
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3 New</span>
+</div>
+<div class="overflow-y-auto p-md space-y-lg flex-1">
+<!-- Comment -->
+<div class="flex gap-md">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-xs">JD</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-xs font-bold">John Designer (Printer)</span>
+<span class="text-[10px] text-secondary">2h ago</span>
+</div>
+<p class="text-sm bg-surface rounded-lg rounded-tl-none p-md mt-1 border border-outline-variant">Updated the color profile to FOGRA39 for better print accuracy on the polyester blend.</p>
+</div>
+</div>
+<!-- Customer Comment -->
+<div class="flex gap-md">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-xs">CA</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-xs font-bold">Coach Alex (Customer)</span>
+<span class="text-[10px] text-secondary">1h ago</span>
+</div>
+<p class="text-sm bg-surface-container-low rounded-lg rounded-tl-none p-md mt-1 border border-primary/20">Looks much better. Is the logo centered to the seam or the collar?</p>
+</div>
+</div>
+<!-- Comment with Marker Ref -->
+<div class="flex gap-md">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-xs">JD</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-xs font-bold">John Designer (Printer)</span>
+<span class="text-[10px] text-secondary">45m ago</span>
+</div>
+<div class="bg-surface rounded-lg rounded-tl-none p-md mt-1 border border-outline-variant">
+<span class="inline-block bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-sm mb-1">Ref #1</span>
+<p class="text-sm">It's aligned to the collar center point to maintain visual balance during movement.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Comment Input -->
+<div class="p-md border-t border-outline-variant">
+<div class="flex items-center gap-2 bg-surface border border-outline-variant rounded-xl p-2 pr-1">
+<input class="bg-transparent border-none focus:ring-0 text-sm flex-1" placeholder="Add a comment..." type="text"/>
+<button class="bg-primary text-white p-2 rounded-lg hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-md">send</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (Contextual for New Asset) -->
+<button class="fixed bottom-margin-desktop right-margin-desktop w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined">add_photo_alternate</span>
+</button>
+<script>
+        // Micro-interaction for Approval Simulation
+        const approveBtn = document.querySelector('.bg-green-600');
+        const warning = document.getElementById('lock-warning');
+        
+        approveBtn.addEventListener('click', () => {
+            if(confirm('Are you sure you want to finalize and approve this proof? This will lock further edits.')) {
+                warning.classList.remove('hidden');
+                approveBtn.disabled = true;
+                approveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        });
+
+        // Toggle Sidebar state logic simulated by nav
+        const sidebarLinks = document.querySelectorAll('aside nav a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                sidebarLinks.forEach(l => {
+                    l.classList.remove('text-primary', 'font-bold', 'border-l-4', 'border-primary', 'bg-surface-container-low');
+                    l.classList.add('text-secondary');
+                });
+                link.classList.add('text-primary', 'font-bold', 'border-l-4', 'border-primary', 'bg-surface-container-low');
+                link.classList.remove('text-secondary');
+            });
+        });
+    </script>
+</body></html>

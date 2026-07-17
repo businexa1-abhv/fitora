@@ -95,13 +95,41 @@ export type ShopProduct = {
   category?: { id: string; name: string; slug: string };
 };
 
+export type ShopOrderItem = {
+  id: string;
+  orderId: string;
+  productId: string;
+  variantId: string | null;
+  productName: string;
+  variantName: string | null;
+  productSku: string | null;
+  productPrice: string;
+  quantity: number;
+  lineTotal: string;
+};
+
 export type ShopOrder = {
   id: string;
+  userId?: string;
   orderNumber: string;
   status: string;
   paymentStatus: string;
+  subtotalAmount?: string;
+  discountAmount?: string;
+  shippingAmount?: string;
   totalAmount: string;
+  shippingName?: string;
+  shippingPhone?: string;
+  shippingAddress?: string;
+  shippingCity?: string;
+  shippingPincode?: string;
+  trackingNumber?: string | null;
+  shippedAt?: string | null;
+  deliveredAt?: string | null;
+  invoiceNumber?: string | null;
+  items?: ShopOrderItem[];
   createdAt: string;
+  updatedAt?: string;
   user?: { id: string; firstName: string; lastName: string; email: string };
 };
 
@@ -138,6 +166,27 @@ export type NotificationItem = {
   createdAt: string;
 };
 
+export type ProductVariant = {
+  id: string;
+  productId: string;
+  name: string;
+  sku: string | null;
+  price: number | null;
+  stock: number;
+  attributes: Record<string, string> | null;
+  isActive: boolean;
+};
+
+export type ProductReview = {
+  id: string;
+  rating: number;
+  title: string | null;
+  comment: string | null;
+  isVerified: boolean;
+  user?: { id: string; firstName: string; lastName: string };
+  createdAt: string;
+};
+
 export type InventoryMovement = {
   id: string;
   type: string;
@@ -146,7 +195,8 @@ export type InventoryMovement = {
   stockAfter: number;
   reason: string | null;
   createdAt: string;
-  product?: { id: string; name: string; slug: string };
+  product?: { id: string; name: string; slug: string; sku?: string | null };
+  variant?: { id: string; name: string; sku: string | null } | null;
 };
 
 export const shopPartnerApi = {
@@ -186,13 +236,59 @@ export const shopPartnerApi = {
 
   adjustInventory: (
     token: string,
-    body: { productId: string; quantityChange: number; type: string; reason?: string },
+    body: {
+      productId: string;
+      quantityChange: number;
+      type: string;
+      reason?: string;
+      variantId?: string;
+    },
   ) =>
     apiFetch<{ stockAfter: number }>(
       '/shop/inventory/adjust',
       { method: 'POST', body: JSON.stringify(body) },
       token,
     ),
+
+  listVariants: (productId: string) =>
+    apiFetch<ProductVariant[]>(`/shop/products/${productId}/variants`),
+
+  updateVariant: (
+    token: string,
+    variantId: string,
+    body: Partial<{
+      name: string;
+      sku: string;
+      price: number;
+      stock: number;
+      attributes: Record<string, string>;
+      isActive: boolean;
+    }>,
+  ) =>
+    apiFetch<ProductVariant>(
+      `/shop/variants/${variantId}`,
+      { method: 'PUT', body: JSON.stringify(body) },
+      token,
+    ),
+
+  createVariant: (
+    token: string,
+    productId: string,
+    body: {
+      name: string;
+      sku?: string;
+      price?: number;
+      stock?: number;
+      attributes?: Record<string, string>;
+    },
+  ) =>
+    apiFetch<ProductVariant>(
+      `/shop/products/${productId}/variants`,
+      { method: 'POST', body: JSON.stringify(body) },
+      token,
+    ),
+
+  getProductReviews: (slug: string) => apiFetch<ProductReview[]>(`/shop/products/${slug}/reviews`),
 
   listOrders: (token: string) => apiFetch<ShopOrder[]>('/shop/orders', {}, token),
 

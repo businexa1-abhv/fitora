@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Shop Partner Portal - Returns & Refunds</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#dae2fd",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "inverse-primary": "#ffb693",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#8a9ab2",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#fff1eb",
+                    "surface-container": "#ffeae1",
+                    "on-surface-variant": "#5a4136",
+                    "error": "#ba1a1a",
+                    "primary-fixed-dim": "#ffb693",
+                    "surface-variant": "#f8ddd2",
+                    "primary": "#a04100",
+                    "on-background": "#261812",
+                    "inverse-on-surface": "#ffede6",
+                    "secondary": "#565e74",
+                    "on-tertiary-container": "#223246",
+                    "on-primary-container": "#572000",
+                    "surface-container-high": "#fee3d8",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#f8ddd2",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "on-surface": "#261812",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#a04100",
+                    "background": "#fff8f6",
+                    "tertiary": "#505f76",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "outline-variant": "#e2bfb0",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#dae2fd",
+                    "inverse-surface": "#3d2d26",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#ffdbcc",
+                    "on-secondary-container": "#5c647a",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "outline": "#8e7164",
+                    "on-primary-fixed": "#351000",
+                    "surface-dim": "#efd5ca",
+                    "primary-container": "#ff6b00",
+                    "tertiary-fixed": "#d3e4fe",
+                    "surface": "#fff8f6",
+                    "on-secondary-fixed": "#131b2e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "sm": "12px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "gutter": "20px",
+                    "base": "8px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2bfb0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8e7164; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(226, 191, 176, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed-dim">
+<!-- SideNavBar (Desktop Fixed) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant py-lg z-50">
+<div class="px-md mb-xl">
+<h1 class="text-headline-md font-headline-md font-bold text-primary">FitOra</h1>
+<p class="text-caption text-on-surface-variant">Shop ID: #8821</p>
+</div>
+<nav class="flex-grow">
+<div class="space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Settlements</span>
+</a>
+<a class="flex items-center gap-3 text-primary font-bold border-l-4 border-primary bg-surface-container-high px-4 py-3" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_return">assignment_return</span>
+<span class="font-label-md text-label-md">Returns</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-label-md text-label-md">Disputes</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<div class="mt-auto px-md pt-lg border-t border-outline-variant space-y-1">
+<button class="w-full bg-primary text-on-primary font-bold py-3 rounded-lg flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span>New Report</span>
+</button>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-label-md">Help Center</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Wrapper -->
+<main class="md:ml-[240px] flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-surface flex justify-between items-center w-full px-margin-desktop h-16 border-b border-outline-variant">
+<div class="flex items-center gap-lg">
+<h2 class="text-headline-md font-headline-md font-bold text-primary">Returns Management</h2>
+<div class="hidden lg:flex items-center gap-md">
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md" href="#">Settlements</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Returns</a>
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md" href="#">Inventory</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-full text-body-md focus:outline-none focus:border-primary w-64" placeholder="Search Request ID..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline">
+<img class="h-full w-full object-cover" data-alt="A professional headshot of a female administrator with a focused and friendly expression. She is wearing a modern corporate blazer in navy blue. The background is a blurred office setting with warm sunlight and minimal architectural lines, reflecting a clean and professional Light Mode aesthetic of the FitOra brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsq0TtCBXzyqIfVdqoUFsPFWmIpxanBxhQDPK-AAQPWCvjvTQusratVbN5_KirzWgj8w7WmZ82YelnI2snGWtbCg3z-tDpSNf4UiDLMJpIZjFAgwwVxHpFlxVvOATqFI1pfzg1qspfqNp6P84wl2WuPdW6Pnmndq2oYxpj2QBfXJ7cAorLDenojzGYFMHbjFEglx3DkNJPi_1gxulaYNjSpAT9rdRcH9AH1f3e-DcD_TpOmHm5JwxEjg"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-lg max-w-[1440px] mx-auto w-full space-y-lg">
+<!-- Statistics Overview -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<div class="glass-card p-md rounded-xl shadow-sm">
+<p class="text-caption text-on-surface-variant">Pending Approval</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-bold text-primary">24</span>
+<span class="text-caption text-error font-bold flex items-center">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                            12%
+                        </span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl shadow-sm">
+<p class="text-caption text-on-surface-variant">Active Pickups</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-bold text-secondary">08</span>
+<span class="text-caption text-on-surface-variant">Last 24h</span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl shadow-sm border-l-4 border-l-error">
+<p class="text-caption text-on-surface-variant">Open Disputes</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-bold text-error">03</span>
+<span class="bg-error-container text-on-error-container text-[10px] px-2 py-1 rounded-full uppercase">Urgent</span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl shadow-sm">
+<p class="text-caption text-on-surface-variant">Completed (30d)</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-bold text-tertiary">142</span>
+<span class="text-caption text-on-surface-variant">↑ 4%</span>
+</div>
+</div>
+</div>
+<!-- Split Layout for Management -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Table Section -->
+<div class="lg:col-span-2 space-y-md">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant">
+<div class="px-md py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="text-label-md font-bold">Recent Return Requests</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-label-md border border-outline-variant rounded-lg hover:bg-surface-container transition-colors">Filter</button>
+<button class="px-3 py-1 text-label-md border border-outline-variant rounded-lg hover:bg-surface-container transition-colors">Export CSV</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-lowest text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-md py-3 font-label-md text-label-md uppercase tracking-wider">Request ID</th>
+<th class="px-md py-3 font-label-md text-label-md uppercase tracking-wider">Product</th>
+<th class="px-md py-3 font-label-md text-label-md uppercase tracking-wider">Date</th>
+<th class="px-md py-3 font-label-md text-label-md uppercase tracking-wider">Status</th>
+<th class="px-md py-3 font-label-md text-label-md uppercase tracking-wider">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors cursor-pointer active:bg-surface-container-high" onclick="setActiveRequest('RT-9921')">
+<td class="px-md py-4 font-bold text-primary">#RT-9921</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="fitness_center">fitness_center</span>
+</div>
+<div>
+<p class="text-label-md font-bold">Pro-Grip Dumbbells</p>
+<p class="text-caption text-on-surface-variant">Set of 2 • 20kg</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-label-md">Oct 24, 14:20</td>
+<td class="px-md py-4">
+<span class="bg-primary-fixed text-on-primary-fixed px-2 py-1 rounded text-[10px] font-bold">PENDING REVIEW</span>
+</td>
+<td class="px-md py-4 font-bold">$124.00</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors cursor-pointer bg-surface-container-low border-l-4 border-l-primary">
+<td class="px-md py-4 font-bold text-primary">#RT-9920</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="directions_run">directions_run</span>
+</div>
+<div>
+<p class="text-label-md font-bold">AeroStride Sneakers</p>
+<p class="text-caption text-on-surface-variant">Neon Blue • Size 42</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-label-md">Oct 24, 11:05</td>
+<td class="px-md py-4">
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-1 rounded text-[10px] font-bold">PICKUP ASSIGNED</span>
+</td>
+<td class="px-md py-4 font-bold">$89.99</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors cursor-pointer">
+<td class="px-md py-4 font-bold text-primary">#RT-9918</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="monitor_heart">monitor_heart</span>
+</div>
+<div>
+<p class="text-label-md font-bold">FitTracker V4</p>
+<p class="text-caption text-on-surface-variant">Obsidian Black</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-label-md">Oct 23, 09:45</td>
+<td class="px-md py-4">
+<span class="bg-error-container text-on-error-container px-2 py-1 rounded text-[10px] font-bold">DISPUTED</span>
+</td>
+<td class="px-md py-4 font-bold">$210.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Detail / Action Section -->
+<div class="space-y-lg">
+<div class="glass-card rounded-xl shadow-lg border border-primary/20 p-md space-y-md">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-headline-md font-bold text-on-surface">Request Detail</h3>
+<p class="text-label-md font-bold text-primary">#RT-9920</p>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="open_in_new">open_in_new</span>
+</div>
+<div class="space-y-sm">
+<p class="text-caption font-bold uppercase text-on-surface-variant">Return Reason</p>
+<div class="p-sm bg-surface-container rounded-lg border border-outline-variant">
+<p class="text-label-md italic">"The sizing is inconsistent with previous AeroStride models. Left shoe feels narrower than the right. Possible manufacturing defect in the sole arch."</p>
+</div>
+</div>
+<div class="space-y-sm">
+<p class="text-caption font-bold uppercase text-on-surface-variant">Evidence (3 photos)</p>
+<div class="flex gap-2">
+<div class="w-20 h-20 rounded-lg overflow-hidden border border-outline cursor-zoom-in">
+<img class="w-full h-full object-cover" data-alt="A macro close-up photograph of a professional athletic sneaker's sole. The lighting is crisp and even, highlighting the intricate texture of the high-performance rubber. The shot is taken from a low angle on a white reflective studio surface, emphasizing a sleek, high-contrast athletic aesthetic consistent with the FitOra brand palette of vibrant orange and deep navy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClzw7et_9QP7_Cv97CrVbUxzwNzRbt23kQfGr_fVShSoExzoRrKhy-lSBbiEux5COoaBNhDVzEe1f09hw4lnyxnDOxGX-gme8bSddvDOB5aaE_O8G8Abu9X63BSheeN6qGKkIbB60HSsiePBTq_lPwEEpTDSbTb8FghepeTP-LX7p_4-yvi7-lQKiFNEQKFmpMv1YDCSMAIWoZAFA5GtnX0M-bmChOR_UoVrbOtFs55FTyqTqynICfcw"/>
+</div>
+<div class="w-20 h-20 rounded-lg overflow-hidden border border-outline cursor-zoom-in relative">
+<img class="w-full h-full object-cover" data-alt="A side profile view of a modern neon blue athletic shoe. The focus is on the midsole and cushioning technology. The lighting is dramatic, high-key, and professional, characteristic of a high-end sports equipment catalog. The image captures the dynamic energy and precision engineering of the FitOra product line in a minimalist, bright setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHKA_EzFYdKylwpMQ0Oz1XrUV314EOzIr9t45IqiZEIT2gw3vB8lB3V2uJHmDQTMcNIo-826ZVOXfFObWyw-yeaZ97fsBbiLHpu9QOJ_SmrbQYEaKMOeKIvOcX2BSdja1EwN5HdTnaX8GZTb6auY869EpCLWyA3RQUEB_F5iQCOBo0Cv0isV7BlX2E4TBOInS21s2RalvHOl7gV6M5bC6JsVdGRxQBr1LOcVyyrh2clVyULp-bAwT3SA"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-caption">+1</div>
+</div>
+</div>
+</div>
+<div class="pt-md border-t border-outline-variant space-y-sm">
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Item Total</span>
+<span class="font-bold">$89.99</span>
+</div>
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Estimated Refund Fees</span>
+<span class="text-error">-$5.00</span>
+</div>
+<div class="flex justify-between text-headline-md border-t border-dashed border-outline-variant pt-2">
+<span class="font-bold">Total Refund</span>
+<span class="font-bold text-primary">$84.99</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 pt-md">
+<button class="bg-primary text-on-primary font-bold py-3 rounded-lg hover:brightness-110 transition-all active:scale-95 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+                                Approve
+                            </button>
+<button class="bg-surface-container-high text-on-surface font-bold py-3 rounded-lg hover:bg-surface-container-highest transition-all active:scale-95 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="cancel">cancel</span>
+                                Reject
+                            </button>
+<button class="bg-secondary text-on-secondary font-bold py-3 rounded-lg hover:brightness-110 transition-all active:scale-95 col-span-2 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+                                Send Replacement
+                            </button>
+</div>
+<button class="w-full text-error font-bold text-label-md py-2 border border-error/20 rounded-lg hover:bg-error-container transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="flag">flag</span>
+                            Escalate to Dispute
+                        </button>
+</div>
+<!-- Logistics Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-md">
+<h4 class="text-label-md font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="local_shipping">local_shipping</span>
+                            Pickup Logistics
+                        </h4>
+<div class="relative pl-6 space-y-4">
+<div class="absolute left-[7px] top-2 bottom-2 w-[2px] bg-secondary-container"></div>
+<div class="relative">
+<div class="absolute -left-[23px] top-1 w-4 h-4 rounded-full bg-primary border-4 border-white shadow-sm"></div>
+<p class="text-label-md font-bold">Agent Assigned</p>
+<p class="text-caption text-on-surface-variant">Logistics Partner: FitExpress</p>
+<p class="text-caption text-on-surface-variant">Scheduled: Oct 25, 09:00 - 12:00</p>
+</div>
+<div class="relative opacity-50">
+<div class="absolute -left-[23px] top-1 w-4 h-4 rounded-full bg-outline-variant border-4 border-white shadow-sm"></div>
+<p class="text-label-md font-bold">Item Received</p>
+<p class="text-caption">Awaiting collection</p>
+</div>
+<div class="relative opacity-50">
+<div class="absolute -left-[23px] top-1 w-4 h-4 rounded-full bg-outline-variant border-4 border-white shadow-sm"></div>
+<p class="text-label-md font-bold">Final QC & Refund</p>
+<p class="text-caption">Pending warehouse scan</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / Mobile Nav Bottom -->
+<footer class="mt-auto py-md px-margin-desktop border-t border-outline-variant bg-surface-container-lowest text-on-surface-variant flex flex-col md:flex-row justify-between items-center text-caption gap-md">
+<p>© 2024 FitOra Global. All systems operational.</p>
+<div class="flex gap-md">
+<a class="hover:text-primary" href="#">Policy Center</a>
+<a class="hover:text-primary" href="#">Seller Terms</a>
+<a class="hover:text-primary" href="#">Support Ticketing</a>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface flex justify-around items-center px-4 py-2 pb-safe shadow-lg rounded-t-xl border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2" href="#">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span class="text-label-md font-label-md">Check-in</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_return">assignment_return</span>
+<span class="text-label-md font-label-md">Returns</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-label-md font-label-md">Profile</span>
+</a>
+</nav>
+</main>
+<script>
+        function setActiveRequest(id) {
+            console.log('Loading request:', id);
+            // Interactive visual feedback
+            const rows = document.querySelectorAll('tr');
+            rows.forEach(row => row.classList.remove('bg-surface-container-low', 'border-l-4', 'border-l-primary'));
+            
+            // In a real app, this would fetch data and update the detail panel
+            // For now, it's a visual toggle simulation
+            event.currentTarget.classList.add('bg-surface-container-low', 'border-l-4', 'border-l-primary');
+        }
+
+        // Search highlight micro-interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>

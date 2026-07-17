@@ -154,7 +154,7 @@ export class ShopController {
   }
 
   @Post('shop/products/:productId/variants')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
   @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
   createVariant(@Param('productId') productId: string, @Body() dto: ProductVariantDto) {
@@ -162,7 +162,7 @@ export class ShopController {
   }
 
   @Put('shop/variants/:variantId')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
   @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
   updateVariant(@Param('variantId') variantId: string, @Body() dto: UpdateVariantDto) {
@@ -170,7 +170,7 @@ export class ShopController {
   }
 
   @Delete('shop/variants/:variantId')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.COURT_OWNER)
   @RequirePermissions(Permission.SHOP_MANAGE)
   @ApiBearerAuth('access-token')
   deleteVariant(@Param('variantId') variantId: string) {

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Coach - Training Session</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#efd5ca",
+                    "surface-bright": "#fff8f6",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#ffdbcc",
+                    "tertiary-container": "#8a9ab2",
+                    "secondary-fixed": "#dae2fd",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "primary": "#a04100",
+                    "on-secondary-container": "#5c647a",
+                    "outline-variant": "#e2bfb0",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#ffede6",
+                    "surface-tint": "#a04100",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "primary-fixed-dim": "#ffb693",
+                    "outline": "#8e7164",
+                    "inverse-primary": "#ffb693",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#572000",
+                    "on-background": "#261812",
+                    "on-error": "#ffffff",
+                    "background": "#fff8f6",
+                    "secondary-container": "#dae2fd",
+                    "inverse-surface": "#3d2d26",
+                    "surface-container-high": "#fee3d8",
+                    "on-tertiary-container": "#223246",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-variant": "#f8ddd2",
+                    "surface-container-highest": "#f8ddd2",
+                    "surface-container": "#ffeae1",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "secondary": "#565e74",
+                    "surface-container-low": "#fff1eb",
+                    "tertiary": "#505f76",
+                    "surface": "#fff8f6",
+                    "on-primary-fixed": "#351000",
+                    "on-surface-variant": "#5a4136",
+                    "on-secondary-fixed": "#131b2e",
+                    "tertiary-fixed": "#d3e4fe",
+                    "on-surface": "#261812",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "primary-container": "#ff6b00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "base": "8px",
+                    "xl": "32px",
+                    "sm": "12px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "gutter": "20px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased mb-40">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-40 bg-surface dark:bg-surface-container shadow-sm h-16 flex items-center px-margin-mobile">
+<div class="flex items-center gap-base w-full max-w-[1440px] mx-auto">
+<button class="hover:bg-surface-variant rounded-full p-2 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-md text-headline-md text-primary leading-tight">FitOra</h1>
+<span class="font-caption text-caption text-on-surface-variant">4:00 PM - 5:30 PM</span>
+</div>
+<div class="ml-auto flex items-center gap-xs px-sm py-1 bg-primary-container text-on-primary-container rounded-full animate-pulse-soft">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span class="font-label-md text-label-md">Unsaved</span>
+</div>
+</div>
+</header>
+<main class="px-margin-mobile py-lg space-y-lg max-w-lg mx-auto">
+<!-- Session Overview Card -->
+<section class="bg-surface rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.04)] p-md border border-outline-variant/30">
+<div class="flex justify-between items-start mb-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Tennis Advanced</h2>
+<p class="text-on-surface-variant">Batch A • Court 4</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-sm py-xs rounded-lg font-label-md text-label-md">
+                    In Progress
+                </div>
+</div>
+<!-- Medical Warning Badge -->
+<div class="bg-error-container text-on-error-container p-sm rounded-lg flex items-center gap-sm border border-error/20">
+<span class="material-symbols-outlined filled-icon text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold">Medical Alert</span>
+<span class="text-caption">Sarah: Nut Allergy</span>
+</div>
+</div>
+</section>
+<!-- Roster Section -->
+<section class="space-y-md">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Roster (12)</h3>
+<span class="text-on-surface-variant font-label-md">9 Present</span>
+</div>
+<div class="space-y-base">
+<!-- Roster Item 1 -->
+<div class="bg-surface-container-low rounded-xl p-md flex items-center justify-between border border-transparent hover:border-outline-variant transition-all">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a young athletic woman with her hair tied back, wearing a clean white tennis polo shirt. High-key lighting highlights her determined expression against a soft, neutral beige background, fitting the premium light-mode corporate athletic aesthetic of FitOra." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS6xcGSw2GYIEOai3DTisWkwcrRpOFH5KUdPFmQkTdE9br_yg9Yp6DMLJ3FXF8fZj-nIfu6fSdkq8B8tccovFss_iNWT9W3DDMVQpL0f58nQqFFdcwIJI2tjflwRtjETKKa1k82A9OPBgIdv8GEw8xg8IX4B3E5d2Uu7cSqY-dAmUU89wg1Cy6M96Jhs-pP23b4pmu5Y9f9_xeMFlIzvFwly9u1c6qAeGV5S4D2hCuDpIQjrmc9biPzw"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Sarah Johnson</span>
+<span class="text-caption text-error font-bold uppercase tracking-wider">Nut Allergy</span>
+</div>
+</div>
+<div class="flex items-center gap-xs">
+<button class="p-2 rounded-lg bg-primary-container text-on-primary-container"><span class="material-symbols-outlined text-[20px] filled-icon" style="font-variation-settings: 'FILL' 1;">check_circle</span></button>
+<button class="p-2 rounded-lg bg-surface-variant text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">schedule</span></button>
+<button class="p-2 rounded-lg bg-surface-variant text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">close</span></button>
+</div>
+</div>
+<!-- Roster Item 2 -->
+<div class="bg-surface-container-low rounded-xl p-md flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A sharp, well-lit headshot of a focused young male athlete wearing a navy blue moisture-wicking jersey. The lighting is crisp and modern, emphasizing athletic texture and a clean professional look on a minimalist background, consistent with the FitOra brand palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnLJGl715FfPJWJlkuZOa1gNFZ1QmiJ9zoGhukJtsCsi7YeAHUMxc6UfZ0vTWJqQQa1HXO5SGjoYIOUuQ1tF6LtQuwyJKA5EmRucsSAq-e-6RTx_rO1xUDTh5TMEAv6FvYCgv_StS0xoPAvUn9pYONmjX7TSP3gvyZFpl12AdWLLx2nCCMYYZfiU1TpH8g46gc6bbp3nlLAKgCVcv_xF4Bpz7z0ynuBpzAZbN5F2_fFXpUxbSZdVBhBA"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Marcus Chen</span>
+<span class="text-caption text-on-surface-variant">Player #042</span>
+</div>
+</div>
+<div class="flex items-center gap-xs">
+<button class="p-2 rounded-lg bg-surface-variant text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">check_circle</span></button>
+<button class="p-2 rounded-lg bg-surface-variant text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">schedule</span></button>
+<button class="p-2 rounded-lg bg-tertiary-container text-on-tertiary-container"><span class="material-symbols-outlined text-[20px] filled-icon" style="font-variation-settings: 'FILL' 1;">close</span></button>
+</div>
+</div>
+</div>
+</section>
+<!-- Drill Checklist -->
+<section class="space-y-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Training Plan</h3>
+<div class="bg-surface border border-outline-variant rounded-xl divide-y divide-outline-variant/30">
+<div class="p-md flex items-center gap-md">
+<input checked="" class="w-6 h-6 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Warm-up (15m)</p>
+<p class="text-caption text-on-surface-variant">Dynamic stretching &amp; jog</p>
+</div>
+</div>
+<div class="p-md flex items-center gap-md">
+<input class="w-6 h-6 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Forehand Drills (30m)</p>
+<p class="text-caption text-on-surface-variant">Cross-court consistency drills</p>
+</div>
+<span class="material-symbols-outlined text-primary">timer</span>
+</div>
+<div class="p-md flex items-center gap-md">
+<input class="w-6 h-6 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Match Play (45m)</p>
+<p class="text-caption text-on-surface-variant">Simulated tie-breakers</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Session Notes -->
+<section class="space-y-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Coach's Notes</h3>
+<textarea class="w-full h-32 bg-surface-container-lowest border border-outline-variant rounded-xl p-md focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none" placeholder="Observe footwork and backhand follow-through..."></textarea>
+</section>
+</main>
+<!-- Fixed Bottom Actions & Navigation Shell -->
+<div class="fixed bottom-0 w-full z-50 flex flex-col pointer-events-none">
+<!-- Floating Actions (Above Nav) -->
+<div class="px-margin-mobile pb-md flex flex-col gap-base w-full max-w-lg mx-auto pointer-events-auto">
+<div class="flex gap-base">
+<button class="flex-1 bg-surface-container-highest text-on-surface font-bold py-md rounded-xl shadow-lg border border-outline-variant/30 flex items-center justify-center gap-base active:scale-95 transition-transform">
+<span class="material-symbols-outlined">save</span>
+                    Save Attendance
+                </button>
+<button class="bg-primary text-on-primary font-bold px-lg py-md rounded-xl shadow-lg flex items-center justify-center gap-base active:scale-95 transition-transform">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    Start
+                </button>
+</div>
+<button class="w-full bg-inverse-surface text-inverse-on-surface font-bold py-md rounded-xl shadow-lg flex items-center justify-center gap-base active:scale-95 transition-transform">
+<span class="material-symbols-outlined">check_circle</span>
+                Complete Session
+            </button>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="pointer-events-auto bg-surface dark:bg-surface-container-low shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.04)] rounded-t-xl flex justify-around items-center px-margin-mobile py-2 w-full">
+<!-- Home -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</button>
+<!-- Students -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</button>
+<!-- Training (ACTIVE) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined filled-icon" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="font-label-md text-label-md">Training</span>
+</button>
+<!-- Analytics -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</button>
+</nav>
+</div>
+<!-- Read-only / Completed State Overlay (Hidden by default, used for demonstration) -->
+<div class="hidden fixed inset-0 bg-surface/10 backdrop-blur-[1px] z-[60] flex items-center justify-center pointer-events-none" id="readOnlyOverlay">
+<div class="bg-inverse-surface/90 text-inverse-on-surface px-lg py-sm rounded-full flex items-center gap-sm shadow-xl pointer-events-auto">
+<span class="material-symbols-outlined">lock</span>
+<span class="font-label-md text-label-md">Session Completed - Read Only</span>
+</div>
+</div>
+<script>
+        // Micro-interactions and State Management
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                // Potential logic for updating "Unsaved" state
+                console.log('Task status toggled');
+            });
+        });
+
+        // Simulating the "Complete Session" interaction
+        const completeBtn = document.querySelector('button:contains("Complete Session")');
+        // Note: Using textContent check because of the lack of IDs for style demo
+        document.querySelectorAll('button').forEach(btn => {
+            if(btn.textContent.includes('Complete Session')) {
+                btn.addEventListener('click', () => {
+                    if(confirm('Mark session as complete? This will lock attendance records.')) {
+                        document.body.classList.add('opacity-80');
+                        document.getElementById('readOnlyOverlay').classList.remove('hidden');
+                        document.querySelector('.animate-pulse-soft').innerHTML = `
+                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                            <span class="font-label-md text-label-md">Completed</span>
+                        `;
+                        document.querySelector('.animate-pulse-soft').classList.remove('animate-pulse-soft', 'bg-primary-container', 'text-on-primary-container');
+                        document.querySelector('.animate-pulse-soft').classList.add('bg-on-surface-variant', 'text-surface');
+                    }
+                });
+            }
+        });
+    </script>
+</body></html>

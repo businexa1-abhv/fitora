@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Shop Partner - Variant Manager</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#ffede6",
+                        "surface-variant": "#f8ddd2",
+                        "on-secondary-fixed": "#131b2e",
+                        "surface-container-highest": "#f8ddd2",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#efd5ca",
+                        "primary": "#a04100",
+                        "secondary": "#565e74",
+                        "on-surface-variant": "#5a4136",
+                        "on-background": "#261812",
+                        "surface-tint": "#a04100",
+                        "secondary-fixed": "#dae2fd",
+                        "tertiary-fixed": "#d3e4fe",
+                        "surface-container": "#ffeae1",
+                        "on-primary-fixed": "#351000",
+                        "primary-fixed": "#ffdbcc",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "on-primary": "#ffffff",
+                        "outline": "#8e7164",
+                        "background": "#fff8f6",
+                        "surface-container-low": "#fff1eb",
+                        "surface": "#fff8f6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fff8f6",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-primary-container": "#572000",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#e2bfb0",
+                        "on-surface": "#261812",
+                        "secondary-container": "#dae2fd",
+                        "surface-container-high": "#fee3d8",
+                        "on-tertiary-container": "#223246",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#3d2d26",
+                        "primary-fixed-dim": "#ffb693",
+                        "on-primary-fixed-variant": "#7a3000",
+                        "on-secondary-container": "#5c647a",
+                        "tertiary": "#505f76",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#8a9ab2",
+                        "primary-container": "#ff6b00",
+                        "inverse-primary": "#ffb693"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "caption": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+        
+        body {
+            background-color: #F8FAFC; /* Level 0 Background per style guidance */
+        }
+
+        .glass-header {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Custom Scrollbar for Dense Tables */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2bfb0;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a04100;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface shadow-sm flex flex-col py-lg z-50">
+<div class="px-md mb-xl">
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">FitOra</h1>
+<p class="font-label-md text-label-md text-secondary">Provider Portal</p>
+</div>
+<nav class="flex-1 space-y-xs overflow-y-auto">
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<!-- Active State: Listings -->
+<a class="flex items-center gap-base px-md py-sm text-primary border-l-4 border-primary bg-primary-container/10 transition-colors" href="#">
+<span class="material-symbols-outlined fill-icon" data-icon="list_alt">list_alt</span>
+<span class="font-label-md">Listings</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md">Orders</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md">Schedule</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span class="font-label-md">Reviews</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md">Payouts</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-16 bg-surface-container-lowest shadow-sm z-40">
+<div class="flex justify-between items-center px-lg h-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-md w-1/2">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container rounded-lg border-none focus:ring-2 focus:ring-primary text-body-md" placeholder="Search variants or SKUs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-sm">
+<button class="hover:bg-surface-variant/20 rounded-full p-2 transition-all active:opacity-80">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-surface-variant/20 rounded-full p-2 transition-all active:opacity-80">
+<span class="material-symbols-outlined text-primary" data-icon="help">help</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-variant/10 p-1 rounded-lg">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-primary-fixed" data-alt="Close-up professional portrait of a fitness brand manager in a modern, brightly lit office environment. The subject is wearing a sleek navy blue polo with a subtle FitOra logo. High-contrast lighting and a clean, minimalist background reflect a corporate and professional shop partner persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANhoJhIVZc_qzjy59TSw8LCKGDjtHjQbBgHeuu9DoTdzi5Lu13RUtM6YosSX2dfzMmYw2BCttWBCkNqJIgyMHNYdEGpNW7y152PfnuyopPI4VdrX0BEJmq0_3fBogCb0qh-NLSawQhKMeKxMEHh4bupgj6WRGmP8sJtMpanJuAK9lElpKXRXQBo5GdFt7Pa1q1KJxvWXx1w7AbgMAodqRky7u44mMxzRQKcun3ZluFlYHXqmNeSNAdVg"/>
+<div class="hidden lg:block text-left">
+<p class="font-label-md text-on-surface leading-none">Sarah Jenkins</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Store Admin</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[240px] pt-24 px-lg pb-xl max-w-[1440px] mx-auto">
+<!-- Breadcrumbs & Actions -->
+<div class="flex flex-wrap items-center justify-between gap-md mb-lg">
+<nav class="flex items-center text-on-surface-variant gap-xs font-label-md">
+<a class="hover:text-primary" href="#">Catalog</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<a class="hover:text-primary" href="#">Apparel</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-on-surface">Pro-Fit Performance Leggings</span>
+</nav>
+<div class="flex gap-sm">
+<button class="flex items-center gap-2 px-md py-2 border-2 border-primary text-primary rounded-lg font-label-md hover:bg-primary/5 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">upload_file</span>
+                    CSV Import
+                </button>
+<button class="flex items-center gap-2 px-md py-2 bg-primary text-on-primary rounded-lg font-label-md shadow-md hover:bg-primary/90 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">add</span>
+                    Add Variant
+                </button>
+</div>
+</div>
+<!-- Product Summary Header (Bento Style) -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter mb-lg">
+<div class="lg:col-span-3 bg-surface-container-lowest p-lg rounded-xl shadow-sm border border-outline-variant/30 flex gap-lg items-center">
+<div class="w-24 h-24 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="High-quality commercial product shot of athletic leggings displayed on a minimalist grey background. The fabric texture is visible, showcasing a premium matte finish with orange accents. Professional studio lighting highlights the sleek silhouette and performance-oriented design, aligning with the FitOra high-performance athletic management aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5oGnUd4E4r1WRty1u2U03nvbVHTUvv1xqBxraaU_pTgjqb_5QdjGvn9hQYd2Fx2xPnJxMxKhIjtB5mk97WyKFC1gppFtJIKbaV_zQgoe-KxmgNyyqDPQxvQQi3MrsxrBQZ2tsvzfwirb6nKTt03qk899O0-33kbv_yiPfq0TjFNRdoZN9Rl5DE8vJj0UpyvhJbdOujUgHtwKEE4K8H-j3UCxDTb3YZCWKmLS8VoDxxSnCIjFPsh5jRA"/>
+</div>
+<div>
+<h2 class="font-headline-md text-on-surface">Pro-Fit Performance Leggings</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Product ID: FIT-APP-0042 • Last updated: 2 hours ago</p>
+<div class="flex gap-md mt-md">
+<div class="flex items-center gap-1 px-3 py-1 bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-sm text-primary">inventory_2</span>
+<span class="text-caption font-bold">428 In Stock</span>
+</div>
+<div class="flex items-center gap-1 px-3 py-1 bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-sm text-primary">sell</span>
+<span class="text-caption font-bold">12 Active Variants</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary-container p-lg rounded-xl shadow-sm border border-primary/20 flex flex-col justify-center">
+<p class="text-on-primary-container font-label-md">Variant Health</p>
+<h3 class="text-on-primary-container font-display-lg text-4xl mb-1">94%</h3>
+<p class="text-on-primary-container/80 text-caption">2 SKUs missing dimensions</p>
+<div class="mt-md w-full bg-on-primary-container/20 h-1.5 rounded-full overflow-hidden">
+<div class="bg-on-primary-container h-full" style="width: 94%"></div>
+</div>
+</div>
+</div>
+<!-- Bulk Edit & Filter Bar -->
+<div class="bg-surface-container-lowest px-lg py-md rounded-t-xl border border-outline-variant/30 flex flex-wrap justify-between items-center gap-md">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary border-outline" type="checkbox"/>
+<span class="font-label-md">Select All</span>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-sm">
+<button class="px-3 py-1.5 text-caption font-bold border border-outline-variant rounded hover:bg-surface-container transition-colors">Bulk Pricing</button>
+<button class="px-3 py-1.5 text-caption font-bold border border-outline-variant rounded hover:bg-surface-container transition-colors">Update Stock</button>
+<button class="px-3 py-1.5 text-caption font-bold text-error border border-error/30 rounded hover:bg-error/5 transition-colors">Delete Selected</button>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<span class="text-caption font-bold text-on-surface-variant uppercase">Filter by:</span>
+<select class="text-caption font-bold bg-surface-container rounded-lg border-none focus:ring-primary py-1 px-3">
+<option>All Colors</option>
+<option>Midnight Navy</option>
+<option>FitOra Orange</option>
+<option>Carbon Black</option>
+</select>
+<select class="text-caption font-bold bg-surface-container rounded-lg border-none focus:ring-primary py-1 px-3">
+<option>All Sizes</option>
+<option>XS</option>
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+</div>
+</div>
+<!-- Dense Matrix Table -->
+<div class="bg-surface-container-lowest border-x border-b border-outline-variant/30 rounded-b-xl overflow-x-auto custom-scrollbar shadow-sm">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant/30">
+<th class="px-lg py-4 font-label-md text-on-surface-variant">Status</th>
+<th class="px-lg py-4 font-label-md text-on-surface-variant">Variant</th>
+<th class="px-lg py-4 font-label-md text-on-surface-variant">SKU</th>
+<th class="px-lg py-4 font-label-md text-on-surface-variant">Color</th>
+<th class="px-lg py-4 font-label-md text-on-surface-variant">Size</th>
+<th class="px-lg py-4 font-label-md text-on-surface-variant">Price</th>
+<th class="px-lg py-4 font-label-md text-on-surface-variant">Stock</th>
+<th class="px-lg py-4 font-label-md text-on-surface-variant">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<!-- Row 1: Active -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-lg py-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-secondary-fixed rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container rounded-md overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up detail of 'Midnight Navy' fabric swatch for athletic performance leggings. The image captures the tight weave and subtle sheen of the high-quality synthetic blend. Minimalist studio lighting creates a professional e-commerce visual consistent with the FitOra Shop Partner Portal's high-contrast and clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlMUx5HatWeGN9rrEyRULAAw0cyBGOrHkZZvPEPIDTfg-nQKvDDbZal8t3ruukYuHuySQJyOGPRPmJ9zT9nR0S7HM5_rNSFuwo05ygbZqFy_MUPzBHjlFOcVtr9f-2j29huE9W0FY46mzi-i-n7oiCazzkZefWk9Ayh525Cclz2mqIKV6r2Z3qqPBny49NwvMAM25jeBj08X9-BM4Idt9U4-pMGzTR9BpilVoKS-2HQkxSQMPa5il53A"/>
+</div>
+<span class="font-label-md">PF-LEG-NVY-S</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<input class="w-32 bg-transparent border-none focus:ring-2 focus:ring-primary rounded py-1 px-2 font-body-md" type="text" value="FIT-PRO-001"/>
+</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">Midnight Navy</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">Small</td>
+<td class="px-lg py-4">
+<div class="relative">
+<span class="absolute left-2 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-md">$</span>
+<input class="w-24 pl-6 pr-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="75.00"/>
+</div>
+</td>
+<td class="px-lg py-4">
+<input class="w-20 px-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="124"/>
+</td>
+<td class="px-lg py-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_horiz</button>
+</td>
+</tr>
+<!-- Row 2: Validation Error (Duplicate SKU) -->
+<tr class="bg-error-container/5 hover:bg-error-container/10 transition-colors group">
+<td class="px-lg py-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-secondary-fixed rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container rounded-md overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up detail of 'FitOra Orange' fabric swatch for athletic performance leggings. The vibrant orange hue is saturated and energetic, reflecting the brand's primary energy color. The macro shot highlights the premium technical stitching, rendered in a professional and clean lighting setup for a high-performance athletic portal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcyRcGQ-O2lws1yNAP8U6B2Df1TAmfbiJlAXP-Bdn3epJoOB6sO3uGGw5Xh3rz-8dEyXo70YTegOtE7RgrQKFD3ZkrV6aobN7pWtv4Gbg6RGwZdJ07Ab_77GlDQIp0wugXcU5oVIAiVNhlHHu8uNoE419V5pSmFjyyQ8CnanZSn1ElEmy9ZODl-Xgpjx8SAh-isBj9NIklrBlRU1IG4Mos8PWOc0IIWorRgzOvuz6ktJfnz-9vb162QQ"/>
+</div>
+<span class="font-label-md">PF-LEG-ORA-M</span>
+</div>
+</td>
+<td class="px-lg py-4 relative">
+<input class="w-32 bg-error/5 border-2 border-error focus:ring-error rounded py-1 px-2 font-body-md text-error" type="text" value="FIT-PRO-001"/>
+<div class="absolute top-12 left-lg z-10 bg-error text-on-error text-[10px] px-2 py-1 rounded shadow-lg whitespace-nowrap">Duplicate SKU detected</div>
+</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">FitOra Orange</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">Medium</td>
+<td class="px-lg py-4">
+<div class="relative">
+<span class="absolute left-2 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-md">$</span>
+<input class="w-24 pl-6 pr-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="75.00"/>
+</div>
+</td>
+<td class="px-lg py-4">
+<input class="w-20 px-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="42"/>
+</td>
+<td class="px-lg py-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_horiz</button>
+</td>
+</tr>
+<!-- Row 3: Disabled State -->
+<tr class="opacity-60 hover:opacity-100 transition-opacity bg-surface-container-low/30">
+<td class="px-lg py-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-secondary-fixed rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container rounded-md overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="Macro photo of 'Carbon Black' technical fabric for workout leggings. The deep black texture is rich and detailed, showcasing the high-contrast aesthetic. Minimal shadows and crisp edges highlight the material's durability and professional quality, following the design system's focus on operational efficiency and performance gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkJpROV4u0ubZYQ3kBMrC6F2ubSG8YjfgDSShpagVrPp3sk8b2LXR1u2CLa8FqBQEKcdmSCjtPuFDum6YahTNCdYl4sPZbkjUPDLDFVHODQlOvNADQChfwVR3g2asBX1h3Fq2oW4zQiZ0ny_VzKanzgR57joscID-pIhwA0uVIsUPlDYvLVAH1Ava24w9XTiehoK0-UnfrWO6HCygdGMZS42DUIq2jJHdvYBSdCsa1vOu9ySzakld-PA"/>
+</div>
+<span class="font-label-md">PF-LEG-BLK-L</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<input class="w-32 bg-transparent border-none focus:ring-2 focus:ring-primary rounded py-1 px-2 font-body-md" type="text" value="FIT-PRO-009"/>
+</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md text-secondary">Carbon Black</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md text-secondary">Large</td>
+<td class="px-lg py-4">
+<div class="relative">
+<span class="absolute left-2 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-md">$</span>
+<input class="w-24 pl-6 pr-2 py-1 bg-surface-container-low/50 border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="79.00"/>
+</div>
+</td>
+<td class="px-lg py-4">
+<input class="w-20 px-2 py-1 bg-surface-container-low/50 border-none rounded font-body-md focus:ring-2 focus:ring-primary text-error" type="number" value="0"/>
+</td>
+<td class="px-lg py-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_horiz</button>
+</td>
+</tr>
+<!-- Additional Rows for Density -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-lg py-4"><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer" type="checkbox"/><div class="w-11 h-6 bg-secondary-fixed rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div></label></td>
+<td class="px-lg py-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-surface-container rounded-md overflow-hidden"><img class="w-full h-full object-cover" data-alt="Technical apparel detail showing a high-performance fabric in 'FitOra Orange' with reinforced flatlock stitching. The image is bright, professional, and captures the essence of a modern fitness portal. High-key lighting ensures every fiber and stitch is visible, promoting a sense of quality and precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfRykkE4G_KFTOMEBLM-ZheIhHbgtiRkmUjIKTUyT73Lfe7W6X0ha-LbCqtHYIaUrRjEpH27vEnvWT3zUN_sDrUw-s-cSeCxsEXJg9hBjyqLjST0HgSuEjpyZqfI4u2yfysIR2eymVJFAubVU-oZxYn3PoctehtilZCxYyt7-qFzQsVv4VqygpQR-_6M1lo4eNF4Mw2ZBpbEP6YwLPqQrEZ-odh-VbFdN1TvQPGAmW86G4LmwRg2_N_Q"/></div><span class="font-label-md">PF-LEG-ORA-L</span></div></td>
+<td class="px-lg py-4"><input class="w-32 bg-transparent border-none focus:ring-2 focus:ring-primary rounded py-1 px-2 font-body-md" type="text" value="FIT-PRO-012"/></td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">FitOra Orange</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">Large</td>
+<td class="px-lg py-4"><div class="relative"><span class="absolute left-2 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-md">$</span><input class="w-24 pl-6 pr-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="75.00"/></div></td>
+<td class="px-lg py-4"><input class="w-20 px-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="28"/></td>
+<td class="px-lg py-4"><button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_horiz</button></td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-lg py-4"><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer" type="checkbox"/><div class="w-11 h-6 bg-secondary-fixed rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div></label></td>
+<td class="px-lg py-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-surface-container rounded-md overflow-hidden"><img class="w-full h-full object-cover" data-alt="Technical apparel detail showing a high-performance fabric in 'Midnight Navy' with reflective branding elements. The image is bright, professional, and captures the essence of a modern fitness portal. High-key lighting ensures every fiber and stitch is visible, promoting a sense of quality and precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhe4mKYXCQtPwId3tM_v1tYtiZ7wVUlycE-VgwFJ542APjJfoS8OgsIRDqtNFDGN67bl11cOoeBLOfot_Ttoy0kihIYCb8tPFKlo1iH6x7zvU5VFeqPTYSt5ahkZgo9PM-EYs7_YLTPQ8LDtVfp6AyA2PriL_Zoxp4H4RlFUZTyowUcJwo9TM7SDzrJXE8kKZALmIgZub5eLiYTRp3r2DTqMST66UVbY_n7hLgWwijQaO3H5LstNhKNA"/></div><span class="font-label-md">PF-LEG-NVY-XS</span></div></td>
+<td class="px-lg py-4"><input class="w-32 bg-transparent border-none focus:ring-2 focus:ring-primary rounded py-1 px-2 font-body-md" type="text" value="FIT-PRO-015"/></td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">Midnight Navy</td>
+<td class="px-lg py-4 text-on-surface-variant font-label-md">Extra Small</td>
+<td class="px-lg py-4"><div class="relative"><span class="absolute left-2 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-md">$</span><input class="w-24 pl-6 pr-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="75.00"/></div></td>
+<td class="px-lg py-4"><input class="w-20 px-2 py-1 bg-surface-container-low border-none rounded font-body-md focus:ring-2 focus:ring-primary" type="number" value="210"/></td>
+<td class="px-lg py-4"><button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_horiz</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Status Bar -->
+<div class="mt-md flex justify-between items-center text-on-surface-variant">
+<p class="text-caption font-bold">Showing 1-12 of 36 variants</p>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="w-8 h-8 flex items-center justify-center border border-primary bg-primary text-on-primary rounded text-caption font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container transition-colors text-caption font-bold">2</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container transition-colors text-caption font-bold">3</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+</main>
+<!-- Success Toast (Hidden by default, triggered by JS) -->
+<div class="fixed bottom-lg right-lg bg-inverse-surface text-inverse-on-surface px-lg py-md rounded-xl shadow-2xl flex items-center gap-md translate-y-24 opacity-0 transition-all duration-300" id="toast">
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+<div>
+<p class="font-label-md">Changes saved successfully</p>
+<p class="text-caption opacity-80">12 variants updated across all sizes.</p>
+</div>
+</div>
+<script>
+        // Micro-interactions and simulation logic
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', () => {
+                showToast();
+            });
+        });
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // CSV Import Simulation
+        document.querySelector('button:has(.material-symbols-outlined:contains("upload_file"))')?.addEventListener('click', () => {
+            alert('Opening CSV File Selector...');
+        });
+    </script>
+</body></html>

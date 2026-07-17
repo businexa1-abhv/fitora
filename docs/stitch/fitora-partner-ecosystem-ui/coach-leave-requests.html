@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Coach - Leave Requests</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#efd5ca",
+                    "surface-bright": "#fff8f6",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#ffdbcc",
+                    "tertiary-container": "#8a9ab2",
+                    "secondary-fixed": "#dae2fd",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "primary": "#a04100",
+                    "on-secondary-container": "#5c647a",
+                    "outline-variant": "#e2bfb0",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#ffede6",
+                    "surface-tint": "#a04100",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "primary-fixed-dim": "#ffb693",
+                    "outline": "#8e7164",
+                    "inverse-primary": "#ffb693",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#572000",
+                    "on-background": "#261812",
+                    "on-error": "#ffffff",
+                    "background": "#fff8f6",
+                    "secondary-container": "#dae2fd",
+                    "inverse-surface": "#3d2d26",
+                    "surface-container-high": "#fee3d8",
+                    "on-tertiary-container": "#223246",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-variant": "#f8ddd2",
+                    "surface-container-highest": "#f8ddd2",
+                    "surface-container": "#ffeae1",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "secondary": "#565e74",
+                    "surface-container-low": "#fff1eb",
+                    "tertiary": "#505f76",
+                    "surface": "#fff8f6",
+                    "on-primary-fixed": "#351000",
+                    "on-surface-variant": "#5a4136",
+                    "on-secondary-fixed": "#131b2e",
+                    "tertiary-fixed": "#d3e4fe",
+                    "on-surface": "#261812",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "primary-container": "#ff6b00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "base": "8px",
+                    "xl": "32px",
+                    "sm": "12px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "gutter": "20px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #F8FAFC;
+        color: #261812;
+        margin: 0;
+        padding-bottom: 80px; /* Space for BottomNavBar */
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        height: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2bfb0;
+        border-radius: 10px;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-40 bg-surface dark:bg-surface-container shadow-sm">
+<div class="flex justify-between items-center px-margin-mobile h-16 w-full">
+<div class="flex items-center gap-base">
+<button class="hover:bg-surface-variant rounded-full p-2 transition-transform active:scale-90">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary">Leave Requests</h1>
+</div>
+<div class="flex items-center gap-xs">
+<button class="hover:bg-surface-variant rounded-full p-2">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container overflow-hidden border border-primary">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fit athletic trainer in a modern high-performance gym setting. The lighting is crisp and energetic, with soft orange and deep navy accents in the background reflecting the FitOra brand colors. The coach is smiling and looks reliable and empowered." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADXwsOveruDkKQ9zgnHsT_3WJxh93WbhYsUEEPeIjw6kNLgdtUw_NAtuCxUF5UegevEoAFl5FCqYnAnOfcIPB2gDTEwm_5WdVFHiBVHJalFhZL8-Pf8NFLYM0uq9L7sL_K8j3uMqo9tJFitxHOXPxNBeZTPjDrg4PzzIxk5mJYKcT_omWGkCZGTm7X2LWhOnF0Dc8If_G_RW975NX3d_MOXdDNLktaZ1tenOFd_aa7gBchPfTv3INWfQ"/>
+</div>
+</div>
+</div>
+</header>
+<main class="px-margin-mobile py-md max-w-md mx-auto space-y-lg">
+<!-- Leave Balance Card -->
+<div class="bg-surface-container-low rounded-xl p-lg shadow-sm border-l-4 border-primary">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Leave Balance</p>
+<div class="flex items-baseline gap-xs mt-xs">
+<span class="font-display-lg text-display-lg text-primary">5</span>
+<span class="font-body-md text-body-md text-secondary">Days remaining</span>
+</div>
+</div>
+<div class="bg-primary-fixed p-base rounded-lg">
+<span class="material-symbols-outlined text-primary text-[32px]">calendar_month</span>
+</div>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-sm">Valid until Dec 31, 2024</p>
+</div>
+<!-- Warning Banner -->
+<div class="bg-error-container text-on-error-container px-md py-sm rounded-lg flex items-start gap-md animate-pulse">
+<span class="material-symbols-outlined mt-xs">warning</span>
+<div>
+<p class="font-label-md text-label-md font-bold">Conflict: You have a session on June 12th</p>
+<p class="font-caption text-caption opacity-90">Training session with 'Elite Performance Group' at 9:00 AM.</p>
+</div>
+</div>
+<!-- Request Form Section -->
+<section class="space-y-md">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">New Request</h2>
+<div class="bg-white rounded-xl p-md shadow-sm border border-outline-variant space-y-md">
+<div class="grid grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Start Date</label>
+<div class="flex items-center gap-xs p-base border border-outline rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-on-surface-variant">event</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body-md" type="date" value="2024-06-12"/>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">End Date</label>
+<div class="flex items-center gap-xs p-base border border-outline rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-on-surface-variant">event</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body-md" type="date" value="2024-06-15"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Reason for Leave</label>
+<select class="p-base border border-outline rounded-lg bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary text-body-md">
+<option>Annual Leave</option>
+<option>Sick Leave</option>
+<option>Personal Emergency</option>
+<option>Professional Training</option>
+</select>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-md rounded-full shadow-md active:scale-95 transition-transform">
+                    Submit Request
+                </button>
+</div>
+</section>
+<!-- History Section -->
+<section class="space-y-md">
+<div class="flex justify-between items-end">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">History</h2>
+<button class="text-primary font-label-md text-label-md">View All</button>
+</div>
+<!-- Tabs -->
+<div class="flex gap-md overflow-x-auto pb-xs custom-scrollbar">
+<button class="bg-primary text-on-primary px-lg py-xs rounded-full whitespace-nowrap font-label-md text-label-md">Pending</button>
+<button class="bg-surface-variant text-on-surface-variant px-lg py-xs rounded-full whitespace-nowrap font-label-md text-label-md">Approved</button>
+<button class="bg-surface-variant text-on-surface-variant px-lg py-xs rounded-full whitespace-nowrap font-label-md text-label-md">Rejected</button>
+<button class="bg-surface-variant text-on-surface-variant px-lg py-xs rounded-full whitespace-nowrap font-label-md text-label-md">Cancelled</button>
+</div>
+<!-- History List -->
+<div class="space-y-base">
+<!-- Item 1: Pending -->
+<div class="bg-white p-md rounded-xl shadow-sm border border-outline-variant flex flex-col gap-base">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Annual Leave</p>
+<p class="font-caption text-caption text-on-surface-variant">Jun 12 - Jun 15 (4 days)</p>
+</div>
+<span class="bg-surface-dim text-on-surface-variant px-base py-xs rounded-lg text-caption font-bold">PENDING</span>
+</div>
+<div class="flex justify-end gap-md border-t border-outline-variant pt-base">
+<button class="flex items-center gap-xs text-error font-label-md text-label-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+                            Cancel
+                        </button>
+</div>
+</div>
+<!-- Item 2: Approved -->
+<div class="bg-white/50 p-md rounded-xl shadow-sm border border-outline-variant opacity-75">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Sick Leave</p>
+<p class="font-caption text-caption text-on-surface-variant">May 20 - May 21 (2 days)</p>
+</div>
+<span class="bg-tertiary-container text-on-tertiary-container px-base py-xs rounded-lg text-caption font-bold uppercase">Approved</span>
+</div>
+</div>
+<!-- Item 3: Rejected -->
+<div class="bg-white/50 p-md rounded-xl shadow-sm border border-outline-variant opacity-75">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Professional Training</p>
+<p class="font-caption text-caption text-on-surface-variant">Apr 15 - Apr 16 (2 days)</p>
+</div>
+<span class="bg-error-container text-on-error-container px-base py-xs rounded-lg text-caption font-bold uppercase">Rejected</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile py-2 bg-surface dark:bg-surface-container-low shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.04)] rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-label-md text-label-md">Training</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors rounded-full p-2">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</div>
+<!-- ACTIVE: Profile -->
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</div>
+</nav>
+<script>
+        // Simple Micro-interaction for form submission
+        const submitBtn = document.querySelector('button.bg-primary-container');
+        submitBtn?.addEventListener('click', () => {
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = 'Submitting...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50');
+            
+            setTimeout(() => {
+                alert('Leave request submitted successfully!');
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50');
+            }, 1500);
+        });
+
+        // Tab selection logic
+        const tabs = document.querySelectorAll('.custom-scrollbar button');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.classList.remove('bg-primary', 'text-on-primary');
+                    t.classList.add('bg-surface-variant', 'text-on-surface-variant');
+                });
+                tab.classList.remove('bg-surface-variant', 'text-on-surface-variant');
+                tab.classList.add('bg-primary', 'text-on-primary');
+            });
+        });
+    </script>
+</body></html>

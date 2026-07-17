@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Coach Profile</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#efd5ca",
+                    "surface-bright": "#fff8f6",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#ffdbcc",
+                    "tertiary-container": "#8a9ab2",
+                    "secondary-fixed": "#dae2fd",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "primary": "#a04100",
+                    "on-secondary-container": "#5c647a",
+                    "outline-variant": "#e2bfb0",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#ffede6",
+                    "surface-tint": "#a04100",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "primary-fixed-dim": "#ffb693",
+                    "outline": "#8e7164",
+                    "inverse-primary": "#ffb693",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#572000",
+                    "on-background": "#261812",
+                    "on-error": "#ffffff",
+                    "background": "#fff8f6",
+                    "secondary-container": "#dae2fd",
+                    "inverse-surface": "#3d2d26",
+                    "surface-container-high": "#fee3d8",
+                    "on-tertiary-container": "#223246",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-variant": "#f8ddd2",
+                    "surface-container-highest": "#f8ddd2",
+                    "surface-container": "#ffeae1",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "secondary": "#565e74",
+                    "surface-container-low": "#fff1eb",
+                    "tertiary": "#505f76",
+                    "surface": "#fff8f6",
+                    "on-primary-fixed": "#351000",
+                    "on-surface-variant": "#5a4136",
+                    "on-secondary-fixed": "#131b2e",
+                    "tertiary-fixed": "#d3e4fe",
+                    "on-surface": "#261812",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "primary-container": "#ff6b00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "base": "8px",
+                    "xl": "32px",
+                    "sm": "12px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "gutter": "20px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .bento-item-large {
+            grid-column: span 2;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface pb-24">
+<!-- Top AppBar -->
+<header class="sticky top-0 w-full z-40 bg-surface shadow-sm h-16 flex justify-between items-center px-margin-mobile">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">FitOra</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:bg-surface-variant rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of an athletic male tennis coach with a friendly smile, wearing high-performance athletic apparel. The lighting is bright and outdoor, reflecting a professional sports setting with a soft-focus tennis court background. The overall aesthetic is crisp, energetic, and clean, aligned with a premium sports coaching brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMl-FK3fnflD9dVSiuQ5ofZ8RACF44VZzsh1RI5xRJiyTLxCemC0Tx1rcdlJDWiblZ0Ho4Z0df4KvjSJyI4fxmKCrvz-TjTpTRylzHgL5Hsv6xWwTpChWS6sQ-WJ3sOF89-HLgqwigWGoceRVg7I9aYPq2YpQ3p7XZ0k3_iXAmv6nxuii3H905bHLQ09GfhFPNEmwXCgeyN67l-9VHI8f_iVaPifbndmSOEQFPhq7G_LDBUJLPIcroLw"/>
+</div>
+</div>
+</header>
+<main class="px-margin-mobile pt-lg max-w-md mx-auto">
+<!-- Profile Header -->
+<section class="flex flex-col items-center text-center mb-xl">
+<div class="relative mb-md">
+<div class="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-quality portrait of a professional athletic trainer in their 30s, looking confident and approachable. They are wearing a sleek navy blue polo shirt with a subtle sports logo. The background is a clean, modern gym environment with soft ambient lighting and warm orange accents to match the brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhGXX_hGiiHPrkzXUgVI27QB2_sIjDmpz_dwufWTVy6icXkp1ip9e-1Vhhu9W0GV7G74oGFgMIkeW_uVngdFfFPDVkN06UaN4lRSZpgKA5TzX8V8vuI5U_RQUl2Pgmtizn6SGTNE2aXdY8ubcT3diohBsR3GbTasHp3eKBF2rQhZhD6xN7-7e7vmoJYHnxqDBF7o-3fgmCVqKhNrCBNgJE0pipXOD7jsyEVLHGoOOdwc89k0sLGcIw4w"/>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-white p-1 rounded-full border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Coach Marcus Miller</h2>
+<div class="flex items-center gap-xs mt-xs">
+<span class="material-symbols-outlined text-[#FFD700]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface">4.9</span>
+<span class="font-caption text-caption text-on-surface-variant">(128 Reviews)</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm px-base">
+                "Elite Tennis Coach with 10+ years experience helping athletes reach their full potential."
+            </p>
+<div class="flex gap-md mt-lg w-full">
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-3 rounded-xl shadow-md active:scale-95 transition-transform">
+                    Edit Profile
+                </button>
+<button class="flex-1 border border-outline text-primary font-label-md text-label-md py-3 rounded-xl active:scale-95 transition-transform">
+                    View Public Bio
+                </button>
+</div>
+</section>
+<!-- Details Bento Grid -->
+<section class="bento-grid mb-xl">
+<!-- Specializations -->
+<div class="bento-item-large bg-surface-container-low p-md rounded-xl border border-outline-variant">
+<div class="flex items-center gap-xs mb-base">
+<span class="material-symbols-outlined text-primary" data-icon="sports_tennis">sports_tennis</span>
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Specializations</h3>
+</div>
+<div class="flex flex-wrap gap-xs">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-caption font-semibold">TENNIS</span>
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-caption font-semibold">FITNESS</span>
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-caption font-semibold">AGILITY</span>
+</div>
+</div>
+<!-- Certifications -->
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant">
+<div class="flex items-center gap-xs mb-base">
+<span class="material-symbols-outlined text-primary" data-icon="workspace_premium">workspace_premium</span>
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Certs</h3>
+</div>
+<p class="font-label-md text-label-md">USPTA Elite</p>
+<p class="font-caption text-caption text-on-surface-variant">Level 3 Pro</p>
+</div>
+<!-- Venues -->
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant">
+<div class="flex items-center gap-xs mb-base">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Venues</h3>
+</div>
+<p class="font-label-md text-label-md">Main Arena</p>
+<p class="font-caption text-caption text-on-surface-variant">Court 4, 7, 9</p>
+</div>
+<!-- Availability Toggle -->
+<div class="bento-item-large bg-white p-md rounded-xl shadow-sm border-2 border-primary/10">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-green-600" data-icon="event_available">event_available</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md">Active Status</h3>
+<p class="font-caption text-caption text-on-surface-variant">Available for bookings today</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Menu List -->
+<section class="bg-white rounded-xl shadow-sm mb-lg overflow-hidden border border-outline-variant">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest active:bg-surface-variant transition-colors cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Leave Requests</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest active:bg-surface-variant transition-colors cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<div class="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full border-2 border-white"></div>
+</div>
+<span class="font-body-md text-body-md">Notifications</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest active:bg-surface-variant transition-colors cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Earnings &amp; Commission</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="font-label-md text-label-md text-primary">$4,280</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="p-md flex justify-between items-center bg-surface-container-lowest active:bg-surface-variant transition-colors cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="help_outline">help_outline</span>
+<span class="font-body-md text-body-md">Help &amp; Support</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</section>
+<!-- Sign Out -->
+<button class="w-full flex items-center justify-center gap-base py-4 text-error font-label-md text-label-md active:bg-error-container/20 rounded-xl transition-colors mb-xl">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+            Sign Out
+        </button>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.04)] bg-surface rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span class="font-label-md text-label-md">Training</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform shadow-md" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for toggle
+        const toggle = document.querySelector('input[type="checkbox"]');
+        toggle.addEventListener('change', function() {
+            const statusText = this.parentElement.previousElementSibling.querySelector('p');
+            if(this.checked) {
+                statusText.innerText = "Available for bookings today";
+                statusText.classList.replace('text-on-surface-variant', 'text-green-600');
+            } else {
+                statusText.innerText = "Offline / Not accepting bookings";
+                statusText.classList.replace('text-green-600', 'text-on-surface-variant');
+            }
+        });
+    </script>
+</body></html>

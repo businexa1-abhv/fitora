@@ -18,7 +18,7 @@ export function CoachHeader({ onBellPress }: { onBellPress?: () => void }) {
       </View>
       <Text style={styles.brand}>FitOra Coach</Text>
       <Pressable
-        onPress={onBellPress ?? (() => router.push('/(tabs)/profile' as never))}
+        onPress={onBellPress ?? (() => router.push('/coach/notifications' as never))}
         hitSlop={8}
       >
         <Ionicons name="notifications-outline" size={22} color={CoachColors.muted} />

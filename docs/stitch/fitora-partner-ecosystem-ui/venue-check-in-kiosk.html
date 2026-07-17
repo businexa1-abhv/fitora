@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Venue Check-in Kiosk</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .animate-scan {
+            animation: scan 2s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .kiosk-gradient {
+            background: radial-gradient(circle at top right, #ffdbcc 0%, #fff8f6 60%);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#dae2fd",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "inverse-primary": "#ffb693",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-primary-fixed-variant": "#7a3000",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#8a9ab2",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#fff1eb",
+                        "surface-container": "#ffeae1",
+                        "on-surface-variant": "#5a4136",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#ffb693",
+                        "surface-variant": "#f8ddd2",
+                        "primary": "#a04100",
+                        "on-background": "#261812",
+                        "inverse-on-surface": "#ffede6",
+                        "secondary": "#565e74",
+                        "on-tertiary-container": "#223246",
+                        "on-primary-container": "#572000",
+                        "surface-container-high": "#fee3d8",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#f8ddd2",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#fff8f6",
+                        "on-surface": "#261812",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#a04100",
+                        "background": "#fff8f6",
+                        "tertiary": "#505f76",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "outline-variant": "#e2bfb0",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#dae2fd",
+                        "inverse-surface": "#3d2d26",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdbcc",
+                        "on-secondary-container": "#5c647a",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "outline": "#8e7164",
+                        "on-primary-fixed": "#351000",
+                        "surface-dim": "#efd5ca",
+                        "primary-container": "#ff6b00",
+                        "tertiary-fixed": "#d3e4fe",
+                        "surface": "#fff8f6",
+                        "on-secondary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden kiosk-gradient h-screen w-screen flex flex-col">
+<!-- Top Navigation Bar (Shared Component Logic) -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-20 max-w-[1440px] mx-auto z-10">
+<div class="flex items-center gap-md">
+<div class="flex items-center justify-center w-12 h-12 bg-primary rounded-xl text-on-primary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+</div>
+<div>
+<h1 class="text-headline-md font-headline-md font-bold text-primary">FitOra <span class="text-on-surface">Kiosk</span></h1>
+<p class="text-label-md text-on-surface-variant font-label-md">Central Court • Venue ID: #8821</p>
+</div>
+</div>
+<div class="flex items-center gap-xl">
+<div class="text-right">
+<p class="text-headline-md font-headline-md text-on-surface" id="current-time">14:35</p>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider" id="current-date">Wednesday, Oct 25</p>
+</div>
+<button class="w-14 h-14 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center transition-all active:scale-95 group" onclick="toggleStaffUnlock()">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">admin_panel_settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas: Asymmetric Bento Grid for Kiosk -->
+<main class="flex-grow grid grid-cols-12 grid-rows-6 gap-lg p-margin-desktop max-w-[1440px] mx-auto w-full relative">
+<!-- Left Column: Scan Area -->
+<div class="col-span-7 row-span-4 glass-panel rounded-[32px] overflow-hidden flex flex-col relative group shadow-lg border-2 border-transparent focus-within:border-primary transition-all">
+<div class="absolute inset-0 shimmer opacity-20 pointer-events-none"></div>
+<div class="p-xl flex-grow flex flex-col items-center justify-center text-center">
+<div class="relative w-72 h-72 mb-lg">
+<!-- Scan Viewfinder -->
+<div class="absolute inset-0 border-4 border-primary/20 rounded-[40px]"></div>
+<div class="absolute top-0 left-10 right-10 h-1 bg-primary-container shadow-[0_0_15px_rgba(255,107,0,0.8)] animate-scan"></div>
+<div class="absolute -top-1 -left-1 w-10 h-10 border-t-8 border-l-8 border-primary rounded-tl-xl"></div>
+<div class="absolute -top-1 -right-1 w-10 h-10 border-t-8 border-r-8 border-primary rounded-tr-xl"></div>
+<div class="absolute -bottom-1 -left-1 w-10 h-10 border-b-8 border-l-8 border-primary rounded-bl-xl"></div>
+<div class="absolute -bottom-1 -right-1 w-10 h-10 border-b-8 border-r-8 border-primary rounded-br-xl"></div>
+<div class="w-full h-full rounded-[40px] overflow-hidden flex items-center justify-center bg-surface-dim">
+<span class="material-symbols-outlined text-[120px] text-on-surface-variant/20">qr_code_2</span>
+</div>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Scan Your QR Code</h2>
+<p class="text-body-lg text-on-surface-variant mt-sm max-w-md">Position your booking confirmation QR code within the frame for instant check-in.</p>
+</div>
+<!-- Manual Entry Trigger Area -->
+<div class="bg-surface-container-high/50 p-lg flex items-center justify-center gap-md border-t border-outline-variant">
+<button class="flex items-center gap-sm px-xl py-md bg-white border border-outline rounded-full text-headline-md font-bold text-on-surface hover:bg-primary-container hover:text-on-primary-container hover:border-primary-container transition-all active:scale-95 min-h-[64px]" onclick="showManualEntry()">
+<span class="material-symbols-outlined">dialpad</span>
+                    Manual Entry
+                </button>
+</div>
+</div>
+<!-- Right Column: Quick Stats / Upcoming -->
+<div class="col-span-5 row-span-6 flex flex-col gap-lg">
+<!-- Upcoming Bookings Widget -->
+<div class="flex-grow glass-panel rounded-[32px] p-xl flex flex-col shadow-sm">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="text-headline-md font-bold text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">event_upcoming</span>
+                        Upcoming Today
+                    </h3>
+<span class="bg-primary-container text-on-primary-container px-md py-xs rounded-full text-label-md">12 Left</span>
+</div>
+<div class="space-y-md overflow-y-auto pr-sm max-h-[500px]">
+<!-- Booking Row 1 -->
+<div class="p-md bg-white rounded-2xl border border-outline-variant flex items-center gap-md hover:border-primary cursor-pointer transition-colors group">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex flex-col items-center justify-center border border-outline-variant">
+<span class="text-headline-md font-bold text-on-surface">15</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">00</span>
+</div>
+<div class="flex-grow">
+<p class="text-body-lg font-bold text-on-surface group-hover:text-primary">Marcus Johansson</p>
+<p class="text-label-md text-on-surface-variant">Court 3 • 60 min Session</p>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-md">chevron_right</span>
+</div>
+</div>
+<!-- Booking Row 2 -->
+<div class="p-md bg-white rounded-2xl border border-outline-variant flex items-center gap-md">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex flex-col items-center justify-center border border-outline-variant">
+<span class="text-headline-md font-bold text-on-surface">15</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">30</span>
+</div>
+<div class="flex-grow">
+<p class="text-body-lg font-bold text-on-surface">Sarah Drummand</p>
+<p class="text-label-md text-on-surface-variant">Central Court • Training</p>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-sm py-xs rounded-lg text-[10px] font-bold uppercase">Ready</span>
+</div>
+<!-- Booking Row 3 -->
+<div class="p-md bg-white rounded-2xl border border-outline-variant flex items-center gap-md opacity-60">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex flex-col items-center justify-center border border-outline-variant">
+<span class="text-headline-md font-bold text-on-surface">16</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">00</span>
+</div>
+<div class="flex-grow">
+<p class="text-body-lg font-bold text-on-surface">Team Volley Pro</p>
+<p class="text-label-md text-on-surface-variant">Court 1 • Match Practice</p>
+</div>
+</div>
+<!-- Booking Row 4 -->
+<div class="p-md bg-white rounded-2xl border border-outline-variant flex items-center gap-md opacity-60">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex flex-col items-center justify-center border border-outline-variant">
+<span class="text-headline-md font-bold text-on-surface">16</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">30</span>
+</div>
+<div class="flex-grow">
+<p class="text-body-lg font-bold text-on-surface">David Chen</p>
+<p class="text-label-md text-on-surface-variant">Court 4 • Solo Drills</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-lg">
+<button class="w-full py-md bg-secondary text-on-secondary font-bold rounded-2xl hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-sm min-h-[56px]">
+<span class="material-symbols-outlined">search</span>
+                        Search All Bookings
+                    </button>
+</div>
+</div>
+</div>
+<!-- Bottom Left: Stats Bento Card -->
+<div class="col-span-3 row-span-2 glass-panel rounded-[32px] p-xl flex flex-col justify-center shadow-sm">
+<p class="text-label-md text-on-surface-variant uppercase font-bold tracking-widest mb-xs">Daily Volume</p>
+<div class="flex items-baseline gap-xs">
+<h4 class="text-display-lg font-display-lg text-primary">84</h4>
+<p class="text-headline-md font-bold text-on-surface-variant">/ 120</p>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mt-md">
+<div class="bg-primary h-2 rounded-full" style="width: 70%"></div>
+</div>
+<p class="text-label-md text-on-surface-variant mt-sm">70% of peak capacity reached</p>
+</div>
+<!-- Bottom Center: Alert / Status Bento Card -->
+<div class="col-span-4 row-span-2 bg-surface-container-lowest rounded-[32px] p-xl flex items-center gap-lg border border-outline-variant shadow-sm overflow-hidden relative">
+<div class="absolute -right-10 -bottom-10 opacity-5">
+<span class="material-symbols-outlined text-[160px]">tips_and_updates</span>
+</div>
+<div class="w-16 h-16 bg-tertiary-container rounded-2xl flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-tertiary-container text-[32px]">info</span>
+</div>
+<div>
+<h4 class="text-headline-md font-bold text-on-surface">Facility Alert</h4>
+<p class="text-body-md text-on-surface-variant">Court 4 cleaning in progress. Next available at 16:00.</p>
+</div>
+</div>
+</main>
+<!-- Success Modal Overlays (State Management Simulation) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-xl hidden" id="modal-container">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-inverse-surface/80 backdrop-blur-md"></div>
+<!-- SUCCESS STATE -->
+<div class="relative glass-panel rounded-[48px] max-w-2xl w-full p-xl text-center shadow-2xl scale-95 transition-transform duration-300 hidden" id="state-success">
+<div class="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-lg shadow-[0_0_40px_rgba(34,197,94,0.4)]">
+<span class="material-symbols-outlined text-[80px] text-white">check_circle</span>
+</div>
+<h2 class="text-[56px] font-extrabold text-on-surface leading-tight">Welcome, Marcus!</h2>
+<p class="text-headline-md text-on-surface-variant mt-sm">Your booking is confirmed for <span class="font-bold text-on-surface">Court 3</span>.</p>
+<div class="grid grid-cols-2 gap-lg mt-xl">
+<div class="bg-surface-container rounded-3xl p-lg text-left">
+<p class="text-label-md text-on-surface-variant uppercase font-bold">Session Time</p>
+<p class="text-headline-md font-bold text-on-surface">15:00 - 16:00</p>
+</div>
+<div class="bg-surface-container rounded-3xl p-lg text-left">
+<p class="text-label-md text-on-surface-variant uppercase font-bold">Equipment</p>
+<p class="text-headline-md font-bold text-on-surface">2x Pro Rackets</p>
+</div>
+</div>
+<p class="text-body-lg text-on-surface-variant mt-xl italic">Auto-resetting in 5 seconds...</p>
+<button class="mt-lg w-full py-xl bg-primary text-on-primary text-headline-md font-bold rounded-3xl active:scale-95 transition-all" onclick="closeModals()">OK, Let's Go!</button>
+</div>
+<!-- ERROR/INVALID STATE -->
+<div class="relative glass-panel rounded-[48px] max-w-lg w-full p-xl text-center shadow-2xl hidden" id="state-invalid">
+<div class="w-32 h-32 bg-error rounded-full flex items-center justify-center mx-auto mb-lg">
+<span class="material-symbols-outlined text-[80px] text-white">error</span>
+</div>
+<h2 class="text-display-lg font-extrabold text-on-surface">Invalid QR</h2>
+<p class="text-headline-md text-on-surface-variant mt-sm">This code doesn't match any active bookings for today.</p>
+<div class="mt-xl flex flex-col gap-md">
+<button class="w-full py-lg bg-surface-variant text-on-surface font-bold rounded-2xl" onclick="closeModals()">Try Again</button>
+<button class="w-full py-lg bg-outline text-white font-bold rounded-2xl">Call Staff Member</button>
+</div>
+</div>
+<!-- MANUAL ENTRY KEYPAD -->
+<div class="relative glass-panel rounded-[48px] max-w-xl w-full p-xl shadow-2xl hidden" id="state-manual">
+<h2 class="text-headline-lg font-extrabold text-center mb-xl">Enter Booking ID</h2>
+<div class="bg-surface-container-highest rounded-2xl p-lg mb-lg">
+<input class="w-full bg-transparent border-none text-center text-display-lg font-bold placeholder:text-outline tracking-[4px] focus:ring-0" id="manual-code" maxlength="8" placeholder="____-____" type="text"/>
+</div>
+<div class="grid grid-cols-3 gap-md">
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('1')">1</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('2')">2</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('3')">3</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('4')">4</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('5')">5</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('6')">6</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('7')">7</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('8')">8</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('9')">9</button>
+<button class="h-20 bg-error-container text-error rounded-2xl font-bold active:scale-95 transition-all flex items-center justify-center" onclick="clearNum()">
+<span class="material-symbols-outlined">backspace</span>
+</button>
+<button class="h-20 bg-white rounded-2xl text-headline-md font-bold border border-outline-variant active:bg-primary-container active:scale-95 transition-all" onclick="typeNum('0')">0</button>
+<button class="h-20 bg-primary text-on-primary rounded-2xl font-bold active:scale-95 transition-all flex items-center justify-center" onclick="checkManualCode()">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<button class="w-full mt-lg py-md text-on-surface-variant font-bold flex items-center justify-center gap-sm" onclick="closeModals()">
+<span class="material-symbols-outlined">close</span> Cancel
+            </button>
+</div>
+</div>
+<!-- Hidden Staff Admin Panel (Staff Unlock) -->
+<div class="fixed top-20 right-margin-desktop glass-panel rounded-3xl w-72 p-lg shadow-2xl border-primary border hidden z-40" id="staff-panel">
+<h5 class="text-label-md font-bold text-primary mb-md">STAFF OVERRIDE</h5>
+<div class="space-y-sm">
+<button class="w-full py-sm bg-surface-container-high rounded-xl text-left px-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-sm">refresh</span> Reset Terminal
+            </button>
+<button class="w-full py-sm bg-surface-container-high rounded-xl text-left px-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-sm">settings</span> Settings
+            </button>
+<button class="w-full py-sm bg-error-container text-error rounded-xl text-left px-md flex items-center gap-sm font-bold">
+<span class="material-symbols-outlined text-sm">lock_open</span> Unlock Kiosk
+            </button>
+</div>
+</div>
+<script>
+        // Update Time and Date
+        function updateDateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('current-time').textContent = `${hours}:${minutes}`;
+            
+            const options = { weekday: 'long', month: 'short', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Kiosk State Logic
+        const modalContainer = document.getElementById('modal-container');
+        const stateSuccess = document.getElementById('state-success');
+        const stateInvalid = document.getElementById('state-invalid');
+        const stateManual = document.getElementById('state-manual');
+        const staffPanel = document.getElementById('staff-panel');
+        const manualInput = document.getElementById('manual-code');
+
+        function closeModals() {
+            modalContainer.classList.add('hidden');
+            stateSuccess.classList.add('hidden');
+            stateInvalid.classList.add('hidden');
+            stateManual.classList.add('hidden');
+            manualInput.value = '';
+        }
+
+        function showManualEntry() {
+            modalContainer.classList.remove('hidden');
+            stateManual.classList.remove('hidden');
+            manualInput.focus();
+        }
+
+        function typeNum(num) {
+            if (manualInput.value.length < 8) {
+                manualInput.value += num;
+            }
+        }
+
+        function clearNum() {
+            manualInput.value = manualInput.value.slice(0, -1);
+        }
+
+        function checkManualCode() {
+            const code = manualInput.value;
+            stateManual.classList.add('hidden');
+            
+            // Simulation Logic
+            if (code === '1234') {
+                stateSuccess.classList.remove('hidden');
+                setTimeout(closeModals, 5000);
+            } else {
+                stateInvalid.classList.remove('hidden');
+            }
+        }
+
+        function toggleStaffUnlock() {
+            staffPanel.classList.toggle('hidden');
+        }
+
+        // Simulate a successful QR scan after 5 seconds just for demo
+        setTimeout(() => {
+            if (modalContainer.classList.contains('hidden')) {
+                modalContainer.classList.remove('hidden');
+                stateSuccess.classList.remove('hidden');
+                stateSuccess.classList.remove('scale-95');
+                stateSuccess.classList.add('scale-100');
+                setTimeout(closeModals, 8000);
+            }
+        }, 8000);
+
+        // Click outside staff panel to close
+        document.addEventListener('click', (e) => {
+            if (!staffPanel.contains(e.target) && !e.target.closest('button')) {
+                staffPanel.classList.add('hidden');
+            }
+        });
+    </script>
+</body></html>

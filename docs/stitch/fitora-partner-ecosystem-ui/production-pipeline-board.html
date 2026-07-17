@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Pro | Production Pipeline</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#ffede6",
+                    "surface-variant": "#f8ddd2",
+                    "on-secondary-fixed": "#131b2e",
+                    "surface-container-highest": "#f8ddd2",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#efd5ca",
+                    "primary": "#a04100",
+                    "secondary": "#565e74",
+                    "on-surface-variant": "#5a4136",
+                    "on-background": "#261812",
+                    "surface-tint": "#a04100",
+                    "secondary-fixed": "#dae2fd",
+                    "tertiary-fixed": "#d3e4fe",
+                    "surface-container": "#ffeae1",
+                    "on-primary-fixed": "#351000",
+                    "primary-fixed": "#ffdbcc",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "on-primary": "#ffffff",
+                    "outline": "#8e7164",
+                    "background": "#fff8f6",
+                    "surface-container-low": "#fff1eb",
+                    "surface": "#fff8f6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "on-primary-container": "#572000",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#e2bfb0",
+                    "on-surface": "#261812",
+                    "secondary-container": "#dae2fd",
+                    "surface-container-high": "#fee3d8",
+                    "on-tertiary-container": "#223246",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#3d2d26",
+                    "primary-fixed-dim": "#ffb693",
+                    "on-primary-fixed-variant": "#7a3000",
+                    "on-secondary-container": "#5c647a",
+                    "tertiary": "#505f76",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#8a9ab2",
+                    "primary-container": "#ff6b00",
+                    "inverse-primary": "#ffb693"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "sm": "12px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "gutter": "20px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kanban-column {
+            min-width: 320px;
+            max-width: 320px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2bfb0;
+            border-radius: 10px;
+        }
+        .kanban-board-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 16px;
+            padding-bottom: 24px;
+        }
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant shadow-sm flex flex-col py-lg z-50">
+<div class="px-md mb-lg">
+<h1 class="text-headline-md font-headline-md font-bold text-primary">FitOra Pro</h1>
+<p class="text-caption text-secondary">Service Portal</p>
+</div>
+<nav class="flex-1 px-sm space-y-1">
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-primary font-bold border-l-4 border-primary bg-surface-container-low transition-colors duration-200 translate-x-1" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Listings</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Schedule</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">star</span>
+<span class="font-label-md text-label-md">Reviews</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Payouts</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-lg border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary font-bold py-sm px-md rounded-lg flex items-center justify-center gap-xs shadow-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined">add</span>
+                New Listing
+            </button>
+</div>
+</aside>
+<!-- TopAppBar Anchor -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-lg flex-1">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Search orders, jobs, or customers..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm mr-lg">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-label-md font-label-md text-secondary">System Status: Active</span>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all">
+<span class="material-symbols-outlined">monitor_heart</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-sm"></div>
+<div class="flex items-center gap-sm cursor-pointer group">
+<img class="w-10 h-10 rounded-full border-2 border-primary-container object-cover" data-alt="A professional headshot of a service provider coach wearing a sleek black athletic polo with a small orange logo. The background is a brightly lit, high-end commercial print facility with blurred high-speed digital printers and rolls of premium sports fabrics in the distance. Professional, sharp focus, 8k resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEm3UM7JFuwqyZzSTdqprpQ4ab8h5Y1cX_au1sCcSS_uAsbUI59TbAx2Hq26yJdHQAdQphhkge0zql--Vnuc6qqhRatKpe1s4dlv_o9pegPFiydluAGoRFB6IM-oIbBoHfg-OV9hy4RAUG3gFuwTHEnlfzNiaHxxyxVctPj3YPGXTL8o1BU8YmqIEaNj4CcqV2TsizNRslRBOEZjbAE_HTFhzPtAJOmyZMQvEkVyLewZMR4ZJtqBulXA"/>
+<div class="hidden xl:block">
+<p class="text-label-md font-bold text-on-surface">Alex PrintPro</p>
+<p class="text-caption text-secondary">Main Operator</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[240px] mt-16 p-lg h-[calc(100vh-64px)] overflow-hidden flex flex-col">
+<!-- Dashboard Header Actions -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Production Pipeline</h2>
+<p class="font-body-md text-body-md text-secondary">Real-time status of 24 active high-performance orders.</p>
+</div>
+<div class="flex gap-sm">
+<div class="flex items-center bg-surface-container-high rounded-lg p-1">
+<button class="px-md py-2 bg-surface-container-lowest shadow-sm rounded-md text-label-md font-bold text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined">view_kanban</span> Kanban
+                    </button>
+<button class="px-md py-2 text-secondary text-label-md font-label-md flex items-center gap-xs hover:text-primary transition-colors">
+<span class="material-symbols-outlined">view_list</span> List
+                    </button>
+</div>
+<button class="flex items-center gap-xs px-md py-2 border border-outline text-on-surface rounded-lg hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">filter_list</span> Filter
+                </button>
+<button class="flex items-center gap-xs px-md py-2 bg-primary text-on-primary rounded-lg font-bold shadow-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined">update</span> Bulk Action
+                </button>
+</div>
+</div>
+<!-- Kanban Board Container -->
+<div class="flex-1 overflow-hidden">
+<div class="kanban-board-scroll h-full custom-scrollbar">
+<!-- Stage: Accepted -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Accepted</h3>
+<span class="bg-surface-container-highest text-primary px-2 py-0.5 rounded-full text-caption font-bold">4</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-xl p-md space-y-md overflow-y-auto custom-scrollbar">
+<!-- Job Card 1 (Overdue) -->
+<div class="job-card bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-error transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-error-container text-on-error-container text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-xs">
+<span class="material-symbols-outlined text-[12px]">priority_high</span> OVERDUE
+                                </span>
+<span class="text-caption text-secondary font-mono">#FO-9210</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface">AeroLite Pro Jerseys</h4>
+<p class="text-caption text-secondary mb-md">Customer: Velocity Elite Cycling</p>
+<div class="flex items-center gap-md mb-md">
+<div class="w-12 h-12 rounded-lg bg-surface-variant overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up product thumbnail of a high-performance orange and navy cycling jersey with aerodynamic texture. The fabric detail shows a micro-mesh pattern suitable for high-speed athletics. Studio lighting, product photography style, sleek and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ0MJEhHYhXNCfuYw8ZgnEGR__SU19gS8syuS1dC14E4yBaben0rL9xs0eMCXa10kLBQGbRo8U9F49KwcVfdkubT7ry_SdjVl-K-Ox-fd7AUKkPiPjw_P3VI-ynpsRK9o0Yl5tolYxv4ZxyAdnXtRWVqja69q67wH6LTutX9faT4xRK0o6hrR3wfq3eZADpRqerVUTMSoIJUg7Gp3wQQlgb1Vzh5soc4N7N55bOu_J0daL_TcekKgxFw"/>
+</div>
+<div>
+<p class="text-caption font-bold">Qty: 120 Units</p>
+<p class="text-[11px] text-error">Deadline: Oct 12, 14:00</p>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface-container-lowest overflow-hidden bg-primary text-on-primary flex items-center justify-center text-[10px] font-bold">JD</div>
+<div class="w-6 h-6 rounded-full border-2 border-surface-container-lowest overflow-hidden bg-secondary text-on-secondary flex items-center justify-center text-[10px] font-bold">+2</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[20px]">attachment</span>
+</div>
+</div>
+<!-- Job Card 2 -->
+<div class="job-card bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-primary transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Standard</span>
+<span class="text-caption text-secondary font-mono">#FO-9215</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface">FitOra Performance Caps</h4>
+<p class="text-caption text-secondary mb-md">Customer: RunFast Academy</p>
+<div class="flex items-center gap-md mb-md">
+<div class="w-12 h-12 rounded-lg bg-surface-variant overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Minimalist high-quality product photo of a deep navy blue athletic cap with a subtle embroidered orange swoosh logo. High contrast lighting highlighting the moisture-wicking fabric texture. Professional photography, clean white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfMAIUQoAvO-9j7nLKj24JVF6dcENDZy5czyGkgwviZjgHJjBqEKrh5R-PLKkXcGU6dymqMRF8S9lK7snN0iN1GoWtOmhshMmAoTeX_ySuG6sfMJzkGhqDH59aKUCTIK9uHYkQAGhHbShQQNGpYaMFk3YzyeMu7-fgI3ZuVL4hQGqPGUxfrqMBpNtQCWEzPwx5E_XUTQev1RGCLwQq9JIceuBoMHmT0HYHwVMhq7KKkSh3Dy59g0oekg"/>
+</div>
+<div>
+<p class="text-caption font-bold">Qty: 50 Units</p>
+<p class="text-[11px] text-secondary">Deadline: Oct 16, 09:00</p>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface-container-lowest overflow-hidden bg-tertiary-container text-on-tertiary-container flex items-center justify-center text-[10px] font-bold">MK</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage: Designing -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-opacity-60">Designing</h3>
+<span class="bg-surface-container-highest text-secondary px-2 py-0.5 rounded-full text-caption font-bold">3</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-surface-container-low bg-opacity-50 border border-dashed border-outline-variant rounded-xl p-md space-y-md">
+<!-- Job Card 3 -->
+<div class="job-card bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-outline transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Priority</span>
+<span class="text-caption text-secondary font-mono">#FO-9221</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface">Compression Sleeves</h4>
+<p class="text-caption text-secondary mb-md">Customer: IronFit Gyms</p>
+<div class="w-full bg-surface-container-high rounded-full h-1.5 mb-md">
+<div class="bg-primary h-1.5 rounded-full w-[65%]"></div>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">brush</span>
+<span class="text-[11px] font-bold text-primary">In Progress</span>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[10px] text-on-secondary font-bold">SL</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage: Proofing -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-opacity-60">Proofing</h3>
+<span class="bg-surface-container-highest text-secondary px-2 py-0.5 rounded-full text-caption font-bold">2</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-surface-container-low bg-opacity-50 border border-dashed border-outline-variant rounded-xl p-md">
+<div class="job-card bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-tertiary-container transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-surface-container-high text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Review</span>
+<span class="text-caption text-secondary font-mono">#FO-9225</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface">Team Banner (XL)</h4>
+<p class="text-caption text-secondary mb-md">Customer: City Marathon</p>
+<div class="flex items-center justify-between border-t border-outline-variant pt-md">
+<span class="text-[11px] font-bold text-secondary italic">Awaiting Customer Approval</span>
+<span class="material-symbols-outlined text-orange-400">hourglass_top</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage: Approved -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Approved</h3>
+<span class="bg-surface-container-highest text-primary px-2 py-0.5 rounded-full text-caption font-bold">8</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-xl p-md space-y-md">
+<!-- Card: Ready for Print -->
+<div class="job-card bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-green-500 transition-all cursor-pointer">
+<div class="flex justify-between items-center mb-sm">
+<span class="text-caption text-secondary font-mono">#FO-9102</span>
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface">Marathon Medals Lanyards</h4>
+<div class="mt-md flex justify-between items-center">
+<span class="text-caption font-bold">3,000 Units</span>
+<button class="px-3 py-1 bg-primary text-on-primary text-[11px] font-bold rounded-full">Send to Print</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage: Printing -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-primary">Printing</h3>
+<span class="bg-primary text-on-primary px-2 py-0.5 rounded-full text-caption font-bold animate-pulse">5</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-primary-fixed rounded-xl p-md space-y-md border border-primary-container shadow-inner">
+<!-- Card: Live Printing -->
+<div class="job-card bg-surface-container-lowest p-md rounded-lg shadow-md border-l-4 border-primary transition-all">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex flex-col">
+<span class="text-caption text-secondary font-mono">#FO-8994</span>
+<h4 class="font-label-md text-label-md text-on-surface">Pro-Series Shorts</h4>
+</div>
+<span class="material-symbols-outlined text-primary animate-spin">print</span>
+</div>
+<div class="space-y-sm mt-md">
+<div class="flex justify-between text-[11px] font-bold">
+<span>Printer #04 (Dye-Sub)</span>
+<span class="text-primary">78%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-primary h-2 rounded-full w-[78%]"></div>
+</div>
+<p class="text-[10px] text-secondary text-right">Est. Completion: 12 min</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage: QC -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-opacity-60">QC</h3>
+<span class="bg-surface-container-highest text-secondary px-2 py-0.5 rounded-full text-caption font-bold">1</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-xl p-md">
+<!-- Empty placeholder or card -->
+</div>
+</div>
+<!-- Stage: Packed -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-opacity-60">Packed</h3>
+<span class="bg-surface-container-highest text-secondary px-2 py-0.5 rounded-full text-caption font-bold">0</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-xl p-md border border-dashed border-outline-variant flex items-center justify-center opacity-40">
+<span class="material-symbols-outlined text-[48px]">inventory_2</span>
+</div>
+</div>
+<!-- Stage: Shipped -->
+<div class="kanban-column flex flex-col gap-md">
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-xs">
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-opacity-60">Shipped</h3>
+<span class="bg-surface-container-highest text-secondary px-2 py-0.5 rounded-full text-caption font-bold">12</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-primary">more_vert</button>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-xl p-md space-y-md overflow-y-auto">
+<!-- Shipped Item -->
+<div class="job-card bg-surface-container-lowest p-md rounded-lg shadow-sm border-l-4 border-secondary opacity-80">
+<div class="flex justify-between items-center">
+<span class="text-caption text-secondary font-mono">#FO-8910</span>
+<span class="material-symbols-outlined text-secondary text-sm">local_shipping</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface-variant">Compression Leggings</h4>
+<p class="text-[11px] text-secondary mt-2">Delivered to Carrier: Today 11:45</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button for High Context Screen -->
+<div class="fixed bottom-lg right-lg flex flex-col gap-md">
+<div class="hidden flex-col gap-sm animate-in slide-in-from-bottom-5" id="bulk-menu">
+<button class="flex items-center gap-sm px-lg py-sm bg-surface shadow-xl rounded-full border border-outline-variant text-on-surface font-bold hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-primary">print</span> Print Selected
+            </button>
+<button class="flex items-center gap-sm px-lg py-sm bg-surface shadow-xl rounded-full border border-outline-variant text-on-surface font-bold hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-secondary">assignment_turned_in</span> Move to QC
+            </button>
+</div>
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all" onclick="toggleBulkMenu()">
+<span class="material-symbols-outlined text-[28px]" id="fab-icon">bolt</span>
+</button>
+</div>
+<script>
+        function toggleBulkMenu() {
+            const menu = document.getElementById('bulk-menu');
+            const icon = document.getElementById('fab-icon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+                icon.innerText = 'close';
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+                icon.innerText = 'bolt';
+            }
+        }
+
+        // Horizontal scrolling with mouse wheel support for the kanban board
+        const board = document.querySelector('.kanban-board-scroll');
+        board.addEventListener('wheel', (evt) => {
+            evt.preventDefault();
+            board.scrollLeft += evt.deltaY;
+        });
+
+        // Simple drag feedback simulation
+        const cards = document.querySelectorAll('.job-card');
+        cards.forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.cursor = 'grabbing';
+                card.style.opacity = '0.7';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.cursor = 'pointer';
+                card.style.opacity = '1';
+            });
+        });
+    </script>
+</body></html>

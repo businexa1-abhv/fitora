@@ -1,0 +1,141 @@
+{
+  "project": {
+    "title": "FitOra Partner Ecosystem UI",
+    "id": "17441379582922632917"
+  },
+  "screens": [
+    {
+      "id": "1eb431e53a4e4b28a6d9987f3679ea8c",
+      "slug": "coach-profile-settings",
+      "title": "Coach Profile & Settings",
+      "html": "coach-profile-settings.html",
+      "screenshot": "coach-profile-settings.png"
+    },
+    {
+      "id": "0dce32d0e78e43758f1518f0695ebdd8",
+      "slug": "coach-leave-requests",
+      "title": "Coach Leave Requests",
+      "html": "coach-leave-requests.html",
+      "screenshot": "coach-leave-requests.png"
+    },
+    {
+      "id": "66f0e6dac5c143598000c03fde04ff7e",
+      "slug": "training-notes",
+      "title": "Training Notes",
+      "html": "training-notes.html",
+      "screenshot": "training-notes.png"
+    },
+    {
+      "id": "c19bdf6b5e2f460a89dd3414c110c62f",
+      "slug": "training-session-detail",
+      "title": "Training Session Detail",
+      "html": "training-session-detail.html",
+      "screenshot": "training-session-detail.png"
+    },
+    {
+      "id": "67af6997ebdc4f1e80a284c758b0d299",
+      "slug": "coach-notifications-center",
+      "title": "Coach Notifications Center",
+      "html": "coach-notifications-center.html",
+      "screenshot": "coach-notifications-center.png"
+    },
+    {
+      "id": "9d4928118649478491dea5e204dfd28d",
+      "slug": "training-batch-detail",
+      "title": "Training Batch Detail",
+      "html": "training-batch-detail.html",
+      "screenshot": "training-batch-detail.png"
+    },
+    {
+      "id": "asset-stub-assets_848b01deae404affaf2c869dfbfaa531",
+      "slug": "design-system",
+      "title": "Design System",
+      "html": null,
+      "screenshot": null
+    },
+    {
+      "id": "df18179e3ce44c4e8f18822018250c72",
+      "slug": "provider-dashboard",
+      "title": "Provider Dashboard",
+      "html": "provider-dashboard.html",
+      "screenshot": "provider-dashboard.png"
+    },
+    {
+      "id": "80cb4a94ed80428997248a8234478fce",
+      "slug": "coach-earnings-commission",
+      "title": "Coach Earnings & Commission",
+      "html": "coach-earnings-commission.html",
+      "screenshot": "coach-earnings-commission.png"
+    },
+    {
+      "id": "31c962db20624d238dca413f5747aa05",
+      "slug": "attendance-check-in-success",
+      "title": "Attendance Check-in Success",
+      "html": "attendance-check-in-success.html",
+      "screenshot": "attendance-check-in-success.png"
+    },
+    {
+      "title": "Ratings & Reviews",
+      "id": "fbbd7e9c5cd346c489f85d9809b87d00",
+      "slug": "ratings-reviews",
+      "html": "ratings-reviews.html",
+      "screenshot": "ratings-reviews.png"
+    },
+    {
+      "title": "Inventory Movement Ledger",
+      "id": "4d997edef58e4c2488a1722e71af56ab",
+      "slug": "inventory-movement-ledger",
+      "html": "inventory-movement-ledger.html",
+      "screenshot": "inventory-movement-ledger.png"
+    },
+    {
+      "title": "Product Variant Manager",
+      "id": "debabeed9aa34c3aa873db543dd32473",
+      "slug": "product-variant-manager",
+      "html": "product-variant-manager.html",
+      "screenshot": "product-variant-manager.png"
+    },
+    {
+      "title": "Production Pipeline Board",
+      "id": "e4a2b4f2351f43239ddcb354ff3eba22",
+      "slug": "production-pipeline-board",
+      "html": "production-pipeline-board.html",
+      "screenshot": "production-pipeline-board.png"
+    },
+    {
+      "title": "Proof Management",
+      "id": "d83df6cb8807413b8b360fd60237e2c5",
+      "slug": "proof-management",
+      "html": "proof-management.html",
+      "screenshot": "proof-management.png"
+    },
+    {
+      "id": "15171e674eb04d448f2245bcf8059666",
+      "slug": "shop-settlements",
+      "title": "Shop Settlements",
+      "html": "shop-settlements.html",
+      "screenshot": "shop-settlements.png"
+    },
+    {
+      "id": "6b7e858b0f204906aa5ec35c31f870da",
+      "slug": "venue-check-in-kiosk",
+      "title": "Venue Check-in Kiosk",
+      "html": "venue-check-in-kiosk.html",
+      "screenshot": "venue-check-in-kiosk.png"
+    },
+    {
+      "id": "8723254c616d432188a8cc6cda43777a",
+      "slug": "booking-widget-desktop",
+      "title": "Booking Widget (Desktop)",
+      "html": "booking-widget-desktop.html",
+      "screenshot": "booking-widget-desktop.png"
+    },
+    {
+      "id": "1c9a0143866243d0b90195e4cf181f3d",
+      "slug": "returns-refunds",
+      "title": "Returns & Refunds",
+      "html": "returns-refunds.html",
+      "screenshot": "returns-refunds.png"
+    }
+  ]
+}

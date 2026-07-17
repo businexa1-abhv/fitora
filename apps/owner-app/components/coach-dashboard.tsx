@@ -96,10 +96,7 @@ export function CoachDashboardScreen() {
             <MaterialCommunityIcons name="bullhorn-outline" size={18} color="#fff" />
             <Text style={styles.actionText}>New Announcement</Text>
           </Pressable>
-          <Pressable
-            style={styles.actionBtn}
-            onPress={() => router.push('/coach/qr-attendance' as never)}
-          >
+          <Pressable style={styles.actionBtn} onPress={() => router.push('/coach/notes' as never)}>
             <Ionicons name="clipboard-outline" size={18} color="#fff" />
             <Text style={styles.actionText}>Log Training</Text>
           </Pressable>
@@ -153,7 +150,16 @@ export function CoachDashboardScreen() {
               </View>
             ) : (
               (scheduleQuery.data ?? []).slice(0, 5).map((item, index) => (
-                <View key={item.batchId} style={styles.classCard}>
+                <Pressable
+                  key={item.batchId}
+                  style={styles.classCard}
+                  onPress={() =>
+                    router.push({
+                      pathname: '/coach/batch/[batchId]',
+                      params: { batchId: item.batchId },
+                    } as never)
+                  }
+                >
                   <View style={styles.classTop}>
                     <View
                       style={[
@@ -187,11 +193,16 @@ export function CoachDashboardScreen() {
                   </View>
                   <Pressable
                     style={styles.startBtn}
-                    onPress={() => router.push('/(tabs)/attendance' as never)}
+                    onPress={() =>
+                      router.push({
+                        pathname: '/coach/session/[batchId]',
+                        params: { batchId: item.batchId },
+                      } as never)
+                    }
                   >
                     <Text style={styles.startBtnText}>Start Session</Text>
                   </Pressable>
-                </View>
+                </Pressable>
               ))
             )}
           </ScrollView>
@@ -232,7 +243,19 @@ export function CoachDashboardScreen() {
                     {dashboard?.pendingAttendance} pending · Overdue
                   </Text>
                 </View>
-                <Pressable onPress={() => router.push('/(tabs)/attendance' as never)}>
+                <Pressable
+                  onPress={() => {
+                    const first = scheduleQuery.data?.[0];
+                    if (first) {
+                      router.push({
+                        pathname: '/coach/session/[batchId]',
+                        params: { batchId: first.batchId },
+                      } as never);
+                    } else {
+                      router.push('/(tabs)/schedule' as never);
+                    }
+                  }}
+                >
                   <Text style={styles.link}>Log</Text>
                 </Pressable>
               </View>

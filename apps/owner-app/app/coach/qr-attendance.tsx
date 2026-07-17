@@ -96,13 +96,19 @@ export default function QrAttendanceScannerScreen() {
                 ? `${enrollment.kid.firstName} ${enrollment.kid.lastName}`.trim()
                 : 'Student',
               batchName: batch.name,
+              medicalNotes: enrollment.kid?.medicalNotes ?? null,
             };
           }
         }
       }
       // Allow direct enrollment UUID check-in even if batches cache is stale
       if (rawId.length >= 20) {
-        return { enrollmentId: rawId, name: 'Student', batchName: 'Batch' };
+        return {
+          enrollmentId: rawId,
+          name: 'Student',
+          batchName: 'Batch',
+          medicalNotes: null as string | null,
+        };
       }
       return null;
     },
@@ -124,7 +130,20 @@ export default function QrAttendanceScannerScreen() {
     onSuccess: async (match) => {
       setStatus(`Checked in ${match.name}`);
       await queryClient.invalidateQueries({ queryKey: ['trainer'] });
-      Alert.alert('Attendance marked', `${match.name} · ${match.batchName}`, [{ text: 'OK' }]);
+      const time = new Date().toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+      });
+      router.replace({
+        pathname: '/coach/check-in-success',
+        params: {
+          enrollmentId: match.enrollmentId,
+          name: match.name,
+          batchName: match.batchName,
+          medicalNotes: match.medicalNotes ?? '',
+          time,
+        },
+      } as never);
     },
     onError: (err) => {
       const message = err instanceof Error ? err.message : 'Check-in failed';

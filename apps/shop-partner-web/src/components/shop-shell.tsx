@@ -13,6 +13,10 @@ import {
   LogIn,
   LogOut,
   Store,
+  Star,
+  Layers,
+  Wallet,
+  Undo2,
 } from 'lucide-react';
 import { clearAuthSession, getAuthSession } from '@/lib/api';
 import { useEffect, useState } from 'react';
@@ -20,8 +24,12 @@ import { useEffect, useState } from 'react';
 const NAV = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/products', label: 'Products', icon: Package },
+  { href: '/variants', label: 'Variants', icon: Layers },
   { href: '/inventory', label: 'Inventory', icon: Boxes },
   { href: '/orders', label: 'Orders', icon: ShoppingCart },
+  { href: '/settlements', label: 'Settlements', icon: Wallet },
+  { href: '/returns', label: 'Returns', icon: Undo2 },
+  { href: '/reviews', label: 'Reviews', icon: Star },
   { href: '/coupons', label: 'Coupons', icon: Ticket },
   { href: '/revenue', label: 'Revenue', icon: IndianRupee },
   { href: '/notifications', label: 'Notifications', icon: Bell },

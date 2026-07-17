@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Coach - Training Notes</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-dim": "#efd5ca",
+                "surface-bright": "#fff8f6",
+                "on-error-container": "#93000a",
+                "primary-fixed": "#ffdbcc",
+                "tertiary-container": "#8a9ab2",
+                "secondary-fixed": "#dae2fd",
+                "on-primary-fixed-variant": "#7a3000",
+                "primary": "#a04100",
+                "on-secondary-container": "#5c647a",
+                "outline-variant": "#e2bfb0",
+                "on-primary": "#ffffff",
+                "inverse-on-surface": "#ffede6",
+                "surface-tint": "#a04100",
+                "error-container": "#ffdad6",
+                "on-tertiary-fixed": "#0b1c30",
+                "primary-fixed-dim": "#ffb693",
+                "outline": "#8e7164",
+                "inverse-primary": "#ffb693",
+                "on-secondary-fixed-variant": "#3f465c",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "error": "#ba1a1a",
+                "on-primary-container": "#572000",
+                "on-background": "#261812",
+                "on-error": "#ffffff",
+                "background": "#fff8f6",
+                "secondary-container": "#dae2fd",
+                "inverse-surface": "#3d2d26",
+                "surface-container-high": "#fee3d8",
+                "on-tertiary-container": "#223246",
+                "secondary-fixed-dim": "#bec6e0",
+                "surface-variant": "#f8ddd2",
+                "surface-container-highest": "#f8ddd2",
+                "surface-container": "#ffeae1",
+                "on-tertiary-fixed-variant": "#38485d",
+                "secondary": "#565e74",
+                "surface-container-low": "#fff1eb",
+                "tertiary": "#505f76",
+                "surface": "#fff8f6",
+                "on-primary-fixed": "#351000",
+                "on-surface-variant": "#5a4136",
+                "on-secondary-fixed": "#131b2e",
+                "tertiary-fixed": "#d3e4fe",
+                "on-surface": "#261812",
+                "tertiary-fixed-dim": "#b7c8e1",
+                "primary-container": "#ff6b00"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "md": "16px",
+                "base": "8px",
+                "xl": "32px",
+                "sm": "12px",
+                "lg": "24px",
+                "margin-mobile": "16px",
+                "xs": "4px",
+                "gutter": "20px",
+                "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                "label-md": ["Inter"],
+                "headline-md": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-lg-mobile": ["Inter"],
+                "body-md": ["Inter"],
+                "display-lg": ["Inter"],
+                "headline-lg": ["Inter"],
+                "caption": ["Inter"]
+            },
+            "fontSize": {
+                "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC; /* Level 0 Background per style guidance */
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar suppression for mobile feel */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        /* Skeleton shimmer effect */
+        @keyframes shimmer {
+            0% { background-position: -468px 0; }
+            100% { background-position: 468px 0; }
+        }
+        .skeleton {
+            background: linear-gradient(to right, #f0f0f0 8%, #e0e0e0 18%, #f0f0f0 33%);
+            background-size: 800px 104px;
+            animation: shimmer 1.5s infinite linear;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-40 bg-surface shadow-sm h-16 flex justify-between items-center px-margin-mobile">
+<div class="flex items-center gap-base">
+<button class="hover:bg-surface-variant rounded-full p-2 transition-colors focus:ring-2 focus:ring-primary">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary">Training Notes</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of an athletic trainer with a determined expression, wearing a sleek black performance polo shirt. The lighting is crisp and cinematic with warm orange rim lighting that reflects the FitOra brand aesthetic. The background is a blurred high-end gym environment with slate and navy tones, emphasizing a professional and energized corporate athletic atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5Py1An8fTkRjlbUJuwspAt_Crmd10DVo3jQB2RQdJUXhiJFUwlHbXXc6NK8Ks0VZapNP9LOJUhi5knpPfDy6YKaQ2EQWPMqtyMAJK2trxrJMz8SdSJgMILhZZL_6EF8e1GbmTsOUHv5qkj60gFXrQqPjRu9Nk9v2I8j2OrCilTGbOKOiiKGsABugQundOxnO7Vrmyd_QIcZqM4kKNXi7tLwf1CnwjUIzJegCltGrvd_aw2SHpLZj4Rg"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[600px] flex flex-col gap-lg px-margin-mobile py-lg pb-32">
+<!-- Search & Filter Area -->
+<section class="flex flex-col gap-md">
+<!-- Search Bar -->
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-low border border-outline-variant rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-body-md text-body-md" placeholder="Search notes..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex gap-sm overflow-x-auto pb-2 no-scrollbar">
+<button class="flex items-center gap-xs px-md py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md shrink-0 shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">person</span>
+                    Student
+                </button>
+<button class="flex items-center gap-xs px-md py-2 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md shrink-0 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">groups</span>
+                    Batch
+                </button>
+<button class="flex items-center gap-xs px-md py-2 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md shrink-0 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                    Date
+                </button>
+<button class="flex items-center gap-xs px-md py-2 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md shrink-0 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+                    More
+                </button>
+</div>
+</section>
+<!-- Note Cards List -->
+<div class="flex flex-col gap-md" id="notes-container">
+<!-- Real Card 1 -->
+<div class="bg-surface rounded-xl p-md shadow-[0_4px_6px_-1px_rgba(0,0,0,0.04)] border border-outline-variant/30 flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Alex Johnson</h3>
+<p class="font-caption text-caption text-on-surface-variant">Oct 24, 2023 • 4:30 PM</p>
+</div>
+<span class="px-sm py-0.5 bg-tertiary-container/20 text-on-tertiary-container rounded-full font-caption text-caption border border-tertiary-container/30">
+                        Shared with Parent
+                    </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                    Focus on lateral movement today. Footwork was slightly sluggish in the first drill but improved significantly during the high-intensity intervals...
+                </p>
+<div class="flex justify-end items-center gap-md pt-sm border-t border-outline-variant/20 mt-xs">
+<button class="flex items-center gap-xs text-primary font-label-md text-label-md hover:underline">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                        Share
+                    </button>
+<button class="flex items-center gap-xs text-secondary font-label-md text-label-md hover:underline">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                        Edit
+                    </button>
+<button class="text-error">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Real Card 2 -->
+<div class="bg-surface rounded-xl p-md shadow-[0_4px_6px_-1px_rgba(0,0,0,0.04)] border border-outline-variant/30 flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Sarah Mitchell</h3>
+<p class="font-caption text-caption text-on-surface-variant">Oct 23, 2023 • 10:00 AM</p>
+</div>
+<span class="px-sm py-0.5 bg-surface-variant text-on-surface-variant rounded-full font-caption text-caption border border-outline-variant/30">
+                        Private
+                    </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                    Needs correction on breathing technique during heavy lifting phases. Strength is increasing, but stability remains a concern...
+                </p>
+<div class="flex justify-end items-center gap-md pt-sm border-t border-outline-variant/20 mt-xs">
+<button class="flex items-center gap-xs text-primary font-label-md text-label-md hover:underline">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                        Share
+                    </button>
+<button class="flex items-center gap-xs text-secondary font-label-md text-label-md hover:underline">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                        Edit
+                    </button>
+<button class="text-error">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Loading State (Skeleton) -->
+<div class="flex flex-col gap-md opacity-50" id="skeleton-loader">
+<div class="bg-surface rounded-xl p-md shadow-sm border border-outline-variant/20 flex flex-col gap-sm">
+<div class="flex justify-between">
+<div class="space-y-2">
+<div class="w-32 h-4 skeleton rounded"></div>
+<div class="w-24 h-3 skeleton rounded"></div>
+</div>
+<div class="w-24 h-6 skeleton rounded-full"></div>
+</div>
+<div class="space-y-2 mt-sm">
+<div class="w-full h-3 skeleton rounded"></div>
+<div class="w-3/4 h-3 skeleton rounded"></div>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, shown via JS if no notes) -->
+<div class="hidden flex-col items-center justify-center py-20 text-center gap-md" id="empty-state">
+<div class="w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-[48px]">note_stack_add</span>
+</div>
+<div class="space-y-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">No notes yet</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[240px]">Start tracking your students' progress by adding your first note.</p>
+</div>
+<button class="mt-base bg-primary text-on-primary px-lg py-3 rounded-full font-label-md text-label-md shadow-lg active:scale-95 transition-transform" onclick="toggleEmptyState()">
+                    Create Note
+                </button>
+</div>
+</div>
+</main>
+<!-- FAB: Floating Action Button -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary-container text-on-primary-container rounded-2xl shadow-xl flex items-center justify-center z-50 hover:brightness-110 active:scale-90 transition-all border-b-4 border-primary">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.04)] bg-surface flex justify-around items-center px-margin-mobile py-2 h-[72px]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</div>
+<!-- ACTIVE TAB -->
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="fitness_center" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="font-label-md text-label-md">Training</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions and simulation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate skeleton disappearing after 1.5s
+            setTimeout(() => {
+                const skeleton = document.getElementById('skeleton-loader');
+                if (skeleton) skeleton.classList.add('hidden');
+            }, 1800);
+        });
+
+        function toggleEmptyState() {
+            // Demo function to show how UI handles empty state
+            const notes = document.querySelectorAll('#notes-container > div:not(#empty-state):not(#skeleton-loader)');
+            const emptyState = document.getElementById('empty-state');
+            
+            notes.forEach(note => note.classList.toggle('hidden'));
+            emptyState.classList.toggle('hidden');
+            emptyState.classList.toggle('flex');
+        }
+
+        // Logic for "active:scale-90" to feel more tactile on touch
+        document.querySelectorAll('button, div[role="button"]').forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('touchend', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

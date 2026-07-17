@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Shop Partner - Inventory Movement Ledger</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #fff1eb;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2bfb0;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#ffede6",
+                        "surface-variant": "#f8ddd2",
+                        "on-secondary-fixed": "#131b2e",
+                        "surface-container-highest": "#f8ddd2",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#efd5ca",
+                        "primary": "#a04100",
+                        "secondary": "#565e74",
+                        "on-surface-variant": "#5a4136",
+                        "on-background": "#261812",
+                        "surface-tint": "#a04100",
+                        "secondary-fixed": "#dae2fd",
+                        "tertiary-fixed": "#d3e4fe",
+                        "surface-container": "#ffeae1",
+                        "on-primary-fixed": "#351000",
+                        "primary-fixed": "#ffdbcc",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "on-primary": "#ffffff",
+                        "outline": "#8e7164",
+                        "background": "#fff8f6",
+                        "surface-container-low": "#fff1eb",
+                        "surface": "#fff8f6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fff8f6",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-primary-container": "#572000",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#e2bfb0",
+                        "on-surface": "#261812",
+                        "secondary-container": "#dae2fd",
+                        "surface-container-high": "#fee3d8",
+                        "on-tertiary-container": "#223246",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#3d2d26",
+                        "primary-fixed-dim": "#ffb693",
+                        "on-primary-fixed-variant": "#7a3000",
+                        "on-secondary-container": "#5c647a",
+                        "tertiary": "#505f76",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#8a9ab2",
+                        "primary-container": "#ff6b00",
+                        "inverse-primary": "#ffb693"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "caption": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Sidebar (Shared Component SideNavBar) -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface shadow-sm flex flex-col py-lg z-50">
+<div class="px-md mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">FitOra</h1>
+<p class="text-secondary font-label-md">Provider Portal</p>
+</div>
+<nav class="flex-1 space-y-xs">
+<!-- Active Navigation -->
+<a class="flex items-center gap-base px-md py-sm text-primary border-l-4 border-primary bg-primary-container/10 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container hover:text-primary transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-label-md text-label-md">Listings</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container hover:text-primary transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container hover:text-primary transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Schedule</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container hover:text-primary transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span class="font-label-md text-label-md">Reviews</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container hover:text-primary transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Payouts</span>
+</a>
+<a class="flex items-center gap-base px-md py-sm text-secondary hover:bg-surface-container hover:text-primary transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-lg">
+<div class="flex items-center gap-sm p-sm rounded-lg bg-surface-container-low border border-outline-variant/30">
+<div class="w-10 h-10 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a fitness e-commerce manager, wearing a modern tech-casual outfit, set against a clean, minimal office background with soft orange and warm lighting. The aesthetic is high-end corporate with a focus on efficiency and approachability, using a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIdLkqAROXMp38AhXfeUEBjIltMIeEmuwRVuy6EX_HE4NWHvzbcJOMuIXpEijaHWU6fKin3rXGVX16kDX_dF-7GBMjksyvt1OTKia0AlznrijyOrO1eljOFKRsb2IIlKAE_rnQdgis3urkkvI8U52Jd6873mQlmJjg04sAejtudJ0KG6mVmNq88PL1OoBwmhZaCvqVTvBUZfYQZw7Hy3Bb2LM2hYZJ8UxJGxvtwgeWcP2ZDKCgaezBFA"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-md text-label-md text-on-surface truncate">Alex Rivera</p>
+<p class="text-caption text-secondary truncate">Elite Partner</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top App Bar (Shared Component TopAppBar) -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-16 bg-surface-container-lowest shadow-sm flex justify-between items-center px-lg z-40">
+<div class="flex items-center gap-md">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container text-body-md border-none rounded-full focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="Search inventory movement..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="relative hover:bg-surface-variant/20 rounded-full p-2 transition-all cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<button class="hover:bg-surface-variant/20 rounded-full p-2 transition-all cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="help">help</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-xs"></div>
+<p class="font-label-md text-primary">FitOra Partner</p>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] pt-24 px-lg pb-xl max-w-[1440px] mx-auto min-h-screen">
+<!-- Page Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Inventory Movement Ledger</h2>
+<p class="text-body-md text-secondary mt-xs">Real-time tracking of all stock fluctuations across your catalog.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs px-md py-sm border-2 border-primary text-primary font-label-md rounded-lg hover:bg-primary/5 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
+                    Export Ledger
+                </button>
+<button class="flex items-center gap-xs px-md py-sm bg-primary text-white font-label-md rounded-lg hover:bg-primary-container shadow-md transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                    Manual Adjustment
+                </button>
+</div>
+</div>
+<!-- Bento Grid: Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-xl">
+<!-- Total Stock -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="p-base bg-primary-fixed rounded-lg">
+<span class="material-symbols-outlined text-on-primary-fixed" data-icon="inventory_2">inventory_2</span>
+</div>
+<span class="text-caption text-success flex items-center text-green-600 font-semibold">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                        +12%
+                    </span>
+</div>
+<div class="mt-md">
+<p class="text-caption text-secondary uppercase tracking-wider font-bold">Total Stock Units</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">42,890</h3>
+</div>
+</div>
+<!-- Low Stock Alerts -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="p-base bg-error-container rounded-lg">
+<span class="material-symbols-outlined text-on-error-container" data-icon="warning">warning</span>
+</div>
+</div>
+<div class="mt-md">
+<p class="text-caption text-secondary uppercase tracking-wider font-bold">Low Stock Alerts</p>
+<h3 class="font-headline-md text-headline-md text-error">14 SKU</h3>
+<p class="text-caption text-error-container bg-error px-2 py-0.5 rounded-full inline-block mt-xs">Action Required</p>
+</div>
+</div>
+<!-- Total Inbound (30d) -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="p-base bg-tertiary-fixed rounded-lg">
+<span class="material-symbols-outlined text-on-tertiary-fixed" data-icon="vertical_align_bottom">vertical_align_bottom</span>
+</div>
+</div>
+<div class="mt-md">
+<p class="text-caption text-secondary uppercase tracking-wider font-bold">Inbound (30d)</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">5,204</h3>
+</div>
+</div>
+<!-- Returns/Damage (30d) -->
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="p-base bg-secondary-container rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="history_edu">history_edu</span>
+</div>
+</div>
+<div class="mt-md">
+<p class="text-caption text-secondary uppercase tracking-wider font-bold">Returns/Damage</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">87</h3>
+<p class="text-caption text-secondary mt-xs">0.4% Loss Rate</p>
+</div>
+</div>
+</div>
+<!-- Filters Section -->
+<section class="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/10 mb-lg flex flex-wrap items-center gap-md">
+<div class="flex-1 min-w-[200px]">
+<label class="text-caption font-bold text-on-surface-variant block mb-xs">Search Product</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-secondary text-[18px]" data-icon="search">search</span>
+<input class="w-full pl-8 pr-3 py-2 border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="SKU or Product Name" type="text"/>
+</div>
+</div>
+<div class="w-48">
+<label class="text-caption font-bold text-on-surface-variant block mb-xs">Movement Type</label>
+<select class="w-full px-3 py-2 border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none bg-white">
+<option>All Types</option>
+<option>Sale</option>
+<option>Purchase</option>
+<option>Return</option>
+<option>Adjustment</option>
+<option>Damage</option>
+</select>
+</div>
+<div class="w-48">
+<label class="text-caption font-bold text-on-surface-variant block mb-xs">Date Range</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary text-[18px]" data-icon="calendar_month">calendar_month</span>
+<input class="w-full pl-3 pr-8 py-2 border border-outline-variant rounded-lg text-body-md bg-white cursor-pointer" readonly="" type="text" value="Last 30 Days"/>
+</div>
+</div>
+<div class="flex items-end self-end h-10">
+<button class="px-md h-full text-secondary hover:text-primary font-label-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                    More Filters
+                </button>
+</div>
+</section>
+<!-- Ledger Table Section -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 overflow-hidden flex flex-col">
+<div class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low/30">
+<h3 class="font-label-md text-label-md text-on-surface">Detailed Movement History</h3>
+<div class="flex items-center gap-base">
+<span class="text-caption text-secondary">Showing 50 of 1,280 entries</span>
+<div class="flex border border-outline-variant rounded-md overflow-hidden">
+<button class="p-1 hover:bg-surface-variant transition-colors disabled:opacity-30"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-1 hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-lg py-md text-caption font-bold text-secondary uppercase tracking-wider">Date &amp; Time</th>
+<th class="px-lg py-md text-caption font-bold text-secondary uppercase tracking-wider">Product / SKU</th>
+<th class="px-lg py-md text-caption font-bold text-secondary uppercase tracking-wider">Movement Type</th>
+<th class="px-lg py-md text-caption font-bold text-secondary uppercase tracking-wider text-right">Change</th>
+<th class="px-lg py-md text-caption font-bold text-secondary uppercase tracking-wider text-right">Final Stock</th>
+<th class="px-lg py-md text-caption font-bold text-secondary uppercase tracking-wider">Reference</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Ledger Entry 1 (Sale) -->
+<tr class="hover:bg-surface-container-low/20 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-label-md text-on-surface">Oct 24, 2023</p>
+<p class="text-caption text-secondary">14:22:10</p>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="A minimalist overhead product shot of professional ergonomic gym gloves on a white surface, featuring high-contrast orange details and premium textured material. The lighting is bright and clean, emphasizing product quality and athletic professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCelgXCuyJilWHwdmmOaVK6JZ9TaQYO09Lo0l36eHadQHaS8GKrx2CGIglrdqs96YER0kMUjF0kJrjcu-wflf2jtr6UN4XsLQFmIis01aUn0kUoPxvjJMCndwOGrLU7p7bwi8xdt_uOI-fyJq86EHhNcqhFus36fPfku0N4lTEmY2wjSEoPBoMJcU3RGj1PappUOpij8ZixpOY5EUr361PRcdWGw1nEL6-froT10cj0Ke6Apg0zkuBWqg"/>
+</div>
+<div>
+<p class="text-label-md text-on-surface">ProGrip Lifting Gloves</p>
+<p class="text-caption text-secondary">SKU: FG-290-BLK-M</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-tertiary-container/20 text-on-tertiary-container flex items-center w-fit gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="shopping_bag">shopping_bag</span>
+                                    Sale
+                                </span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-error font-bold">-2</span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-on-surface font-bold">142</span>
+</td>
+<td class="px-lg py-md">
+<a class="text-label-md text-primary hover:underline font-semibold flex items-center gap-1" href="#">
+                                    #ORD-88219
+                                    <span class="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</td>
+</tr>
+<!-- Ledger Entry 2 (Purchase) -->
+<tr class="hover:bg-surface-container-low/20 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-label-md text-on-surface">Oct 24, 2023</p>
+<p class="text-caption text-secondary">09:15:45</p>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="A macro detail shot of high-performance yoga mat texture, deep navy blue color with a subtle honeycomb grip pattern. Soft side lighting highlights the material quality. The overall mood is professional, serene, and durable." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHSF0Xm_4PB0DqD2W43bvSWzzoEtKUiYuT2BYIa0sXDDlExoZ5mf0aeasafTPXSTyReG9593Zzo7FqsrZYCWa1XUUTQt90m3OlAXpTHc3kYyDrsXBCwHsX5yZvR-oKQdM7EiZp-VqI7uewAH7vt291pztWiif7OPmBMSrPBsDVhbQdRhwfR0oLZJmurI2WA59b3ufOT7ueqdyTDE4HvutL52-iuVgjjpp6gs9rmcvpCdPNKij0KlflRg"/>
+</div>
+<div>
+<p class="text-label-md text-on-surface">UltraFlex Yoga Mat</p>
+<p class="text-caption text-secondary">SKU: YM-550-NVY</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-primary-fixed text-on-primary-fixed flex items-center w-fit gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="local_shipping">local_shipping</span>
+                                    Purchase
+                                </span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-green-600 font-bold">+500</span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-on-surface font-bold">1,240</span>
+</td>
+<td class="px-lg py-md">
+<a class="text-label-md text-primary hover:underline font-semibold flex items-center gap-1" href="#">
+                                    #PO-WH-992
+                                    <span class="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</td>
+</tr>
+<!-- Ledger Entry 3 (Adjustment) -->
+<tr class="hover:bg-surface-container-low/20 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-label-md text-on-surface">Oct 23, 2023</p>
+<p class="text-caption text-secondary">16:40:02</p>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="Professional sports shaker bottle in vibrant orange and slate grey, set on a polished metallic surface with soft atmospheric studio lighting. The focus is on the bold design and high-quality plastics, conveying energy and performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzWCcjptpkiJC_511lOXxxUPiMUJfWpLgxD80YoWraqvZJe3G9F_1PElsuNNYJsvlRbjBg3yStkGzalxpJ4AqzltPG755hUSyTt40K9VJFvPXo6Dgvu-5OYBJjr2m-0_MUkyM4xI-q6oDHX98nE1AO8sA072IK4Gjj4Yo7K3TNraqvXsdDGGdMtB-d_vj6mLrFrm42x6wxwX3LJVRmS4elOl3-8IsXq3x3JlSb1Jn7BHbqZvmbCyaKYA"/>
+</div>
+<div>
+<p class="text-label-md text-on-surface">Hybrid Shaker Bottle</p>
+<p class="text-caption text-secondary">SKU: SB-100-ORG</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-surface-container-highest text-on-surface-variant flex items-center w-fit gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="edit_note">edit_note</span>
+                                    Adjustment
+                                </span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-secondary font-bold">-1</span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-on-surface font-bold">88</span>
+</td>
+<td class="px-lg py-md">
+<p class="text-caption text-secondary">Cycle Count Inv. Audit</p>
+</td>
+</tr>
+<!-- Ledger Entry 4 (Damage) -->
+<tr class="hover:bg-surface-container-low/20 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-label-md text-on-surface">Oct 23, 2023</p>
+<p class="text-caption text-secondary">11:05:33</p>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="A sleek black fitness tracker smart watch displayed on a textured charcoal stone pedestal. The display shows a bright orange activity ring. Lighting is dramatic and high-contrast, creating a premium technology vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi0GNgBCoKlHTpTQRjn7xCEyaoex5T68lKUagrHSPhT1riCuGpc-xva8C9Lib1wiTTRzfo62Lf0jDRyYM_TUJ1QoBmfNJr4ozKKozNRtwKlrak16GCf-jBawyt1_-SWlPNifBiAbWE3Xlcb0O7v0fzqx3Da3472P9KjJupuNGIiKlulBZCPpPVGFStCWbMjqpLQLsU11UT1BNxzrJl6ohhVa9_Ifw9ECS-PGbu0_28jbb7gpaDwy6b9Q"/>
+</div>
+<div>
+<p class="text-label-md text-on-surface">FitBand Pro X1</p>
+<p class="text-caption text-secondary">SKU: WB-50-BLK</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-error-container text-on-error-container flex items-center w-fit gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="broken_image">broken_image</span>
+                                    Damage
+                                </span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-error font-bold">-3</span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-on-surface font-bold">12</span>
+</td>
+<td class="px-lg py-md">
+<p class="text-caption text-secondary italic">Transit damage report #55</p>
+</td>
+</tr>
+<!-- Ledger Entry 5 (Return) -->
+<tr class="hover:bg-surface-container-low/20 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-label-md text-on-surface">Oct 22, 2023</p>
+<p class="text-caption text-secondary">15:50:12</p>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="Dynamic shot of a professional sports jersey being folded on a minimalist wooden table. The fabric is high-quality moisture-wicking mesh in a vibrant athletic orange. Soft window light creates a natural, professional retail look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzJIb6O2c7u2pMRsZXYHBMAs7URYAYdGEDF0nWcjDYPs6xUc31tGIT28wHr_VGlpjlYvmhECt7HTMChDB36bcZly4LnTPM8Jc6owGsEg68Ms-bGF3wgSuXHy4n2OrSkYO6Hrhc8tm_J-bzI8EoJ1E1aV_aXwo7cCo1_rb6jFHSFKshsGzrurWfgH3etFT-rCeV3CDxdyTZKbvZSDheeyDTTB8xqIspB8f9TVg5Ji5pAu34Wf4k8zG9hA"/>
+</div>
+<div>
+<p class="text-label-md text-on-surface">Core Mesh Training Tee</p>
+<p class="text-caption text-secondary">SKU: AP-400-ORG-L</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-secondary-container text-on-secondary-container flex items-center w-fit gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="keyboard_return">keyboard_return</span>
+                                    Return
+                                </span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-green-600 font-bold">+1</span>
+</td>
+<td class="px-lg py-md text-right">
+<span class="text-label-md text-on-surface font-bold">256</span>
+</td>
+<td class="px-lg py-md">
+<a class="text-label-md text-primary hover:underline font-semibold flex items-center gap-1" href="#">
+                                    #RTN-4420
+                                    <span class="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-lg py-md border-t border-outline-variant/20 flex items-center justify-between">
+<div class="flex items-center gap-base">
+<span class="text-caption text-secondary">Rows per page:</span>
+<select class="bg-transparent text-caption font-bold outline-none border-none cursor-pointer">
+<option>50</option>
+<option>100</option>
+<option>250</option>
+</select>
+</div>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white text-caption font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors text-caption font-bold">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors text-caption font-bold">3</button>
+<span class="w-8 h-8 flex items-center justify-center text-caption font-bold">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors text-caption font-bold">26</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Contextual FAB (Shared Component Logic) -->
+<!-- FAB suppressed for transactional/detailed ledger screens as per guidelines -->
+<script>
+        // Micro-interaction for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Future implementation: Open detail panel
+                console.log('Row clicked for transaction details');
+            });
+        });
+
+        // Simple search filter simulation
+        const searchInput = document.querySelector('input[placeholder="SKU or Product Name"]');
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
+            });
+        });
+    </script>
+</body></html>

@@ -144,15 +144,21 @@ export default function TrainingScheduleScreen() {
                     </View>
                     <View style={{ flex: 1, paddingBottom: Spacing.lg }}>
                       <Text style={styles.time}>{time}</Text>
-                      <View
+                      <Pressable
                         style={[
                           styles.classCard,
                           accent && { borderLeftColor: CoachColors.danger, borderLeftWidth: 3 },
                         ]}
+                        onPress={() =>
+                          router.push({
+                            pathname: '/coach/batch/[batchId]',
+                            params: { batchId: item.batchId },
+                          } as never)
+                        }
                       >
                         <View style={styles.classTop}>
                           <Text style={styles.classTitle}>{item.batchName}</Text>
-                          <Ionicons name="ellipsis-vertical" size={16} color={CoachColors.muted} />
+                          <Ionicons name="chevron-forward" size={16} color={CoachColors.muted} />
                         </View>
                         <Text style={styles.program}>{item.program.name}</Text>
                         <View style={styles.tags}>
@@ -196,7 +202,7 @@ export default function TrainingScheduleScreen() {
                             </Text>
                           </View>
                         </View>
-                      </View>
+                      </Pressable>
                     </View>
                   </View>
                 );

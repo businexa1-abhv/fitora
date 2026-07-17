@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitOra Coach - Training Batch Detail</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom Scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e2bfb0;
+            border-radius: 10px;
+        }
+        /* Glassmorphism subtle effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#efd5ca",
+                      "surface-bright": "#fff8f6",
+                      "on-error-container": "#93000a",
+                      "primary-fixed": "#ffdbcc",
+                      "tertiary-container": "#8a9ab2",
+                      "secondary-fixed": "#dae2fd",
+                      "on-primary-fixed-variant": "#7a3000",
+                      "primary": "#a04100",
+                      "on-secondary-container": "#5c647a",
+                      "outline-variant": "#e2bfb0",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#ffede6",
+                      "surface-tint": "#a04100",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "primary-fixed-dim": "#ffb693",
+                      "outline": "#8e7164",
+                      "inverse-primary": "#ffb693",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#572000",
+                      "on-background": "#261812",
+                      "on-error": "#ffffff",
+                      "background": "#fff8f6",
+                      "secondary-container": "#dae2fd",
+                      "inverse-surface": "#3d2d26",
+                      "surface-container-high": "#fee3d8",
+                      "on-tertiary-container": "#223246",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "surface-variant": "#f8ddd2",
+                      "surface-container-highest": "#f8ddd2",
+                      "surface-container": "#ffeae1",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "secondary": "#565e74",
+                      "surface-container-low": "#fff1eb",
+                      "tertiary": "#505f76",
+                      "surface": "#fff8f6",
+                      "on-primary-fixed": "#351000",
+                      "on-surface-variant": "#5a4136",
+                      "on-secondary-fixed": "#131b2e",
+                      "tertiary-fixed": "#d3e4fe",
+                      "on-surface": "#261812",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "primary-container": "#ff6b00"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "base": "8px",
+                      "xl": "32px",
+                      "sm": "12px",
+                      "lg": "24px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "gutter": "20px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "caption": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-40 bg-surface dark:bg-surface-container shadow-sm h-16 flex items-center px-margin-mobile">
+<div class="flex items-center gap-md">
+<button class="hover:bg-surface-variant rounded-full p-2 transition-colors focus:ring-2 focus:ring-primary">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary">Elite Tennis Batch A</h1>
+</div>
+<div class="ml-auto">
+<button class="hover:bg-surface-variant rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+</header>
+<main class="px-margin-mobile pt-md space-y-md max-w-md mx-auto">
+<!-- Summary Card -->
+<section class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant relative overflow-hidden">
+<div class="absolute top-0 right-0 p-lg opacity-10">
+<span class="material-symbols-outlined text-[80px]">sports_tennis</span>
+</div>
+<div class="space-y-md relative z-10">
+<div class="flex items-center gap-base">
+<span class="bg-primary-container text-on-primary-container text-caption px-2 py-0.5 rounded-full font-label-md">Tennis</span>
+<span class="bg-secondary-container text-on-secondary-container text-caption px-2 py-0.5 rounded-full font-label-md">Beginner</span>
+</div>
+<div class="grid grid-cols-2 gap-md pt-base">
+<div class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+<div>
+<p class="font-label-md text-label-md">Court 4</p>
+<p class="text-caption text-on-surface-variant">Main Arena</p>
+</div>
+</div>
+<div class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+<div>
+<p class="font-label-md text-label-md">Mon / Wed</p>
+<p class="text-caption text-on-surface-variant">4:00 PM - 5:30 PM</p>
+</div>
+</div>
+</div>
+<!-- Capacity Indicator -->
+<div class="pt-base space-y-xs">
+<div class="flex justify-between items-end">
+<span class="text-label-md font-label-md">Capacity</span>
+<span class="text-label-md font-label-md text-primary">12 / 15 Students</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[80%] rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Attendance KPIs (Bento Style) -->
+<section class="grid grid-cols-2 gap-md">
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant flex flex-col justify-between">
+<span class="text-caption text-on-surface-variant font-label-md">Avg Attendance</span>
+<div class="mt-base flex items-baseline gap-xs">
+<span class="font-headline-md text-headline-md text-on-surface">88%</span>
+<span class="material-symbols-outlined text-primary text-[18px]">trending_up</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant flex flex-col justify-between">
+<span class="text-caption text-on-surface-variant font-label-md">Active Students</span>
+<div class="mt-base flex items-baseline gap-xs">
+<span class="font-headline-md text-headline-md text-on-surface">12</span>
+<span class="text-caption text-on-tertiary-container">+2 this month</span>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="flex flex-wrap gap-base">
+<button class="flex-1 min-w-[140px] bg-primary text-on-primary font-label-md py-md rounded-xl flex items-center justify-center gap-base active:scale-95 transition-transform shadow-lg">
+<span class="material-symbols-outlined fill-icon">play_arrow</span>
+                Start Session
+            </button>
+<button class="flex-1 min-w-[140px] bg-surface-container-high text-primary font-label-md py-md rounded-xl border border-primary/20 flex items-center justify-center gap-base active:scale-95 transition-transform">
+<span class="material-symbols-outlined">how_to_reg</span>
+                Attendance
+            </button>
+</section>
+<!-- Student Roster -->
+<section class="space-y-md">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-label-md text-on-surface-variant uppercase tracking-wider">Student Roster</h3>
+<button class="text-primary font-label-md text-label-md">View All</button>
+</div>
+<div class="space-y-base">
+<!-- Roster Item 1 -->
+<div class="flex items-center gap-md p-md bg-white rounded-xl shadow-sm border border-outline-variant/50">
+<img class="w-12 h-12 rounded-full object-cover border-2 border-primary-container" data-alt="A professional headshot of a young athletic male student in a white tennis polo, smiling brightly against a soft blurred outdoor sports court background. Light mode aesthetic with crisp details and high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUlsXbrdPFlMEi_nJNr9ACFocjOJgyELIH3nmyEmQmxH95wLuwsXpNF2IpM3ryOKDaFwpSX7aE4jCvSwcuZQZdDR7WPI908WYbxxoBQUCgDtTn2Un4Mp9SHUOmOzMbia71l3uXeoT-WiLOPY3wnF3-GFmSW9jE_88vNYmdVQ09bGpwVLtM1QGO7mYfUzbGS5VK7ztz_6VszG5JFMbr_ydS46M856rUOedSsOIQxtzYreYV0dz2uoZ_8Q"/>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Alex Thompson</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px] text-primary fill-icon">local_fire_department</span>
+<p class="text-caption text-on-surface-variant">5 day streak</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-caption font-bold text-primary">94% Att.</p>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">chevron_right</span>
+</div>
+</div>
+<!-- Roster Item 2 -->
+<div class="flex items-center gap-md p-md bg-white rounded-xl shadow-sm border border-outline-variant/50">
+<img class="w-12 h-12 rounded-full object-cover border-2 border-surface-variant" data-alt="A portrait of a focused teenage girl with athletic gear and a tennis headband, standing in bright daylight on a clay court. The image has a vibrant energy and uses a warm, sun-drenched color palette consistent with FitOra brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq599xNHJS_rpx1wn9ZbC8uihhTPD2fo0mG2Cto3t1fZxNcABTWMPQCQmcaC2RL-os3zqy617G-EBAiIxewaVQbXUkcIUeR_HHsYVHxw1D3fFl4mAOibeVlcRy92yEZ93xLI6uIRm-7hdFHq32VK5SuzaY-cGA3kyjuIXE29UC3TFPExnQd6zLgddXFA8_BHyqpDXZbsh82-26RNTUjYRU5vq6hiagE86feo3r6iwrxdoFphbe1VKncw"/>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Mia Chen</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px] text-outline-variant">local_fire_department</span>
+<p class="text-caption text-on-surface-variant">2 day streak</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-caption font-bold text-on-surface-variant">82% Att.</p>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">chevron_right</span>
+</div>
+</div>
+<!-- Roster Item 3 -->
+<div class="flex items-center gap-md p-md bg-white rounded-xl shadow-sm border border-outline-variant/50">
+<div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary font-bold">JD</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Jordan Davis</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px] text-primary fill-icon">local_fire_department</span>
+<p class="text-caption text-on-surface-variant">12 day streak</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-caption font-bold text-primary">100% Att.</p>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Secondary Actions -->
+<section class="grid grid-cols-2 gap-md pb-8">
+<button class="bg-surface-container p-md rounded-xl flex flex-col items-center gap-xs border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+<span class="font-label-md text-caption">Add Note</span>
+</button>
+<button class="bg-surface-container p-md rounded-xl flex flex-col items-center gap-xs border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary">architecture</span>
+<span class="font-label-md text-caption">Training Plan</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile py-2 bg-surface dark:bg-surface-container-low rounded-t-xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.04)]">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<!-- Students -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<!-- Training (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined fill-icon">fitness_center</span>
+<span class="font-label-md text-label-md">Training</span>
+</a>
+<!-- Analytics -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-fixed-variant hover:bg-surface-variant transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<!-- Floating Action Button Overlay (Contextual Logic Check: Only for major addition) -->
+<!-- We skip a global FAB here as the specific "Start Session" button is already prominent on this detail screen -->
+<script>
+        // Subtle interaction: Log when start session is clicked
+        document.querySelector('button:has(span:contains("play_arrow"))').addEventListener('click', () => {
+            console.log('Session timer initiated');
+            // Mock feedback
+            const btn = document.querySelector('button:has(span:contains("play_arrow"))');
+            btn.innerHTML = '<span class="material-symbols-outlined fill-icon animate-pulse">timer</span> Recording...';
+            btn.classList.replace('bg-primary', 'bg-on-error-container');
+        });
+
+        // Simple helper for pseudo-selectors if not natively supported in all mobile webviews
+        function contains(selector, text) {
+            var elements = document.querySelectorAll(selector);
+            return Array.from(elements).filter(function(element) {
+                return RegExp(text).test(element.textContent);
+            });
+        }
+    </script>
+</body></html>
