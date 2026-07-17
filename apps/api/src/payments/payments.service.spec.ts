@@ -13,6 +13,7 @@ import { QueueJobsService } from '../queue/queue-jobs.service';
 import { WalletService } from '../wallet/wallet.service';
 import { TenantsService } from '../tenants/tenants.service';
 import { SlotEventsService } from '../realtime/slot-events.service';
+import { RevenueOrchestrator } from '../finance/revenue.orchestrator';
 
 describe('PaymentsService', () => {
   let service: PaymentsService;
@@ -75,6 +76,16 @@ describe('PaymentsService', () => {
         {
           provide: SlotEventsService,
           useValue: { emitPaymentUpdated: jest.fn(), emitMembershipUpdated: jest.fn() },
+        },
+        {
+          provide: RevenueOrchestrator,
+          useValue: {
+            onPaymentCompleted: jest.fn(),
+            onPaymentRefunded: jest.fn(),
+            recordWebhookEvent: jest.fn().mockResolvedValue({ duplicate: false, id: 'wh-1' }),
+            markWebhookProcessed: jest.fn(),
+            isEnabled: jest.fn().mockReturnValue(true),
+          },
         },
       ],
     }).compile();

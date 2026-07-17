@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { UserRole } from '@fitora/shared';
 import { AuthLayout, FormField, inputClassName, buttonClassName } from '@/components/auth-layout';
 import { login } from '@/lib/api';
@@ -30,7 +30,9 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/dashboard');
+      // Honor an in-app return URL (e.g. the embeddable booking widget)
+      const next = new URLSearchParams(window.location.search).get('next');
+      router.push(next && next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard');
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Login failed');
     } finally {

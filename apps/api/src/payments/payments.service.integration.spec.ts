@@ -11,6 +11,9 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { WalletService } from '../wallet/wallet.service';
 import { QueueJobsService } from '../queue/queue-jobs.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { TenantsService } from '../tenants/tenants.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
+import { RevenueOrchestrator } from '../finance/revenue.orchestrator';
 
 describe('PaymentsService (integration)', () => {
   let service: PaymentsService;
@@ -58,7 +61,10 @@ describe('PaymentsService (integration)', () => {
       providers: [
         PaymentsService,
         { provide: PrismaService, useValue: prisma },
-        { provide: NotificationsService, useValue: { notifyPaymentSuccess: jest.fn(), notifyPaymentFailed: jest.fn() } },
+        {
+          provide: NotificationsService,
+          useValue: { notifyPaymentSuccess: jest.fn(), notifyPaymentFailed: jest.fn() },
+        },
         { provide: BookingsService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: TrainingService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: ShopService, useValue: { confirmAfterPayment: jest.fn() } },
@@ -66,6 +72,26 @@ describe('PaymentsService (integration)', () => {
         { provide: ServicesService, useValue: { confirmAfterPayment: jest.fn() } },
         { provide: WalletService, useValue: { creditFromTopup: jest.fn() } },
         { provide: QueueJobsService, useValue: queueJobs },
+        {
+          provide: TenantsService,
+          useValue: {
+            resolveTenantIdFromContext: jest.fn().mockReturnValue(null),
+            getPaymentConfig: jest.fn(),
+          },
+        },
+        {
+          provide: SlotEventsService,
+          useValue: { emitPaymentUpdated: jest.fn(), emitMembershipUpdated: jest.fn() },
+        },
+        {
+          provide: RevenueOrchestrator,
+          useValue: {
+            onPaymentCompleted: jest.fn(),
+            onPaymentRefunded: jest.fn(),
+            recordWebhookEvent: jest.fn(),
+            markWebhookProcessed: jest.fn(),
+          },
+        },
       ],
     }).compile();
 

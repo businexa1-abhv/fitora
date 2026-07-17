@@ -9,7 +9,13 @@ import {
 } from '@nestjs/common';
 import { addMembershipDuration } from '../memberships/constants/plan-benefits';
 import { QueueJobsService } from '../queue/queue-jobs.service';
-import { PaymentEntityType, PaymentStatus, Prisma, UserRole } from '@prisma/client';
+import {
+  PaymentEntityType,
+  PaymentStatus,
+  Prisma,
+  UserRole,
+  WebhookEventStatus,
+} from '@prisma/client';
 import Razorpay from 'razorpay';
 import { createHmac, timingSafeEqual } from 'crypto';
 import { BookingsService } from '../bookings/bookings.service';
@@ -24,6 +30,7 @@ import { SlotEventsService } from '../realtime/slot-events.service';
 import { TenantsService } from '../tenants/tenants.service';
 import { generatePaymentInvoiceNumber, PAYMENT_ENTITY_LABELS } from './payments.constants';
 import { AuthUserPayload } from '../common/decorators/current-user.decorator';
+import { RevenueOrchestrator } from '../finance/revenue.orchestrator';
 
 @Injectable()
 export class PaymentsService {
@@ -49,6 +56,8 @@ export class PaymentsService {
     private walletService: WalletService,
     @Inject(forwardRef(() => QueueJobsService))
     private queueJobs: QueueJobsService,
+    @Inject(forwardRef(() => RevenueOrchestrator))
+    private revenueOrchestrator: RevenueOrchestrator,
   ) {
     this.isMockMode = process.env.PAYMENT_MODE === 'mock' || !process.env.RAZORPAY_KEY_ID;
 
@@ -467,6 +476,10 @@ export class PaymentsService {
       },
     });
 
+    if (isFullRefund) {
+      await this.revenueOrchestrator.onPaymentRefunded(paymentId);
+    }
+
     return this.formatPaymentRecord(updated);
   }
 
@@ -641,53 +654,88 @@ export class PaymentsService {
     }
 
     const event = payload.event as string | undefined;
-    const paymentEntity = (payload.payload as { payment?: { entity?: Record<string, string> } })
-      ?.payment?.entity;
+    const eventId =
+      (payload.event_id as string | undefined) ??
+      (typeof payload.id === 'string' ? payload.id : undefined) ??
+      `rzp_${event}_${(payload.created_at as number | undefined) ?? Date.now()}`;
 
-    if (event === 'payment.captured' && paymentEntity?.order_id) {
-      const payment = await this.prisma.payment.findFirst({
-        where: { razorpayOrderId: paymentEntity.order_id },
-      });
-
-      if (payment && payment.status !== PaymentStatus.PAID) {
-        await this.completePayment(payment.id, payment.userId, paymentEntity.id);
-      }
+    const webhookRecord = await this.revenueOrchestrator.recordWebhookEvent({
+      provider: 'razorpay',
+      eventId,
+      eventType: event ?? 'unknown',
+      payload,
+    });
+    if (webhookRecord.duplicate) {
+      return { received: true, duplicate: true };
     }
 
-    if (event === 'payment.failed' && paymentEntity?.order_id) {
-      const failedPayment = await this.prisma.payment.findFirst({
-        where: { razorpayOrderId: paymentEntity.order_id },
-      });
-      await this.prisma.payment.updateMany({
-        where: { razorpayOrderId: paymentEntity.order_id, status: PaymentStatus.PENDING },
-        data: {
-          status: PaymentStatus.FAILED,
-          failureReason: paymentEntity.error_description ?? 'Payment failed',
-        },
-      });
-      if (failedPayment) {
-        await this.notificationsService.notifyPaymentFailed(
-          failedPayment.userId,
-          Number(failedPayment.amount),
-          failedPayment.entityType,
-          paymentEntity.error_description,
-        );
-      }
-    }
+    try {
+      const paymentEntity = (payload.payload as { payment?: { entity?: Record<string, string> } })
+        ?.payment?.entity;
 
-    if (event === 'refund.processed') {
-      const refundEntity = (payload.payload as { refund?: { entity?: Record<string, string> } })
-        ?.refund?.entity;
-      const razorpayPaymentId = refundEntity?.payment_id;
-      if (razorpayPaymentId) {
+      if (event === 'payment.captured' && paymentEntity?.order_id) {
+        const payment = await this.prisma.payment.findFirst({
+          where: { razorpayOrderId: paymentEntity.order_id },
+        });
+
+        if (payment && payment.status !== PaymentStatus.PAID) {
+          await this.completePayment(payment.id, payment.userId, paymentEntity.id);
+        }
+      }
+
+      if (event === 'payment.failed' && paymentEntity?.order_id) {
+        const failedPayment = await this.prisma.payment.findFirst({
+          where: { razorpayOrderId: paymentEntity.order_id },
+        });
         await this.prisma.payment.updateMany({
-          where: { razorpayPaymentId },
+          where: { razorpayOrderId: paymentEntity.order_id, status: PaymentStatus.PENDING },
           data: {
-            status: PaymentStatus.REFUNDED,
-            refundedAt: new Date(),
+            status: PaymentStatus.FAILED,
+            failureReason: paymentEntity.error_description ?? 'Payment failed',
           },
         });
+        if (failedPayment) {
+          await this.notificationsService.notifyPaymentFailed(
+            failedPayment.userId,
+            Number(failedPayment.amount),
+            failedPayment.entityType,
+            paymentEntity.error_description,
+          );
+        }
       }
+
+      if (event === 'refund.processed') {
+        const refundEntity = (payload.payload as { refund?: { entity?: Record<string, string> } })
+          ?.refund?.entity;
+        const razorpayPaymentId = refundEntity?.payment_id;
+        if (razorpayPaymentId) {
+          const refunded = await this.prisma.payment.findFirst({
+            where: { razorpayPaymentId },
+          });
+          await this.prisma.payment.updateMany({
+            where: { razorpayPaymentId },
+            data: {
+              status: PaymentStatus.REFUNDED,
+              refundedAt: new Date(),
+            },
+          });
+          if (refunded) {
+            await this.revenueOrchestrator.onPaymentRefunded(refunded.id);
+          }
+        }
+      }
+
+      await this.revenueOrchestrator.markWebhookProcessed(
+        webhookRecord.id,
+        WebhookEventStatus.PROCESSED,
+      );
+    } catch (err) {
+      await this.revenueOrchestrator.markWebhookProcessed(
+        webhookRecord.id,
+        WebhookEventStatus.FAILED,
+        err instanceof Error ? err.message : 'Webhook processing failed',
+      );
+      throw err;
     }
 
     return { received: true };
@@ -761,6 +809,15 @@ export class PaymentsService {
     );
 
     await this.createPaymentInvoice(updated);
+
+    await this.revenueOrchestrator.onPaymentCompleted({
+      paymentId: updated.id,
+      userId,
+      entityType: payment.entityType,
+      entityId: payment.entityId,
+      amount: Number(updated.amount),
+      tenantId: payment.tenantId,
+    });
 
     await this.events.emitPaymentUpdated({
       paymentId: updated.id,

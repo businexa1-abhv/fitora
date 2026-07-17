@@ -26,6 +26,7 @@ import { WaitlistService } from './waitlist.service';
 import { type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { buildCursorPaginatedResult, decodeCursor } from '../common/utils/cursor-pagination.util';
 import { BOOKING_LOCK_TTL_MINUTES } from './constants/refund-rules';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 import {
   calculateRefundAmount,
   calculateRefundPercent,
@@ -72,10 +73,19 @@ export class BookingsService {
     private events: SlotEventsService,
     @Inject(WaitlistService)
     private waitlist: WaitlistService,
+    @Inject(forwardRef(() => SubscriptionService))
+    private subscriptions: SubscriptionService,
   ) {}
 
   /** Step 1–3: Select court slot → lock → create PENDING booking + payment order */
   async createBooking(dto: CreateBookingDto, userId: string) {
+    const court = await this.prisma.court.findFirst({
+      where: { id: dto.courtId, deletedAt: null },
+      select: { tenantId: true },
+    });
+    if (!court) throw new NotFoundException('Court not found');
+    await this.subscriptions.assertTenantCanAcceptBookings(court.tenantId);
+
     if (this.availability.isEngineEnabled()) {
       return this.createBookingV2(dto, userId);
     }

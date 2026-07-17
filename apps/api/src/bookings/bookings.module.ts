@@ -2,6 +2,7 @@ import { Module, forwardRef } from '@nestjs/common';
 import { MembershipsModule } from '../memberships/memberships.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PaymentsModule } from '../payments/payments.module';
+import { FinanceModule } from '../finance/finance.module';
 import { AvailabilityModule } from '../availability/availability.module';
 import { RealtimeModule } from '../realtime/realtime.module';
 import { BookingsController } from './bookings.controller';
@@ -14,6 +15,7 @@ import { RecurringBookingService } from './recurring-booking.service';
   imports: [
     forwardRef(() => PaymentsModule),
     forwardRef(() => MembershipsModule),
+    forwardRef(() => FinanceModule),
     NotificationsModule,
     AvailabilityModule,
     RealtimeModule,

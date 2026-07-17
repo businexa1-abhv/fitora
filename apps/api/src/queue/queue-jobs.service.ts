@@ -12,6 +12,8 @@ import { PrismaService } from '../prisma/prisma.module';
 import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
 import { SlotsService } from '../slots/slots.service';
 import { WaitlistService } from '../bookings/waitlist.service';
+import { SettlementService } from '../finance/settlement/settlement.service';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 import {
   CHANNEL_JOB_OPTIONS,
   QUEUES,
@@ -58,6 +60,10 @@ export class QueueJobsService implements OnModuleInit {
     private slotsService: SlotsService,
     @Inject(WaitlistService)
     private waitlistService: WaitlistService,
+    @Inject(forwardRef(() => SettlementService))
+    private settlementService: SettlementService,
+    @Inject(forwardRef(() => SubscriptionService))
+    private subscriptionService: SubscriptionService,
   ) {}
 
   onModuleInit() {
@@ -163,6 +169,10 @@ export class QueueJobsService implements OnModuleInit {
         return this.slotsService.autoGenerateUpcomingSlots(14);
       case SCHEDULED_JOBS.RELEASE_EXPIRED_LOCKS:
         return this.runReleaseExpiredLocks();
+      case SCHEDULED_JOBS.WEEKLY_SETTLEMENT:
+        return this.settlementService.processDueSettlements();
+      case SCHEDULED_JOBS.SUBSCRIPTION_EXPIRY:
+        return this.subscriptionService.processExpiries();
       default:
         this.logger.warn(`Unknown scheduled job: ${jobName}`);
     }

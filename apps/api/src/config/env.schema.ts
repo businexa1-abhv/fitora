@@ -67,6 +67,14 @@ export const envSchema = z
       .enum(['true', 'false'])
       .default('true')
       .transform((v) => v === 'true'),
+    REVENUE_ENGINE_ENABLED: z
+      .enum(['true', 'false'])
+      .default('true')
+      .transform((v) => v === 'true'),
+    SUBSCRIPTION_GATE_ENABLED: z
+      .enum(['true', 'false'])
+      .default('false')
+      .transform((v) => v === 'true'),
     BOOKING_LOCK_TTL_MINUTES: z.coerce.number().int().positive().optional(),
 
     RUN_MIGRATIONS: z

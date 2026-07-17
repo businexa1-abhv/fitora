@@ -13,6 +13,15 @@ import { QueueJobsService } from '../queue/queue-jobs.service';
 import { WalletService } from '../wallet/wallet.service';
 import { TenantsService } from '../tenants/tenants.service';
 import { SlotEventsService } from '../realtime/slot-events.service';
+import { RevenueOrchestrator } from '../finance/revenue.orchestrator';
+
+const revenueOrchestratorMock = {
+  onPaymentCompleted: jest.fn(),
+  onPaymentRefunded: jest.fn(),
+  recordWebhookEvent: jest.fn().mockResolvedValue({ duplicate: false, id: 'wh-1' }),
+  markWebhookProcessed: jest.fn(),
+  isEnabled: jest.fn().mockReturnValue(true),
+};
 
 describe('PaymentsService webhook', () => {
   let service: PaymentsService;
@@ -53,6 +62,7 @@ describe('PaymentsService webhook', () => {
           provide: SlotEventsService,
           useValue: { emitPaymentUpdated: jest.fn(), emitMembershipUpdated: jest.fn() },
         },
+        { provide: RevenueOrchestrator, useValue: revenueOrchestratorMock },
       ],
     }).compile();
 
@@ -62,6 +72,8 @@ describe('PaymentsService webhook', () => {
   afterEach(() => {
     delete process.env.RAZORPAY_WEBHOOK_SECRET;
     delete process.env.PAYMENT_MODE;
+    jest.clearAllMocks();
+    revenueOrchestratorMock.recordWebhookEvent.mockResolvedValue({ duplicate: false, id: 'wh-1' });
   });
 
   it('rejects webhook when secret is configured but signature is missing', async () => {

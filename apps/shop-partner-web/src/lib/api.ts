@@ -322,4 +322,42 @@ export const shopPartnerApi = {
 
   unreadNotificationCount: (token: string) =>
     apiFetch<{ count: number }>('/notifications/unread-count', {}, token),
+
+  getMerchantWallet: (token: string) =>
+    apiFetch<
+      Array<{
+        id: string;
+        role: string;
+        available: number;
+        pending: number;
+        settled: number;
+        lifetimeEarned: number;
+      }>
+    >('/wallet/merchant', {}, token),
+
+  getSettlements: (token: string) =>
+    apiFetch<
+      Array<{
+        id: string;
+        gross: number;
+        commission: number;
+        net: number;
+        status: string;
+        periodStart: string;
+        periodEnd: string;
+        paidAt: string | null;
+        invoiceNumber: string | null;
+      }>
+    >('/settlements', {}, token),
+
+  getRevenueReport: (token: string) =>
+    apiFetch<{
+      revenue: number;
+      commission: number;
+      net: number;
+      pending: number;
+      available: number;
+      settled: number;
+      nextSettlementDate: string | null;
+    }>('/reports/revenue', {}, token),
 };

@@ -179,7 +179,9 @@ async function seedShopCatalog(tenantId: string) {
         isActive: true,
         isFeatured: true,
         images: {
-          create: [{ url: `https://cdn.fitora.com/shop/${p.slug}.jpg`, isPrimary: true, sortOrder: 0 }],
+          create: [
+            { url: `https://cdn.fitora.com/shop/${p.slug}.jpg`, isPrimary: true, sortOrder: 0 },
+          ],
         },
         variants: {
           create: [{ name: 'Standard', stock: p.stock, sku: `${p.sku}-STD` }],
@@ -242,12 +244,30 @@ async function seedServiceListings(providerId: string, tenantId?: string) {
 async function main() {
   await seedSports();
 
-  const admin = await upsertUser('admin@fitora.com', 'AdminPass123!', 'Platform', 'Admin', UserRole.ADMIN);
-  const owner = await upsertUser('owner@fitora.com', 'OwnerPass123!', 'Court', 'Owner', UserRole.COURT_OWNER);
+  const admin = await upsertUser(
+    'admin@fitora.com',
+    'AdminPass123!',
+    'Platform',
+    'Admin',
+    UserRole.ADMIN,
+  );
+  const owner = await upsertUser(
+    'owner@fitora.com',
+    'OwnerPass123!',
+    'Court',
+    'Owner',
+    UserRole.COURT_OWNER,
+  );
   await upsertUser('player@fitora.com', 'PlayerPass123!', 'Test', 'Player', UserRole.PLAYER);
   await upsertUser('trainer@fitora.com', 'TrainerPass123!', 'Coach', 'Ravi', UserRole.TRAINER);
   await upsertUser('printer@fitora.com', 'PrinterPass123!', 'Print', 'Shop', UserRole.PRINTER);
-  await upsertUser('provider@fitora.com', 'ProviderPass123!', 'Sports', 'Pro', UserRole.SERVICE_PROVIDER);
+  await upsertUser(
+    'provider@fitora.com',
+    'ProviderPass123!',
+    'Sports',
+    'Pro',
+    UserRole.SERVICE_PROVIDER,
+  );
 
   const platformTenant = await ensurePlatformTenant(admin.id);
   const ownerTenant = await ensureOwnerTenant(owner.id, 'Court Owner');
@@ -302,6 +322,152 @@ async function main() {
 
   await seedSampleCourt(owner.id, ownerTenant.id);
   await seedShopCatalog(platformTenant.id);
+  await seedFinanceDefaults();
+}
+
+async function seedFinanceDefaults() {
+  const { CommissionServiceType, OwnerSubscriptionPlanCode } = await import('@prisma/client');
+
+  const plans = [
+    {
+      code: OwnerSubscriptionPlanCode.MONTHLY,
+      name: 'Monthly',
+      durationDays: 30,
+      amount: 2999,
+      sortOrder: 1,
+    },
+    {
+      code: OwnerSubscriptionPlanCode.QUARTERLY,
+      name: 'Quarterly',
+      durationDays: 90,
+      amount: 7999,
+      sortOrder: 2,
+    },
+    {
+      code: OwnerSubscriptionPlanCode.HALF_YEARLY,
+      name: 'Half-Yearly',
+      durationDays: 180,
+      amount: 14999,
+      sortOrder: 3,
+    },
+    {
+      code: OwnerSubscriptionPlanCode.YEARLY,
+      name: 'Yearly',
+      durationDays: 365,
+      amount: 26999,
+      sortOrder: 4,
+    },
+  ];
+
+  for (const plan of plans) {
+    await prisma.subscriptionPlan.upsert({
+      where: { code: plan.code },
+      create: {
+        ...plan,
+        gstRate: 0.18,
+        features: { courts: true, bookings: true, coaches: true, memberships: true },
+      },
+      update: {
+        name: plan.name,
+        durationDays: plan.durationDays,
+        amount: plan.amount,
+        isActive: true,
+      },
+    });
+  }
+
+  const rules: Array<{
+    serviceType: (typeof CommissionServiceType)[keyof typeof CommissionServiceType];
+    ratePercent: number;
+  }> = [
+    { serviceType: CommissionServiceType.BOOKING, ratePercent: 8 },
+    { serviceType: CommissionServiceType.MEMBERSHIP, ratePercent: 3 },
+    { serviceType: CommissionServiceType.TRAINING, ratePercent: 5 },
+    { serviceType: CommissionServiceType.SHOP_ORDER, ratePercent: 12 },
+    { serviceType: CommissionServiceType.SERVICE_ORDER, ratePercent: 10 },
+    { serviceType: CommissionServiceType.PRINT_ORDER, ratePercent: 10 },
+  ];
+
+  for (const rule of rules) {
+    const existing = await prisma.commissionRule.findFirst({
+      where: { serviceType: rule.serviceType, tenantId: null, isActive: true },
+    });
+    if (!existing) {
+      await prisma.commissionRule.create({
+        data: {
+          serviceType: rule.serviceType,
+          ratePercent: rule.ratePercent,
+          tenantId: null,
+          isActive: true,
+        },
+      });
+    }
+  }
+
+  const accounts = [
+    { code: 'CASH_RAZORPAY', name: 'Cash — Razorpay', type: 'ASSET' as const },
+    { code: 'OWNER_PAYABLE', name: 'Owner Payable', type: 'LIABILITY' as const },
+    { code: 'PLATFORM_COMMISSION', name: 'Platform Commission Revenue', type: 'REVENUE' as const },
+    {
+      code: 'PLATFORM_SUBSCRIPTION',
+      name: 'Platform Subscription Revenue',
+      type: 'REVENUE' as const,
+    },
+    { code: 'GST_PAYABLE', name: 'GST Payable', type: 'LIABILITY' as const },
+    { code: 'COMMISSION_RECEIVABLE', name: 'Commission Receivable', type: 'ASSET' as const },
+    { code: 'REFUNDS', name: 'Refunds Expense', type: 'EXPENSE' as const },
+  ];
+  for (const account of accounts) {
+    await prisma.ledgerAccount.upsert({
+      where: { code: account.code },
+      create: account,
+      update: { name: account.name, isActive: true },
+    });
+  }
+
+  // Activate a seed subscription for the demo owner so booking gate (when enabled) works
+  const owner = await prisma.user.findUnique({ where: { email: 'owner@fitora.com' } });
+  const ownerTenant = owner
+    ? await prisma.tenant.findFirst({ where: { ownerId: owner.id } })
+    : null;
+  const yearly = await prisma.subscriptionPlan.findUnique({
+    where: { code: OwnerSubscriptionPlanCode.YEARLY },
+  });
+  if (owner && ownerTenant && yearly) {
+    const existing = await prisma.ownerSubscription.findFirst({
+      where: {
+        ownerId: owner.id,
+        status: { in: ['ACTIVE', 'GRACE'] },
+      },
+    });
+    if (!existing) {
+      const start = new Date();
+      const end = new Date(start);
+      end.setFullYear(end.getFullYear() + 1);
+      const grace = new Date(end);
+      grace.setDate(grace.getDate() + 3);
+      const amount = Number(yearly.amount);
+      const gst = Math.round(amount * 0.18 * 100) / 100;
+      await prisma.ownerSubscription.create({
+        data: {
+          ownerId: owner.id,
+          tenantId: ownerTenant.id,
+          planId: yearly.id,
+          amount,
+          gst,
+          total: amount + gst,
+          status: 'ACTIVE',
+          startDate: start,
+          endDate: end,
+          graceEndsAt: grace,
+          autoRenew: false,
+        },
+      });
+      console.log('Seeded ACTIVE yearly subscription for owner@fitora.com');
+    }
+  }
+
+  console.log('Seeded finance defaults (plans, commission rules, ledger accounts)');
 }
 
 main()

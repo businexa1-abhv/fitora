@@ -18,7 +18,7 @@ import { ShopShell, primaryBtnClass } from '@/components/shop-shell';
 import { getAccessToken, getAuthSession, shopPartnerApi, type ShopOrder } from '@/lib/api';
 import { formatInr } from '@/lib/format';
 
-const COMMISSION_RATE = 0.12;
+const COMMISSION_RATE = 0.12; // Fallback estimate only when ledger APIs return empty
 const RANGE_OPTIONS = [
   { id: '7d', label: 'Last 7 Days', days: 7 },
   { id: '30d', label: 'Last 30 Days', days: 30 },
@@ -119,6 +119,17 @@ export default function SettlementsPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [ledger, setLedger] = useState<{
+    pending: number;
+    available: number;
+    settled: number;
+    commission: number;
+    revenue: number;
+    nextSettlementDate: string | null;
+  } | null>(null);
+  const [apiSettlements, setApiSettlements] = useState<
+    Awaited<ReturnType<typeof shopPartnerApi.getSettlements>>
+  >([]);
 
   const refresh = useCallback(() => {
     const token = getAccessToken();
@@ -127,13 +138,28 @@ export default function SettlementsPage() {
     Promise.all([
       shopPartnerApi.listOrders(token),
       shopPartnerApi.getTenantMe(token).catch(() => null),
+      shopPartnerApi.getRevenueReport(token).catch(() => null),
+      shopPartnerApi.getMerchantWallet(token).catch(() => []),
+      shopPartnerApi.getSettlements(token).catch(() => []),
     ])
-      .then(([orderList, tenant]) => {
+      .then(([orderList, tenant, revenue, wallets, settlements]) => {
         setOrders(orderList);
+        setApiSettlements(settlements);
         if (tenant?.name) setTenantName(tenant.name);
         else {
           const session = getAuthSession();
           if (session?.tenantName) setTenantName(session.tenantName);
+        }
+        const shopWallet = wallets.find((w) => w.role === 'SHOP') ?? wallets[0] ?? null;
+        if (revenue || shopWallet) {
+          setLedger({
+            pending: shopWallet?.pending ?? revenue?.pending ?? 0,
+            available: shopWallet?.available ?? revenue?.available ?? 0,
+            settled: shopWallet?.settled ?? revenue?.settled ?? 0,
+            commission: revenue?.commission ?? 0,
+            revenue: revenue?.revenue ?? 0,
+            nextSettlementDate: revenue?.nextSettlementDate ?? null,
+          });
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load settlements'))
@@ -307,17 +333,20 @@ export default function SettlementsPage() {
                 Available for Settlement
               </p>
               <p className="mt-2 font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
-                {formatInr(availableNet)}
+                {formatInr(ledger?.pending ?? availableNet)}
               </p>
               <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#572000]/20 bg-[#572000]/10 px-3 py-1 text-xs font-semibold">
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                Next settlement: {nextSettlement}
+                Next settlement:{' '}
+                {ledger?.nextSettlementDate
+                  ? new Date(ledger.nextSettlementDate).toLocaleDateString('en-IN')
+                  : nextSettlement}
               </div>
               <div className="mt-6 flex gap-3">
                 <button
                   type="button"
                   disabled
-                  title="Payout API not available yet"
+                  title="Early payout requires admin settlement run"
                   className="flex-1 rounded-xl bg-white py-3 text-sm font-bold text-primary opacity-70"
                 >
                   Request Early Payout
@@ -331,7 +360,9 @@ export default function SettlementsPage() {
                 </button>
               </div>
               <p className="mt-3 text-[11px] opacity-80">
-                Est. from {availableOrders.length} delivered + paid orders in range
+                {ledger
+                  ? `Ledger pending · lifetime settled ${formatInr(ledger.settled)}`
+                  : `Est. from ${availableOrders.length} delivered + paid orders in range`}
               </p>
             </article>
 

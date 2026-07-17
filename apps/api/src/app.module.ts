@@ -27,6 +27,7 @@ import { AvailabilityModule } from './availability/availability.module';
 import { RealtimeModule } from './realtime/realtime.module';
 import { VenueOpsModule } from './venue-ops/venue-ops.module';
 import { SupportModule } from './support/support.module';
+import { FinanceModule } from './finance/finance.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { SupportModule } from './support/support.module';
     SupportModule,
     WalletModule,
     AiModule,
+    FinanceModule,
   ],
 })
 export class AppModule {}

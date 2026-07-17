@@ -288,6 +288,42 @@ export const adminApi = {
     return apiFetch<PaymentReports>(`/payments/admin/reports${qs}`, {}, token);
   },
 
+  getPlatformFinanceReport: (token: string) =>
+    apiFetch<{
+      gmv: number;
+      platformCommission: number;
+      subscriptionRevenue: number;
+      platformRevenue: number;
+      activeOwners: number;
+      pendingSettlements: number;
+      failedPayouts: number;
+      paymentCount: number;
+      gmvByEntity: Record<string, number>;
+    }>('/reports/platform', {}, token),
+
+  listSettlements: (token: string) =>
+    apiFetch<
+      Array<{
+        id: string;
+        beneficiaryUserId: string;
+        gross: number;
+        commission: number;
+        net: number;
+        status: string;
+        periodStart: string;
+        periodEnd: string;
+        paidAt: string | null;
+        payoutStatus: string | null;
+      }>
+    >('/settlements', {}, token),
+
+  processSettlements: (token: string) =>
+    apiFetch<{ processed: number; settlements: Array<{ settlementId: string; net: number }> }>(
+      '/settlements/process',
+      { method: 'POST' },
+      token,
+    ),
+
   listPayments: (token: string, page?: number) => {
     const qs = page ? `?page=${page}` : '';
     return apiFetch<Paginated<PaymentRecord>>(`/payments/admin/list${qs}`, {}, token);

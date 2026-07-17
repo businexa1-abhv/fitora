@@ -8,6 +8,7 @@ export const PAYMENT_ENTITY_LABELS: Record<PaymentEntityType, string> = {
   SERVICE_ORDER: 'Sports Service',
   PRINT_ORDER: 'T-Shirt Printing',
   WALLET_TOPUP: 'Wallet Top-up',
+  OWNER_SUBSCRIPTION: 'Owner Subscription',
 };
 
 export function generatePaymentInvoiceNumber(paymentId: string): string {
