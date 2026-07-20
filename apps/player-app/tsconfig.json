@@ -1,7 +1,6 @@
 {
   "extends": "@fitora/config/typescript/react-native.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"],
     "paths": {

@@ -1,0 +1,488 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>FitOra — Application Architecture</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #ffffff;
+    color: #1f2328;
+    padding: 32px 16px 48px;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #57606a; font-size: 13px; margin-bottom: 32px; }
+  h2 {
+    font-size: 15px; font-weight: 700;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 6px; margin: 28px 0 14px;
+    color: #1f2328;
+  }
+  h3 { font-size: 13px; font-weight: 600; margin: 16px 0 8px; color: #3b82d4; }
+  p { margin-bottom: 10px; color: #1f2328; }
+
+  /* Deployment topology diagram */
+  .topology {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 20px;
+    font-size: 12px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .topology svg { display: block; width: 100%; max-width: 700px; margin: 0 auto; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 13px; }
+  th {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+    color: #1f2328;
+  }
+  td {
+    border: 1px solid #e5e7eb;
+    padding: 6px 10px;
+    vertical-align: top;
+    color: #1f2328;
+  }
+  tr:nth-child(even) td { background: #fafbfc; }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-purple { background: #ede9fe; color: #5b21b6; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+  .badge-gray   { background: #f1f5f9; color: #475569; }
+
+  /* Code blocks */
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: #7c5cd8;
+  }
+  pre {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    color: #1f2328;
+  }
+
+  /* Cards */
+  .card-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .card {
+    flex: 1; min-width: 180px;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .card-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .card-meta { font-size: 12px; color: #57606a; }
+
+  /* Flow boxes */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+  .flow-arrow { color: #57606a; font-size: 14px; }
+
+  /* Principle list */
+  .principle-list { margin-bottom: 18px; }
+  .principle-item {
+    display: flex; gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .principle-item:last-child { border-bottom: none; }
+  .principle-label { font-weight: 600; min-width: 190px; color: #3b82d4; }
+
+  /* Phase pill */
+  .phase { font-size: 11px; font-weight: 600; color: #57606a; background: #f1f5f9; border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
+
+  /* Section divider */
+  .section-divider { border: none; border-top: 1px solid #e5e7eb; margin: 28px 0; }
+
+  footer {
+    margin-top: 48px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 14px;
+    text-align: center;
+    font-size: 11px;
+    color: #57606a;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>FitOra — Application Architecture</h1>
+  <p class="subtitle">Multi-sided sports &amp; fitness platform · Turborepo monorepo · Version 1.0 · July 2026</p>
+
+  
+  <h2>1. Architecture Style</h2>
+  <p>FitOra uses a <strong>modular monolith</strong> today — a single NestJS API with clear domain-module boundaries — designed to extract into domain-oriented microservices when scale demands it.</p>
+
+  <div class="principle-list">
+    <div class="principle-item"><span class="principle-label">API-first</span>All clients (web, admin, mobile) share one versioned REST API at <code>/api/v1</code></div>
+    <div class="principle-item"><span class="principle-label">Modular monolith</span>NestJS domain modules with clear ownership; extract only when justified by scale</div>
+    <div class="principle-item"><span class="principle-label">Pay-before-confirm</span>Payment completion drives all state transitions via a unified PaymentsService</div>
+    <div class="principle-item"><span class="principle-label">Role-aware by design</span>RBAC enforced at API layer; clients adapt UI by role</div>
+    <div class="principle-item"><span class="principle-label">Fail closed</span>Auth and permission checks default to deny; public routes are explicit opt-outs</div>
+    <div class="principle-item"><span class="principle-label">Cache-aside</span>Redis accelerates reads; PostgreSQL remains source of truth</div>
+    <div class="principle-item"><span class="principle-label">Shared contracts</span>Types, enums, constants in <code>@fitora/shared</code> — single source of truth</div>
+    <div class="principle-item"><span class="principle-label">Observable by default</span>Structured logs, health checks, error tracking from day one</div>
+  </div>
+
+  
+  <h2>2. Deployment Topology</h2>
+
+  <div class="topology">
+    <svg xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,sans-serif" font-size="11">
+      
+      <rect x="200" y="8" width="280" height="34" rx="5" fill="#ede9fe" stroke="#7c5cd8" stroke-width="1.2"></rect>
+      <text x="340" y="20" text-anchor="middle" font-weight="600" fill="#5b21b6">CDN / Edge</text>
+      <text x="340" y="33" text-anchor="middle" fill="#57606a" font-size="10">Vercel / CloudFront + Cloudinary</text>
+
+      
+      <line x1="340" y1="42" x2="340" y2="70" stroke="#aaa" stroke-width="1.2" marker-end="url(#arr)"></line>
+
+      
+      <rect x="20" y="74" width="160" height="40" rx="5" fill="#dbeafe" stroke="#3b82d4" stroke-width="1.2"></rect>
+      <text x="100" y="90" text-anchor="middle" font-weight="600" fill="#1d4ed8">Web App</text>
+      <text x="100" y="104" text-anchor="middle" fill="#57606a" font-size="10">Next.js 15 · :3000</text>
+
+      <rect x="260" y="74" width="160" height="40" rx="5" fill="#dbeafe" stroke="#3b82d4" stroke-width="1.2"></rect>
+      <text x="340" y="90" text-anchor="middle" font-weight="600" fill="#1d4ed8">Admin App</text>
+      <text x="340" y="104" text-anchor="middle" fill="#57606a" font-size="10">Next.js 15 · :3002</text>
+
+      <rect x="500" y="74" width="160" height="40" rx="5" fill="#dbeafe" stroke="#3b82d4" stroke-width="1.2"></rect>
+      <text x="580" y="90" text-anchor="middle" font-weight="600" fill="#1d4ed8">Mobile App</text>
+      <text x="580" y="104" text-anchor="middle" fill="#57606a" font-size="10">Expo 52 (iOS/Android)</text>
+
+      
+      <line x1="100" y1="114" x2="300" y2="158" stroke="#aaa" stroke-width="1.2"></line>
+      <line x1="340" y1="114" x2="340" y2="158" stroke="#aaa" stroke-width="1.2"></line>
+      <line x1="580" y1="114" x2="380" y2="158" stroke="#aaa" stroke-width="1.2"></line>
+
+      
+      <text x="340" y="145" text-anchor="middle" fill="#57606a" font-size="10">HTTPS / REST + Bearer JWT</text>
+
+      
+      <rect x="195" y="160" width="290" height="34" rx="5" fill="#f7f8fa" stroke="#e5e7eb" stroke-width="1.2"></rect>
+      <text x="340" y="173" text-anchor="middle" font-weight="600" fill="#1f2328">API Gateway / LB</text>
+      <text x="340" y="186" text-anchor="middle" fill="#57606a" font-size="10">nginx / ALB · routes to NestJS</text>
+
+      <line x1="340" y1="194" x2="340" y2="216" stroke="#aaa" stroke-width="1.2" marker-end="url(#arr)"></line>
+
+      
+      <rect x="150" y="218" width="380" height="56" rx="5" fill="#dcfce7" stroke="#166534" stroke-width="1.2"></rect>
+      <text x="340" y="234" text-anchor="middle" font-weight="600" fill="#166534">NestJS API — Modular Monolith · :3001</text>
+      <text x="340" y="248" text-anchor="middle" fill="#374151" font-size="10">Auth · Users · Courts · Memberships · Training · Shop</text>
+      <text x="340" y="261" text-anchor="middle" fill="#374151" font-size="10">Marketplace · Payments · Notifications · Media · Health</text>
+
+      
+      <line x1="230" y1="274" x2="100" y2="300" stroke="#aaa" stroke-width="1.2"></line>
+      <line x1="300" y1="274" x2="245" y2="300" stroke="#aaa" stroke-width="1.2"></line>
+      <line x1="380" y1="274" x2="425" y2="300" stroke="#aaa" stroke-width="1.2"></line>
+      <line x1="450" y1="274" x2="565" y2="300" stroke="#aaa" stroke-width="1.2"></line>
+
+      
+      <rect x="30" y="300" width="130" height="30" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"></rect>
+      <text x="95" y="316" text-anchor="middle" font-weight="600" fill="#92400e" font-size="11">PostgreSQL 16</text>
+
+      <rect x="175" y="300" width="130" height="30" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"></rect>
+      <text x="240" y="316" text-anchor="middle" font-weight="600" fill="#92400e" font-size="11">Redis 7</text>
+
+      <rect x="355" y="300" width="130" height="30" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"></rect>
+      <text x="420" y="316" text-anchor="middle" font-weight="600" fill="#92400e" font-size="11">Cloudinary</text>
+
+      <rect x="500" y="300" width="130" height="30" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"></rect>
+      <text x="565" y="316" text-anchor="middle" font-weight="600" fill="#92400e" font-size="11">Razorpay</text>
+
+      <defs>
+        <marker id="arr">
+          <path d="M0,0 L0,6 L8,3 z" fill="#aaa"></path>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  
+  <h2>3. Frontend Surfaces (8 Apps)</h2>
+  <table>
+    <tr>
+      <th>App</th><th>Stack</th><th>Port</th><th>Users</th><th>Deploy</th>
+    </tr>
+    <tr><td><code>apps/web</code></td><td>Next.js 15 App Router</td><td>3000</td><td>Player, Owner, Trainer, Provider, Printer</td><td>Vercel</td></tr>
+    <tr><td><code>apps/admin</code></td><td>Next.js 15 App Router</td><td>3002</td><td>Admin</td><td>Vercel (restricted)</td></tr>
+    <tr><td><code>apps/admin-web</code></td><td>Next.js 15</td><td>3010</td><td>Partner ops admin</td><td>Vercel</td></tr>
+    <tr><td><code>apps/partner-web</code></td><td>Next.js 15</td><td>3011</td><td>Venue partner onboarding</td><td>Vercel</td></tr>
+    <tr><td><code>apps/shop-partner-web</code></td><td>Next.js 15</td><td>3012</td><td>Shop partner console</td><td>Vercel</td></tr>
+    <tr><td><code>apps/player-app</code></td><td>Expo 52 / React Native</td><td>—</td><td>Player (primary)</td><td>EAS → App Store / Play Store</td></tr>
+    <tr><td><code>apps/owner-app</code></td><td>Expo 52 / React Native</td><td>—</td><td>Court owner / coach</td><td>EAS → App Store / Play Store</td></tr>
+    <tr><td><code>apps/api</code></td><td>NestJS 11</td><td>3001</td><td>(API backend)</td><td>Railway / Docker / ECS</td></tr>
+  </table>
+
+  <h3>Web Architecture Pattern</h3>
+  <p>Client-heavy SPA with <code>'use client'</code> for interactive flows; SSR/static for SEO pages. No Next.js API routes for business logic — all data flows through NestJS for consistency across all clients.</p>
+
+  <h3>Mobile Architecture Pattern</h3>
+  <p>Expo Router (file-based routing), <code>SecureStore</code> for refresh tokens, Firebase FCM for push notifications, deep linking for booking confirmations and order updates.</p>
+
+  
+  <h2>4. Backend — NestJS Domain Modules</h2>
+  <p>Layered architecture: <strong>Controller → Service → Prisma Data Access → Infrastructure</strong>. Each module owns its routes, business logic, and data access.</p>
+
+  <table>
+    <tr><th>Module</th><th>Responsibility</th><th>Key Routes</th></tr>
+    <tr><td><strong>AuthModule</strong></td><td>Register, login, refresh, logout, JWT strategy</td><td><code>/auth/*</code></td></tr>
+    <tr><td><strong>UsersModule</strong></td><td>User CRUD, profile management</td><td><code>/users/*</code></td></tr>
+    <tr><td><strong>CourtsModule</strong></td><td>Court CRUD, slots, bookings</td><td><code>/courts/*</code></td></tr>
+    <tr><td><strong>MembershipsModule</strong></td><td>Plans, purchase, active memberships</td><td><code>/memberships/*</code></td></tr>
+    <tr><td><strong>TrainingModule</strong></td><td>Programs, batches, kids, enrollment, attendance</td><td><code>/training/*</code></td></tr>
+    <tr><td><strong>ShopModule</strong></td><td>Products, cart, checkout, orders</td><td><code>/shop/*</code></td></tr>
+    <tr><td><strong>MarketplaceModule</strong></td><td>Service/print listings, orders</td><td><code>/marketplace/*</code></td></tr>
+    <tr><td><strong>PaymentsModule</strong></td><td>Razorpay orders, verify, webhooks — polymorphic</td><td><code>/payments/*</code></td></tr>
+    <tr><td><strong>NotificationsModule</strong> <span class="phase">Phase 2</span></td><td>Email, push dispatch workers</td><td>internal + <code>/notifications/*</code></td></tr>
+    <tr><td><strong>MediaModule</strong> <span class="phase">Phase 2</span></td><td>Cloudinary signed uploads</td><td><code>/media/*</code></td></tr>
+    <tr><td><strong>HealthModule</strong></td><td>Liveness &amp; readiness probes</td><td><code>/health</code></td></tr>
+    <tr><td><strong>AnalyticsModule</strong></td><td>Reporting pipelines, admin metrics</td><td><code>/analytics/*</code></td></tr>
+    <tr><td><strong>WalletModule</strong></td><td>User wallet balance and transactions</td><td><code>/wallet/*</code></td></tr>
+    <tr><td><strong>SupportModule</strong></td><td>Support tickets and queries</td><td><code>/support/*</code></td></tr>
+  </table>
+
+  <h3>Layered Architecture</h3>
+  <pre>┌─────────────────────────────────────────┐
+│  Controller Layer                        │
+│  HTTP routing · DTO validation           │
+│  @Roles() · @Public() · @CurrentUser()  │
+├─────────────────────────────────────────┤
+│  Service Layer                           │
+│  Business logic · cross-module calls     │
+│  (e.g. Shop → Payments)                  │
+├─────────────────────────────────────────┤
+│  Data Access Layer (Prisma)              │
+│  Queries · $transaction for multi-writes │
+├─────────────────────────────────────────┤
+│  Infrastructure Layer                    │
+│  Redis · Cloudinary · Razorpay · Firebase│
+└─────────────────────────────────────────┘</pre>
+
+  
+  <h2>5. Database Layer</h2>
+  <div class="card-row">
+    <div class="card">
+      <div class="card-title">PostgreSQL 16</div>
+      <div class="card-meta">Primary source of truth · ACID guarantees · Prisma 6 ORM · snake_case tables · camelCase in TypeScript</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Redis 7</div>
+      <div class="card-meta">Cache-aside reads · Rate limiting · OTP store · Refresh token blocklist · Slot locks · BullMQ job queues</div>
+    </div>
+  </div>
+
+  <h3>Core Entity Relationships</h3>
+  <pre>User ──┬── Court (owner, 1:N)
+       ├── Booking (1:N)
+       ├── Membership (1:N)
+       ├── Payment (1:N)  ← polymorphic: entityType + entityId
+       ├── KidProfile (1:N)
+       ├── Cart (1:1)
+       ├── ShopOrder (1:N)
+       └── MarketplaceOrder (1:N)
+
+Court ──┬── CourtSlot (1:N)
+        ├── MembershipPlan (1:N)
+        └── TrainingProgram ── TrainingBatch ── TrainingEnrollment ── AttendanceRecord</pre>
+
+  <h3>Key Data Integrity Rules</h3>
+  <table>
+    <tr><th>Rule</th><th>Enforcement</th></tr>
+    <tr><td>One booking per slot</td><td><code>Booking.slotId</code> is <code>@unique</code></td></tr>
+    <tr><td>One cart per user</td><td><code>Cart.userId</code> is <code>@unique</code></td></tr>
+    <tr><td>No double enrollment</td><td><code>(kidId, batchId)</code> composite unique</td></tr>
+    <tr><td>No double booking under concurrency</td><td><code>SELECT ... FOR UPDATE</code> within Prisma <code>$transaction</code></td></tr>
+  </table>
+
+  
+  <h2>6. Authentication &amp; Authorization</h2>
+
+  <h3>JWT Token Model</h3>
+  <table>
+    <tr><th>Token</th><th>Web Storage</th><th>Mobile Storage</th><th>TTL</th></tr>
+    <tr><td>Access Token</td><td>localStorage</td><td>SecureStore</td><td>15 min</td></tr>
+    <tr><td>Refresh Token</td><td>localStorage</td><td>SecureStore</td><td>7 days (rotating)</td></tr>
+  </table>
+
+  <h3>Auth Flow</h3>
+  <div class="flow">
+    <div class="flow-step">Credentials</div><div class="flow-arrow">→</div>
+    <div class="flow-step">bcrypt verify</div><div class="flow-arrow">→</div>
+    <div class="flow-step">Issue JWT pair</div><div class="flow-arrow">→</div>
+    <div class="flow-step">Store refresh in DB</div><div class="flow-arrow">→</div>
+    <div class="flow-step">Return tokens</div>
+  </div>
+
+  <h3>RBAC Enforcement (3 layers)</h3>
+  <div class="flow">
+    <div class="flow-step">JwtAuthGuard<br /><span style="font-size:11px;color:#57606a">validates JWT</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">RolesGuard<br /><span style="font-size:11px;color:#57606a">checks @Roles()</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Service Layer<br /><span style="font-size:11px;color:#57606a">resource ownership</span></div>
+  </div>
+
+  <h3>Roles</h3>
+  <table>
+    <tr><th>Role</th><th>Scope</th></tr>
+    <tr><td><span class="badge badge-orange">ADMIN</span></td><td>Platform-wide administration</td></tr>
+    <tr><td><span class="badge badge-blue">COURT_OWNER</span></td><td>Own courts, slots, plans, programs</td></tr>
+    <tr><td><span class="badge badge-green">TRAINER</span></td><td>Assigned training batches only</td></tr>
+    <tr><td><span class="badge badge-purple">PLAYER</span></td><td>Own bookings, memberships, kids, orders</td></tr>
+    <tr><td><span class="badge badge-gray">SERVICE_PROVIDER</span></td><td>Own service listings and orders</td></tr>
+    <tr><td><span class="badge badge-gray">PRINTER</span></td><td>Own print listings and orders</td></tr>
+  </table>
+  <p>Users can hold <strong>multiple roles simultaneously</strong> via <code>UserRoleAssignment</code>.</p>
+
+  
+  <h2>7. Payments — Polymorphic Architecture</h2>
+  <p>All monetizable entities share a single <strong>PaymentsService</strong>. Entity type determines the post-payment action.</p>
+
+  <table>
+    <tr><th>Entity Type</th><th>Action on PAID</th></tr>
+    <tr><td><code>BOOKING</code></td><td>Status → CONFIRMED, generate check-in code</td></tr>
+    <tr><td><code>MEMBERSHIP</code></td><td>Activate, set start/end dates</td></tr>
+    <tr><td><code>TRAINING</code></td><td>Enrollment → ACTIVE, set enrolledAt</td></tr>
+    <tr><td><code>SHOP_ORDER</code></td><td>Confirm order, decrement stock, clear cart</td></tr>
+    <tr><td><code>MARKETPLACE_ORDER</code></td><td>Status → ACCEPTED</td></tr>
+  </table>
+
+  <h3>Payment State Machine</h3>
+  <div class="flow">
+    <div class="flow-step">PENDING</div>
+    <div class="flow-arrow">→ verify / webhook →</div>
+    <div class="flow-step">PAID</div>
+    <div class="flow-arrow">→ refund →</div>
+    <div class="flow-step">REFUNDED</div>
+  </div>
+  <div class="flow" style="margin-top:6px">
+    <div class="flow-step">PENDING</div>
+    <div class="flow-arrow">→ failure / timeout →</div>
+    <div class="flow-step">FAILED</div>
+  </div>
+
+  <p>Razorpay HMAC SHA256 signature validation · Idempotency on webhook re-delivery · <code>PAYMENT_MODE=mock</code> for local dev.</p>
+
+  
+  <h2>8. Caching Strategy (Redis Cache-Aside)</h2>
+  <table>
+    <tr><th>Use Case</th><th>Key Pattern</th><th>TTL</th></tr>
+    <tr><td>Court listing by city</td><td><code>courts:city:{city}</code></td><td>5 min</td></tr>
+    <tr><td>Available slots</td><td><code>slots:{courtId}:{date}</code></td><td>60 sec</td></tr>
+    <tr><td>Product catalog page</td><td><code>products:page:{hash}</code></td><td>10 min</td></tr>
+    <tr><td>OTP codes</td><td><code>otp:{phone}</code></td><td>5 min</td></tr>
+    <tr><td>Rate limiting</td><td><code>ratelimit:{ip}:{endpoint}</code></td><td>1 min</td></tr>
+    <tr><td>Refresh token blocklist</td><td><code>revoked:{tokenId}</code></td><td>7 days</td></tr>
+  </table>
+  <p><strong>Never cached:</strong> Cart contents, payment state, authorization decisions.</p>
+
+  
+  <h2>9. Shared Packages</h2>
+  <div class="card-row">
+    <div class="card">
+      <div class="card-title">@fitora/types</div>
+      <div class="card-meta">All shared TypeScript enums, interfaces, and label maps. Canonical contracts across all apps.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">@fitora/shared</div>
+      <div class="card-meta">Runtime utilities + re-exports from @fitora/types. Shared by web, admin, and mobile.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">@fitora/config</div>
+      <div class="card-meta">Shared ESLint, Prettier, TypeScript configs for all apps. <code>extends: @fitora/config/typescript/nextjs.json</code></div>
+    </div>
+  </div>
+
+  
+  <h2>10. Observability</h2>
+  <table>
+    <tr><th>Pillar</th><th>Tool</th><th>Details</th></tr>
+    <tr><td>Structured Logs</td><td>pino / nestjs-pino</td><td>JSON format · X-Request-Id correlation · no PII in logs</td></tr>
+    <tr><td>Metrics</td><td>Prometheus + Grafana</td><td>p95 latency · error rate · payment success rate · queue backlog</td></tr>
+    <tr><td>Error Tracking</td><td>Sentry</td><td>API + frontend · source maps · release tracking by git SHA</td></tr>
+    <tr><td>Uptime</td><td>Better Stack / UptimeRobot</td><td>Ping <code>GET /health</code> every 60s · Slack/PagerDuty alerts</td></tr>
+    <tr><td>Health Checks</td><td>NestJS HealthModule</td><td><code>/health</code> liveness · <code>/health/ready</code> readiness (DB + Redis)</td></tr>
+  </table>
+
+  
+  <h2>11. CI/CD Pipeline</h2>
+  <div class="flow">
+    <div class="flow-step">Push / PR</div><div class="flow-arrow">→</div>
+    <div class="flow-step">Lint + Typecheck</div><div class="flow-arrow">→</div>
+    <div class="flow-step">Unit Tests</div><div class="flow-arrow">→</div>
+    <div class="flow-step">Build All Apps</div><div class="flow-arrow">→</div>
+    <div class="flow-step">Deploy (main/tag)</div>
+  </div>
+
+  <table>
+    <tr><th>Environment</th><th>Branch</th><th>Payments</th><th>Database</th></tr>
+    <tr><td>Local</td><td>feature/*</td><td>Mock mode</td><td>Docker PostgreSQL</td></tr>
+    <tr><td>Staging</td><td>main</td><td>Razorpay test mode</td><td>Neon branch DB</td></tr>
+    <tr><td>Production</td><td>release tag</td><td>Razorpay live</td><td>Production DB</td></tr>
+  </table>
+
+  <p>Turborepo caches build artifacts across CI runs — only changed packages rebuild. Prisma <code>migrate diff</code> runs on every PR to catch schema drift.</p>
+
+  
+  <h2>12. Scalability Stages</h2>
+  <table>
+    <tr><th>Stage</th><th>MAU</th><th>Architecture</th></tr>
+    <tr><td><span class="badge badge-green">MVP</span></td><td>&lt; 5K</td><td>Single API instance, single DB, Redis single node</td></tr>
+    <tr><td><span class="badge badge-blue">Growth</span></td><td>5K–50K</td><td>2–3 API instances behind LB, DB connection pooling, Redis cluster</td></tr>
+    <tr><td><span class="badge badge-purple">Scale</span></td><td>50K–500K</td><td>Read replicas, BullMQ workers, CDN, cache warming</td></tr>
+    <tr><td><span class="badge badge-orange">Platform</span></td><td>500K+</td><td>Extract payment/notification services, DB sharding</td></tr>
+  </table>
+  <p>Stateless API instances (no session state) allow horizontal autoscaling. First microservice candidates: <strong>Notifications</strong> and <strong>Payments webhook processing</strong>.</p>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>

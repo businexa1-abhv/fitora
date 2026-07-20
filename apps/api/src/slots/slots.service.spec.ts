@@ -4,6 +4,7 @@ import { ClosureReason, SlotPricingRuleType, UserRole } from '@prisma/client';
 import { SlotsService } from './slots.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { SlotEventsService } from '../realtime/slot-events.service';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 
 describe('SlotsService', () => {
   let service: SlotsService;
@@ -55,6 +56,10 @@ describe('SlotsService', () => {
         SlotsService,
         { provide: PrismaService, useValue: prisma },
         { provide: SlotEventsService, useValue: events },
+        {
+          provide: SubscriptionService,
+          useValue: { assertTenantCanAcceptBookings: jest.fn().mockResolvedValue(undefined) },
+        },
       ],
     }).compile();
 

@@ -6,6 +6,7 @@ import {
   NotFoundException,
   forwardRef,
 } from '@nestjs/common';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 import {
   BookingStatus,
   CouponAppliesTo,
@@ -53,6 +54,8 @@ export class MembershipsService {
     private paymentsService: PaymentsService,
     @Inject(CouponsService)
     private couponsService: CouponsService,
+    @Inject(forwardRef(() => SubscriptionService))
+    private subscriptions: SubscriptionService,
   ) {}
 
   // ─── Plans ──────────────────────────────────────────────────────────────────
@@ -61,6 +64,9 @@ export class MembershipsService {
     const court = await this.prisma.court.findUnique({ where: { id: courtId } });
     if (!court) throw new NotFoundException('Court not found');
     this.assertOwnerOrAdmin(court.ownerId, user);
+    if (court.tenantId) {
+      await this.subscriptions.assertTenantCanAcceptBookings(court.tenantId);
+    }
 
     return this.formatPlan(
       await this.prisma.membershipPlan.create({

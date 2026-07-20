@@ -49,11 +49,7 @@ export function createCourt(
     amenities?: string[];
   },
 ) {
-  return apiFetch<Court>(
-    '/courts',
-    { method: 'POST', body: JSON.stringify(data) },
-    token,
-  );
+  return apiFetch<Court>('/courts', { method: 'POST', body: JSON.stringify(data) }, token);
 }
 
 export function getCourtSlots(courtId: string, date: string) {
@@ -124,11 +120,7 @@ export function getTrainers() {
 }
 
 export function approveCourt(token: string, courtId: string) {
-  return apiFetch<Court>(
-    `/courts/${courtId}/approve`,
-    { method: 'PATCH' },
-    token,
-  );
+  return apiFetch<Court>(`/courts/${courtId}/approve`, { method: 'PATCH' }, token);
 }
 
 export function getPendingCourts(token: string) {
@@ -186,11 +178,11 @@ export function enrollKidNew(
     emergencyPhone: string;
   },
 ) {
-  return apiFetch<{ enrollment: unknown; payment: import('@fitora/shared').PaymentOrder; fee: string }>(
-    '/training/enroll/new',
-    { method: 'POST', body: JSON.stringify(data) },
-    token,
-  );
+  return apiFetch<{
+    enrollment: unknown;
+    payment: import('@fitora/shared').PaymentOrder;
+    fee: string;
+  }>('/training/enroll/new', { method: 'POST', body: JSON.stringify(data) }, token);
 }
 
 export function getTrainerBatches(token: string) {
@@ -236,6 +228,26 @@ export function createTrainingBatch(
   return apiFetch<TrainingBatch>(
     `/training/programs/${programId}/batches`,
     { method: 'POST', body: JSON.stringify(data) },
+    token,
+  );
+}
+
+export interface RefundPreview {
+  refundAmount: number;
+  refundPercent: number;
+  hoursUntilSlot: number;
+  policy: string;
+  originalAmount: number;
+}
+
+export function getRefundPreview(token: string, bookingId: string) {
+  return apiFetch<RefundPreview>(`/bookings/${bookingId}/refund-preview`, {}, token);
+}
+
+export function cancelBooking(token: string, bookingId: string, reason?: string) {
+  return apiFetch<{ booking: Booking; refundAmount: number }>(
+    `/bookings/${bookingId}/cancel`,
+    { method: 'POST', body: JSON.stringify({ reason: reason ?? 'Cancelled by player' }) },
     token,
   );
 }

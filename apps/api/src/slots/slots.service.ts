@@ -1,9 +1,12 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 import {
   BookingStatus,
   ClosureReason,
@@ -54,6 +57,8 @@ export class SlotsService {
   constructor(
     private prisma: PrismaService,
     private events: SlotEventsService,
+    @Inject(forwardRef(() => SubscriptionService))
+    private subscriptions: SubscriptionService,
   ) {}
 
   // ─── Single & bulk slot creation ────────────────────────────────────────────
@@ -61,6 +66,9 @@ export class SlotsService {
   async createSlot(courtId: string, dto: CreateSlotDto, user: AuthUserPayload) {
     const court = await this.getCourt(courtId);
     this.assertOwnerOrAdmin(court.ownerId, user);
+    if (court.tenantId) {
+      await this.subscriptions.assertTenantCanAcceptBookings(court.tenantId);
+    }
 
     const startTime = new Date(dto.startTime);
     const endTime = new Date(dto.endTime);
@@ -107,6 +115,9 @@ export class SlotsService {
   async generateSlots(courtId: string, dto: GenerateSlotsDto, user: AuthUserPayload) {
     const court = await this.getCourt(courtId);
     this.assertOwnerOrAdmin(court.ownerId, user);
+    if (court.tenantId) {
+      await this.subscriptions.assertTenantCanAcceptBookings(court.tenantId);
+    }
 
     if (dto.endHour <= dto.startHour) {
       throw new BadRequestException('endHour must be greater than startHour');
@@ -137,6 +148,9 @@ export class SlotsService {
   ) {
     const court = await this.getCourt(courtId);
     this.assertOwnerOrAdmin(court.ownerId, user);
+    if (court.tenantId) {
+      await this.subscriptions.assertTenantCanAcceptBookings(court.tenantId);
+    }
 
     if (dto.endDate < dto.startDate) {
       throw new BadRequestException('endDate must be on or after startDate');
@@ -686,11 +700,11 @@ export class SlotsService {
       durationMinutes,
     );
 
+    if (windows.length === 0) return { created: 0, total: 0 };
+
     const rules = await this.loadPricingRules(courtId);
     const rangeStart = new Date(`${date}T00:00:00.000Z`);
     const closures = await this.loadClosures(courtId, rangeStart, rangeStart);
-
-    let created = 0;
 
     const court = await this.prisma.court.findFirst({
       where: { id: courtId, deletedAt: null },
@@ -699,33 +713,39 @@ export class SlotsService {
     const capacity =
       court?.defaultSlotCapacity && court.defaultSlotCapacity > 0 ? court.defaultSlotCapacity : 1;
 
-    for (const window of windows) {
-      const existing = await this.prisma.courtSlot.findFirst({
-        where: { courtId, startTime: window.startTime, deletedAt: null },
-      });
-      if (existing) continue;
+    // Fetch all existing slots for this date in one query
+    const startTimes = windows.map((w) => w.startTime);
+    const existing = await this.prisma.courtSlot.findMany({
+      where: { courtId, startTime: { in: startTimes }, deletedAt: null },
+      select: { startTime: true },
+    });
+    const existingSet = new Set(existing.map((s) => s.startTime.toISOString()));
 
-      const closure = isSlotClosed(window.startTime, window.endTime, closures);
-      const { price, appliedRule } = resolveSlotPrice(basePrice, window.startTime, rules);
-
-      await this.prisma.courtSlot.create({
-        data: {
+    // Build rows for new slots only
+    const rows = windows
+      .filter((w) => !existingSet.has(w.startTime.toISOString()))
+      .map((w) => {
+        const closure = isSlotClosed(w.startTime, w.endTime, closures);
+        const { price, appliedRule } = resolveSlotPrice(basePrice, w.startTime, rules);
+        return {
           courtId,
           scheduleId: scheduleId ?? null,
-          startTime: window.startTime,
-          endTime: window.endTime,
+          startTime: w.startTime,
+          endTime: w.endTime,
           price,
           capacity,
           bookingMode: capacity > 1 ? SlotBookingMode.SHARED : SlotBookingMode.EXCLUSIVE,
           isBlocked: !!closure,
           blockReason: closure?.reason ?? null,
           notes: appliedRule ? `Pricing: ${appliedRule.name}` : null,
-        },
+        };
       });
-      created++;
-    }
 
-    return { created, total: windows.length };
+    if (rows.length === 0) return { created: 0, total: windows.length };
+
+    const { count } = await this.prisma.courtSlot.createMany({ data: rows, skipDuplicates: true });
+
+    return { created: count, total: windows.length };
   }
 
   private async applyClosureToExistingSlots(

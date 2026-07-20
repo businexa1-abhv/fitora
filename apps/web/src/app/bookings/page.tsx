@@ -4,13 +4,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookingStatus, SPORT_LABELS, UserRole, type Booking, type SportType } from '@fitora/shared';
+import {
+  BookingStatus,
+  SPORT_LABELS,
+  UserRole,
+  type Booking,
+  type SportType,
+} from '@fitora/shared';
 import { Navbar } from '@/components/navbar';
 import { PageShell, formatDate, formatPrice, formatTime } from '@/components/app-header';
 import { FadeUp } from '@/components/motion';
 import { SPORT_EMOJI } from '@/lib/constants';
 import { getAccessToken, getStoredUser } from '@/lib/auth';
 import { getMyBookings } from '@/lib/courts';
+import { CancelBookingDialog } from '@/components/cancel-booking-dialog';
 
 const STATUS_STYLES: Record<BookingStatus, string> = {
   [BookingStatus.PENDING]: 'bg-amber-50 text-amber-700',
@@ -23,6 +30,7 @@ export default function BookingsPage() {
   const router = useRouter();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cancelTarget, setCancelTarget] = useState<Booking | null>(null);
 
   useEffect(() => {
     const token = getAccessToken();
@@ -42,6 +50,17 @@ export default function BookingsPage() {
 
   return (
     <PageShell>
+      {/* P0-5: Booking cancellation dialog */}
+      <CancelBookingDialog
+        booking={cancelTarget}
+        onClose={() => setCancelTarget(null)}
+        onCancelled={(id) => {
+          setBookings((prev) =>
+            prev.map((b) => (b.id === id ? { ...b, status: BookingStatus.CANCELLED } : b)),
+          );
+          setCancelTarget(null);
+        }}
+      />
       <Navbar />
 
       <section className="hero-mesh text-white py-12 sm:py-14">
@@ -130,25 +149,42 @@ export default function BookingsPage() {
                         {booking.slot && (
                           <p className="text-sm mt-2 font-medium">
                             {formatDate(booking.slot.startTime)},{' '}
-                            {formatTime(booking.slot.startTime)} – {formatTime(booking.slot.endTime)}
+                            {formatTime(booking.slot.startTime)} –{' '}
+                            {formatTime(booking.slot.endTime)}
                           </p>
                         )}
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-xl font-extrabold text-primary">{formatPrice(booking.totalAmount)}</p>
+                      <p className="text-xl font-extrabold text-primary">
+                        {formatPrice(booking.totalAmount)}
+                      </p>
                       <span
                         className={`mt-2 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${
-                          STATUS_STYLES[booking.status as BookingStatus] ?? 'bg-gray-100 text-gray-600'
+                          STATUS_STYLES[booking.status as BookingStatus] ??
+                          'bg-gray-100 text-gray-600'
                         }`}
                       >
                         {booking.status.toLowerCase()}
                       </span>
                       {booking.checkInCode && (
                         <div className="mt-3 rounded-xl bg-primary-light border border-primary/20 px-3 py-2">
-                          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold">Check-in</p>
-                          <p className="font-mono font-bold text-primary text-sm">{booking.checkInCode}</p>
+                          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold">
+                            Check-in
+                          </p>
+                          <p className="font-mono font-bold text-primary text-sm">
+                            {booking.checkInCode}
+                          </p>
                         </div>
+                      )}
+                      {booking.status === BookingStatus.CONFIRMED && (
+                        <button
+                          type="button"
+                          onClick={() => setCancelTarget(booking)}
+                          className="mt-3 text-xs text-red-500 hover:text-red-700 font-medium"
+                        >
+                          Cancel booking
+                        </button>
                       )}
                     </div>
                   </div>

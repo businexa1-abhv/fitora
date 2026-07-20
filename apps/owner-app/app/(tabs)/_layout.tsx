@@ -1,6 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { View } from 'react-native';
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
 import { CoachColors } from '@/constants/coach-theme';
@@ -8,6 +10,16 @@ import { CoachColors } from '@/constants/coach-theme';
 export default function TabsLayout() {
   const { colors } = useTheme();
   const { isOwner, isCoachMode } = useAuth();
+  const router = useRouter();
+  const notifChecked = useRef(false);
+
+  useEffect(() => {
+    if (notifChecked.current) return;
+    notifChecked.current = true;
+    AsyncStorage.getItem('fitora_owner_notification_asked').then((val) => {
+      if (!val) router.push('/notification-permission' as never);
+    });
+  }, [router]);
 
   const coachTabBar = {
     backgroundColor: CoachColors.tabBar,

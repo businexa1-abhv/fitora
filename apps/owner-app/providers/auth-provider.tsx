@@ -11,6 +11,8 @@ import {
   type AppMode,
 } from '@/lib/auth';
 import { logout as logoutApi } from '@/lib/auth-api';
+import { getMySubscription } from '@/lib/owner-api';
+import { registerForPushNotifications } from '@/lib/push';
 
 interface AuthContextValue {
   user: AuthUser | null;
@@ -19,6 +21,8 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   isOwner: boolean;
   isTrainer: boolean;
+  /** True when the owner's subscription is EXPIRED (not ACTIVE or GRACE). */
+  isSubscriptionExpired: boolean;
   /** UI mode chosen at login (Owner vs Coach tab). */
   appMode: AppMode;
   /** True when the session should show the coach Stitch shell. */
@@ -43,6 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [appMode, setAppMode] = useState<AppMode>('owner');
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubscriptionExpired, setIsSubscriptionExpired] = useState(false);
 
   useEffect(() => {
     async function bootstrap() {
@@ -57,6 +62,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (storedUser) {
           setAppMode(resolveAppMode(storedUser.roles ?? [], storedMode));
         }
+        if (accessToken) {
+          registerForPushNotifications(accessToken).catch(() => undefined);
+          getMySubscription(accessToken)
+            .then((sub) => {
+              if (sub && sub.status !== 'ACTIVE' && sub.status !== 'GRACE') {
+                setIsSubscriptionExpired(true);
+              }
+            })
+            .catch(() => undefined);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -70,6 +85,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(response.user);
     setToken(response.tokens.accessToken);
     setAppMode(resolved);
+    registerForPushNotifications(response.tokens.accessToken).catch(() => undefined);
+    getMySubscription(response.tokens.accessToken)
+      .then((sub) => {
+        if (sub && sub.status !== 'ACTIVE' && sub.status !== 'GRACE') {
+          setIsSubscriptionExpired(true);
+        } else {
+          setIsSubscriptionExpired(false);
+        }
+      })
+      .catch(() => undefined);
   }, []);
 
   const signOut = useCallback(async () => {
@@ -98,12 +123,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isAuthenticated: Boolean(user && token),
       isOwner,
       isTrainer,
+      isSubscriptionExpired,
       appMode,
       isCoachMode,
       signIn,
       signOut,
     }),
-    [user, token, isLoading, isOwner, isTrainer, appMode, isCoachMode, signIn, signOut],
+    [
+      user,
+      token,
+      isLoading,
+      isOwner,
+      isTrainer,
+      isSubscriptionExpired,
+      appMode,
+      isCoachMode,
+      signIn,
+      signOut,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

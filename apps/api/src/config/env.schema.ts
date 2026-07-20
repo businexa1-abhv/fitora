@@ -51,7 +51,7 @@ export const envSchema = z
 
     SWAGGER_ENABLED: z
       .enum(['true', 'false'])
-      .default('false')
+      .default('true')
       .transform((v) => v === 'true'),
 
     SENTRY_DSN: z.string().optional(),

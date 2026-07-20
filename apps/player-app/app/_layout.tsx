@@ -8,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from '@/providers/theme-provider';
 import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
-import { parseDeepLink } from '@/lib/push';
+import { isSafeDeepLinkPath, parseDeepLink } from '@/lib/push';
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
@@ -27,7 +27,7 @@ function AppNavigator() {
 
     function handleUrl(event: { url: string }) {
       const link = parseDeepLink(event.url) ?? parseUniversalLink(event.url);
-      if (!link) return;
+      if (!link || !isSafeDeepLinkPath(link.path)) return;
       router.push(link.path as never);
     }
 
@@ -39,7 +39,7 @@ function AppNavigator() {
     const notificationSub = Notifications.addNotificationResponseReceivedListener((response) => {
       const data = response.notification.request.content.data as { path?: string; url?: string };
       if (data.path) {
-        router.push(data.path as never);
+        if (isSafeDeepLinkPath(data.path)) router.push(data.path as never);
         return;
       }
       if (data.url) {

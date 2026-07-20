@@ -4,18 +4,18 @@ import { MembershipsService } from './memberships.service';
 import { CouponsService } from './coupons.service';
 import { PaymentsService } from '../payments/payments.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 import { addMembershipDuration } from './constants/plan-benefits';
 import { MembershipDuration } from '@prisma/client';
 
 describe('MembershipsService', () => {
   let service: MembershipsService;
   let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      'membershipPlan' | 'membershipPurchase' | 'court' | 'booking' | 'coupon'
-    >
+    Pick<PrismaService, 'membershipPlan' | 'membershipPurchase' | 'court' | 'booking' | 'coupon'>
   >;
-  let couponsService: jest.Mocked<Pick<CouponsService, 'resolveCoupon' | 'applyRedemption' | 'validateForUser'>>;
+  let couponsService: jest.Mocked<
+    Pick<CouponsService, 'resolveCoupon' | 'applyRedemption' | 'validateForUser'>
+  >;
   let paymentsService: jest.Mocked<Pick<PaymentsService, 'createPaymentOrder'>>;
 
   const ownerUser = { id: 'owner-1', email: 'o@f.com', roles: [UserRole.COURT_OWNER] };
@@ -45,7 +45,9 @@ describe('MembershipsService', () => {
     } as unknown as typeof prisma;
 
     couponsService = {
-      resolveCoupon: jest.fn().mockResolvedValue({ coupon: null, discountAmount: 0, finalAmount: 999 }),
+      resolveCoupon: jest
+        .fn()
+        .mockResolvedValue({ coupon: null, discountAmount: 0, finalAmount: 999 }),
       applyRedemption: jest.fn(),
       validateForUser: jest.fn(),
     };
@@ -60,6 +62,10 @@ describe('MembershipsService', () => {
         { provide: PrismaService, useValue: prisma },
         { provide: CouponsService, useValue: couponsService },
         { provide: PaymentsService, useValue: paymentsService },
+        {
+          provide: SubscriptionService,
+          useValue: { assertTenantCanAcceptBookings: jest.fn().mockResolvedValue(undefined) },
+        },
       ],
     }).compile();
 

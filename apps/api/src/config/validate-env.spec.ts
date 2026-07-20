@@ -15,7 +15,7 @@ describe('validateEnv', () => {
   it('accepts valid development config', () => {
     const result = validateEnv(baseEnv);
     expect(result.DATABASE_URL).toBe(baseEnv.DATABASE_URL);
-    expect(result.SWAGGER_ENABLED).toBe(false);
+    expect(result.SWAGGER_ENABLED).toBe(true);
   });
 
   it('rejects short JWT secret in production', () => {

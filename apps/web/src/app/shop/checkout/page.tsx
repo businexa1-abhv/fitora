@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Cart } from '@fitora/shared';
 import { Navbar } from '@/components/navbar';
@@ -11,12 +11,14 @@ import { ApiError } from '@/lib/api';
 import { getAccessToken, getStoredUser } from '@/lib/auth';
 import { completePayment } from '@/lib/payments';
 import { checkout, getCart, validateShopCoupon } from '@/lib/shop';
+import { PaymentProcessingOverlay } from '@/components/payment-processing-overlay';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [discountPreview, setDiscountPreview] = useState<number | null>(null);
@@ -68,6 +70,7 @@ export default function CheckoutPage() {
         ...form,
         couponCode: couponCode.trim() || undefined,
       });
+      setVerifying(true);
       await completePayment(
         token,
         payment,
@@ -75,19 +78,25 @@ export default function CheckoutPage() {
         `${user.firstName} ${user.lastName}`,
         `Shop order — ${order.items.length} item(s)`,
       );
+      setVerifying(false);
       router.push('/shop/orders');
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Checkout failed');
+      setVerifying(false);
+      const msg = err instanceof ApiError ? err.message : 'Checkout failed';
+      // Redirect to payment failure page for gateway errors
+      if (msg.toLowerCase().includes('payment') || msg.toLowerCase().includes('razorpay')) {
+        router.push(`/payment-failed?reason=${encodeURIComponent(msg)}&return=/shop/checkout`);
+      } else {
+        setError(msg);
+      }
     } finally {
       setSubmitting(false);
     }
   }
 
   const subtotal =
-    cart?.items.reduce(
-      (sum, item) => sum + Number(item.product?.price ?? 0) * item.quantity,
-      0,
-    ) ?? 0;
+    cart?.items.reduce((sum, item) => sum + Number(item.product?.price ?? 0) * item.quantity, 0) ??
+    0;
   const shipping = subtotal >= 999 ? 0 : 99;
   const total = Math.max(0, subtotal + shipping - (discountPreview ?? 0));
 
@@ -116,13 +125,16 @@ export default function CheckoutPage() {
 
   return (
     <PageShell>
+      <PaymentProcessingOverlay visible={verifying} />
       <Navbar />
 
       <section className="hero-mesh text-white py-10 sm:py-12">
         <div className="mx-auto max-w-lg px-4 sm:px-6">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="text-2xl sm:text-3xl font-extrabold">Checkout</h1>
-            <p className="text-white/75 mt-2 text-sm">Enter shipping details to complete your order</p>
+            <p className="text-white/75 mt-2 text-sm">
+              Enter shipping details to complete your order
+            </p>
           </motion.div>
         </div>
       </section>
@@ -224,7 +236,11 @@ export default function CheckoutPage() {
                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                 placeholder="SAVE10"
               />
-              <button type="button" onClick={applyCoupon} className="rounded-xl border border-border px-4 text-sm font-semibold shrink-0">
+              <button
+                type="button"
+                onClick={applyCoupon}
+                className="rounded-xl border border-border px-4 text-sm font-semibold shrink-0"
+              >
                 Apply
               </button>
             </div>

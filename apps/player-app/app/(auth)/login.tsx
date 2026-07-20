@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, type ComponentProps } from 'react';
 import {
   Image,
@@ -298,6 +299,7 @@ export default function LoginScreen() {
         notificationsEnabled: askForNotifications,
       });
       await signIn({ ...pendingAuthResponse, user });
+      await AsyncStorage.setItem('fitora_notification_asked', '1').catch(() => undefined);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Registration failed');
     } finally {

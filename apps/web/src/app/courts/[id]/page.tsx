@@ -3,7 +3,14 @@
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { DURATION_LABELS, SPORT_LABELS, SportType, type Court, type CourtSlot, type MembershipPlan } from '@fitora/shared';
+import {
+  DURATION_LABELS,
+  SPORT_LABELS,
+  SportType,
+  type Court,
+  type CourtSlot,
+  type MembershipPlan,
+} from '@fitora/shared';
 import { AppHeader, PageShell, formatDate, formatPrice, formatTime } from '@/components/app-header';
 import { SPORT_EMOJI, SPORT_GRADIENTS } from '@/lib/constants';
 import { FadeUp } from '@/components/motion';
@@ -18,6 +25,8 @@ import {
   purchaseMembership,
 } from '@/lib/courts';
 import { completePayment } from '@/lib/payments';
+import { PaymentProcessingOverlay } from '@/components/payment-processing-overlay';
+import { SlotConflictBanner } from '@/components/slot-conflict-banner';
 
 function todayString() {
   return new Date().toISOString().split('T')[0];
@@ -35,13 +44,17 @@ export default function CourtDetailPage() {
   const [purchasingPlanId, setPurchasingPlanId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [slotConflict, setSlotConflict] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
     getCourt(id)
       .then(setCourt)
       .catch(() => setCourt(null))
       .finally(() => setLoading(false));
-    getMembershipPlans(id).then(setPlans).catch(() => setPlans([]));
+    getMembershipPlans(id)
+      .then(setPlans)
+      .catch(() => setPlans([]));
   }, [id]);
 
   useEffect(() => {
@@ -61,16 +74,19 @@ export default function CourtDetailPage() {
     setBookingSlotId(slotId);
     setError('');
     setSuccess('');
+    setSlotConflict(false);
 
     try {
       const checkout = await createBooking(token, slotId);
-      const result = await completePayment(
+      setVerifying(true);
+      const result = (await completePayment(
         token,
         checkout.payment,
         user.email,
         `${user.firstName} ${user.lastName}`,
         `Court booking — ${court?.name}`,
-      ) as { checkInCode?: string };
+      )) as { checkInCode?: string };
+      setVerifying(false);
 
       const discount = checkout.membershipDiscount
         ? ` (${Math.round(checkout.membershipDiscount * 100)}% member discount applied)`
@@ -79,7 +95,23 @@ export default function CourtDetailPage() {
       const updated = await getCourtSlots(id, date);
       setSlots(updated);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : err instanceof Error ? err.message : 'Booking failed');
+      setVerifying(false);
+      const message =
+        err instanceof ApiError
+          ? err.message
+          : err instanceof Error
+            ? err.message
+            : 'Booking failed';
+      // Detect slot conflict (409 or "already booked" messages)
+      if (
+        (err instanceof ApiError && err.status === 409) ||
+        message.toLowerCase().includes('already booked') ||
+        message.toLowerCase().includes('slot is')
+      ) {
+        setSlotConflict(true);
+      } else {
+        setError(message);
+      }
     } finally {
       setBookingSlotId(null);
     }
@@ -107,7 +139,13 @@ export default function CourtDetailPage() {
       );
       setSuccess('Membership activated!');
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : err instanceof Error ? err.message : 'Purchase failed');
+      setError(
+        err instanceof ApiError
+          ? err.message
+          : err instanceof Error
+            ? err.message
+            : 'Purchase failed',
+      );
     } finally {
       setPurchasingPlanId(null);
     }
@@ -139,6 +177,9 @@ export default function CourtDetailPage() {
 
   return (
     <PageShell>
+      {/* P0-10: Payment processing overlay */}
+      <PaymentProcessingOverlay visible={verifying} />
+
       <AppHeader backHref="/courts">
         <Link href="/memberships" className="text-sm font-semibold text-primary hover:underline">
           Memberships
@@ -187,7 +228,10 @@ export default function CourtDetailPage() {
               className="mt-4 flex flex-wrap gap-2"
             >
               {court.amenities.map((a) => (
-                <span key={a} className="rounded-full bg-white/20 backdrop-blur px-3 py-1 text-xs font-medium">
+                <span
+                  key={a}
+                  className="rounded-full bg-white/20 backdrop-blur px-3 py-1 text-xs font-medium"
+                >
                   {a}
                 </span>
               ))}
@@ -197,6 +241,19 @@ export default function CourtDetailPage() {
       </div>
 
       <main className="mx-auto max-w-6xl px-4 sm:px-6 py-8 -mt-6">
+        {slotConflict && (
+          <div className="mb-4">
+            <SlotConflictBanner
+              courtId={id}
+              onRefresh={() => {
+                setSlotConflict(false);
+                getCourtSlots(id, date)
+                  .then(setSlots)
+                  .catch(() => null);
+              }}
+            />
+          </div>
+        )}
         {error && (
           <div className="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
             {error}
@@ -215,10 +272,15 @@ export default function CourtDetailPage() {
               <p className="text-sm text-muted mt-1">Members get 10% off every booking</p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {plans.map((plan) => (
-                  <div key={plan.id} className="rounded-xl border-2 border-border bg-background p-5 card-hover">
+                  <div
+                    key={plan.id}
+                    className="rounded-xl border-2 border-border bg-background p-5 card-hover"
+                  >
                     <h3 className="font-bold">{plan.name}</h3>
                     <p className="text-sm text-muted mt-1">{DURATION_LABELS[plan.duration]}</p>
-                    <p className="text-2xl font-extrabold text-primary mt-3">{formatPrice(plan.price)}</p>
+                    <p className="text-2xl font-extrabold text-primary mt-3">
+                      {formatPrice(plan.price)}
+                    </p>
                     <button
                       onClick={() => handlePurchasePlan(plan.id)}
                       disabled={purchasingPlanId === plan.id}
@@ -268,7 +330,9 @@ export default function CourtDetailPage() {
                       <p className="font-bold text-sm">
                         {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
                       </p>
-                      <p className="text-primary font-extrabold text-lg mt-1">{formatPrice(slot.price)}</p>
+                      <p className="text-primary font-extrabold text-lg mt-1">
+                        {formatPrice(slot.price)}
+                      </p>
                     </div>
                     <button
                       onClick={() => handleBook(slot.id)}

@@ -103,6 +103,9 @@ export class BookingsService {
     if (court.ownerId !== owner.id && !owner.roles.includes(UserRole.ADMIN)) {
       throw new ForbiddenException('Only the court owner can create walk-in bookings');
     }
+    if (court.tenantId) {
+      await this.subscriptions.assertTenantCanAcceptBookings(court.tenantId);
+    }
 
     const seats = dto.seats ?? 1;
     const equipmentFee = dto.equipmentFee ?? 0;
@@ -787,6 +790,14 @@ export class BookingsService {
       id: booking.id,
       courtName: booking.court.name,
       slotStart: booking.slot.startTime,
+      checkInCode,
+    });
+
+    this.events.emitBookingConfirmed({
+      bookingId: booking.id,
+      userId: booking.userId,
+      courtId: booking.courtId,
+      slotId: booking.slotId,
       checkInCode,
     });
 
