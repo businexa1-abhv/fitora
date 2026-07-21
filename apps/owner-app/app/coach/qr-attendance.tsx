@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/providers/auth-provider';
 import { getTrainerBatches, markEnrollmentAttendance } from '@/lib/trainer-api';
 import { todayString } from '@/lib/trainer-utils';
+import { FitoraLoader } from '@/components/fitora-loader';
 import { CoachColors } from '@/constants/coach-theme';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -178,7 +179,7 @@ export default function QrAttendanceScannerScreen() {
   if (!permission) {
     return (
       <View style={[styles.center, { backgroundColor: '#111' }]}>
-        <ActivityIndicator color={CoachColors.primary} />
+        <FitoraLoader variant="screen" />
       </View>
     );
   }

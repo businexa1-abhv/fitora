@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   Alert,
   Pressable,
   ScrollView,
@@ -22,6 +21,7 @@ import {
   getTrainerBatches,
   listTrainingNotes,
 } from '@/lib/trainer-api';
+import { FitoraLoader } from '@/components/fitora-loader';
 import { CoachColors } from '@/constants/coach-theme';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -174,7 +174,7 @@ export default function PerformanceReportScreen() {
   if (batchesQuery.isLoading || reportsQuery.isLoading) {
     return (
       <View style={[styles.center, { paddingTop: insets.top }]}>
-        <ActivityIndicator color={CoachColors.primary} size="large" />
+        <FitoraLoader variant="screen" />
       </View>
     );
   }

@@ -1,14 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,6 +13,7 @@ import {
   markBatchAttendance,
 } from '@/lib/trainer-api';
 import { todayString } from '@/lib/trainer-utils';
+import { FitoraLoader } from '@/components/fitora-loader';
 import { CoachColors } from '@/constants/coach-theme';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -119,7 +111,7 @@ export default function TrainingSessionDetailScreen() {
   if (batchesQuery.isLoading) {
     return (
       <View style={[styles.center, { paddingTop: insets.top }]}>
-        <ActivityIndicator color={CoachColors.primary} size="large" />
+        <FitoraLoader variant="screen" />
       </View>
     );
   }

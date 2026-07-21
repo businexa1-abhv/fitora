@@ -1,19 +1,12 @@
 import { useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  Linking,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '@/providers/auth-provider';
 import { getEnrollmentAttendance, getProgressReports, getTrainerBatches } from '@/lib/trainer-api';
+import { FitoraLoader } from '@/components/fitora-loader';
 import { CoachColors } from '@/constants/coach-theme';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -79,7 +72,7 @@ export default function StudentProfileDetailScreen() {
   if (batchesQuery.isLoading) {
     return (
       <View style={[styles.center, { paddingTop: insets.top }]}>
-        <ActivityIndicator color={CoachColors.primary} size="large" />
+        <FitoraLoader variant="screen" />
       </View>
     );
   }

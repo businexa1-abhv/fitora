@@ -1,5 +1,6 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '@/providers/theme-provider';
+import { FitoraLoader } from '@/components/fitora-loader';
 import { FontSize, Spacing } from '@/constants/theme';
 
 interface QueryStateProps {
@@ -14,11 +15,7 @@ export function QueryState({ isLoading, isError, error, onRetry, children }: Que
   const { colors } = useTheme();
 
   if (isLoading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
+    return <FitoraLoader variant="screen" />;
   }
 
   if (isError) {

@@ -373,6 +373,9 @@ const holdStyles = StyleSheet.create({
   releaseText: { fontSize: FontSize.xs, fontWeight: '700' },
 });
 
+/** Width in px for one hour of slot duration in the horizontal timeline */
+const PX_PER_HOUR = 88;
+
 /** Interactive horizontal timeline with labeled time markers */
 function TimelineView({
   slots,
@@ -1051,7 +1054,8 @@ export default function BookingScreen() {
             >
               <Ionicons name="hourglass-outline" size={18} color={colors.accent} />
               <Text style={[styles.waitlistText, { color: colors.accent }]}>
-                This slot is full. Join the waitlist and we'll notify you instantly if a spot opens.
+                This slot is full. Join the waitlist and we&apos;ll notify you instantly if a spot
+                opens.
               </Text>
             </View>
           )}

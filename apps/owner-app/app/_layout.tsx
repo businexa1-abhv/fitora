@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -10,6 +9,7 @@ import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { ThemeProvider, useTheme } from '@/providers/theme-provider';
 import { isSafeDeepLinkPath, parseDeepLink } from '@/lib/push';
+import { FitoraLoader } from '@/components/fitora-loader';
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
@@ -109,16 +109,10 @@ function OwnerNavigator() {
 
   if (isLoading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: colors.background,
-        }}
-      >
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
+      <>
+        <StatusBar style="light" />
+        <FitoraLoader variant="splash" />
+      </>
     );
   }
 

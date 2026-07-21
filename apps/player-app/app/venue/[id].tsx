@@ -554,7 +554,9 @@ export default function VenueDetailsScreen() {
                 <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
                   {filteredCourts.length === 1 ? '1 court' : `${filteredCourts.length} courts`}
                 </Text>
-                <Text style={[styles.todayLabel, { color: colors.muted }]}>Today's timeline</Text>
+                <Text style={[styles.todayLabel, { color: colors.muted }]}>
+                  Today&apos;s timeline
+                </Text>
               </View>
 
               <View style={styles.courtList}>

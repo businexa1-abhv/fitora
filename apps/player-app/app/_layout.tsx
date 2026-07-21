@@ -9,6 +9,7 @@ import { ThemeProvider, useTheme } from '@/providers/theme-provider';
 import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { isSafeDeepLinkPath, parseDeepLink } from '@/lib/push';
+import { FitoraLoader } from '@/components/fitora-loader';
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
@@ -18,9 +19,8 @@ function AppNavigator() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoading) return;
     SplashScreen.hideAsync().catch(() => undefined);
-  }, [isLoading]);
+  }, []);
 
   useEffect(() => {
     if (isLoading || !isAuthenticated) return undefined;
@@ -54,7 +54,12 @@ function AppNavigator() {
   }, [isAuthenticated, isLoading, router]);
 
   if (isLoading) {
-    return null;
+    return (
+      <>
+        <StatusBar style="light" />
+        <FitoraLoader variant="splash" />
+      </>
+    );
   }
 
   const commonOptions = {
