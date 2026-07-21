@@ -94,7 +94,7 @@ export class VenuesService {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, sportSlug?: string) {
     const tenant = await this.prisma.tenant.findFirst({
       where: {
         id,
@@ -114,12 +114,23 @@ export class VenuesService {
     });
     if (!tenant) throw new NotFoundException('Venue not found');
 
+    const sportId = sportSlug
+      ? (
+          await this.prisma.sport.findFirst({
+            where: { slug: sportSlug, deletedAt: null },
+            select: { id: true },
+          })
+        )?.id
+      : undefined;
+    if (sportSlug && !sportId) throw new NotFoundException('Sport not found at this venue');
+
     const courts = await this.prisma.court.findMany({
       where: {
         tenantId: id,
         deletedAt: null,
         approvalStatus: CourtApprovalStatus.APPROVED,
         isActive: true,
+        ...(sportId && { sportId }),
       },
       include: COURT_INCLUDE,
       orderBy: { name: 'asc' },
@@ -128,6 +139,160 @@ export class VenuesService {
     if (courts.length === 0) throw new NotFoundException('Venue not found');
 
     return this.formatVenue(tenant, courts, true);
+  }
+
+  async listVenueSports(venueId: string) {
+    await this.assertVenue(venueId);
+    const courts = await this.prisma.court.findMany({
+      where: {
+        tenantId: venueId,
+        deletedAt: null,
+        approvalStatus: CourtApprovalStatus.APPROVED,
+        isActive: true,
+      },
+      include: { sport: { select: { id: true, name: true, slug: true, iconUrl: true } } },
+    });
+
+    const bySport = new Map<
+      string,
+      {
+        sport: { id: string; name: string; slug: string; iconUrl: string | null };
+        courtCount: number;
+        priceFrom: number | null;
+      }
+    >();
+
+    for (const court of courts) {
+      if (!court.sport) continue;
+      const row = bySport.get(court.sport.id) ?? {
+        sport: court.sport,
+        courtCount: 0,
+        priceFrom: null,
+      };
+      row.courtCount += 1;
+      const price = Number(court.defaultSlotPrice);
+      if (Number.isFinite(price) && price > 0) {
+        row.priceFrom = row.priceFrom == null ? price : Math.min(row.priceFrom, price);
+      }
+      bySport.set(court.sport.id, row);
+    }
+
+    return {
+      venueId,
+      sports: [...bySport.values()].map((row) => ({
+        ...row.sport,
+        courtCount: row.courtCount,
+        priceFrom: row.priceFrom?.toString() ?? null,
+      })),
+    };
+  }
+
+  async getVenueSportDetail(venueId: string, sportSlug: string) {
+    await this.assertVenue(venueId);
+    const sport = await this.prisma.sport.findFirst({
+      where: { slug: sportSlug, deletedAt: null },
+    });
+    if (!sport) throw new NotFoundException('Sport not found');
+
+    const courts = await this.prisma.court.findMany({
+      where: {
+        tenantId: venueId,
+        sportId: sport.id,
+        deletedAt: null,
+        approvalStatus: CourtApprovalStatus.APPROVED,
+        isActive: true,
+      },
+      include: COURT_INCLUDE,
+      orderBy: { name: 'asc' },
+    });
+    if (courts.length === 0) throw new NotFoundException('Sport not offered at this venue');
+
+    const courtIds = courts.map((c) => c.id);
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+
+    const [schedules, membershipCount, trainerCount, availableSlotsToday] = await Promise.all([
+      this.prisma.slotSchedule.findMany({
+        where: { courtId: { in: courtIds }, deletedAt: null, isActive: true },
+        select: {
+          startHour: true,
+          endHour: true,
+          daysOfWeek: true,
+          basePrice: true,
+        },
+      }),
+      this.prisma.membershipPlan.count({
+        where: { courtId: { in: courtIds }, deletedAt: null, isActive: true },
+      }),
+      this.prisma.tenantTrainer.count({
+        where: { tenantId: venueId, deletedAt: null },
+      }),
+      this.prisma.courtSlot.count({
+        where: {
+          courtId: { in: courtIds },
+          deletedAt: null,
+          operationalState: 'AVAILABLE',
+          startTime: { gte: today, lt: tomorrow },
+        },
+      }),
+    ]);
+
+    const prices = courts
+      .map((c) => Number(c.defaultSlotPrice))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    const operatingHours = this.summarizeOperatingHours(schedules);
+
+    return {
+      venueId,
+      sport: {
+        id: sport.id,
+        name: sport.name,
+        slug: sport.slug,
+        iconUrl: sport.iconUrl,
+      },
+      courtCount: courts.length,
+      availableCourts: courts.length,
+      availableSlotsToday,
+      priceFrom: prices.length ? Math.min(...prices).toString() : null,
+      membershipAvailable: membershipCount > 0,
+      coachAvailable: trainerCount > 0,
+      operatingHours,
+      courts: courts.map((court) => ({
+        id: court.id,
+        name: court.name,
+        defaultSlotPrice: court.defaultSlotPrice?.toString() ?? null,
+        defaultSlotCapacity: court.defaultSlotCapacity,
+        amenities: court.amenities,
+        sport: court.sport,
+        images: court.images,
+      })),
+    };
+  }
+
+  private async assertVenue(venueId: string) {
+    const tenant = await this.prisma.tenant.findFirst({
+      where: {
+        id: venueId,
+        deletedAt: null,
+        status: TenantStatus.ACTIVE,
+        isActive: true,
+      },
+      select: { id: true },
+    });
+    if (!tenant) throw new NotFoundException('Venue not found');
+    return tenant;
+  }
+
+  private summarizeOperatingHours(
+    schedules: Array<{ startHour: number; endHour: number; daysOfWeek: number[] }>,
+  ) {
+    if (schedules.length === 0) return null;
+    const startHour = Math.min(...schedules.map((s) => s.startHour));
+    const endHour = Math.max(...schedules.map((s) => s.endHour));
+    const days = [...new Set(schedules.flatMap((s) => s.daysOfWeek))].sort();
+    return { startHour, endHour, daysOfWeek: days };
   }
 
   private async buildCourtWhere(query: VenueQueryDto): Promise<Prisma.CourtWhereInput> {

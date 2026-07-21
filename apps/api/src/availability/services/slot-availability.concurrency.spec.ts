@@ -119,6 +119,13 @@ describe('SlotAvailabilityService concurrency', () => {
       emitSlotCancelled: jest.fn().mockResolvedValue(undefined),
       emitSlotReleased: jest.fn().mockResolvedValue(undefined),
       emitBookingConfirmed: jest.fn().mockResolvedValue(undefined),
+      enqueueSlotLifecycleInTx: jest.fn().mockResolvedValue({
+        eventId: 'evt-1',
+        event: 'slot.booked',
+        occurredAt: new Date().toISOString(),
+        data: {},
+      }),
+      publishEnvelopes: jest.fn().mockResolvedValue(undefined),
     };
     const holds = { setHold: jest.fn().mockResolvedValue(undefined) };
 
@@ -179,7 +186,8 @@ describe('SlotAvailabilityService concurrency', () => {
     const snap = prisma.getSnapshot();
     expect(snap.reservedCount).toBe(capacity);
     expect(snap.bookings).toBe(capacity);
-    expect(events.emitSlotUpdated).toHaveBeenCalledTimes(capacity);
+    expect(events.publishEnvelopes).toHaveBeenCalledTimes(capacity);
+    expect(events.enqueueSlotLifecycleInTx).toHaveBeenCalled();
   });
 
   it('rejects when requesting more seats than remaining capacity', async () => {

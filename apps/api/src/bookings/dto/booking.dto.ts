@@ -32,6 +32,20 @@ export class CreateBookingDto {
   @IsOptional()
   @IsUUID()
   couponId?: string;
+
+  @ApiPropertyOptional({ description: 'Optimistic concurrency token from slot snapshot' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  expectedVersion?: number;
+
+  @ApiPropertyOptional({ description: 'Seats to reserve', default: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  seats?: number;
 }
 
 export class CreateWalkInBookingDto {

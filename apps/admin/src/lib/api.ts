@@ -80,8 +80,17 @@ export function getUsers(accessToken: string) {
   return apiFetch<AuthUser[]>('/users', {}, accessToken);
 }
 
-export function getPendingCourts(token: string) {
-  return apiFetch<Court[]>('/courts/pending', {}, token);
+interface PaginatedCourts {
+  items: Court[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export async function getPendingCourts(token: string) {
+  const result = await apiFetch<PaginatedCourts>('/courts/pending', {}, token);
+  return result.items;
 }
 
 export function approveCourt(token: string, courtId: string) {

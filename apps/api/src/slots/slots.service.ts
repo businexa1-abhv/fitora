@@ -396,7 +396,7 @@ export class SlotsService {
     const court = await this.getCourt(courtId);
     this.assertOwnerOrAdmin(court.ownerId, user);
 
-    const slot = await this.getSlot(courtId, slotId);
+    let slot = await this.getSlot(courtId, slotId);
     const previousPrice = Number(slot.price);
     const previousCapacity = slot.capacity;
 
@@ -408,9 +408,19 @@ export class SlotsService {
     }
 
     if (dto.capacity != null) {
-      return this.availability.updateCapacity(courtId, slotId, dto.capacity, {
+      await this.availability.updateCapacity(courtId, slotId, dto.capacity, {
         expectedVersion: dto.expectedVersion,
       });
+      const hasMoreUpdates =
+        dto.price !== undefined ||
+        dto.startTime !== undefined ||
+        dto.endTime !== undefined ||
+        dto.notes !== undefined;
+      if (!hasMoreUpdates) {
+        const refreshed = await this.getSlot(courtId, slotId);
+        return this.formatSlot(refreshed);
+      }
+      slot = await this.getSlot(courtId, slotId);
     }
 
     if (dto.operationalState) {

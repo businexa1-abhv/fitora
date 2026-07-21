@@ -7,6 +7,7 @@ import {
 import { Prisma, TenantStatus, UserRole } from '@prisma/client';
 import { AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { PrismaService } from '../prisma/prisma.module';
+import { SlotEventsService } from '../realtime/slot-events.service';
 import { TenantContextService } from './tenant-context.service';
 import {
   CreateTenantDto,
@@ -55,6 +56,7 @@ export class TenantsService {
   constructor(
     private prisma: PrismaService,
     private tenantContext: TenantContextService,
+    private slotEvents: SlotEventsService,
   ) {}
 
   async resolve(query: ResolveTenantQueryDto) {
@@ -92,7 +94,9 @@ export class TenantsService {
         take: pageSize,
         include: {
           owner: { select: { id: true, email: true, firstName: true, lastName: true } },
-          _count: { select: { courts: true, products: true, membershipPlans: true, trainers: true } },
+          _count: {
+            select: { courts: true, products: true, membershipPlans: true, trainers: true },
+          },
         },
       }),
       this.prisma.tenant.count({ where }),
@@ -229,6 +233,14 @@ export class TenantsService {
       data: { status: dto.status, isActive: dto.isActive },
     });
 
+    await this.slotEvents.emitVenueUpdated({
+      venueId: updated.id,
+      tenantId: updated.id,
+      name: updated.brandName ?? updated.name,
+      status: updated.status,
+      isActive: updated.isActive,
+    });
+
     return this.formatTenant(updated, user);
   }
 
@@ -302,7 +314,9 @@ export class TenantsService {
   requireTenantScope(explicit?: string): string {
     const tenantId = this.resolveTenantIdFromContext(explicit);
     if (!tenantId) {
-      throw new BadRequestException('Tenant context required (X-Tenant-Id or X-Tenant-Slug header)');
+      throw new BadRequestException(
+        'Tenant context required (X-Tenant-Id or X-Tenant-Slug header)',
+      );
     }
     return tenantId;
   }

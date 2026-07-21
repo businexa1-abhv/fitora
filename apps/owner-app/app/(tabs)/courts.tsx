@@ -8,7 +8,7 @@ import { formatCurrency, type Court } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
 import { Card, QueryState } from '@/components/ui';
-import { courtPrimaryImage, getMyCourts } from '@/lib/owner-api';
+import { courtPrimaryImage, getMyCourts, getVenueAvailability } from '@/lib/owner-api';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 function statusMeta(court: Court) {
@@ -66,7 +66,15 @@ export default function CourtsInventoryScreen() {
 
   const activeCount = courts.filter((c) => c.isActive && c.approvalStatus === 'APPROVED').length;
   const maintenanceCount = courts.filter((c) => !c.isActive).length;
-  const occupancy = courts.length > 0 ? Math.round((activeCount / courts.length) * 45) : 0;
+
+  const tenantId = courts.find((c) => c.tenantId)?.tenantId;
+  const today = new Date().toISOString().slice(0, 10);
+  const occupancyQuery = useQuery({
+    queryKey: ['owner', 'occupancy', tenantId, today],
+    queryFn: () => getVenueAvailability(token!, tenantId!, today),
+    enabled: !!token && !!tenantId,
+  });
+  const occupancy = occupancyQuery.data?.summary?.occupancyPercent ?? 0;
 
   return (
     <View style={[styles.root, { backgroundColor: colors.background }]}>

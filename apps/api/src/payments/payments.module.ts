@@ -8,6 +8,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
 import { WalletModule } from '../wallet/wallet.module';
 import { RealtimeModule } from '../realtime/realtime.module';
 import { FinanceModule } from '../finance/finance.module';
+import { AvailabilityModule } from '../availability/availability.module';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 
@@ -22,6 +23,7 @@ import { PaymentsService } from './payments.service';
     forwardRef(() => WalletModule),
     RealtimeModule,
     forwardRef(() => FinanceModule),
+    forwardRef(() => AvailabilityModule),
   ],
   controllers: [PaymentsController],
   providers: [PaymentsService],

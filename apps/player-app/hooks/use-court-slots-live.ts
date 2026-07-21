@@ -3,6 +3,20 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { CourtSlot } from '@fitora/shared';
 import { getRealtimeSocket, type LiveSlotUpdated } from '@/lib/realtime';
 
+/** Server emits both raw slot snapshots and version-aware envelopes ({ event, data }). */
+function unwrapPayload<T>(payload: T | { event: string; data: T }): T {
+  if (
+    payload &&
+    typeof payload === 'object' &&
+    'event' in payload &&
+    'data' in payload &&
+    (payload as { data?: unknown }).data != null
+  ) {
+    return (payload as { data: T }).data;
+  }
+  return payload as T;
+}
+
 function patchSlot(existing: CourtSlot, update: LiveSlotUpdated): CourtSlot {
   const existingVersion = existing.version ?? 0;
   const nextVersion = update.version ?? existingVersion;
@@ -54,7 +68,8 @@ export function useCourtSlotsLive(
       void queryClient.invalidateQueries({ queryKey: ['slots', courtId, date] });
     };
 
-    const onUpdated = (payload: LiveSlotUpdated) => {
+    const onUpdated = (raw: LiveSlotUpdated | { event: string; data: LiveSlotUpdated }) => {
+      const payload = unwrapPayload(raw);
       if (!payload?.id || payload.courtId !== courtId) return;
 
       const payloadDate = payload.startTime?.slice(0, 10);
@@ -81,8 +96,9 @@ export function useCourtSlotsLive(
     };
 
     const onDeleted = (
-      payload: LiveSlotUpdated | { id?: string; slotId?: string; courtId: string },
+      raw: LiveSlotUpdated | { id?: string; slotId?: string; courtId: string },
     ) => {
+      const payload = unwrapPayload(raw);
       const slotId =
         'id' in payload && payload.id ? payload.id : (payload as { slotId?: string }).slotId;
       if (!slotId || payload.courtId !== courtId) return;
@@ -98,41 +114,59 @@ export function useCourtSlotsLive(
       reconcile();
     };
 
+    const onCourtUpdated = (raw: { courtId?: string } | { event: string; data: unknown }) => {
+      const payload = unwrapPayload(raw) as { courtId?: string };
+      if (payload?.courtId !== courtId) return;
+      void queryClient.invalidateQueries({ queryKey: ['court', courtId] });
+      reconcile();
+    };
+
+    const onVenueUpdated = (raw: { venueId?: string } | { event: string; data: unknown }) => {
+      const payload = unwrapPayload(raw) as { venueId?: string };
+      if (payload?.venueId) {
+        void queryClient.invalidateQueries({ queryKey: ['venue', payload.venueId] });
+      }
+      reconcile();
+    };
+
     const onConnect = () => {
       subscribe();
       reconcile();
     };
 
+    const updateEvents = [
+      'slot:updated',
+      'slot.updated',
+      'slot.created',
+      'slot.blocked',
+      'slot.unblocked',
+      'slot.closed',
+      'slot.full',
+      'slot.available',
+      'slot.booked',
+      'slot.cancelled',
+      'slot.capacity.changed',
+      'slot.price.changed',
+      'slot.maintenance',
+      'slot.tournament',
+    ] as const;
+
     subscribe();
     socket.on('connect', onConnect);
-    socket.on('slot:updated', onUpdated);
-    socket.on('slot.updated', onUpdated);
-    socket.on('slot.created', onUpdated);
-    socket.on('slot.blocked', onUpdated);
-    socket.on('slot.unblocked', onUpdated);
-    socket.on('slot.closed', onUpdated);
-    socket.on('slot.full', onUpdated);
-    socket.on('slot.available', onUpdated);
-    socket.on('slot.booked', onUpdated);
-    socket.on('slot.cancelled', onUpdated);
+    for (const event of updateEvents) socket.on(event, onUpdated);
     socket.on('slot.deleted', onDeleted);
     socket.on('slot:released', onReleased);
+    socket.on('court.updated', onCourtUpdated);
+    socket.on('venue.updated', onVenueUpdated);
 
     return () => {
       socket.emit('unsubscribe:court', { courtId, date });
       socket.off('connect', onConnect);
-      socket.off('slot:updated', onUpdated);
-      socket.off('slot.updated', onUpdated);
-      socket.off('slot.created', onUpdated);
-      socket.off('slot.blocked', onUpdated);
-      socket.off('slot.unblocked', onUpdated);
-      socket.off('slot.closed', onUpdated);
-      socket.off('slot.full', onUpdated);
-      socket.off('slot.available', onUpdated);
-      socket.off('slot.booked', onUpdated);
-      socket.off('slot.cancelled', onUpdated);
+      for (const event of updateEvents) socket.off(event, onUpdated);
       socket.off('slot.deleted', onDeleted);
       socket.off('slot:released', onReleased);
+      socket.off('court.updated', onCourtUpdated);
+      socket.off('venue.updated', onVenueUpdated);
     };
   }, [courtId, date, queryClient, token]);
 }

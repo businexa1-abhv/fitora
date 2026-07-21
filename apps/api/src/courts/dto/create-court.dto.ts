@@ -123,6 +123,12 @@ export class CreateCourtDto {
   @Min(0)
   defaultSlotPrice?: number;
 
+  @ApiPropertyOptional({ example: 4, description: 'Default seats per slot for shared courts' })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  defaultSlotCapacity?: number;
+
   @ApiPropertyOptional({ type: [CreateCourtImageDto] })
   @IsOptional()
   @IsArray()

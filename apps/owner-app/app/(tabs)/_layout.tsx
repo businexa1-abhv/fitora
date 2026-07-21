@@ -132,6 +132,16 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="bookings"
+        options={{
+          title: 'Bookings',
+          href: isOwner && !isCoachMode ? undefined : null,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="notifications"
         options={{
           title: 'Alerts',

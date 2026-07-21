@@ -16,6 +16,8 @@ import {
   Zap,
   Receipt,
   Percent,
+  Activity,
+  MapPin,
 } from 'lucide-react';
 import { clearAuthSession, getAuthSession } from '@/lib/api';
 import { useEffect, useState } from 'react';
@@ -23,6 +25,8 @@ import { useEffect, useState } from 'react';
 const NAV = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
   { href: '/owners', label: 'Management', icon: Users },
+  { href: '/courts', label: 'Courts', icon: MapPin },
+  { href: '/occupancy', label: 'Live Occupancy', icon: Activity },
   { href: '/finance', label: 'Finance', icon: Wallet },
   { href: '/settlements', label: 'Settlements', icon: Receipt },
   { href: '/gst', label: 'GST', icon: Percent },

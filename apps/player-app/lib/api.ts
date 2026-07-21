@@ -1,15 +1,39 @@
-import type { AuthResponse } from '@fitora/shared';
+import type { AuthResponse, CourtSlot } from '@fitora/shared';
 import { clearAuthSession, getAccessToken, getRefreshToken, saveAuthSession } from './auth';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api/v1';
 
+/** Slot snapshot returned in 409 conflict bodies from the availability engine. */
+export type ConflictSlotSnapshot = Partial<CourtSlot> & { id?: string };
+
 export class ApiError extends Error {
+  /** Machine-readable error code (e.g. SLOT_AVAILABILITY_CONFLICT). */
+  code?: string;
+  /** Latest slot snapshot when the booking conflicts (409). */
+  slot?: ConflictSlotSnapshot;
+  /** Alternative bookable slots suggested by the server (409). */
+  nearbySlots?: ConflictSlotSnapshot[];
+  /** Raw parsed response body, when available. */
+  body?: unknown;
+
   constructor(
     message: string,
     public status: number,
+    body?: unknown,
   ) {
     super(message);
     this.name = 'ApiError';
+    this.body = body;
+    if (body && typeof body === 'object') {
+      const { code, slot, nearbySlots } = body as {
+        code?: unknown;
+        slot?: unknown;
+        nearbySlots?: unknown;
+      };
+      if (typeof code === 'string') this.code = code;
+      if (slot && typeof slot === 'object') this.slot = slot as ConflictSlotSnapshot;
+      if (Array.isArray(nearbySlots)) this.nearbySlots = nearbySlots as ConflictSlotSnapshot[];
+    }
   }
 }
 
@@ -94,13 +118,14 @@ export async function apiFetch<T>(
 
   if (!response.ok) {
     let message = 'Something went wrong';
+    let body: unknown;
     try {
-      const body = await response.json();
+      body = await response.json();
       message = getErrorMessage(body, message);
     } catch {
       message = response.statusText || message;
     }
-    throw new ApiError(message, response.status);
+    throw new ApiError(message, response.status, body);
   }
 
   if (response.status === 204) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   ImageBackground,
@@ -25,13 +25,24 @@ import { ScreenHeader } from '@/components/screen-header';
 import { Button } from '@/components/ui/button';
 import { QueryState } from '@/components/query-state';
 import { SPORT_COLORS, SPORT_EMOJI } from '@/lib/constants';
+import { ApiError } from '@/lib/api';
 import { getCourt, getCourtSlots, createBooking, joinWaitlist } from '@/lib/courts';
 import { getVenue } from '@/lib/venues';
 import { completePayment } from '@/lib/payments';
 import { useCourtSlotsLive } from '@/hooks/use-court-slots-live';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
-const DURATION_OPTIONS = [60, 90, 120];
+/** Six-state slot status palette: green / red / orange / gray / blue / yellow. */
+type SlotStatusKey = 'AVAILABLE' | 'RESERVED' | 'FULL' | 'CLOSED' | 'TOURNAMENT' | 'MAINTENANCE';
+
+const SLOT_STATUS_META: Record<SlotStatusKey, { color: string; label: string }> = {
+  AVAILABLE: { color: '#22C55E', label: 'Open' },
+  RESERVED: { color: '#E8A317', label: 'Reserved' },
+  FULL: { color: '#EF4444', label: 'Full' },
+  CLOSED: { color: '#9CA3AF', label: 'Closed' },
+  TOURNAMENT: { color: '#3B82F6', label: 'Tournament' },
+  MAINTENANCE: { color: '#FFDB17', label: 'Maintenance' },
+};
 
 function shortCourtLabel(name: string, index: number) {
   const match = name.match(/Court\s+(\d+)/i);
@@ -75,13 +86,16 @@ function getPrimaryImage(court: Court) {
   return typeof primary === 'string' ? primary : primary?.url;
 }
 
-function slotDurationLabel(slot?: CourtSlot) {
-  if (!slot) return '60 Mins';
-  const minutes = Math.max(
+function slotMinutes(slot: CourtSlot) {
+  return Math.max(
     30,
     Math.round((new Date(slot.endTime).getTime() - new Date(slot.startTime).getTime()) / 60000),
   );
-  return `${minutes} Mins`;
+}
+
+function slotDurationLabel(slot?: CourtSlot) {
+  if (!slot) return '60 Mins';
+  return `${slotMinutes(slot)} Mins`;
 }
 
 function occupiedSeats(slot: CourtSlot) {
@@ -95,9 +109,14 @@ function occupiedSeats(slot: CourtSlot) {
 
 function isSlotBlocked(slot: CourtSlot) {
   if (slot.isBlocked) return true;
-  if (slot.availabilityStatus === 'BLOCKED') return true;
-  if (slot.availabilityStatus === 'MAINTENANCE' || slot.availabilityStatus === 'HOLIDAY')
-    return true;
+  const status = slot.availabilityStatus;
+  const op = slot.operationalState;
+  if (status === 'BLOCKED' || op === 'BLOCKED') return true;
+  if (status === 'MAINTENANCE' || op === 'MAINTENANCE') return true;
+  if (status === 'TOURNAMENT' || op === 'TOURNAMENT') return true;
+  if (status === 'CLOSED' || op === 'CLOSED') return true;
+  if (status === 'PRIVATE' || op === 'PRIVATE') return true;
+  if (status === 'HOLIDAY') return true;
   return false;
 }
 
@@ -108,8 +127,20 @@ function isSlotFull(slot: CourtSlot) {
   return !!slot.isBooked;
 }
 
-function isSlotUnavailable(slot: CourtSlot) {
-  return isSlotBlocked(slot);
+function isSlotBookable(slot: CourtSlot) {
+  if (typeof slot.isBookable === 'boolean') return slot.isBookable;
+  return !isSlotBlocked(slot) && !isSlotFull(slot);
+}
+
+function slotStatus(slot: CourtSlot): SlotStatusKey {
+  const status = slot.availabilityStatus;
+  const op = slot.operationalState;
+  if (status === 'MAINTENANCE' || op === 'MAINTENANCE') return 'MAINTENANCE';
+  if (status === 'TOURNAMENT' || op === 'TOURNAMENT') return 'TOURNAMENT';
+  if (isSlotBlocked(slot)) return 'CLOSED';
+  if (isSlotFull(slot)) return 'FULL';
+  if (status === 'FEW_SPOTS' || (slot.reservedSeats ?? 0) > 0) return 'RESERVED';
+  return 'AVAILABLE';
 }
 
 export default function BookingScreen() {
@@ -121,7 +152,7 @@ export default function BookingScreen() {
   const queryClient = useQueryClient();
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(todayIso());
-  const [selectedDuration, setSelectedDuration] = useState(60);
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const dateOptions = buildDateOptions();
 
   const courtQuery = useQuery({
@@ -159,27 +190,52 @@ export default function BookingScreen() {
       ? [court]
       : [];
   const slots = slotsQuery.data ?? [];
+
+  // Duration pills reflect the real slot durations available on this date.
+  const durationOptions = useMemo(() => {
+    const unique = [...new Set(slots.map((slot) => slotMinutes(slot)))].sort((a, b) => a - b);
+    return unique.length > 0 ? unique : [60];
+  }, [slots]);
+  const activeDuration =
+    selectedDuration != null && durationOptions.includes(selectedDuration)
+      ? selectedDuration
+      : durationOptions[0]!;
+  const visibleSlots =
+    durationOptions.length > 1
+      ? slots.filter((slot) => slotMinutes(slot) === activeDuration)
+      : slots;
+
   const selected = slots.find((slot) => slot.id === selectedSlot);
   const selectedIsFull = selected ? isSlotFull(selected) : false;
-  const total = selected && !selectedIsFull ? Number(selected.price) : 0;
+  const selectedIsBookable = selected ? isSlotBookable(selected) : false;
+  const total = selected && selectedIsBookable ? Number(selected.price) : 0;
   const sport: SportType = (court?.sportType as SportType | null) ?? SportType.OTHER;
   const imageUrl = court ? getPrimaryImage(court) : undefined;
   const selectedMonth = dateOptions.find((date) => date.iso === selectedDate)?.month ?? '';
   const venueTitle = venueQuery.data?.name ?? court?.name ?? 'Select Court';
+  const courtIndexInVenue = siblingCourts.findIndex((item) => item.id === courtId);
+  const courtSummaryLabel = court
+    ? shortCourtLabel(court.name, courtIndexInVenue >= 0 ? courtIndexInVenue : 0)
+    : 'Court';
 
   const bookMutation = useMutation({
     mutationFn: async () => {
       if (!token || !courtId || !selected) throw new Error('Missing booking data');
-      const checkout = await createBooking(token, courtId, selected.id);
-      await completePayment(
+      const checkout = await createBooking(token, courtId, selected.id, {
+        expectedVersion: selected.version,
+        seats: 1,
+      });
+      const paymentResult = (await completePayment(
         token,
         checkout.payment,
         user?.email ?? '',
         user ? `${user.firstName} ${user.lastName}` : 'Player',
-      );
-      return { checkout, slot: selected };
+      )) as { entity?: { checkInCode?: string | null } } | undefined;
+      const checkInCode =
+        paymentResult?.entity?.checkInCode ?? checkout.booking.checkInCode ?? undefined;
+      return { checkout, slot: selected, checkInCode };
     },
-    onSuccess: ({ checkout, slot }) => {
+    onSuccess: ({ checkout, slot, checkInCode }) => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
       queryClient.invalidateQueries({ queryKey: ['slots', courtId, selectedDate] });
       router.replace({
@@ -191,10 +247,24 @@ export default function BookingScreen() {
           startTime: slot.startTime,
           endTime: slot.endTime,
           amount: checkout.booking.totalAmount ?? String(total),
+          ...(checkInCode ? { checkInCode } : {}),
         },
       });
     },
-    onError: (err: Error) => Alert.alert('Booking failed', err.message),
+    onError: (err: Error) => {
+      if (err instanceof ApiError && err.status === 409) {
+        queryClient.invalidateQueries({ queryKey: ['slots', courtId, selectedDate] });
+        setSelectedSlot(null);
+        const nearby = (err.nearbySlots ?? [])
+          .map((slot) => (slot.startTime ? formatSlotTime(slot.startTime) : null))
+          .filter(Boolean)
+          .slice(0, 3);
+        const suggestion = nearby.length > 0 ? `\n\nNearby open slots: ${nearby.join(', ')}` : '';
+        Alert.alert('Slot no longer available', `${err.message}${suggestion}`);
+        return;
+      }
+      Alert.alert('Booking failed', err.message);
+    },
   });
 
   const waitlistMutation = useMutation({
@@ -215,6 +285,14 @@ export default function BookingScreen() {
   function handleDatePress(iso: string) {
     setSelectedDate(iso);
     setSelectedSlot(null);
+    setSelectedDuration(null);
+  }
+
+  function handleDurationPress(duration: number) {
+    setSelectedDuration(duration);
+    if (selected && slotMinutes(selected) !== duration) {
+      setSelectedSlot(null);
+    }
   }
 
   return (
@@ -308,12 +386,12 @@ export default function BookingScreen() {
             <View style={styles.section}>
               <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Duration</Text>
               <View style={styles.durationRow}>
-                {DURATION_OPTIONS.map((duration) => {
-                  const active = selectedDuration === duration;
+                {durationOptions.map((duration) => {
+                  const active = activeDuration === duration;
                   return (
                     <Pressable
                       key={duration}
-                      onPress={() => setSelectedDuration(duration)}
+                      onPress={() => handleDurationPress(duration)}
                       style={[
                         styles.durationButton,
                         {
@@ -340,22 +418,30 @@ export default function BookingScreen() {
               <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
                 Available Slots
               </Text>
-              <View style={styles.legendRow}>
-                <LegendDot color={colors.border} label="Full" />
-                <LegendDot color="#E8A317" label="Few left" />
-                <LegendDot color={colors.accent} label="Open" />
-              </View>
+            </View>
+            <View style={styles.legendRow}>
+              {(Object.keys(SLOT_STATUS_META) as SlotStatusKey[]).map((key) => (
+                <LegendDot
+                  key={key}
+                  color={SLOT_STATUS_META[key].color}
+                  label={SLOT_STATUS_META[key].label}
+                />
+              ))}
             </View>
             <View style={styles.slotGrid}>
-              {slots.map((slot) => {
+              {visibleSlots.map((slot) => {
                 const isSelected = selectedSlot === slot.id;
-                const blocked = isSlotBlocked(slot);
-                const full = isSlotFull(slot);
-                const unavailable = blocked;
+                const statusKey = slotStatus(slot);
+                const statusMeta = SLOT_STATUS_META[statusKey];
+                const bookable = isSlotBookable(slot);
+                const full = statusKey === 'FULL';
+                // Full slots stay tappable so players can join the waitlist.
+                const unavailable = !bookable && !full;
                 const capacity = slot.capacity ?? 1;
                 const taken = occupiedSeats(slot);
-                const fewSpots = slot.availabilityStatus === 'FEW_SPOTS';
-                const showOccupancy = capacity > 1;
+                const seatsLeft = slot.availableSeats ?? Math.max(0, capacity - taken);
+                const showSeats =
+                  capacity > 1 && (statusKey === 'AVAILABLE' || statusKey === 'RESERVED');
                 const fillRatio = capacity > 0 ? Math.min(1, taken / capacity) : 0;
 
                 return (
@@ -368,17 +454,11 @@ export default function BookingScreen() {
                       {
                         backgroundColor: isSelected
                           ? colors.accent
-                          : unavailable
-                            ? colors.mutedBg
-                            : full
-                              ? colors.mutedBg
-                              : colors.card,
-                        borderColor: isSelected
-                          ? colors.accent
-                          : fewSpots && !unavailable && !full
-                            ? '#E8A317'
-                            : colors.border,
-                        opacity: unavailable ? 0.56 : full && !isSelected ? 0.72 : 1,
+                          : statusKey === 'AVAILABLE'
+                            ? colors.card
+                            : `${statusMeta.color}1A`,
+                        borderColor: isSelected ? colors.accent : statusMeta.color,
+                        opacity: unavailable ? 0.56 : full && !isSelected ? 0.8 : 1,
                       },
                     ]}
                   >
@@ -387,15 +467,23 @@ export default function BookingScreen() {
                     >
                       {formatSlotTime(slot.startTime)}
                     </Text>
-                    {showOccupancy && (
+                    <Text
+                      style={[
+                        styles.slotPrice,
+                        { color: isSelected ? 'rgba(255,255,255,0.92)' : colors.muted },
+                      ]}
+                    >
+                      {formatCurrency(Number(slot.price) || 0)}
+                    </Text>
+                    {showSeats && (
                       <>
                         <Text
                           style={[
                             styles.slotOccupancy,
-                            { color: isSelected ? 'rgba(255,255,255,0.9)' : colors.muted },
+                            { color: isSelected ? 'rgba(255,255,255,0.9)' : statusMeta.color },
                           ]}
                         >
-                          {taken}/{capacity}
+                          {seatsLeft} left
                         </Text>
                         <View
                           style={[
@@ -412,33 +500,24 @@ export default function BookingScreen() {
                               styles.slotBarFill,
                               {
                                 width: `${Math.round(fillRatio * 100)}%`,
-                                backgroundColor: isSelected
-                                  ? '#fff'
-                                  : fewSpots
-                                    ? '#E8A317'
-                                    : colors.accent,
+                                backgroundColor: isSelected ? '#fff' : statusMeta.color,
                               },
                             ]}
                           />
                         </View>
                       </>
                     )}
-                    {!showOccupancy && fewSpots && !unavailable && !full && (
-                      <Text style={[styles.slotHint, { color: isSelected ? '#fff' : '#E8A317' }]}>
-                        Few left
-                      </Text>
-                    )}
-                    {full && (
+                    {statusKey !== 'AVAILABLE' && (
                       <Text
-                        style={[styles.slotHint, { color: isSelected ? '#fff' : colors.muted }]}
+                        style={[styles.slotHint, { color: isSelected ? '#fff' : statusMeta.color }]}
                       >
-                        Full
+                        {statusMeta.label}
                       </Text>
                     )}
                   </Pressable>
                 );
               })}
-              {slots.length === 0 && (
+              {visibleSlots.length === 0 && (
                 <Text style={[styles.empty, { color: colors.muted }]}>
                   No slots available for this date
                 </Text>
@@ -450,7 +529,7 @@ export default function BookingScreen() {
             >
               <Text style={[styles.summaryTitle, { color: colors.foreground }]}>Order Summary</Text>
               <SummaryRow
-                label={`Court 1 (${selected ? slotDurationLabel(selected) : `${selectedDuration} Mins`})`}
+                label={`${courtSummaryLabel} (${selected ? slotDurationLabel(selected) : `${activeDuration} Mins`})`}
                 value={selected ? formatCurrency(total) : '--'}
               />
               {selected && (selected.capacity ?? 1) > 1 && (
@@ -501,15 +580,23 @@ export default function BookingScreen() {
                 : selectedIsFull
                   ? 'Join Waitlist'
                   : selected
-                    ? 'Confirm & Pay'
+                    ? selectedIsBookable
+                      ? 'Confirm & Pay'
+                      : 'Unavailable'
                     : 'Select a slot'
           }
-          disabled={!selected || bookMutation.isPending || waitlistMutation.isPending}
+          disabled={
+            !selected ||
+            (!selectedIsBookable && !selectedIsFull) ||
+            bookMutation.isPending ||
+            waitlistMutation.isPending
+          }
           onPress={() => {
             if (selectedIsFull) {
               waitlistMutation.mutate();
               return;
             }
+            if (!selectedIsBookable) return;
             bookMutation.mutate();
           }}
           style={styles.payButton}
@@ -659,7 +746,12 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
   },
   durationText: { fontSize: FontSize.sm, fontWeight: '900' },
-  legendRow: { flexDirection: 'row', gap: Spacing.md },
+  legendRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+    marginTop: -Spacing.md,
+  },
   legendItem: { alignItems: 'center', flexDirection: 'row', gap: 4 },
   legendDot: { borderRadius: 3, height: 10, width: 10 },
   legendText: { fontSize: 10, fontWeight: '900', textTransform: 'uppercase' },
@@ -676,6 +768,7 @@ const styles = StyleSheet.create({
     width: '31.7%',
   },
   slotTime: { fontSize: FontSize.sm, fontWeight: '900', textAlign: 'center' },
+  slotPrice: { fontSize: 10, fontWeight: '800' },
   slotOccupancy: { fontSize: 10, fontWeight: '800' },
   slotHint: { fontSize: 9, fontWeight: '800', textTransform: 'uppercase' },
   slotBarTrack: {

@@ -5,6 +5,7 @@ export type AvailabilityStatus =
   | 'AVAILABLE'
   | 'FEW_SPOTS'
   | 'FULL'
+  | 'RESERVED'
   | 'BLOCKED'
   | 'MAINTENANCE'
   | 'TOURNAMENT'
@@ -35,12 +36,14 @@ export function computeAvailabilityStatus(input: {
   operationalState?: SlotOperationalState | string | null;
   capacity: number;
   availableSeats: number;
+  reservedSeats?: number;
 }): AvailabilityStatus {
   const operational = resolveOperationalState(input);
   if (operational !== 'AVAILABLE') {
     return operational;
   }
   if (input.availableSeats <= 0) return 'FULL';
+  if ((input.reservedSeats ?? 0) > 0) return 'RESERVED';
   const threshold = Math.max(1, Math.floor(input.capacity * 0.25));
   if (input.availableSeats <= threshold) return 'FEW_SPOTS';
   return 'AVAILABLE';

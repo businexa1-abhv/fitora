@@ -42,7 +42,7 @@ export class RealtimeOutboxService implements OnModuleInit, OnModuleDestroy {
     event: RealtimeEventType,
     data: unknown,
     meta?: Partial<Omit<RealtimeEventEnvelope, 'eventId' | 'event' | 'occurredAt' | 'data'>>,
-  ) {
+  ): Promise<RealtimeEventEnvelope> {
     const envelope = wrapRealtimeEvent(event, data, meta);
     await tx.realtimeOutbox.create({
       data: {

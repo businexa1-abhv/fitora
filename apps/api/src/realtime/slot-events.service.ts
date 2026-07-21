@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import type { Prisma } from '@prisma/client';
 import type { AvailabilityStatus } from '../availability/utils/availability-status.util';
 import { isBookableStatus } from '../availability/utils/availability-status.util';
 import { RealtimeOutboxService } from './realtime-outbox.service';
@@ -103,33 +104,99 @@ export class SlotEventsService {
       | 'slot.cancelled'
       | 'slot.available'
       | 'slot.full'
+      | 'slot.maintenance'
+      | 'slot.tournament'
     >,
     payload: SlotUpdatedPayload,
   ) {
+    const envelope = this.buildSlotEnvelope(event, payload);
+    try {
+      const persisted = (await this.outbox.enqueue(
+        event,
+        envelope.data,
+        this.envelopeMeta(envelope),
+      )) as typeof envelope;
+      this.emitCanonical(persisted);
+      await this.outbox.markPublished(persisted.eventId);
+    } catch (error) {
+      this.logger.warn(`Outbox enqueue failed, emitting locally only: ${String(error)}`);
+      this.emitCanonical(envelope);
+    }
+
+    await this.emitDerivedAvailability(envelope);
+  }
+
+  /** Enqueue inside the same DB transaction as the slot mutation. */
+  async enqueueSlotLifecycleInTx(
+    tx: Prisma.TransactionClient,
+    event: Extract<
+      RealtimeEventType,
+      | 'slot.created'
+      | 'slot.updated'
+      | 'slot.deleted'
+      | 'slot.blocked'
+      | 'slot.unblocked'
+      | 'slot.closed'
+      | 'slot.capacity.changed'
+      | 'slot.price.changed'
+      | 'slot.booked'
+      | 'slot.cancelled'
+      | 'slot.available'
+      | 'slot.full'
+      | 'slot.maintenance'
+      | 'slot.tournament'
+    >,
+    payload: SlotUpdatedPayload,
+  ): Promise<RealtimeEventEnvelope<SlotSnapshot>> {
+    const envelope = this.buildSlotEnvelope(event, payload);
+    await this.outbox.enqueueInTx(tx, event, envelope.data, this.envelopeMeta(envelope));
+    return envelope;
+  }
+
+  async publishEnvelopes(envelopes: RealtimeEventEnvelope<SlotSnapshot>[]) {
+    for (const envelope of envelopes) {
+      this.emitCanonical(envelope);
+      try {
+        await this.outbox.markPublished(envelope.eventId);
+      } catch {
+        /* pump will retry */
+      }
+      await this.emitDerivedAvailability(envelope);
+    }
+  }
+
+  private buildSlotEnvelope(
+    event: RealtimeEventType,
+    payload: SlotUpdatedPayload,
+  ): RealtimeEventEnvelope<SlotSnapshot> {
     const snapshot = this.toSnapshot(payload);
-    const meta = {
+    return wrapRealtimeEvent(event, snapshot, {
       slotVersion: snapshot.version,
       tenantId: snapshot.tenantId,
       venueId: snapshot.venueId,
       courtId: snapshot.courtId,
       slotId: snapshot.id,
+    });
+  }
+
+  private envelopeMeta(envelope: RealtimeEventEnvelope) {
+    return {
+      slotVersion: envelope.slotVersion,
+      tenantId: envelope.tenantId,
+      venueId: envelope.venueId,
+      courtId: envelope.courtId,
+      slotId: envelope.slotId,
     };
+  }
 
-    let envelope = wrapRealtimeEvent(event, snapshot, meta);
-    try {
-      envelope = (await this.outbox.enqueue(event, snapshot, meta)) as typeof envelope;
-    } catch (error) {
-      this.logger.warn(`Outbox enqueue failed, emitting locally only: ${String(error)}`);
-    }
-
-    this.emitCanonical(envelope);
-    try {
-      await this.outbox.markPublished(envelope.eventId);
-    } catch {
-      /* non-fatal */
-    }
-
-    if (event === 'slot.updated' || event === 'slot.booked' || event === 'slot.cancelled') {
+  private async emitDerivedAvailability(envelope: RealtimeEventEnvelope<SlotSnapshot>) {
+    const snapshot = envelope.data;
+    const meta = this.envelopeMeta(envelope);
+    if (
+      envelope.event === 'slot.updated' ||
+      envelope.event === 'slot.booked' ||
+      envelope.event === 'slot.cancelled'
+    ) {
       if (snapshot.availabilityStatus === 'FULL') {
         this.emitCanonical(wrapRealtimeEvent('slot.full', snapshot, meta));
       } else if (snapshot.isBookable) {
@@ -160,6 +227,60 @@ export class SlotEventsService {
 
   async emitSlotClosed(payload: SlotUpdatedPayload) {
     await this.emitSlotLifecycle('slot.closed', payload);
+  }
+
+  async emitSlotMaintenance(payload: SlotUpdatedPayload) {
+    await this.emitSlotLifecycle('slot.maintenance', payload);
+  }
+
+  async emitSlotTournament(payload: SlotUpdatedPayload) {
+    await this.emitSlotLifecycle('slot.tournament', payload);
+  }
+
+  async emitCourtUpdated(payload: {
+    courtId: string;
+    tenantId: string;
+    name: string;
+    approvalStatus?: string;
+    isActive?: boolean;
+  }) {
+    const envelope = wrapRealtimeEvent('court.updated', payload, {
+      courtId: payload.courtId,
+      tenantId: payload.tenantId,
+      venueId: payload.tenantId,
+    });
+    try {
+      await this.outbox.enqueue('court.updated', payload, {
+        courtId: payload.courtId,
+        tenantId: payload.tenantId,
+        venueId: payload.tenantId,
+      });
+    } catch {
+      /* local fallback */
+    }
+    this.emitCanonical(envelope);
+  }
+
+  async emitVenueUpdated(payload: {
+    venueId: string;
+    tenantId: string;
+    name: string;
+    status?: string;
+    isActive?: boolean;
+  }) {
+    const envelope = wrapRealtimeEvent('venue.updated', payload, {
+      tenantId: payload.tenantId,
+      venueId: payload.venueId,
+    });
+    try {
+      await this.outbox.enqueue('venue.updated', payload, {
+        tenantId: payload.tenantId,
+        venueId: payload.venueId,
+      });
+    } catch {
+      /* local fallback */
+    }
+    this.emitCanonical(envelope);
   }
 
   async emitSlotCapacityChanged(payload: SlotUpdatedPayload) {

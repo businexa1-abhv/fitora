@@ -138,6 +138,7 @@ function OwnerNavigator() {
         <Stack.Screen name="court" />
         <Stack.Screen name="ops" />
         <Stack.Screen name="manage" />
+        <Stack.Screen name="bookings" />
         <Stack.Screen name="subscription-expired" />
         <Stack.Screen name="notification-permission" />
       </Stack>

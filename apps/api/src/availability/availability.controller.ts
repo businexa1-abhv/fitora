@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   ForbiddenException,
   Get,
@@ -10,9 +11,10 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
+import { Permission } from '@fitora/types';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
-import { OptionalAuth, Roles } from '../common/decorators';
+import { OptionalAuth, Roles, RequirePermissions } from '../common/decorators';
 import { CurrentUser, type AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { PrismaService } from '../prisma/prisma.module';
 import { SlotAvailabilityService } from './services/slot-availability.service';
@@ -62,5 +64,35 @@ export class SlotAvailabilityController {
   @ApiOperation({ summary: 'Repair CourtSlot reserved/confirmed counters' })
   reconcile() {
     return this.availability.reconcileSlotCounters();
+  }
+
+  @Post('courts/:courtId/force-close')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_APPROVE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Admin force-close all slots for a court on a date' })
+  forceClose(@Param('courtId') courtId: string, @Body() body: { date: string }) {
+    return this.availability.forceCloseCourtSlots(courtId, body.date);
+  }
+
+  @Post('courts/:courtId/force-open')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_APPROVE)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Admin force-open closed/blocked slots for a court on a date' })
+  forceOpen(@Param('courtId') courtId: string, @Body() body: { date: string }) {
+    return this.availability.forceOpenCourtSlots(courtId, body.date);
+  }
+
+  @Get('admin/occupancy')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_READ)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Live occupancy monitor across venues' })
+  occupancyMonitor(@Query('date') date?: string, @Query('tenantId') tenantId?: string) {
+    return this.availability.getAdminOccupancyMonitor(date, tenantId);
   }
 }

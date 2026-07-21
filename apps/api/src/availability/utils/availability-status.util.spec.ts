@@ -59,6 +59,17 @@ describe('computeAvailabilityStatus', () => {
     ).toBe('BLOCKED');
   });
 
+  it('returns RESERVED when holds exist but seats remain', () => {
+    expect(
+      computeAvailabilityStatus({
+        isBlocked: false,
+        capacity: 4,
+        availableSeats: 2,
+        reservedSeats: 1,
+      }),
+    ).toBe('RESERVED');
+  });
+
   it('returns FULL / FEW_SPOTS / AVAILABLE', () => {
     expect(
       computeAvailabilityStatus({

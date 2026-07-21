@@ -13,6 +13,7 @@ import {
   CourtApprovalStatus,
   PaymentStatus,
   SlotOperationalState,
+  TenantStatus,
   type Prisma,
 } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.module';
@@ -25,6 +26,7 @@ import {
 } from '../utils/availability-status.util';
 import { SlotHoldService } from './slot-hold.service';
 import { SlotEventsService } from '../../realtime/slot-events.service';
+import type { RealtimeEventEnvelope, SlotSnapshot } from '../../realtime/realtime.types';
 
 export type ReserveSlotInput = {
   courtId: string;
@@ -93,6 +95,7 @@ export class SlotAvailabilityService {
       operationalState: slot.operationalState,
       capacity: slot.capacity,
       availableSeats,
+      reservedSeats: slot.reservedCount,
     });
     return {
       id: slot.id,
@@ -160,6 +163,7 @@ export class SlotAvailabilityService {
     const ttlMinutes = this.getLockTtlMinutes();
     const lockedUntil = new Date(Date.now() + ttlMinutes * 60_000);
     const holdToken = randomUUID();
+    const pendingEnvelopes: RealtimeEventEnvelope<SlotSnapshot>[] = [];
 
     const booking = await this.prisma.$transaction(async (tx) => {
       await tx.$executeRaw`SELECT id FROM court_slots WHERE id = ${input.slotId}::uuid AND deleted_at IS NULL FOR UPDATE`;
@@ -178,7 +182,11 @@ export class SlotAvailabilityService {
       if (input.expectedVersion != null && slot.version !== input.expectedVersion) {
         const availability = this.formatAvailability(slot);
         const nearby = await this.findNearbyAvailableSlots(slot.courtId, slot.startTime, slot.id);
-        throw this.conflictException('This slot has just been booked.', availability, nearby);
+        throw this.conflictException(
+          'This slot was just booked by another player.',
+          availability,
+          nearby,
+        );
       }
 
       await this.reclaimUserExpiredHolds(tx, slot.id, input.userId);
@@ -192,7 +200,11 @@ export class SlotAvailabilityService {
           fresh.startTime,
           fresh.id,
         );
-        throw this.conflictException('This slot has just been booked.', availability, nearby);
+        throw this.conflictException(
+          'This slot was just booked by another player.',
+          availability,
+          nearby,
+        );
       }
 
       const activeHolds = await tx.booking.count({
@@ -253,8 +265,22 @@ export class SlotAvailabilityService {
         },
       });
 
+      const updatedSlot = await tx.courtSlot.findUniqueOrThrow({
+        where: { id: slot.id },
+        include: { court: { select: { tenantId: true } } },
+      });
+      const availability = this.formatAvailability(updatedSlot);
+      pendingEnvelopes.push(
+        await this.events.enqueueSlotLifecycleInTx(tx, 'slot.booked', availability),
+      );
+      pendingEnvelopes.push(
+        await this.events.enqueueSlotLifecycleInTx(tx, 'slot.updated', availability),
+      );
+
       return created;
     });
+
+    await this.events.publishEnvelopes(pendingEnvelopes);
 
     await this.holds.setHold({
       slotId: input.slotId,
@@ -266,13 +292,12 @@ export class SlotAvailabilityService {
     });
 
     const availability = await this.getSlotAvailability(input.courtId, input.slotId);
-    await this.events.emitSlotBooked(availability);
-    await this.events.emitSlotUpdated(availability);
 
     return { booking, lockedUntil, holdToken, availability };
   }
 
   async confirmReservation(bookingId: string, checkInCode: string) {
+    const pendingEnvelopes: RealtimeEventEnvelope<SlotSnapshot>[] = [];
     const result = await this.prisma.$transaction(async (tx) => {
       const booking = await tx.booking.findFirst({
         where: { id: bookingId, deletedAt: null },
@@ -326,6 +351,15 @@ export class SlotAvailabilityService {
         },
       });
 
+      const updatedSlot = await tx.courtSlot.findUniqueOrThrow({
+        where: { id: booking.slotId },
+        include: { court: { select: { tenantId: true } } },
+      });
+      const availability = this.formatAvailability(updatedSlot);
+      pendingEnvelopes.push(
+        await this.events.enqueueSlotLifecycleInTx(tx, 'slot.updated', availability),
+      );
+
       return {
         updated,
         holdToken: booking.holdToken,
@@ -334,12 +368,13 @@ export class SlotAvailabilityService {
       };
     });
 
+    await this.events.publishEnvelopes(pendingEnvelopes);
+
     if (result.holdToken) {
       await this.holds.clearHold(result.slotId, result.holdToken, result.updated.userId);
     }
 
     const availability = await this.getSlotAvailability(result.courtId, result.slotId);
-    await this.events.emitSlotUpdated(availability);
     await this.events.emitBookingConfirmed({
       bookingId: result.updated.id,
       userId: result.updated.userId,
@@ -355,6 +390,7 @@ export class SlotAvailabilityService {
     bookingId: string,
     opts?: { reason?: 'expired' | 'cancelled' | 'abandoned' },
   ) {
+    const pendingEnvelopes: RealtimeEventEnvelope<SlotSnapshot>[] = [];
     const result = await this.prisma.$transaction(async (tx) => {
       const booking = await tx.booking.findFirst({
         where: { id: bookingId, deletedAt: null },
@@ -378,18 +414,30 @@ export class SlotAvailabilityService {
         },
       });
 
+      const updatedSlot = await tx.courtSlot.findUniqueOrThrow({
+        where: { id: booking.slotId },
+        include: { court: { select: { tenantId: true } } },
+      });
+      const availability = this.formatAvailability(updatedSlot);
+      pendingEnvelopes.push(
+        await this.events.enqueueSlotLifecycleInTx(tx, 'slot.updated', availability),
+      );
+      pendingEnvelopes.push(
+        await this.events.enqueueSlotLifecycleInTx(tx, 'slot.cancelled', availability),
+      );
+
       return booking;
     });
 
     if (!result) return { released: false };
+
+    await this.events.publishEnvelopes(pendingEnvelopes);
 
     if (result.holdToken) {
       await this.holds.clearHold(result.slotId, result.holdToken, result.userId);
     }
 
     const availability = await this.getSlotAvailability(result.courtId, result.slotId);
-    await this.events.emitSlotUpdated(availability);
-    await this.events.emitSlotCancelled(availability);
     await this.events.emitSlotReleased({
       slotId: result.slotId,
       courtId: result.courtId,
@@ -461,6 +509,10 @@ export class SlotAvailabilityService {
       await this.events.emitSlotUnblocked(availability);
     } else if (state === SlotOperationalState.CLOSED) {
       await this.events.emitSlotClosed(availability);
+    } else if (state === SlotOperationalState.MAINTENANCE) {
+      await this.events.emitSlotMaintenance(availability);
+    } else if (state === SlotOperationalState.TOURNAMENT) {
+      await this.events.emitSlotTournament(availability);
     } else {
       await this.events.emitSlotBlocked(availability);
     }
@@ -584,6 +636,7 @@ export class SlotAvailabilityService {
     const available = slots.filter((s) => s.isBookable).length;
     const blocked = slots.filter((s) => s.availabilityStatus === 'BLOCKED').length;
     const maintenance = slots.filter((s) => s.availabilityStatus === 'MAINTENANCE').length;
+    const reserved = slots.filter((s) => s.availabilityStatus === 'RESERVED').length;
     const capacity = slots.reduce((sum, s) => sum + s.capacity, 0);
     const occupied = slots.reduce((sum, s) => sum + s.confirmedSeats + s.reservedSeats, 0);
     return {
@@ -592,8 +645,101 @@ export class SlotAvailabilityService {
       availableSlots: available,
       blockedSlots: blocked,
       maintenanceSlots: maintenance,
+      reservedSlots: reserved,
       occupancyPercent: capacity === 0 ? 0 : Math.round((occupied / capacity) * 100),
     };
+  }
+
+  async forceCloseCourtSlots(courtId: string, date: string) {
+    const slots = await this.slotsForCourtDate(courtId, date);
+    let updated = 0;
+    for (const slot of slots) {
+      await this.setOperationalState(courtId, slot.id, SlotOperationalState.CLOSED);
+      updated += 1;
+    }
+    return { courtId, date, updated };
+  }
+
+  async forceOpenCourtSlots(courtId: string, date: string) {
+    const slots = await this.prisma.courtSlot.findMany({
+      where: {
+        courtId,
+        deletedAt: null,
+        startTime: this.dayRange(date),
+        operationalState: { in: [SlotOperationalState.CLOSED, SlotOperationalState.BLOCKED] },
+      },
+      select: { id: true },
+    });
+    let updated = 0;
+    for (const slot of slots) {
+      await this.setOperationalState(courtId, slot.id, SlotOperationalState.AVAILABLE);
+      updated += 1;
+    }
+    return { courtId, date, updated };
+  }
+
+  async getAdminOccupancyMonitor(date?: string, tenantId?: string) {
+    const day = date ?? new Date().toISOString().slice(0, 10);
+    const tenants = tenantId
+      ? await this.prisma.tenant.findMany({
+          where: { id: tenantId, deletedAt: null },
+          select: { id: true, name: true, brandName: true },
+        })
+      : await this.prisma.tenant.findMany({
+          where: { deletedAt: null, status: TenantStatus.ACTIVE, isActive: true },
+          select: { id: true, name: true, brandName: true },
+          take: 50,
+        });
+
+    const venues = await Promise.all(
+      tenants.map(async (tenant) => {
+        const availability = await this.getVenueAvailability(tenant.id, day);
+        const peakHours = this.computePeakHours(availability.slots);
+        return {
+          venueId: tenant.id,
+          venueName: tenant.brandName || tenant.name,
+          ...availability.summary,
+          peakHours,
+        };
+      }),
+    );
+
+    return { date: day, venues };
+  }
+
+  private computePeakHours(
+    slots: Array<ReturnType<SlotAvailabilityService['formatAvailability']>>,
+  ) {
+    const byHour = new Map<number, { total: number; occupied: number }>();
+    for (const slot of slots) {
+      const hour = new Date(slot.startTime).getUTCHours();
+      const row = byHour.get(hour) ?? { total: 0, occupied: 0 };
+      row.total += slot.capacity;
+      row.occupied += slot.confirmedSeats + slot.reservedSeats;
+      byHour.set(hour, row);
+    }
+    return [...byHour.entries()]
+      .map(([hour, stats]) => ({
+        hour,
+        occupancyPercent: stats.total === 0 ? 0 : Math.round((stats.occupied / stats.total) * 100),
+      }))
+      .sort((a, b) => b.occupancyPercent - a.occupancyPercent)
+      .slice(0, 5);
+  }
+
+  private dayRange(date: string) {
+    const dayStart = new Date(`${date}T00:00:00.000Z`);
+    dayStart.setUTCHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart);
+    dayEnd.setUTCHours(23, 59, 59, 999);
+    return { gte: dayStart, lte: dayEnd };
+  }
+
+  private async slotsForCourtDate(courtId: string, date: string) {
+    return this.prisma.courtSlot.findMany({
+      where: { courtId, deletedAt: null, startTime: this.dayRange(date) },
+      select: { id: true },
+    });
   }
 
   async reconcileSlotCounters(slotId?: string) {

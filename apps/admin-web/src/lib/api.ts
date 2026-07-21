@@ -212,6 +212,50 @@ export type SupportTicket = {
   updatedAt: string;
 };
 
+export type CourtAdmin = {
+  id: string;
+  name: string;
+  slug: string;
+  address: string;
+  city: string;
+  state?: string | null;
+  tenantId: string;
+  approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
+  isApproved: boolean;
+  isActive: boolean;
+  rejectionReason?: string | null;
+  defaultSlotPrice?: string | null;
+  sport?: { id: string; name: string; slug: string };
+  owner?: { id: string; firstName: string; lastName: string; email: string };
+};
+
+export type TenantAdmin = {
+  id: string;
+  name: string;
+  brandName: string | null;
+  slug: string;
+  status: 'PENDING' | 'ACTIVE' | 'SUSPENDED';
+  isActive: boolean;
+  owner?: { id: string; email: string; firstName: string; lastName: string };
+  _count?: { courts: number; products: number; membershipPlans: number; trainers: number };
+};
+
+export type OccupancyMonitor = {
+  date: string;
+  venues: Array<{
+    venueId: string;
+    venueName: string;
+    totalSlots: number;
+    bookedSlots: number;
+    availableSlots: number;
+    blockedSlots: number;
+    maintenanceSlots: number;
+    reservedSlots: number;
+    occupancyPercent: number;
+    peakHours: Array<{ hour: number; occupancyPercent: number }>;
+  }>;
+};
+
 export const adminApi = {
   login: (email: string, password: string) =>
     apiFetch<{
@@ -264,12 +308,65 @@ export const adminApi = {
 
   listTenants: (token: string, status?: string) => {
     const qs = status ? `?status=${status}` : '';
-    return apiFetch<{ items: Array<Record<string, unknown>>; total: number }>(
+    return apiFetch<{ items: TenantAdmin[]; total: number; page: number; pageSize: number }>(
       `/tenants${qs}`,
       {},
       token,
     );
   },
+
+  updateTenantStatus: (
+    token: string,
+    id: string,
+    body: { status: TenantAdmin['status']; isActive?: boolean },
+  ) =>
+    apiFetch<TenantAdmin>(
+      `/tenants/${id}/status`,
+      { method: 'PATCH', body: JSON.stringify(body) },
+      token,
+    ),
+
+  listPendingCourts: (token: string) =>
+    apiFetch<Paginated<CourtAdmin>>('/courts/pending?pageSize=100', {}, token),
+
+  listCourts: (
+    token: string,
+    params?: { approvalStatus?: CourtAdmin['approvalStatus']; search?: string },
+  ) => {
+    const qs = new URLSearchParams({ pageSize: '100' });
+    if (params?.approvalStatus) qs.set('approvalStatus', params.approvalStatus);
+    if (params?.search) qs.set('search', params.search);
+    return apiFetch<Paginated<CourtAdmin>>(`/courts?${qs}`, {}, token);
+  },
+
+  approveCourt: (token: string, id: string) =>
+    apiFetch<CourtAdmin>(`/courts/${id}/approve`, { method: 'PATCH' }, token),
+
+  rejectCourt: (token: string, id: string, reason: string) =>
+    apiFetch<CourtAdmin>(
+      `/courts/${id}/reject`,
+      { method: 'PATCH', body: JSON.stringify({ reason }) },
+      token,
+    ),
+
+  getOccupancy: (token: string, date?: string) => {
+    const qs = date ? `?date=${encodeURIComponent(date)}` : '';
+    return apiFetch<OccupancyMonitor>(`/admin/occupancy${qs}`, {}, token);
+  },
+
+  forceOpenCourt: (token: string, courtId: string, date: string) =>
+    apiFetch<{ courtId: string; date: string; updated: number }>(
+      `/courts/${courtId}/force-open`,
+      { method: 'POST', body: JSON.stringify({ date }) },
+      token,
+    ),
+
+  forceCloseCourt: (token: string, courtId: string, date: string) =>
+    apiFetch<{ courtId: string; date: string; updated: number }>(
+      `/courts/${courtId}/force-close`,
+      { method: 'POST', body: JSON.stringify({ date }) },
+      token,
+    ),
 
   getAnalyticsDashboard: (
     token: string,

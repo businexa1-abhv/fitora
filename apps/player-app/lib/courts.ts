@@ -33,10 +33,23 @@ export function getCourtSlots(courtId: string, date: string) {
   return apiFetch<CourtSlot[]>(`/courts/${courtId}/slots?date=${date}`);
 }
 
-export function createBooking(token: string, courtId: string, slotId: string) {
+export function createBooking(
+  token: string,
+  courtId: string,
+  slotId: string,
+  options?: { expectedVersion?: number; seats?: number },
+) {
   return apiFetch<BookingCheckoutResponse>(
     '/bookings',
-    { method: 'POST', body: JSON.stringify({ courtId, slotId }) },
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        courtId,
+        slotId,
+        ...(options?.expectedVersion != null && { expectedVersion: options.expectedVersion }),
+        ...(options?.seats != null && { seats: options.seats }),
+      }),
+    },
     token,
   );
 }
@@ -69,6 +82,15 @@ export function getMyWaitlist(token: string) {
       court: { name: string; city: string };
     }>
   >('/waitlist/my', {}, token);
+}
+
+export function getBookingQr(token: string, bookingId: string) {
+  return apiFetch<{
+    bookingId: string;
+    checkInCode: string;
+    payload: string;
+    qrCodeDataUrl: string;
+  }>(`/bookings/${bookingId}/qr`, {}, token);
 }
 
 export function getRefundPreview(token: string, bookingId: string) {

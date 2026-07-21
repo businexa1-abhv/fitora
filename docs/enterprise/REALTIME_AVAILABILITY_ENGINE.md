@@ -30,6 +30,7 @@ Derived (never stored as owner override):
 | Status | Rule |
 |---|---|
 | FULL | `availableSeats == 0` and operational state is AVAILABLE |
+| RESERVED | `reservedCount > 0` and seats remain (payment holds) |
 | FEW_SPOTS | remaining ≤ 25% of capacity |
 | AVAILABLE | otherwise |
 
@@ -39,6 +40,9 @@ Derived (never stored as owner override):
 
 Canonical routes (nested court routes remain as aliases):
 
+- `GET /api/v1/venues/:id/sports`
+- `GET /api/v1/venues/:id/sports/:sportSlug`
+- `GET /api/v1/venues/:id?sportSlug=badminton`
 - `GET /api/v1/venues/:id/availability?date=YYYY-MM-DD`
 - `GET /api/v1/courts/:courtId/slots?date=YYYY-MM-DD`
 - `GET /api/v1/slots/:slotId`
@@ -50,13 +54,18 @@ Canonical routes (nested court routes remain as aliases):
 - `POST /api/v1/slots/:slotId/open`
 - `POST /api/v1/slots/:slotId/close`
 - `GET /api/v1/courts/:courtId/slots/:slotId/availability`
+- `POST /api/v1/courts/:courtId/force-close` (admin)
+- `POST /api/v1/courts/:courtId/force-open` (admin)
+- `GET /api/v1/admin/occupancy?date=YYYY-MM-DD&tenantId=`
+
+Player bookings accept optional `expectedVersion` and `seats` on `POST /api/v1/bookings`.
 
 Conflict responses use HTTP **409** with:
 
 ```json
 {
   "code": "SLOT_AVAILABILITY_CONFLICT",
-  "message": "This slot has just been booked.",
+  "message": "This slot was just booked by another player.",
   "slot": { "...current snapshot..." },
   "nearbySlots": [{ "...nearby available..." }]
 }
@@ -93,6 +102,8 @@ Canonical (dot form) plus temporary colon aliases:
 - `slot.blocked` / `slot.unblocked` / `slot.closed`
 - `slot.capacity.changed` / `slot.price.changed`
 - `slot.booked` / `slot.cancelled` / `slot.available` / `slot.full`
+- `slot.maintenance` / `slot.tournament`
+- `court.updated` / `venue.updated`
 - `booking.created` / `booking.confirmed` / `booking.cancelled`
 - `attendance.updated`
 - `waitlist.promoted`
@@ -130,7 +141,9 @@ Two players racing the last seat: **one succeeds, one receives 409 `SLOT_AVAILAB
 
 ## Durable outbox
 
-`realtime_outbox` stores events in the same transactional boundary when enqueued via `RealtimeOutboxService.enqueueInTx`. Happy-path local emit marks rows `PUBLISHED`. A background pump retries `PENDING`/`FAILED` rows (crash recovery). Multi-instance fan-out uses the Socket.IO Redis adapter when `REDIS_URL` is set.
+`realtime_outbox` stores events in the same transactional boundary when enqueued via `RealtimeOutboxService.enqueueInTx` inside `SlotAvailabilityService.reserve`, `releaseReservation`, and `confirmReservation`. Happy-path local emit marks rows `PUBLISHED`. A background pump retries `PENDING`/`FAILED` rows (crash recovery). Multi-instance fan-out uses the Socket.IO Redis adapter when `REDIS_URL` is set.
+
+Payment webhooks (`payment.failed`) release booking holds via `releaseReservation`.
 
 ## Client reconnect protocol
 

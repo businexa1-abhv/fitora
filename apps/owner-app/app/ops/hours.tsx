@@ -33,7 +33,10 @@ export default function OperatingHoursConfigScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { courtId, court, token } = useDefaultCourt();
+  const { courtId: defaultCourtId, courts, token } = useDefaultCourt();
+  const [selectedCourtId, setSelectedCourtId] = useState<string | undefined>(undefined);
+  const courtId = selectedCourtId ?? defaultCourtId;
+  const court = courts.find((c) => c.id === courtId);
 
   const [name, setName] = useState('Weekday Hours');
   const [days, setDays] = useState<number[]>([1, 2, 3, 4, 5]);
@@ -81,10 +84,17 @@ export default function OperatingHoursConfigScreen() {
         courtId,
         start.toISOString().slice(0, 10),
         end.toISOString().slice(0, 10),
-      );
+      ) as Promise<{ created?: number }>;
     },
-    onSuccess: () => Alert.alert('Generated', 'Slots created for the next 14 days.'),
-    onError: (e: Error) => Alert.alert('Generate failed', e.message),
+    onSuccess: (result) =>
+      Alert.alert('Generated', `${result?.created ?? 0} new slots created for the next 14 days.`),
+    onError: (e: Error) =>
+      Alert.alert(
+        'Generate failed',
+        e.message.includes('No active recurring schedules')
+          ? 'Save a schedule first (tap "Save Configuration"), then generate.'
+          : e.message,
+      ),
   });
 
   const schedules = schedulesQuery.data ?? [];
@@ -115,6 +125,41 @@ export default function OperatingHoursConfigScreen() {
       <Text style={{ color: colors.muted, marginTop: 4 }}>
         Manage hours and generate slots for {court?.name ?? 'your court'}.
       </Text>
+
+      {courts.length > 1 && (
+        <View style={[styles.days, { marginTop: Spacing.md }]}>
+          {courts.map((c) => {
+            const active = c.id === courtId;
+            return (
+              <Pressable
+                key={c.id}
+                onPress={() => setSelectedCourtId(c.id)}
+                style={[
+                  styles.courtChip,
+                  { backgroundColor: active ? colors.primary : colors.mutedBg },
+                ]}
+              >
+                <Text
+                  style={{
+                    color: active ? '#fff' : colors.foreground,
+                    fontWeight: '700',
+                    fontSize: 12,
+                  }}
+                >
+                  {c.name}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      )}
+      {courts.length === 0 && (
+        <Card style={{ marginTop: Spacing.md }}>
+          <Text style={{ color: colors.muted }}>
+            No courts found for your account. Add a court first from the Courts tab.
+          </Text>
+        </Card>
+      )}
 
       <Card style={{ marginTop: Spacing.lg, gap: Spacing.sm }}>
         <Text style={[styles.label, { color: colors.muted }]}>Schedule Name</Text>
@@ -301,6 +346,11 @@ const styles = StyleSheet.create({
   dayChip: {
     borderRadius: Radius.full,
     paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.sm,
+  },
+  courtChip: {
+    borderRadius: Radius.full,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
   },
   row: { flexDirection: 'row', gap: Spacing.md },

@@ -1,5 +1,15 @@
 import { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,9 +18,30 @@ import { formatCurrency } from '@fitora/shared';
 import { useTheme } from '@/providers/theme-provider';
 import { Card, QueryState } from '@/components/ui';
 import { useDefaultCourt } from '@/lib/use-default-court';
-import { getCourtCalendar, getOwnerBookings, updateSlot } from '@/lib/owner-api';
+import {
+  blockSlot,
+  closeSlot,
+  getCourtCalendar,
+  getOwnerBookings,
+  openSlot,
+  unblockSlot,
+  updateSlot,
+  type CalendarDay,
+  type SlotOperationalState,
+} from '@/lib/owner-api';
 import { useOwnerCalendarLive } from '@/hooks/use-owner-calendar-live';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
+
+type CalendarSlot = CalendarDay['slots'][number];
+
+const STATE_OPTIONS: Array<{ state: SlotOperationalState; label: string }> = [
+  { state: 'AVAILABLE', label: 'Open' },
+  { state: 'BLOCKED', label: 'Blocked' },
+  { state: 'MAINTENANCE', label: 'Maintenance' },
+  { state: 'TOURNAMENT', label: 'Tournament' },
+  { state: 'PRIVATE', label: 'Private' },
+  { state: 'CLOSED', label: 'Closed' },
+];
 
 function toISODate(d: Date) {
   return d.toISOString().slice(0, 10);
@@ -22,6 +53,11 @@ function formatHour(iso: string) {
     minute: '2-digit',
     hour12: false,
   });
+}
+
+function slotState(slot: CalendarSlot): SlotOperationalState {
+  if (slot.operationalState) return slot.operationalState;
+  return slot.isBlocked ? 'BLOCKED' : 'AVAILABLE';
 }
 
 export default function SlotMasterCalendarScreen() {
@@ -36,6 +72,9 @@ export default function SlotMasterCalendarScreen() {
     return d;
   });
   const [sportFilter, setSportFilter] = useState('all');
+  const [selectedSlot, setSelectedSlot] = useState<CalendarSlot | null>(null);
+  const [priceInput, setPriceInput] = useState('');
+  const [capacityInput, setCapacityInput] = useState('');
 
   const date = toISODate(day);
 
@@ -53,13 +92,55 @@ export default function SlotMasterCalendarScreen() {
     enabled: !!token,
   });
 
-  const blockMutation = useMutation({
-    mutationFn: (slotId: string) => updateSlot(token!, courtId!, slotId, { isBlocked: true }),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['owner', 'calendar', courtId, date] });
+  const invalidateCalendar = () =>
+    queryClient.invalidateQueries({ queryKey: ['owner', 'calendar', courtId, date] });
+
+  const stateMutation = useMutation({
+    mutationFn: ({ slot, state }: { slot: CalendarSlot; state: SlotOperationalState }) => {
+      const payload = { expectedVersion: slot.version };
+      if (state === 'AVAILABLE') {
+        return slotState(slot) === 'CLOSED'
+          ? openSlot(token!, slot.id, payload)
+          : unblockSlot(token!, slot.id, payload);
+      }
+      if (state === 'CLOSED') return closeSlot(token!, slot.id, payload);
+      return blockSlot(token!, slot.id, { ...payload, reason: state });
     },
-    onError: (e: Error) => Alert.alert('Could not block slot', e.message),
+    onSuccess: async () => {
+      setSelectedSlot(null);
+      await invalidateCalendar();
+    },
+    onError: (e: Error) => Alert.alert('Could not update slot', e.message),
   });
+
+  const editMutation = useMutation({
+    mutationFn: ({ slot }: { slot: CalendarSlot }) => {
+      const price = Number(priceInput);
+      const capacity = Number(capacityInput);
+      const payload: { price?: number; capacity?: number; expectedVersion?: number } = {
+        expectedVersion: slot.version,
+      };
+      if (priceInput.trim() && Number.isFinite(price) && price >= 0) payload.price = price;
+      if (capacityInput.trim() && Number.isInteger(capacity) && capacity >= 1) {
+        payload.capacity = capacity;
+      }
+      if (payload.price === undefined && payload.capacity === undefined) {
+        throw new Error('Enter a valid price or capacity');
+      }
+      return updateSlot(token!, courtId!, slot.id, payload);
+    },
+    onSuccess: async () => {
+      setSelectedSlot(null);
+      await invalidateCalendar();
+    },
+    onError: (e: Error) => Alert.alert('Could not save slot', e.message),
+  });
+
+  function openSlotSheet(slot: CalendarSlot) {
+    setPriceInput(String(Number(slot.price) || ''));
+    setCapacityInput(String(slot.capacity ?? 1));
+    setSelectedSlot(slot);
+  }
 
   const dayData = calendarQuery.data?.days?.[0];
   const slots = dayData?.slots ?? [];
@@ -214,15 +295,18 @@ export default function SlotMasterCalendarScreen() {
             const capacity = slot.capacity ?? 1;
             const available = slot.availableSeats ?? (slot.isBooked ? 0 : capacity);
             const fewSpots = slot.availabilityStatus === 'FEW_SPOTS';
-            const tone = slot.isBlocked
+            const state = slotState(slot);
+            const offline = state !== 'AVAILABLE';
+            const tone = offline
               ? colors.warning
               : slot.isBooked || available <= 0
                 ? colors.primary
                 : fewSpots
                   ? '#E8A317'
                   : colors.secondary;
-            const statusLabel = slot.isBlocked
-              ? 'Blocked / Maintenance'
+            const stateLabel = STATE_OPTIONS.find((o) => o.state === state)?.label ?? 'Blocked';
+            const statusLabel = offline
+              ? stateLabel
               : booking
                 ? `${booking.user?.firstName ?? 'Player'} · ${booking.status}`
                 : capacity > 1
@@ -231,28 +315,161 @@ export default function SlotMasterCalendarScreen() {
                     ? 'Booked'
                     : `Available · ${formatCurrency(Number(slot.price))}`;
             return (
-              <Card key={slot.id} style={styles.slotRow}>
-                <View style={[styles.slotBar, { backgroundColor: tone }]} />
-                <View style={{ flex: 1 }}>
-                  <Text style={{ color: colors.foreground, fontWeight: '800' }}>
-                    {formatHour(slot.startTime)} – {formatHour(slot.endTime)}
-                  </Text>
-                  <Text style={{ color: colors.muted, fontSize: FontSize.sm }}>{statusLabel}</Text>
-                </View>
-                {!slot.isBlocked && !slot.isBooked && available > 0 ? (
-                  <Pressable onPress={() => blockMutation.mutate(slot.id)}>
-                    <Text
-                      style={{ color: colors.danger, fontWeight: '700', fontSize: FontSize.xs }}
-                    >
-                      Block
+              <Pressable key={slot.id} onPress={() => openSlotSheet(slot)}>
+                <Card style={styles.slotRow}>
+                  <View style={[styles.slotBar, { backgroundColor: tone }]} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: colors.foreground, fontWeight: '800' }}>
+                      {formatHour(slot.startTime)} – {formatHour(slot.endTime)}
                     </Text>
-                  </Pressable>
-                ) : null}
-              </Card>
+                    <Text style={{ color: colors.muted, fontSize: FontSize.sm }}>
+                      {statusLabel}
+                    </Text>
+                  </View>
+                  {offline && !slot.isBooked ? (
+                    <Pressable
+                      hitSlop={8}
+                      onPress={() => stateMutation.mutate({ slot, state: 'AVAILABLE' })}
+                    >
+                      <Text
+                        style={{
+                          color: colors.secondary,
+                          fontWeight: '700',
+                          fontSize: FontSize.xs,
+                        }}
+                      >
+                        Open
+                      </Text>
+                    </Pressable>
+                  ) : !slot.isBooked && available > 0 ? (
+                    <Pressable
+                      hitSlop={8}
+                      onPress={() => stateMutation.mutate({ slot, state: 'BLOCKED' })}
+                    >
+                      <Text
+                        style={{ color: colors.danger, fontWeight: '700', fontSize: FontSize.xs }}
+                      >
+                        Block
+                      </Text>
+                    </Pressable>
+                  ) : null}
+                </Card>
+              </Pressable>
             );
           })}
         </View>
       </QueryState>
+
+      <Modal
+        visible={!!selectedSlot}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setSelectedSlot(null)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={[styles.modalCard, { backgroundColor: colors.card }]}>
+            {selectedSlot ? (
+              <>
+                <Text style={[styles.modalTitle, { color: colors.foreground }]}>
+                  {formatHour(selectedSlot.startTime)} – {formatHour(selectedSlot.endTime)}
+                </Text>
+                <Text style={{ color: colors.muted, fontSize: FontSize.sm }}>
+                  {STATE_OPTIONS.find((o) => o.state === slotState(selectedSlot))?.label}
+                  {selectedSlot.isBooked ? ' · Has bookings' : ''}
+                </Text>
+
+                <Text style={[styles.fieldLabel, { color: colors.muted }]}>Slot Status</Text>
+                <View style={styles.stateRow}>
+                  {STATE_OPTIONS.map((option) => {
+                    const active = slotState(selectedSlot) === option.state;
+                    return (
+                      <Pressable
+                        key={option.state}
+                        disabled={active || stateMutation.isPending}
+                        onPress={() =>
+                          stateMutation.mutate({ slot: selectedSlot, state: option.state })
+                        }
+                        style={[
+                          styles.stateChip,
+                          { backgroundColor: active ? colors.primary : colors.mutedBg },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            color: active ? '#fff' : colors.foreground,
+                            fontSize: FontSize.xs,
+                            fontWeight: '700',
+                          }}
+                        >
+                          {option.label}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+
+                <View style={styles.editRow}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.fieldLabel, { color: colors.muted }]}>Price</Text>
+                    <TextInput
+                      value={priceInput}
+                      onChangeText={setPriceInput}
+                      keyboardType="decimal-pad"
+                      placeholder="500"
+                      placeholderTextColor={colors.muted}
+                      style={[
+                        styles.input,
+                        { borderColor: colors.border, color: colors.foreground },
+                      ]}
+                    />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.fieldLabel, { color: colors.muted }]}>Capacity</Text>
+                    <TextInput
+                      value={capacityInput}
+                      onChangeText={setCapacityInput}
+                      keyboardType="number-pad"
+                      placeholder="1"
+                      placeholderTextColor={colors.muted}
+                      style={[
+                        styles.input,
+                        { borderColor: colors.border, color: colors.foreground },
+                      ]}
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.modalActions}>
+                  <Pressable
+                    style={[styles.modalBtn, { borderColor: colors.border }]}
+                    onPress={() => setSelectedSlot(null)}
+                  >
+                    <Text style={{ color: colors.foreground, fontWeight: '700' }}>Close</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[
+                      styles.modalBtn,
+                      {
+                        backgroundColor: colors.primary,
+                        borderColor: colors.primary,
+                        opacity: editMutation.isPending ? 0.7 : 1,
+                      },
+                    ]}
+                    disabled={editMutation.isPending}
+                    onPress={() => editMutation.mutate({ slot: selectedSlot })}
+                  >
+                    {editMutation.isPending ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={{ color: '#fff', fontWeight: '800' }}>Save Changes</Text>
+                    )}
+                  </Pressable>
+                </View>
+              </>
+            ) : null}
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -299,4 +516,40 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   slotBar: { borderRadius: 2, height: '100%', minHeight: 44, width: 4 },
+  modalBackdrop: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalCard: {
+    borderTopLeftRadius: Radius.xl,
+    borderTopRightRadius: Radius.xl,
+    gap: Spacing.sm,
+    padding: Spacing.xl,
+    paddingBottom: Spacing.xxxl,
+  },
+  modalTitle: { fontSize: FontSize.lg, fontWeight: '800' },
+  fieldLabel: { fontSize: 11, fontWeight: '700', marginTop: Spacing.sm },
+  stateRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
+  stateChip: {
+    borderRadius: Radius.xl,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+  },
+  editRow: { flexDirection: 'row', gap: Spacing.md },
+  input: {
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+  },
+  modalActions: { flexDirection: 'row', gap: Spacing.md, marginTop: Spacing.lg },
+  modalBtn: {
+    alignItems: 'center',
+    borderRadius: Radius.lg,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: Spacing.md,
+  },
 });

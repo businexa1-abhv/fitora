@@ -14,6 +14,7 @@ import {
   getOwnerDashboard,
   getTenantMe,
   getUnreadNotificationCount,
+  getVenueAvailability,
   listTenantTrainers,
 } from '@/lib/owner-api';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
@@ -72,19 +73,23 @@ function AcademyDashboardScreen() {
   const stats = dashboardQuery.data?.stats;
   const revenue = stats?.revenueMtd ?? 0;
   const members = stats?.activeMembers ?? 0;
-  const activeCourts = stats?.activeCourts ?? 0;
   const pendingCourts = stats?.pendingCourts ?? 0;
   const bookingsToday = stats?.bookingsToday ?? 0;
   const bookingsMtd = stats?.bookingsMtd ?? 0;
-  const totalCourts = courtsQuery.data?.items?.length ?? stats?.activeCourts ?? 0;
-  const occupancy =
-    totalCourts > 0 ? Math.min(98, Math.round((activeCourts / Math.max(totalCourts, 1)) * 100)) : 0;
 
   const tenantQuery = useQuery({
     queryKey: ['owner', 'tenant'],
     queryFn: () => getTenantMe(token!),
     enabled: !!token,
   });
+
+  const today = new Date().toISOString().slice(0, 10);
+  const occupancyQuery = useQuery({
+    queryKey: ['owner', 'occupancy', tenantQuery.data?.id, today],
+    queryFn: () => getVenueAvailability(token!, tenantQuery.data!.id, today),
+    enabled: !!token && !!tenantQuery.data?.id,
+  });
+  const occupancy = occupancyQuery.data?.summary?.occupancyPercent ?? 0;
 
   const trainersQuery = useQuery({
     queryKey: ['owner', 'trainers', tenantQuery.data?.id],

@@ -55,6 +55,35 @@ export default function OwnerReviewPage() {
     }
   }
 
+  async function setVenueActive(active: boolean) {
+    const token = getAccessToken();
+    if (!token || !app?.tenant) return;
+    setBusy(true);
+    setError('');
+    try {
+      const tenant = await adminApi.updateTenantStatus(token, app.tenant.id, {
+        status: active ? 'ACTIVE' : 'SUSPENDED',
+        isActive: active,
+      });
+      setApp((current) =>
+        current?.tenant
+          ? {
+              ...current,
+              tenant: {
+                ...current.tenant,
+                status: tenant.status,
+                isActive: tenant.isActive,
+              },
+            }
+          : current,
+      );
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Venue status update failed');
+    } finally {
+      setBusy(false);
+    }
+  }
+
   if (!app) {
     return (
       <AdminShell>
@@ -153,6 +182,29 @@ export default function OwnerReviewPage() {
               </dd>
             </div>
           </dl>
+          {app.tenant && (
+            <div className="mt-5 border-t border-border pt-5">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">
+                Venue access
+              </p>
+              <button
+                type="button"
+                disabled={busy}
+                className={
+                  app.tenant.status === 'SUSPENDED' || !app.tenant.isActive
+                    ? primaryBtnClass
+                    : secondaryBtnClass
+                }
+                onClick={() =>
+                  void setVenueActive(app.tenant?.status === 'SUSPENDED' || !app.tenant?.isActive)
+                }
+              >
+                {app.tenant.status === 'SUSPENDED' || !app.tenant.isActive
+                  ? 'Activate venue'
+                  : 'Suspend venue'}
+              </button>
+            </div>
+          )}
         </section>
 
         <section className="rounded-3xl border border-border bg-card p-6">

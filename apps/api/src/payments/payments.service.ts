@@ -31,6 +31,7 @@ import { TenantsService } from '../tenants/tenants.service';
 import { generatePaymentInvoiceNumber, PAYMENT_ENTITY_LABELS } from './payments.constants';
 import { AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { RevenueOrchestrator } from '../finance/revenue.orchestrator';
+import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
 
 @Injectable()
 export class PaymentsService {
@@ -58,6 +59,8 @@ export class PaymentsService {
     private queueJobs: QueueJobsService,
     @Inject(forwardRef(() => RevenueOrchestrator))
     private revenueOrchestrator: RevenueOrchestrator,
+    @Inject(forwardRef(() => SlotAvailabilityService))
+    private availability: SlotAvailabilityService,
   ) {
     this.isMockMode = process.env.PAYMENT_MODE === 'mock' || !process.env.RAZORPAY_KEY_ID;
 
@@ -701,6 +704,11 @@ export class PaymentsService {
             failedPayment.entityType,
             paymentEntity.error_description,
           );
+          if (failedPayment.entityType === PaymentEntityType.BOOKING && failedPayment.entityId) {
+            await this.availability.releaseReservation(failedPayment.entityId, {
+              reason: 'abandoned',
+            });
+          }
         }
       }
 

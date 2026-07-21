@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatCurrency } from '@fitora/shared';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
+import { getBookingQr } from '@/lib/courts';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 const QR_CELLS = Array.from(
@@ -32,6 +35,7 @@ function formatTime(value?: string) {
 
 export default function BookingSuccessScreen() {
   const { colors } = useTheme();
+  const { token } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const params = useLocalSearchParams<{
@@ -41,8 +45,18 @@ export default function BookingSuccessScreen() {
     startTime?: string;
     endTime?: string;
     amount?: string;
+    checkInCode?: string;
   }>();
 
+  // Fetch the check-in code from the API when it wasn't passed via params.
+  const qrQuery = useQuery({
+    queryKey: ['booking-qr', params.bookingId],
+    queryFn: () => getBookingQr(token!, params.bookingId!),
+    enabled: !!token && !!params.bookingId && !params.checkInCode,
+    retry: 1,
+  });
+
+  const checkInCode = params.checkInCode ?? qrQuery.data?.checkInCode;
   const bookingId = params.bookingId
     ? `#${params.bookingId.slice(0, 8).toUpperCase()}`
     : '#FO987654';
@@ -86,6 +100,12 @@ export default function BookingSuccessScreen() {
                 ))}
               </View>
             </View>
+            {checkInCode && (
+              <View style={styles.codeRow}>
+                <Text style={[styles.codeLabel, { color: colors.muted }]}>Check-in code</Text>
+                <Text style={[styles.codeValue, { color: colors.accent }]}>{checkInCode}</Text>
+              </View>
+            )}
             <View style={[styles.passMeta, { borderTopColor: colors.border }]}>
               <DetailColumn label="Date" value={formatDate(params.startTime)} />
               <DetailColumn
@@ -255,6 +275,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   qrShell: { borderRadius: Radius.lg, marginVertical: Spacing.xl, padding: Spacing.lg },
+  codeRow: { alignItems: 'center', gap: 2, marginBottom: Spacing.lg, marginTop: -Spacing.sm },
+  codeLabel: {
+    fontSize: FontSize.xs,
+    fontWeight: '800',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+  },
+  codeValue: { fontSize: FontSize.xl, fontWeight: '900', letterSpacing: 4 },
   qrGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 3, height: 190, width: 190 },
   qrCell: { borderRadius: 2, height: 16.3, width: 16.3 },
   passMeta: { borderTopWidth: 1, flexDirection: 'row', paddingTop: Spacing.lg, width: '100%' },

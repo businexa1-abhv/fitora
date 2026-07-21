@@ -33,10 +33,23 @@ export interface OwnerDashboard {
 export interface OwnerBookingRow {
   id: string;
   status: string;
+  paymentStatus?: string;
   totalAmount?: string | number;
-  court?: { id: string; name: string; city?: string };
-  user?: { firstName?: string; lastName?: string; email?: string };
-  slot?: { startTime: string; endTime: string };
+  court?: { id: string; name: string; city?: string; sportType?: string };
+  user?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    avatarUrl?: string;
+  };
+  slot?: { startTime: string; endTime: string; price?: string };
+  bookingSource?: 'PLAYER_APP' | 'OWNER_WALK_IN';
+  bookingType?: string;
+  checkInCode?: string | null;
+  createdAt?: string;
+  notes?: string;
+  seats?: number;
 }
 
 export interface CourtClosure {
@@ -72,6 +85,8 @@ export interface CalendarDay {
     availableSeats?: number;
     reservedSeats?: number;
     confirmedSeats?: number;
+    version?: number;
+    operationalState?: SlotOperationalState;
     availabilityStatus?:
       | 'AVAILABLE'
       | 'FEW_SPOTS'
@@ -84,6 +99,9 @@ export interface CalendarDay {
       | 'HOLIDAY';
   }>;
 }
+
+export type SlotOperationalState =
+  'AVAILABLE' | 'BLOCKED' | 'MAINTENANCE' | 'TOURNAMENT' | 'PRIVATE' | 'CLOSED';
 
 export interface CreateCourtPayload {
   name: string;
@@ -171,6 +189,27 @@ export function getCourtCalendar(
     {},
     token,
   );
+}
+
+export interface VenueAvailabilitySummary {
+  totalSlots: number;
+  bookedSlots: number;
+  availableSlots: number;
+  blockedSlots: number;
+  maintenanceSlots: number;
+  reservedSlots: number;
+  occupancyPercent: number;
+}
+
+export function getVenueAvailability(token: string, venueId: string, date?: string) {
+  const q = date ? `?date=${date}` : '';
+  return apiFetch<{
+    venueId: string;
+    date: string;
+    courts: Array<{ id: string; name: string }>;
+    slots: Array<Record<string, unknown>>;
+    summary?: VenueAvailabilitySummary;
+  }>(`/venues/${venueId}/availability${q}`, {}, token);
 }
 
 export function listClosures(token: string, courtId: string) {
@@ -438,15 +477,62 @@ export function deletePricingRule(token: string, courtId: string, ruleId: string
   );
 }
 
+export interface UpdateSlotPayload {
+  price?: number;
+  capacity?: number;
+  isBlocked?: boolean;
+  operationalState?: SlotOperationalState;
+  notes?: string;
+  expectedVersion?: number;
+}
+
+export interface SlotActionPayload {
+  reason?: Exclude<SlotOperationalState, 'AVAILABLE'>;
+  notes?: string;
+  expectedVersion?: number;
+}
+
 export function updateSlot(
   token: string,
   courtId: string,
   slotId: string,
-  payload: { price?: number; isBlocked?: boolean; notes?: string },
+  payload: UpdateSlotPayload,
 ) {
   return apiFetch(
     `/courts/${courtId}/slots/${slotId}`,
     { method: 'PATCH', body: JSON.stringify(payload) },
+    token,
+  );
+}
+
+export function blockSlot(token: string, slotId: string, payload: SlotActionPayload = {}) {
+  return apiFetch(
+    `/slots/${slotId}/block`,
+    { method: 'POST', body: JSON.stringify(payload) },
+    token,
+  );
+}
+
+export function unblockSlot(token: string, slotId: string, payload: SlotActionPayload = {}) {
+  return apiFetch(
+    `/slots/${slotId}/unblock`,
+    { method: 'POST', body: JSON.stringify(payload) },
+    token,
+  );
+}
+
+export function openSlot(token: string, slotId: string, payload: SlotActionPayload = {}) {
+  return apiFetch(
+    `/slots/${slotId}/open`,
+    { method: 'POST', body: JSON.stringify(payload) },
+    token,
+  );
+}
+
+export function closeSlot(token: string, slotId: string, payload: SlotActionPayload = {}) {
+  return apiFetch(
+    `/slots/${slotId}/close`,
+    { method: 'POST', body: JSON.stringify(payload) },
     token,
   );
 }
@@ -506,6 +592,40 @@ export function getBookingQr(token: string, bookingId: string) {
     payload: string;
     qrCodeDataUrl: string;
   }>(`/bookings/${bookingId}/qr`, {}, token);
+}
+
+// ─── Booking search / detail ──────────────────────────────────────────────────
+
+export interface BookingsFilterParams {
+  page?: number;
+  pageSize?: number;
+  /** Single status or comma-separated list e.g. "CONFIRMED,PENDING" */
+  status?: string;
+  /** Search by player name, email, phone, or booking ID */
+  search?: string;
+  courtId?: string;
+  /** ISO date YYYY-MM-DD */
+  startDate?: string;
+  /** ISO date YYYY-MM-DD */
+  endDate?: string;
+  bookingSource?: string;
+  paymentStatus?: string;
+}
+
+export function getOwnerBookingsFiltered(token: string, params: BookingsFilterParams = {}) {
+  const qs = new URLSearchParams();
+  (Object.entries(params) as [string, string | number | undefined][]).forEach(([k, v]) => {
+    if (v !== undefined && v !== '') qs.set(k, String(v));
+  });
+  return apiFetch<PaginatedResponse<OwnerBookingRow>>(
+    `/bookings/owner/list?${qs.toString()}`,
+    {},
+    token,
+  );
+}
+
+export function getBookingDetail(token: string, bookingId: string) {
+  return apiFetch<OwnerBookingRow>(`/bookings/${bookingId}`, {}, token);
 }
 
 // ─── Tenant / people / finance / settings ─────────────────────────────────────

@@ -18,6 +18,7 @@ import { CACHE_KEYS, CACHE_PREFIX, CACHE_TTL } from '../common/redis/cache.const
 import { optimizeImageUrl } from '../common/utils/cdn.util';
 import { hashQueryParams } from '../common/utils/cursor-pagination.util';
 import { TenantsService } from '../tenants/tenants.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
 import { COURT_AMENITIES } from './constants/court.constants';
 import {
   type AddCourtImageDto,
@@ -54,6 +55,7 @@ export class CourtsService {
     private prisma: PrismaService,
     private cacheService: CacheService,
     private tenantsService: TenantsService,
+    private slotEvents: SlotEventsService,
   ) {}
 
   // ─── Sports & amenities ───────────────────────────────────────────────────
@@ -95,6 +97,7 @@ export class CourtsService {
         latitude: dto.latitude,
         longitude: dto.longitude,
         defaultSlotPrice: dto.defaultSlotPrice,
+        defaultSlotCapacity: dto.defaultSlotCapacity,
         approvalStatus: CourtApprovalStatus.PENDING,
         isApproved: false,
         images: images?.length
@@ -268,6 +271,7 @@ export class CourtsService {
     if (dto.latitude !== undefined) data.latitude = dto.latitude;
     if (dto.longitude !== undefined) data.longitude = dto.longitude;
     if (dto.defaultSlotPrice !== undefined) data.defaultSlotPrice = dto.defaultSlotPrice;
+    if (dto.defaultSlotCapacity !== undefined) data.defaultSlotCapacity = dto.defaultSlotCapacity;
     if (dto.amenities !== undefined) data.amenities = dto.amenities;
 
     if (dto.sportId || dto.sportSlug || dto.sportType) {
@@ -291,6 +295,13 @@ export class CourtsService {
     });
 
     await this.logAudit(user.id, AuditAction.UPDATE, id, court, updated);
+    await this.slotEvents.emitCourtUpdated({
+      courtId: updated.id,
+      tenantId: updated.tenantId,
+      name: updated.name,
+      approvalStatus: updated.approvalStatus,
+      isActive: updated.isActive,
+    });
     return this.formatCourt(updated);
   }
 
@@ -332,6 +343,13 @@ export class CourtsService {
 
     await this.logAudit(adminId, AuditAction.APPROVE, id, court, updated);
     await this.cacheService.invalidatePattern(`${CACHE_PREFIX}courts:list:*`);
+    await this.slotEvents.emitCourtUpdated({
+      courtId: updated.id,
+      tenantId: updated.tenantId,
+      name: updated.name,
+      approvalStatus: updated.approvalStatus,
+      isActive: updated.isActive,
+    });
     return this.formatCourt(updated);
   }
 
