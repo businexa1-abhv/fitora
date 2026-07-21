@@ -5,17 +5,16 @@ import { MembershipsService } from './memberships.service';
 import { CouponsService } from './coupons.service';
 import { PaymentsService } from '../payments/payments.service';
 import { PrismaService } from '../prisma/prisma.module';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 
 describe('MembershipsService (extended)', () => {
   let service: MembershipsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      'membershipPlan' | 'membershipPurchase' | 'court' | 'booking' | 'coupon'
-    >
-  >;
-  let couponsService: jest.Mocked<Pick<CouponsService, 'resolveCoupon' | 'applyRedemption' | 'validateForUser'>>;
-  let paymentsService: jest.Mocked<Pick<PaymentsService, 'createPaymentOrder'>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let couponsService: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let paymentsService: any;
 
   const owner = { id: 'owner-1', email: 'o@f.com', roles: [UserRole.COURT_OWNER] };
 
@@ -44,7 +43,9 @@ describe('MembershipsService (extended)', () => {
     } as unknown as typeof prisma;
 
     couponsService = {
-      resolveCoupon: jest.fn().mockResolvedValue({ coupon: null, discountAmount: 0, finalAmount: 999 }),
+      resolveCoupon: jest
+        .fn()
+        .mockResolvedValue({ coupon: null, discountAmount: 0, finalAmount: 999 }),
       applyRedemption: jest.fn(),
       validateForUser: jest.fn(),
     };
@@ -59,6 +60,10 @@ describe('MembershipsService (extended)', () => {
         { provide: PrismaService, useValue: prisma },
         { provide: CouponsService, useValue: couponsService },
         { provide: PaymentsService, useValue: paymentsService },
+        {
+          provide: SubscriptionService,
+          useValue: { assertTenantCanAcceptBookings: jest.fn().mockResolvedValue(undefined) },
+        },
       ],
     }).compile();
 
@@ -80,7 +85,7 @@ describe('MembershipsService (extended)', () => {
     } as never);
 
     const plan = await service.getPlan('plan-1');
-    expect(plan.name).toBe('Monthly');
+    expect((plan as any).name).toBe('Monthly');
   });
 
   it('getPlan throws when not found', async () => {
@@ -126,7 +131,7 @@ describe('MembershipsService (extended)', () => {
     } as never);
 
     const result = await service.setAutoRenew('purchase-1', true, 'u1');
-    expect(result.autoRenew).toBe(true);
+    expect((result as any).autoRenew).toBe(true);
   });
 
   it('deletePlan forbids non-owner', async () => {

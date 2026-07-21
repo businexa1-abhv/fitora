@@ -10,20 +10,8 @@ import { mockNotificationsService, mockPaymentsService } from '../../test/helper
 
 describe('TrainingService (extended)', () => {
   let service: TrainingService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'court'
-      | 'sport'
-      | 'trainingProgram'
-      | 'trainingBatch'
-      | 'trainingEnrollment'
-      | 'kidProfile'
-      | 'user'
-      | 'attendanceRecord'
-      | 'progressReport'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
 
   const owner = { id: 'owner-1', email: 'o@f.com', roles: [UserRole.COURT_OWNER] };
 

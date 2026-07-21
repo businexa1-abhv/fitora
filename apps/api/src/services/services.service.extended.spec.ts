@@ -1,6 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
-import { PaymentEntityType, PaymentStatus, ServiceCategory, ServiceOrderStatus, UserRole } from '@prisma/client';
+import {
+  PaymentEntityType,
+  PaymentStatus,
+  ServiceCategory,
+  ServiceOrderStatus,
+  UserRole,
+} from '@prisma/client';
 import { ServicesService } from './services.service';
 import { PaymentsService } from '../payments/payments.service';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -28,9 +34,8 @@ const listing = {
 
 describe('ServicesService (extended)', () => {
   let service: ServicesService;
-  let prisma: jest.Mocked<
-    Pick<PrismaService, 'serviceListing' | 'serviceOrder' | 'sport' | 'serviceReview'>
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
   let notifications: ReturnType<typeof mockNotificationsService>;
 
   beforeEach(async () => {
@@ -164,11 +169,15 @@ describe('ServicesService (extended)', () => {
     prisma.serviceListing.findFirst.mockResolvedValue(listing as never);
     prisma.serviceListing.update.mockResolvedValue({ ...listing, title: 'Updated' } as never);
 
-    const updated = await service.updateListing('listing-1', {
-      id: 'provider-1',
-      email: 'p@f.com',
-      roles: [UserRole.SERVICE_PROVIDER],
-    }, { title: 'Updated' });
+    const updated = await service.updateListing(
+      'listing-1',
+      {
+        id: 'provider-1',
+        email: 'p@f.com',
+        roles: [UserRole.SERVICE_PROVIDER],
+      },
+      { title: 'Updated' },
+    );
     expect(updated.title).toBe('Updated');
   });
 

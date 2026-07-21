@@ -6,33 +6,27 @@ import { CouponsService } from '../memberships/coupons.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { CacheService } from '../common/redis/cache.service';
-import { mockCouponsService, mockNotificationsService, mockPaymentsService, mockCacheService } from '../../test/helpers/mock-deps';
+import { TenantsService } from '../tenants/tenants.service';
+import {
+  mockCouponsService,
+  mockNotificationsService,
+  mockPaymentsService,
+  mockCacheService,
+} from '../../test/helpers/mock-deps';
 
 describe('ShopService', () => {
   let service: ShopService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'productCategory'
-      | 'product'
-      | 'productVariant'
-      | 'productImage'
-      | 'cart'
-      | 'cartItem'
-      | 'shopOrder'
-      | 'sport'
-      | 'wishlist'
-      | 'wishlistItem'
-      | 'review'
-      | 'inventoryMovement'
-      | 'shopInvoice'
-      | '$transaction'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
 
   beforeEach(async () => {
     prisma = {
-      productCategory: { findMany: jest.fn(), findFirst: jest.fn(), create: jest.fn(), update: jest.fn() },
+      productCategory: {
+        findMany: jest.fn(),
+        findFirst: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+      },
       product: {
         findMany: jest.fn(),
         findFirst: jest.fn(),
@@ -41,11 +35,26 @@ describe('ShopService', () => {
         update: jest.fn(),
         count: jest.fn(),
       },
-      productVariant: { findMany: jest.fn(), findFirst: jest.fn(), create: jest.fn(), update: jest.fn() },
-      productImage: { createMany: jest.fn(), updateMany: jest.fn(), create: jest.fn(), update: jest.fn() },
+      productVariant: {
+        findMany: jest.fn(),
+        findFirst: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+      },
+      productImage: {
+        createMany: jest.fn(),
+        updateMany: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+      },
       cart: { findUnique: jest.fn(), create: jest.fn() },
       cartItem: { create: jest.fn(), update: jest.fn(), delete: jest.fn(), deleteMany: jest.fn() },
-      shopOrder: { create: jest.fn(), findUnique: jest.fn(), findMany: jest.fn(), update: jest.fn() },
+      shopOrder: {
+        create: jest.fn(),
+        findUnique: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
       sport: { findFirst: jest.fn() },
       wishlist: { findUnique: jest.fn(), create: jest.fn() },
       wishlistItem: { create: jest.fn(), delete: jest.fn() },
@@ -63,6 +72,10 @@ describe('ShopService', () => {
         { provide: CouponsService, useValue: mockCouponsService() },
         { provide: NotificationsService, useValue: mockNotificationsService() },
         { provide: CacheService, useValue: mockCacheService() },
+        {
+          provide: TenantsService,
+          useValue: { resolveTenantId: jest.fn().mockResolvedValue('tenant-1') },
+        },
       ],
     }).compile();
 
@@ -131,9 +144,9 @@ describe('ShopService', () => {
         stockQuantity: 10,
       } as never);
 
-      await expect(
-        service.addToCart('u1', { productId: 'prod-1', quantity: 1 }),
-      ).rejects.toThrow('Product unavailable');
+      await expect(service.addToCart('u1', { productId: 'prod-1', quantity: 1 })).rejects.toThrow(
+        'Product unavailable',
+      );
     });
   });
 });

@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { BookingsController } from '../../src/bookings/bookings.controller';
 import { BookingsService } from '../../src/bookings/bookings.service';
+import { RecurringBookingService } from '../../src/bookings/recurring-booking.service';
 import { closeTestApp, createTestApp } from '../helpers/create-test-app';
 
 const COURT_ID = '11111111-1111-4111-8111-111111111111';
@@ -24,7 +25,13 @@ describe('Bookings API (integration)', () => {
     jest.clearAllMocks();
     const fixture = await createTestApp({
       controllers: [BookingsController],
-      providers: [{ provide: BookingsService, useValue: bookingsService }],
+      providers: [
+        { provide: BookingsService, useValue: bookingsService },
+        {
+          provide: RecurringBookingService,
+          useValue: { createRecurringBooking: jest.fn(), listRecurringBookings: jest.fn() },
+        },
+      ],
     });
     app = fixture.app;
   });

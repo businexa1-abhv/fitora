@@ -1,4 +1,5 @@
 import { io, type Socket } from 'socket.io-client';
+
 import { API_URL } from './api';
 
 export type LiveSlotUpdated = {
@@ -8,7 +9,20 @@ export type LiveSlotUpdated = {
   availableSeats?: number;
   reservedSeats?: number;
   confirmedSeats?: number;
-  availabilityStatus?: 'AVAILABLE' | 'FEW_SPOTS' | 'FULL' | 'BLOCKED' | 'MAINTENANCE' | 'HOLIDAY';
+  bookedPlayers?: number;
+  version?: number;
+  isBookable?: boolean;
+  operationalState?: string;
+  availabilityStatus?:
+    | 'AVAILABLE'
+    | 'FEW_SPOTS'
+    | 'FULL'
+    | 'BLOCKED'
+    | 'MAINTENANCE'
+    | 'TOURNAMENT'
+    | 'PRIVATE'
+    | 'CLOSED'
+    | 'HOLIDAY';
   isBooked: boolean;
   isBlocked: boolean;
   blockReason?: string | null;
@@ -40,6 +54,10 @@ export function getRealtimeSocket(token?: string | null): Socket {
   socket = io(`${getRealtimeOrigin()}/realtime`, {
     transports: ['websocket', 'polling'],
     autoConnect: true,
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 800,
+    reconnectionDelayMax: 8_000,
     auth: token ? { token } : undefined,
   });
 

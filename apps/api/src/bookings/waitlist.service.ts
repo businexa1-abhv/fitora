@@ -9,6 +9,7 @@ import { UserRole, WaitlistStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.module';
 import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { SlotEventsService } from '../realtime/slot-events.service';
 import { AuthUserPayload } from '../common/decorators/current-user.decorator';
 
 const OFFER_TTL_MS = 5 * 60_000;
@@ -23,6 +24,7 @@ export class WaitlistService {
     private availability: SlotAvailabilityService,
     @Inject(NotificationsService)
     private notifications: NotificationsService,
+    private events: SlotEventsService,
   ) {}
 
   async join(courtId: string, slotId: string, userId: string, seats = 1) {
@@ -198,6 +200,14 @@ export class WaitlistService {
       courtName: next.court.name,
       slotStart: next.slot.startTime,
       offeredUntil,
+    });
+
+    await this.events.emitWaitlistPromoted({
+      waitlistEntryId: next.id,
+      userId: next.userId,
+      slotId,
+      courtId,
+      seats: next.seats,
     });
 
     return this.formatEntry(updated);

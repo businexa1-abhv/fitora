@@ -4,8 +4,8 @@ import { UserRole } from '@prisma/client';
 import { Permission } from '@fitora/types';
 import { CurrentUser, RequirePermissions, Roles, type AuthUserPayload } from '../common/decorators';
 import {
-  type ListPartnerApplicationsQueryDto,
-  type RejectPartnerApplicationDto,
+  ListPartnerApplicationsQueryDto,
+  RejectPartnerApplicationDto,
 } from './dto/admin-partner.dto';
 import { PartnerOnboardingService } from './partner-onboarding.service';
 

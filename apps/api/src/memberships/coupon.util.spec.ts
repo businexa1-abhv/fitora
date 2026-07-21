@@ -1,9 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import {
-  CouponAppliesTo,
-  CouponCodeType,
-  CouponDiscountType,
-} from '@prisma/client';
+import { CouponAppliesTo, CouponCodeType, CouponDiscountType } from '@prisma/client';
 import {
   calculateCouponDiscount,
   normalizeCouponCode,
@@ -16,6 +12,7 @@ describe('coupon.util', () => {
     code: 'SAVE20',
     description: null,
     codeType: CouponCodeType.PROMO,
+    tenantId: null,
     courtId: 'court-1',
     companyName: null,
     createdById: null,
@@ -42,7 +39,11 @@ describe('coupon.util', () => {
   it('calculates percentage discount', () => {
     expect(
       calculateCouponDiscount(
-        { discountType: CouponDiscountType.PERCENTAGE, discountValue: '20' as never, maxDiscount: null },
+        {
+          discountType: CouponDiscountType.PERCENTAGE,
+          discountValue: '20' as never,
+          maxDiscount: null,
+        },
         1000,
       ),
     ).toBe(200);

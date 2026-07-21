@@ -7,20 +7,10 @@ import { PrismaService } from '../prisma/prisma.module';
 
 describe('TrainersService', () => {
   let service: TrainersService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'trainerProfile'
-      | 'user'
-      | 'trainingBatch'
-      | 'trainingEnrollment'
-      | 'attendanceRecord'
-      | 'progressReport'
-      | 'leaveRequest'
-      | 'trainingNote'
-    >
-  >;
-  let notificationsService: jest.Mocked<Pick<NotificationsService, 'create' | 'notifyLeaveRequestUpdate'>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let notificationsService: any;
 
   beforeEach(async () => {
     prisma = {
@@ -41,7 +31,12 @@ describe('TrainersService', () => {
         update: jest.fn(),
         groupBy: jest.fn(),
       },
-      trainingNote: { findMany: jest.fn(), create: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
+      trainingNote: {
+        findMany: jest.fn(),
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        update: jest.fn(),
+      },
     };
 
     notificationsService = {

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   MerchantWalletRole,
@@ -24,6 +24,7 @@ export class RevenueOrchestrator {
     private readonly prisma: PrismaService,
     private readonly config: ConfigService<EnvConfig, true>,
     private readonly commissionEngine: CommissionEngine,
+    @Inject(forwardRef(() => SubscriptionService))
     private readonly subscriptions: SubscriptionService,
   ) {}
 

@@ -2,14 +2,14 @@ import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post } from '@nestj
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '../common/decorators';
 import {
-  type PartnerBusinessDto,
-  type PartnerLegalDto,
-  type PartnerSportsConfigDto,
-  type PartnerSubmitDto,
-  type PartnerTrainersDto,
-  type PartnerVenueDto,
-  type PartnerVerifyPhoneDto,
-  type PartnerVisualsDto,
+  PartnerBusinessDto,
+  PartnerLegalDto,
+  PartnerSportsConfigDto,
+  PartnerSubmitDto,
+  PartnerTrainersDto,
+  PartnerVenueDto,
+  PartnerVerifyPhoneDto,
+  PartnerVisualsDto,
 } from './dto/partner-onboarding.dto';
 import { PartnerOnboardingService } from './partner-onboarding.service';
 

@@ -14,6 +14,8 @@ import { MembershipsService } from '../memberships/memberships.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
 import { SlotEventsService } from '../realtime/slot-events.service';
+import { WaitlistService } from './waitlist.service';
+import { SubscriptionService } from '../finance/subscription/subscription.service';
 
 describe('BookingsService', () => {
   let service: BookingsService;
@@ -144,6 +146,14 @@ describe('BookingsService', () => {
             emitBookingCancelled: jest.fn(),
             emitAttendanceUpdated: jest.fn(),
           },
+        },
+        {
+          provide: WaitlistService,
+          useValue: { addToWaitlist: jest.fn(), notifyNextInWaitlist: jest.fn() },
+        },
+        {
+          provide: SubscriptionService,
+          useValue: { assertTenantCanAcceptBookings: jest.fn().mockResolvedValue(undefined) },
         },
       ],
     }).compile();

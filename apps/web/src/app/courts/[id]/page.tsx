@@ -27,6 +27,7 @@ import {
 import { completePayment } from '@/lib/payments';
 import { PaymentProcessingOverlay } from '@/components/payment-processing-overlay';
 import { SlotConflictBanner } from '@/components/slot-conflict-banner';
+import { getRealtimeSocket } from '@/lib/realtime';
 
 function todayString() {
   return new Date().toISOString().split('T')[0];
@@ -61,6 +62,93 @@ export default function CourtDetailPage() {
     getCourtSlots(id, date)
       .then(setSlots)
       .catch(() => setSlots([]));
+  }, [id, date]);
+
+  // Live availability — patch only the changed slot; reconcile once on reconnect.
+  useEffect(() => {
+    if (!id) return;
+    let disposed = false;
+    const socket = getRealtimeSocket(getAccessToken());
+
+    const subscribe = () => socket.emit('subscribe:court', { courtId: id, date });
+    const reconcile = () => {
+      getCourtSlots(id, date)
+        .then((next) => {
+          if (!disposed) setSlots(next);
+        })
+        .catch(() => undefined);
+    };
+
+    const onUpdated = (payload: {
+      id: string;
+      courtId: string;
+      startTime?: string;
+      capacity?: number;
+      availableSeats?: number;
+      reservedSeats?: number;
+      confirmedSeats?: number;
+      availabilityStatus?: CourtSlot['availabilityStatus'];
+      isBooked: boolean;
+      isBlocked: boolean;
+      price?: string;
+      endTime?: string;
+      version?: number;
+      isBookable?: boolean;
+    }) => {
+      if (payload.courtId !== id) return;
+      const payloadDate = payload.startTime?.slice(0, 10);
+      if (payloadDate && payloadDate !== date) return;
+      setSlots((current) => {
+        const index = current.findIndex((s) => s.id === payload.id);
+        if (index === -1) {
+          reconcile();
+          return current;
+        }
+        const existing = current[index]!;
+        if (payload.version != null && (existing.version ?? 0) > payload.version) return current;
+        const next = current.slice();
+        next[index] = {
+          ...existing,
+          ...payload,
+          price: payload.price ?? existing.price,
+          startTime: payload.startTime ?? existing.startTime,
+          endTime: payload.endTime ?? existing.endTime,
+        };
+        return next;
+      });
+    };
+
+    const onConnect = () => {
+      subscribe();
+      reconcile();
+    };
+
+    subscribe();
+    socket.on('connect', onConnect);
+    socket.on('slot:updated', onUpdated);
+    socket.on('slot.updated', onUpdated);
+    socket.on('slot.created', onUpdated);
+    socket.on('slot.blocked', onUpdated);
+    socket.on('slot.unblocked', onUpdated);
+    socket.on('slot.full', onUpdated);
+    socket.on('slot.available', onUpdated);
+    socket.on('slot.booked', onUpdated);
+    socket.on('slot.cancelled', onUpdated);
+
+    return () => {
+      disposed = true;
+      socket.emit('unsubscribe:court', { courtId: id, date });
+      socket.off('connect', onConnect);
+      socket.off('slot:updated', onUpdated);
+      socket.off('slot.updated', onUpdated);
+      socket.off('slot.created', onUpdated);
+      socket.off('slot.blocked', onUpdated);
+      socket.off('slot.unblocked', onUpdated);
+      socket.off('slot.full', onUpdated);
+      socket.off('slot.available', onUpdated);
+      socket.off('slot.booked', onUpdated);
+      socket.off('slot.cancelled', onUpdated);
+    };
   }, [id, date]);
 
   async function handleBook(slotId: string) {

@@ -1,8 +1,22 @@
 import { SlotEventsService } from './slot-events.service';
 
+function createEvents() {
+  const outbox = {
+    enqueue: jest.fn(async (_event: string, data: unknown, meta?: object) => ({
+      eventId: 'evt-1',
+      event: _event,
+      occurredAt: new Date().toISOString(),
+      data,
+      ...meta,
+    })),
+    markPublished: jest.fn(async () => undefined),
+  };
+  return { events: new SlotEventsService(outbox as never), outbox };
+}
+
 describe('SlotEventsService', () => {
-  it('delivers slot:updated to registered listeners', async () => {
-    const events = new SlotEventsService();
+  it('delivers canonical and legacy slot:updated events', async () => {
+    const { events, outbox } = createEvents();
     const seen: Array<{ event: string; payload: unknown }> = [];
     events.onEvent((event, payload) => {
       seen.push({ event, payload });
@@ -21,17 +35,17 @@ describe('SlotEventsService', () => {
       startTime: new Date('2026-07-20T10:00:00.000Z'),
       endTime: new Date('2026-07-20T11:00:00.000Z'),
       price: '500',
+      version: 2,
     });
 
-    expect(seen).toHaveLength(1);
-    expect(seen[0]).toMatchObject({
-      event: 'slot:updated',
-      payload: { id: 'slot-1', availableSeats: 3, courtId: 'court-1' },
-    });
+    expect(outbox.enqueue).toHaveBeenCalled();
+    expect(seen.some((s) => s.event === 'slot.updated')).toBe(true);
+    expect(seen.some((s) => s.event === 'slot:updated')).toBe(true);
+    expect(seen.some((s) => s.event === 'slot.available')).toBe(true);
   });
 
   it('unsubscribes listeners', async () => {
-    const events = new SlotEventsService();
+    const { events } = createEvents();
     const listener = jest.fn();
     const off = events.onEvent(listener);
     off();
@@ -43,5 +57,24 @@ describe('SlotEventsService', () => {
     });
 
     expect(listener).not.toHaveBeenCalled();
+  });
+
+  it('emits waitlist.promoted', async () => {
+    const { events } = createEvents();
+    const listener = jest.fn();
+    events.onEvent(listener);
+    await events.emitWaitlistPromoted({
+      waitlistEntryId: 'w1',
+      userId: 'u1',
+      slotId: 's1',
+      courtId: 'c1',
+      seats: 1,
+    });
+    expect(listener).toHaveBeenCalledWith(
+      'waitlist.promoted',
+      expect.objectContaining({
+        event: 'waitlist.promoted',
+      }),
+    );
   });
 });

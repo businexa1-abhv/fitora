@@ -5,22 +5,13 @@ import { AnalyticsService } from './analytics.service';
 import { AnalyticsPeriod } from './analytics.constants';
 import { PrismaService } from '../prisma/prisma.module';
 import { CacheService } from '../common/redis/cache.service';
+import { TenantsService } from '../tenants/tenants.service';
 import { mockCacheService, mockConfigService } from '../../test/helpers/mock-deps';
 
 describe('AnalyticsService', () => {
   let service: AnalyticsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'payment'
-      | 'booking'
-      | 'user'
-      | 'membershipPurchase'
-      | 'shopOrder'
-      | 'shopOrderItem'
-      | 'court'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
 
   beforeEach(async () => {
     prisma = {
@@ -59,6 +50,10 @@ describe('AnalyticsService', () => {
         { provide: PrismaService, useValue: prisma },
         { provide: CacheService, useValue: mockCacheService() },
         { provide: ConfigService, useValue: mockConfigService({ CACHE_ENABLED: true }) },
+        {
+          provide: TenantsService,
+          useValue: { resolveTenantId: jest.fn().mockResolvedValue('tenant-1') },
+        },
       ],
     }).compile();
 

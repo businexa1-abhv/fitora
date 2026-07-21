@@ -24,6 +24,8 @@ function createSerializedPrisma(capacity: number) {
     capacity,
     isBlocked: false,
     blockReason: null,
+    operationalState: 'AVAILABLE',
+    version: 0,
     startTime: new Date(Date.now() + 60 * 60_000),
     endTime: new Date(Date.now() + 2 * 60 * 60_000),
     price: 500,
@@ -32,6 +34,7 @@ function createSerializedPrisma(capacity: number) {
       deletedAt: null,
       approvalStatus: CourtApprovalStatus.APPROVED,
       isActive: true,
+      tenantId: 'tenant-1',
       sport: { id: 'sport-1', name: 'Badminton', slug: 'badminton' },
     },
   };
@@ -99,6 +102,7 @@ function createSerializedPrisma(capacity: number) {
         reservedCount,
         confirmedCount,
       })),
+      findMany: jest.fn().mockResolvedValue([]),
     },
     getSnapshot: () => ({ reservedCount, confirmedCount, bookings: bookingSeq }),
   };
@@ -109,7 +113,13 @@ function createSerializedPrisma(capacity: number) {
 describe('SlotAvailabilityService concurrency', () => {
   async function createService(capacity: number) {
     const prisma = createSerializedPrisma(capacity);
-    const events = { emitSlotUpdated: jest.fn().mockResolvedValue(undefined) };
+    const events = {
+      emitSlotUpdated: jest.fn().mockResolvedValue(undefined),
+      emitSlotBooked: jest.fn().mockResolvedValue(undefined),
+      emitSlotCancelled: jest.fn().mockResolvedValue(undefined),
+      emitSlotReleased: jest.fn().mockResolvedValue(undefined),
+      emitBookingConfirmed: jest.fn().mockResolvedValue(undefined),
+    };
     const holds = { setHold: jest.fn().mockResolvedValue(undefined) };
 
     const module: TestingModule = await Test.createTestingModule({

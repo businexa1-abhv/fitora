@@ -239,7 +239,21 @@ export interface CourtSlot {
   availableSeats?: number;
   reservedSeats?: number;
   confirmedSeats?: number;
-  availabilityStatus?: 'AVAILABLE' | 'FEW_SPOTS' | 'FULL' | 'BLOCKED' | 'MAINTENANCE' | 'HOLIDAY';
+  bookedPlayers?: number;
+  version?: number;
+  isBookable?: boolean;
+  operationalState?: 'AVAILABLE' | 'BLOCKED' | 'MAINTENANCE' | 'TOURNAMENT' | 'PRIVATE' | 'CLOSED';
+  availabilityStatus?:
+    | 'AVAILABLE'
+    | 'FEW_SPOTS'
+    | 'FULL'
+    | 'BLOCKED'
+    | 'MAINTENANCE'
+    | 'TOURNAMENT'
+    | 'PRIVATE'
+    | 'CLOSED'
+    | 'HOLIDAY';
+  blockReason?: string | null;
 }
 
 export interface Booking {

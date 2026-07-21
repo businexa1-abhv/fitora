@@ -8,21 +8,8 @@ import { QueueManagerService } from '../queue/queue-manager.service';
 
 describe('NotificationsService (extended)', () => {
   let service: NotificationsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'notification'
-      | 'notificationPreference'
-      | 'notificationDelivery'
-      | 'scheduledNotification'
-      | 'user'
-      | 'deviceToken'
-      | 'userRoleAssignment'
-      | 'booking'
-      | 'membershipPurchase'
-      | 'trainingEnrollment'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
   const queueJobs = {
     enqueueEmail: jest.fn(),
     enqueueSms: jest.fn(),
@@ -115,7 +102,7 @@ describe('NotificationsService (extended)', () => {
 
     const result = await service.listForUser('u1', 1, 20);
     expect(result.items).toHaveLength(1);
-    expect(result.total).toBe(1);
+    expect((result as any).total).toBe(1);
   });
 
   it('unreadCount returns count', async () => {
@@ -129,7 +116,7 @@ describe('NotificationsService (extended)', () => {
     prisma.notification.update.mockResolvedValue(mockNotification({ readAt: new Date() }) as never);
 
     const result = await service.markRead('u1', 'n1');
-    expect(result.readAt).toBeTruthy();
+    expect(result!.readAt).toBeTruthy();
   });
 
   it('markAllRead updates all unread', async () => {
@@ -172,14 +159,31 @@ describe('NotificationsService (extended)', () => {
   });
 
   it('adminBroadcast sends to role users', async () => {
-    prisma.userRoleAssignment.findMany.mockResolvedValue([{ userId: 'u1' }, { userId: 'u2' }] as never);
+    prisma.userRoleAssignment.findMany.mockResolvedValue([
+      { userId: 'u1' },
+      { userId: 'u2' },
+    ] as never);
     prisma.user.findMany.mockResolvedValue([
       { id: 'u1', email: 'u1@f.com', phone: null },
       { id: 'u2', email: 'u2@f.com', phone: null },
     ] as never);
     prisma.notificationPreference.findMany.mockResolvedValue([
-      { userId: 'u1', emailEnabled: true, smsEnabled: false, pushEnabled: true, inAppEnabled: true, typeOverrides: null },
-      { userId: 'u2', emailEnabled: true, smsEnabled: false, pushEnabled: true, inAppEnabled: true, typeOverrides: null },
+      {
+        userId: 'u1',
+        emailEnabled: true,
+        smsEnabled: false,
+        pushEnabled: true,
+        inAppEnabled: true,
+        typeOverrides: null,
+      },
+      {
+        userId: 'u2',
+        emailEnabled: true,
+        smsEnabled: false,
+        pushEnabled: true,
+        inAppEnabled: true,
+        typeOverrides: null,
+      },
     ] as never);
     prisma.notification.create.mockResolvedValue(mockNotification() as never);
     prisma.notificationDelivery.create.mockResolvedValue({ id: 'd1' } as never);
@@ -221,7 +225,9 @@ describe('NotificationsService (extended)', () => {
   });
 
   it('notifyBookingConfirmed creates notification', async () => {
-    prisma.notification.create.mockResolvedValue(mockNotification({ title: 'Booking confirmed' }) as never);
+    prisma.notification.create.mockResolvedValue(
+      mockNotification({ title: 'Booking confirmed' }) as never,
+    );
     prisma.notificationDelivery.create.mockResolvedValue({ id: 'd1' } as never);
     prisma.notificationDelivery.createMany.mockResolvedValue({ count: 0 } as never);
     prisma.user.findUnique.mockResolvedValue({ email: 'u@f.com', phone: null } as never);
@@ -240,7 +246,13 @@ describe('NotificationsService (extended)', () => {
   it('getDeliveryHistory returns deliveries for owner', async () => {
     prisma.notification.findFirst.mockResolvedValue(mockNotification() as never);
     prisma.notificationDelivery.findMany.mockResolvedValue([
-      { channel: 'EMAIL', status: 'SENT', sentAt: new Date(), errorMessage: null, createdAt: new Date() },
+      {
+        channel: 'EMAIL',
+        status: 'SENT',
+        sentAt: new Date(),
+        errorMessage: null,
+        createdAt: new Date(),
+      },
     ] as never);
 
     const deliveries = await service.getDeliveryHistory('n1', 'u1');
@@ -274,7 +286,9 @@ describe('NotificationsService (extended)', () => {
   });
 
   it('notifyPaymentFailed creates notification', async () => {
-    prisma.notification.create.mockResolvedValue(mockNotification({ title: 'Payment failed' }) as never);
+    prisma.notification.create.mockResolvedValue(
+      mockNotification({ title: 'Payment failed' }) as never,
+    );
     prisma.notificationDelivery.create.mockResolvedValue({ id: 'd1' } as never);
     prisma.notificationDelivery.createMany.mockResolvedValue({ count: 0 } as never);
     prisma.user.findUnique.mockResolvedValue({ email: 'u@f.com', phone: null } as never);
@@ -284,12 +298,14 @@ describe('NotificationsService (extended)', () => {
   });
 
   it('notifyMembershipExpiring creates warning', async () => {
-    prisma.notification.create.mockResolvedValue(mockNotification({ title: 'Membership expiring' }) as never);
+    prisma.notification.create.mockResolvedValue(
+      mockNotification({ title: 'Membership expiring' }) as never,
+    );
     prisma.notificationDelivery.create.mockResolvedValue({ id: 'd1' } as never);
     prisma.notificationDelivery.createMany.mockResolvedValue({ count: 0 } as never);
     prisma.user.findUnique.mockResolvedValue({ email: 'u@f.com', phone: null } as never);
 
-    const result = await service.notifyMembershipExpiring('u1', 'Gold Plan', 3);
+    const result = await service.notifyMembershipExpiring('u1', 'Gold Plan');
     expect(result?.title).toBe('Membership expiring');
   });
 
@@ -310,7 +326,14 @@ describe('NotificationsService (extended)', () => {
     prisma.userRoleAssignment.findMany.mockResolvedValue([{ userId: 'u1' }] as never);
     prisma.user.findMany.mockResolvedValue([{ id: 'u1', email: 'u@f.com', phone: null }] as never);
     prisma.notificationPreference.findMany.mockResolvedValue([
-      { userId: 'u1', emailEnabled: true, smsEnabled: false, pushEnabled: true, inAppEnabled: true, typeOverrides: null },
+      {
+        userId: 'u1',
+        emailEnabled: true,
+        smsEnabled: false,
+        pushEnabled: true,
+        inAppEnabled: true,
+        typeOverrides: null,
+      },
     ] as never);
     prisma.notification.create.mockResolvedValue(mockNotification() as never);
     prisma.notificationDelivery.create.mockResolvedValue({ id: 'd1' } as never);

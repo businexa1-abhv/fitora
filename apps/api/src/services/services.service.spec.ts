@@ -8,11 +8,17 @@ import { PrismaService } from '../prisma/prisma.module';
 
 describe('ServicesService', () => {
   let service: ServicesService;
-  let prisma: jest.Mocked<Pick<PrismaService, 'serviceListing' | 'serviceOrder' | 'sport'>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
 
   beforeEach(async () => {
     prisma = {
-      serviceListing: { findFirst: jest.fn(), findMany: jest.fn(), count: jest.fn(), create: jest.fn() },
+      serviceListing: {
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        count: jest.fn(),
+        create: jest.fn(),
+      },
       serviceOrder: { create: jest.fn() },
       sport: { findUnique: jest.fn() },
     } as unknown as typeof prisma;
@@ -96,6 +102,7 @@ describe('ServicesService', () => {
           price: 500,
           sportSlug: 'badminton',
           turnaroundDays: 2,
+          city: 'Bangalore',
         },
       );
 

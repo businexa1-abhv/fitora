@@ -4,13 +4,27 @@ import { ClosureReason, SlotPricingRuleType, UserRole } from '@prisma/client';
 import { SlotsService } from './slots.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { SlotEventsService } from '../realtime/slot-events.service';
+import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
 import { SubscriptionService } from '../finance/subscription/subscription.service';
 
 describe('SlotsService', () => {
   let service: SlotsService;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let prisma: any;
-  const events = { emitSlotUpdated: jest.fn().mockResolvedValue(undefined) };
+  const events = {
+    emitSlotUpdated: jest.fn().mockResolvedValue(undefined),
+    emitSlotCreated: jest.fn().mockResolvedValue(undefined),
+    emitSlotDeleted: jest.fn().mockResolvedValue(undefined),
+    emitSlotBlocked: jest.fn().mockResolvedValue(undefined),
+    emitSlotUnblocked: jest.fn().mockResolvedValue(undefined),
+    emitSlotClosed: jest.fn().mockResolvedValue(undefined),
+    emitSlotPriceChanged: jest.fn().mockResolvedValue(undefined),
+    emitSlotCapacityChanged: jest.fn().mockResolvedValue(undefined),
+  };
+  const availability = {
+    setOperationalState: jest.fn(),
+    updateCapacity: jest.fn(),
+  };
 
   const ownerUser = { id: 'owner-1', email: 'o@f.com', roles: [UserRole.COURT_OWNER] };
   const mockCourt = {
@@ -27,7 +41,8 @@ describe('SlotsService', () => {
       court: { findFirst: jest.fn() },
       courtSlot: {
         create: jest.fn(),
-        findMany: jest.fn(),
+        createMany: jest.fn().mockResolvedValue({ count: 2 }),
+        findMany: jest.fn().mockResolvedValue([]),
         findFirst: jest.fn(),
         update: jest.fn(),
       },
@@ -56,6 +71,7 @@ describe('SlotsService', () => {
         SlotsService,
         { provide: PrismaService, useValue: prisma },
         { provide: SlotEventsService, useValue: events },
+        { provide: SlotAvailabilityService, useValue: availability },
         {
           provide: SubscriptionService,
           useValue: { assertTenantCanAcceptBookings: jest.fn().mockResolvedValue(undefined) },
@@ -65,6 +81,7 @@ describe('SlotsService', () => {
 
     service = module.get(SlotsService);
     events.emitSlotUpdated.mockClear();
+    events.emitSlotCreated.mockClear();
   });
 
   describe('generateSlots', () => {

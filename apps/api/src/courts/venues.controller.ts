@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OptionalAuth } from '../common/decorators';
-import { type VenueQueryDto } from './dto/venue-query.dto';
+import { VenueQueryDto } from './dto/venue-query.dto';
 import { VenuesService } from './venues.service';
 
 @ApiTags('venues')

@@ -7,18 +7,8 @@ import { QueueManagerService } from '../queue/queue-manager.service';
 
 describe('NotificationsService', () => {
   let service: NotificationsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'notification'
-      | 'notificationPreference'
-      | 'notificationDelivery'
-      | 'user'
-      | 'deviceToken'
-      | 'userRoleAssignment'
-      | 'booking'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
 
   const queueJobs = {
     enqueueEmail: jest.fn(),

@@ -1,7 +1,38 @@
-import { computeAvailabilityStatus } from './availability-status.util';
+import { computeAvailabilityStatus, isBookableStatus } from './availability-status.util';
 
 describe('computeAvailabilityStatus', () => {
-  it('returns BLOCKED variants', () => {
+  it('returns operational overrides before FULL', () => {
+    expect(
+      computeAvailabilityStatus({
+        operationalState: 'MAINTENANCE',
+        capacity: 4,
+        availableSeats: 0,
+      }),
+    ).toBe('MAINTENANCE');
+    expect(
+      computeAvailabilityStatus({
+        operationalState: 'TOURNAMENT',
+        capacity: 4,
+        availableSeats: 4,
+      }),
+    ).toBe('TOURNAMENT');
+    expect(
+      computeAvailabilityStatus({
+        operationalState: 'PRIVATE',
+        capacity: 4,
+        availableSeats: 4,
+      }),
+    ).toBe('PRIVATE');
+    expect(
+      computeAvailabilityStatus({
+        operationalState: 'CLOSED',
+        capacity: 4,
+        availableSeats: 4,
+      }),
+    ).toBe('CLOSED');
+  });
+
+  it('returns BLOCKED variants from legacy fields', () => {
     expect(
       computeAvailabilityStatus({
         isBlocked: true,
@@ -50,5 +81,13 @@ describe('computeAvailabilityStatus', () => {
         availableSeats: 3,
       }),
     ).toBe('AVAILABLE');
+  });
+
+  it('only AVAILABLE and FEW_SPOTS are bookable', () => {
+    expect(isBookableStatus('AVAILABLE')).toBe(true);
+    expect(isBookableStatus('FEW_SPOTS')).toBe(true);
+    expect(isBookableStatus('FULL')).toBe(false);
+    expect(isBookableStatus('BLOCKED')).toBe(false);
+    expect(isBookableStatus('TOURNAMENT')).toBe(false);
   });
 });

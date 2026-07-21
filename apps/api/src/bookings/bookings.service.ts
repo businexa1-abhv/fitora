@@ -628,18 +628,7 @@ export class BookingsService {
     }
 
     if (this.availability.isEngineEnabled() && booking.paymentStatus === PaymentStatus.PAID) {
-      await this.prisma.courtSlot.update({
-        where: { id: booking.slotId },
-        data: {
-          confirmedCount: { decrement: booking.seats ?? 1 },
-          version: { increment: 1 },
-        },
-      });
-      const availability = await this.availability.getSlotAvailability(
-        booking.courtId,
-        booking.slotId,
-      );
-      await this.events.emitSlotUpdated(availability);
+      await this.availability.releaseConfirmedSeats(booking.id);
     }
 
     const updated = await this.prisma.booking.update({

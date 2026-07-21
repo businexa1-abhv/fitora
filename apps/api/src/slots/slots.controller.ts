@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -26,10 +16,12 @@ import {
   CalendarQueryDto,
   CreateClosureDto,
   CreatePricingRuleDto,
+  CreateSlotCanonicalDto,
   CreateSlotDto,
   CreateSlotScheduleDto,
   GenerateRecurringSlotsDto,
   GenerateSlotsDto,
+  SlotActionDto,
   SlotQueryDto,
   SlotResponseDto,
   UpdateClosureDto,
@@ -43,7 +35,106 @@ import {
 export class SlotsController {
   constructor(private slotsService: SlotsService) {}
 
-  // ─── Slots ──────────────────────────────────────────────────────────────────
+  // ─── Canonical slot routes ──────────────────────────────────────────────────
+
+  @OptionalAuth()
+  @Get('slots/:slotId')
+  @ApiOperation({ summary: 'Get a single slot snapshot' })
+  getSlot(@Param('slotId') slotId: string, @CurrentUser() user?: AuthUserPayload) {
+    return this.slotsService.getSlotById(slotId, user);
+  }
+
+  @Post('slots')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Create a slot (canonical)' })
+  createSlotCanonical(@Body() dto: CreateSlotCanonicalDto, @CurrentUser() user: AuthUserPayload) {
+    const { courtId, ...rest } = dto;
+    return this.slotsService.createSlot(courtId, rest, user);
+  }
+
+  @Patch('slots/:slotId')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Update a slot (canonical)' })
+  async updateSlotCanonical(
+    @Param('slotId') slotId: string,
+    @Body() dto: UpdateSlotDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    const existing = await this.slotsService.getSlotById(slotId, user);
+    return this.slotsService.updateSlot(existing.courtId, slotId, dto, user);
+  }
+
+  @Delete('slots/:slotId')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Delete a slot (canonical)' })
+  async deleteSlotCanonical(@Param('slotId') slotId: string, @CurrentUser() user: AuthUserPayload) {
+    const existing = await this.slotsService.getSlotById(slotId, user);
+    return this.slotsService.removeSlot(existing.courtId, slotId, user);
+  }
+
+  @Post('slots/:slotId/block')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Block a slot' })
+  async blockSlotCanonical(
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    const existing = await this.slotsService.getSlotById(slotId, user);
+    return this.slotsService.blockSlot(existing.courtId, slotId, dto, user);
+  }
+
+  @Post('slots/:slotId/unblock')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Unblock a slot' })
+  async unblockSlotCanonical(
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    const existing = await this.slotsService.getSlotById(slotId, user);
+    return this.slotsService.unblockSlot(existing.courtId, slotId, dto, user);
+  }
+
+  @Post('slots/:slotId/open')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Open a previously closed/blocked slot' })
+  async openSlotCanonical(
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    const existing = await this.slotsService.getSlotById(slotId, user);
+    return this.slotsService.openSlot(existing.courtId, slotId, dto, user);
+  }
+
+  @Post('slots/:slotId/close')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Close a slot' })
+  async closeSlotCanonical(
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    const existing = await this.slotsService.getSlotById(slotId, user);
+    return this.slotsService.closeSlot(existing.courtId, slotId, dto, user);
+  }
+
+  // ─── Nested court routes (existing clients) ─────────────────────────────────
 
   @OptionalAuth()
   @Get('courts/:courtId/slots')
@@ -137,6 +228,62 @@ export class SlotsController {
     @CurrentUser() user: AuthUserPayload,
   ) {
     return this.slotsService.removeSlot(courtId, slotId, user);
+  }
+
+  @Post('courts/:courtId/slots/:slotId/block')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Block a nested court slot' })
+  blockSlot(
+    @Param('courtId') courtId: string,
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    return this.slotsService.blockSlot(courtId, slotId, dto, user);
+  }
+
+  @Post('courts/:courtId/slots/:slotId/unblock')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Unblock a nested court slot' })
+  unblockSlot(
+    @Param('courtId') courtId: string,
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    return this.slotsService.unblockSlot(courtId, slotId, dto, user);
+  }
+
+  @Post('courts/:courtId/slots/:slotId/open')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Open a nested court slot' })
+  openSlot(
+    @Param('courtId') courtId: string,
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    return this.slotsService.openSlot(courtId, slotId, dto, user);
+  }
+
+  @Post('courts/:courtId/slots/:slotId/close')
+  @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_WRITE)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Close a nested court slot' })
+  closeSlot(
+    @Param('courtId') courtId: string,
+    @Param('slotId') slotId: string,
+    @Body() dto: SlotActionDto,
+    @CurrentUser() user: AuthUserPayload,
+  ) {
+    return this.slotsService.closeSlot(courtId, slotId, dto, user);
   }
 
   // ─── Recurring schedules ────────────────────────────────────────────────────
@@ -241,7 +388,7 @@ export class SlotsController {
     return this.slotsService.removePricingRule(courtId, ruleId, user);
   }
 
-  // ─── Closures (blocked dates & maintenance) ─────────────────────────────────
+  // ─── Closures ───────────────────────────────────────────────────────────────
 
   @Get('courts/:courtId/closures')
   @Roles(UserRole.COURT_OWNER, UserRole.ADMIN)

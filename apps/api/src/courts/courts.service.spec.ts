@@ -1,23 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { CourtApprovalStatus, UserRole } from '@prisma/client';
 import { CourtsService } from './courts.service';
 import { PrismaService } from '../prisma/prisma.module';
 import { CacheService } from '../common/redis/cache.service';
+import { TenantsService } from '../tenants/tenants.service';
 import { mockCacheService } from '../../test/helpers/mock-deps';
 
 describe('CourtsService', () => {
   let service: CourtsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      'court' | 'sport' | 'courtImage' | 'courtSlot' | 'booking' | 'auditLog'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
 
   const ownerUser = {
     id: 'owner-1',
@@ -118,6 +111,10 @@ describe('CourtsService', () => {
         CourtsService,
         { provide: PrismaService, useValue: prisma },
         { provide: CacheService, useValue: mockCacheService() },
+        {
+          provide: TenantsService,
+          useValue: { resolveTenantId: jest.fn().mockResolvedValue('tenant-1') },
+        },
       ],
     }).compile();
 
@@ -173,10 +170,7 @@ describe('CourtsService', () => {
 
     it('requires sportId or sportSlug', async () => {
       await expect(
-        service.create(
-          { name: 'Test Arena', address: 'MG Road', city: 'Bangalore' },
-          'owner-1',
-        ),
+        service.create({ name: 'Test Arena', address: 'MG Road', city: 'Bangalore' }, 'owner-1'),
       ).rejects.toThrow(BadRequestException);
     });
   });
@@ -266,9 +260,9 @@ describe('CourtsService', () => {
     it('forbids non-owner updates', async () => {
       prisma.court.findFirst.mockResolvedValue(mockCourt as never);
 
-      await expect(
-        service.update('court-1', { description: 'Hack' }, playerUser),
-      ).rejects.toThrow(ForbiddenException);
+      await expect(service.update('court-1', { description: 'Hack' }, playerUser)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
   });
 

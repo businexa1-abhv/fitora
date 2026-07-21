@@ -29,6 +29,10 @@ export function getRealtimeSocket(token?: string | null): Socket {
   socket = io(`${getRealtimeOrigin()}/realtime`, {
     transports: ['websocket', 'polling'],
     autoConnect: true,
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 800,
+    reconnectionDelayMax: 8_000,
     auth: token ? { token } : undefined,
   });
 

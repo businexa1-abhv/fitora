@@ -17,20 +17,10 @@ import { RevenueOrchestrator } from '../finance/revenue.orchestrator';
 
 describe('PaymentsService (integration)', () => {
   let service: PaymentsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'payment'
-      | 'paymentInvoice'
-      | 'membershipPurchase'
-      | 'booking'
-      | 'serviceOrder'
-      | 'printOrder'
-      | 'trainingEnrollment'
-      | 'shopInvoice'
-    >
-  >;
-  let queueJobs: jest.Mocked<Pick<QueueJobsService, 'enqueueRefund' | 'enqueuePaymentRetry'>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let queueJobs: any;
 
   beforeEach(async () => {
     prisma = {

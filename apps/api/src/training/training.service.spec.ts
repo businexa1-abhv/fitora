@@ -10,27 +10,12 @@ import { calculateAge } from './constants/age-groups';
 
 describe('TrainingService', () => {
   let service: TrainingService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      | 'court'
-      | 'sport'
-      | 'trainingProgram'
-      | 'trainingBatch'
-      | 'trainingEnrollment'
-      | 'kidProfile'
-      | 'user'
-      | 'attendanceRecord'
-      | 'progressReport'
-    >
-  >;
-  let paymentsService: jest.Mocked<Pick<PaymentsService, 'createPaymentOrder'>>;
-  let notificationsService: jest.Mocked<
-    Pick<
-      NotificationsService,
-      'notifyTrainingEnrolled' | 'notifyProgressReport' | 'notifyTrainerNewEnrollment'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let paymentsService: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let notificationsService: any;
 
   const ownerUser = { id: 'owner-1', email: 'o@f.com', roles: [UserRole.COURT_OWNER] };
 

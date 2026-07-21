@@ -1,9 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import {
   CouponAppliesTo,
   CouponCodeType,
@@ -41,12 +37,8 @@ const baseCoupon = {
 
 describe('CouponsService', () => {
   let service: CouponsService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      'coupon' | 'couponRedemption' | 'court' | '$transaction'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
 
   beforeEach(async () => {
     prisma = {
@@ -96,7 +88,7 @@ describe('CouponsService', () => {
         service.create(
           {
             code: 'CORP',
-            discountType: CouponDiscountType.FIXED,
+            discountType: 'FIXED_AMOUNT' as never,
             discountValue: 100,
             codeType: CouponCodeType.CORPORATE,
           },
@@ -191,11 +183,7 @@ describe('CouponsService', () => {
       } as never);
       prisma.coupon.update.mockResolvedValue({ ...baseCoupon, description: 'Updated' } as never);
 
-      const result = await service.update(
-        'coupon-1',
-        { description: 'Updated' },
-        asUser('owner'),
-      );
+      const result = await service.update('coupon-1', { description: 'Updated' }, asUser('owner'));
       expect(result.description).toBe('Updated');
     });
 
@@ -209,9 +197,9 @@ describe('CouponsService', () => {
 
     it('throws when coupon not found', async () => {
       prisma.coupon.findFirst.mockResolvedValue(null);
-      await expect(
-        service.update('missing', {}, asUser('admin')),
-      ).rejects.toBeInstanceOf(NotFoundException);
+      await expect(service.update('missing', {}, asUser('admin'))).rejects.toBeInstanceOf(
+        NotFoundException,
+      );
     });
   });
 
@@ -271,13 +259,7 @@ describe('CouponsService', () => {
 
   describe('applyRedemption', () => {
     it('increments usage and creates redemption', async () => {
-      await service.applyRedemption(
-        'coupon-1',
-        'u1',
-        PaymentEntityType.SHOP_ORDER,
-        'order-1',
-        50,
-      );
+      await service.applyRedemption('coupon-1', 'u1', PaymentEntityType.SHOP_ORDER, 'order-1', 50);
       expect(prisma.$transaction).toHaveBeenCalled();
     });
   });

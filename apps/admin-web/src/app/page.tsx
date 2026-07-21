@@ -15,9 +15,17 @@ import { getRealtimeSocket } from '@/lib/realtime';
 
 const LIVE_EVENTS = [
   'booking.created',
+  'booking.confirmed',
   'booking.cancelled',
   'slot:updated',
+  'slot.updated',
+  'slot.created',
+  'slot.blocked',
+  'slot.full',
+  'slot.available',
+  'slot.booked',
   'attendance.updated',
+  'waitlist.promoted',
   'membership.updated',
   'payment.updated',
   'coach.updated',

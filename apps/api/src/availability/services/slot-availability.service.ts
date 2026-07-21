@@ -12,12 +12,17 @@ import {
   BookingStatus,
   CourtApprovalStatus,
   PaymentStatus,
+  SlotOperationalState,
   type Prisma,
 } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.module';
 import { RedisService } from '../../common/redis/redis.service';
 import { BOOKING_LOCK_TTL_MINUTES } from '../../bookings/constants/refund-rules';
-import { computeAvailabilityStatus } from '../utils/availability-status.util';
+import {
+  computeAvailabilityStatus,
+  isBookableStatus,
+  syncLegacyBlockFields,
+} from '../utils/availability-status.util';
 import { SlotHoldService } from './slot-hold.service';
 import { SlotEventsService } from '../../realtime/slot-events.service';
 
@@ -34,7 +39,11 @@ export type ReserveSlotInput = {
   subtotalAmount: number;
   discountAmount: number;
   totalAmount: number;
+  /** Optimistic concurrency token from the client snapshot. */
+  expectedVersion?: number;
 };
+
+export const SLOT_AVAILABILITY_CONFLICT = 'SLOT_AVAILABILITY_CONFLICT';
 
 @Injectable()
 export class SlotAvailabilityService {
@@ -49,7 +58,8 @@ export class SlotAvailabilityService {
   ) {}
 
   isEngineEnabled(): boolean {
-    return this.config.get<boolean>('AVAILABILITY_ENGINE_V2') === true;
+    // Default ON — legacy path is unsafe under concurrency.
+    return this.config.get<boolean>('AVAILABILITY_ENGINE_V2') !== false;
   }
 
   getLockTtlMinutes(): number {
@@ -69,32 +79,77 @@ export class SlotAvailabilityService {
     confirmedCount: number;
     isBlocked: boolean;
     blockReason?: string | null;
+    operationalState?: SlotOperationalState | string | null;
+    version?: number;
     startTime: Date;
     endTime: Date;
     price: Prisma.Decimal | string | number;
+    court?: { tenantId?: string | null } | null;
   }) {
     const availableSeats = this.availableSeats(slot);
     const status = computeAvailabilityStatus({
       isBlocked: slot.isBlocked,
       blockReason: slot.blockReason,
+      operationalState: slot.operationalState,
       capacity: slot.capacity,
       availableSeats,
     });
     return {
       id: slot.id,
       courtId: slot.courtId,
+      tenantId: slot.court?.tenantId ?? null,
+      venueId: slot.court?.tenantId ?? null,
+      version: slot.version ?? 0,
       capacity: slot.capacity,
       reservedSeats: slot.reservedCount,
       confirmedSeats: slot.confirmedCount,
       availableSeats,
+      bookedPlayers: slot.confirmedCount,
       availabilityStatus: status,
-      isBooked: availableSeats === 0,
-      isBlocked: slot.isBlocked,
+      operationalState: slot.operationalState ?? (slot.isBlocked ? 'BLOCKED' : 'AVAILABLE'),
+      isBookable: isBookableStatus(status),
+      isBooked: availableSeats === 0 || !isBookableStatus(status),
+      isBlocked:
+        slot.isBlocked || (slot.operationalState != null && slot.operationalState !== 'AVAILABLE'),
       blockReason: slot.blockReason,
       startTime: slot.startTime,
       endTime: slot.endTime,
       price: String(slot.price),
     };
+  }
+
+  async findNearbyAvailableSlots(courtId: string, around: Date, excludeSlotId: string, limit = 3) {
+    const windowStart = new Date(around.getTime() - 3 * 60 * 60_000);
+    const windowEnd = new Date(around.getTime() + 6 * 60 * 60_000);
+    const slots = await this.prisma.courtSlot.findMany({
+      where: {
+        courtId,
+        deletedAt: null,
+        id: { not: excludeSlotId },
+        isBlocked: false,
+        operationalState: SlotOperationalState.AVAILABLE,
+        startTime: { gte: windowStart, lte: windowEnd },
+      },
+      orderBy: { startTime: 'asc' },
+      take: 20,
+    });
+    return slots
+      .map((s) => this.formatAvailability(s))
+      .filter((s) => s.isBookable && s.availableSeats > 0)
+      .slice(0, limit);
+  }
+
+  private conflictException(
+    message: string,
+    availability: ReturnType<SlotAvailabilityService['formatAvailability']>,
+    nearby: Awaited<ReturnType<SlotAvailabilityService['findNearbyAvailableSlots']>>,
+  ) {
+    return new ConflictException({
+      code: SLOT_AVAILABILITY_CONFLICT,
+      message,
+      slot: availability,
+      nearbySlots: nearby,
+    });
   }
 
   /** Authoritative reserve with SELECT FOR UPDATE */
@@ -120,20 +175,26 @@ export class SlotAvailabilityService {
 
       this.validateCourtAndSlot(slot);
 
-      // Reclaim caller's own expired holds on this slot
+      if (input.expectedVersion != null && slot.version !== input.expectedVersion) {
+        const availability = this.formatAvailability(slot);
+        const nearby = await this.findNearbyAvailableSlots(slot.courtId, slot.startTime, slot.id);
+        throw this.conflictException('This slot has just been booked.', availability, nearby);
+      }
+
       await this.reclaimUserExpiredHolds(tx, slot.id, input.userId);
 
       const fresh = await tx.courtSlot.findUniqueOrThrow({ where: { id: slot.id } });
       const available = this.availableSeats(fresh);
       if (available < seats) {
-        throw new ConflictException({
-          code: 'SLOT_FULL',
-          message: 'Slot has no remaining seats',
-          availableSeats: available,
-        });
+        const availability = this.formatAvailability(fresh);
+        const nearby = await this.findNearbyAvailableSlots(
+          fresh.courtId,
+          fresh.startTime,
+          fresh.id,
+        );
+        throw this.conflictException('This slot has just been booked.', availability, nearby);
       }
 
-      // Cap concurrent holds per user
       const activeHolds = await tx.booking.count({
         where: {
           userId: input.userId,
@@ -205,6 +266,7 @@ export class SlotAvailabilityService {
     });
 
     const availability = await this.getSlotAvailability(input.courtId, input.slotId);
+    await this.events.emitSlotBooked(availability);
     await this.events.emitSlotUpdated(availability);
 
     return { booking, lockedUntil, holdToken, availability };
@@ -327,6 +389,7 @@ export class SlotAvailabilityService {
 
     const availability = await this.getSlotAvailability(result.courtId, result.slotId);
     await this.events.emitSlotUpdated(availability);
+    await this.events.emitSlotCancelled(availability);
     await this.events.emitSlotReleased({
       slotId: result.slotId,
       courtId: result.courtId,
@@ -355,7 +418,91 @@ export class SlotAvailabilityService {
 
     const availability = await this.getSlotAvailability(result.courtId, result.slotId);
     await this.events.emitSlotUpdated(availability);
+    await this.events.emitSlotCancelled(availability);
     return result;
+  }
+
+  async setOperationalState(
+    courtId: string,
+    slotId: string,
+    state: SlotOperationalState,
+    opts?: { expectedVersion?: number; notes?: string },
+  ) {
+    const updated = await this.prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT id FROM court_slots WHERE id = ${slotId}::uuid AND deleted_at IS NULL FOR UPDATE`;
+      const slot = await tx.courtSlot.findFirst({
+        where: { id: slotId, courtId, deletedAt: null },
+      });
+      if (!slot) throw new NotFoundException('Slot not found');
+      if (opts?.expectedVersion != null && slot.version !== opts.expectedVersion) {
+        throw new ConflictException({
+          code: SLOT_AVAILABILITY_CONFLICT,
+          message: 'Slot was modified by another update. Refresh and try again.',
+          slot: this.formatAvailability(slot),
+        });
+      }
+
+      const legacy = syncLegacyBlockFields(state);
+      return tx.courtSlot.update({
+        where: { id: slotId },
+        data: {
+          operationalState: state,
+          isBlocked: legacy.isBlocked,
+          blockReason: legacy.blockReason,
+          ...(opts?.notes !== undefined ? { notes: opts.notes } : {}),
+          version: { increment: 1 },
+        },
+        include: { court: { select: { tenantId: true } } },
+      });
+    });
+
+    const availability = this.formatAvailability(updated);
+    if (state === SlotOperationalState.AVAILABLE) {
+      await this.events.emitSlotUnblocked(availability);
+    } else if (state === SlotOperationalState.CLOSED) {
+      await this.events.emitSlotClosed(availability);
+    } else {
+      await this.events.emitSlotBlocked(availability);
+    }
+    await this.events.emitSlotUpdated(availability);
+    return availability;
+  }
+
+  async updateCapacity(
+    courtId: string,
+    slotId: string,
+    capacity: number,
+    opts?: { expectedVersion?: number },
+  ) {
+    if (capacity < 1) throw new BadRequestException('capacity must be at least 1');
+
+    const updated = await this.prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT id FROM court_slots WHERE id = ${slotId}::uuid AND deleted_at IS NULL FOR UPDATE`;
+      const slot = await tx.courtSlot.findFirst({
+        where: { id: slotId, courtId, deletedAt: null },
+      });
+      if (!slot) throw new NotFoundException('Slot not found');
+      const occupied = slot.reservedCount + slot.confirmedCount;
+      if (capacity < occupied) {
+        throw new BadRequestException(`Cannot set capacity below occupied seats (${occupied})`);
+      }
+      if (opts?.expectedVersion != null && slot.version !== opts.expectedVersion) {
+        throw new ConflictException({
+          code: SLOT_AVAILABILITY_CONFLICT,
+          message: 'Slot was modified by another update. Refresh and try again.',
+        });
+      }
+      return tx.courtSlot.update({
+        where: { id: slotId },
+        data: { capacity, version: { increment: 1 } },
+        include: { court: { select: { tenantId: true } } },
+      });
+    });
+
+    const availability = this.formatAvailability(updated);
+    await this.events.emitSlotCapacityChanged(availability);
+    await this.events.emitSlotUpdated(availability);
+    return availability;
   }
 
   async releaseExpiredLocks() {
@@ -388,9 +535,65 @@ export class SlotAvailabilityService {
   async getSlotAvailability(courtId: string, slotId: string) {
     const slot = await this.prisma.courtSlot.findFirst({
       where: { id: slotId, courtId, deletedAt: null },
+      include: { court: { select: { tenantId: true } } },
     });
     if (!slot) throw new NotFoundException('Slot not found');
     return this.formatAvailability(slot);
+  }
+
+  async getVenueAvailability(venueId: string, date?: string) {
+    const dayStart = date ? new Date(`${date}T00:00:00.000Z`) : new Date();
+    dayStart.setUTCHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart);
+    dayEnd.setUTCHours(23, 59, 59, 999);
+
+    const courts = await this.prisma.court.findMany({
+      where: { tenantId: venueId, deletedAt: null, isActive: true },
+      select: { id: true, name: true },
+    });
+    const courtIds = courts.map((c) => c.id);
+    if (courtIds.length === 0) {
+      return { venueId, date: date ?? dayStart.toISOString().slice(0, 10), courts: [], slots: [] };
+    }
+
+    const slots = await this.prisma.courtSlot.findMany({
+      where: {
+        courtId: { in: courtIds },
+        deletedAt: null,
+        startTime: { gte: dayStart, lte: dayEnd },
+      },
+      include: { court: { select: { tenantId: true, name: true } } },
+      orderBy: { startTime: 'asc' },
+    });
+
+    const formatted = slots.map((s) => this.formatAvailability(s));
+    return {
+      venueId,
+      date: date ?? dayStart.toISOString().slice(0, 10),
+      courts,
+      slots: formatted,
+      summary: this.summarizeSlots(formatted),
+    };
+  }
+
+  summarizeSlots(slots: Array<ReturnType<SlotAvailabilityService['formatAvailability']>>) {
+    const total = slots.length;
+    const booked = slots.filter(
+      (s) => s.confirmedSeats > 0 || s.availabilityStatus === 'FULL',
+    ).length;
+    const available = slots.filter((s) => s.isBookable).length;
+    const blocked = slots.filter((s) => s.availabilityStatus === 'BLOCKED').length;
+    const maintenance = slots.filter((s) => s.availabilityStatus === 'MAINTENANCE').length;
+    const capacity = slots.reduce((sum, s) => sum + s.capacity, 0);
+    const occupied = slots.reduce((sum, s) => sum + s.confirmedSeats + s.reservedSeats, 0);
+    return {
+      totalSlots: total,
+      bookedSlots: booked,
+      availableSlots: available,
+      blockedSlots: blocked,
+      maintenanceSlots: maintenance,
+      occupancyPercent: capacity === 0 ? 0 : Math.round((occupied / capacity) * 100),
+    };
   }
 
   async reconcileSlotCounters(slotId?: string) {
@@ -403,15 +606,16 @@ export class SlotAvailabilityService {
     let repaired = 0;
     for (const slot of slots) {
       const [confirmed, reserved] = await Promise.all([
-        this.prisma.booking.count({
+        this.prisma.booking.aggregate({
           where: {
             slotId: slot.id,
             deletedAt: null,
             status: { in: [BookingStatus.CONFIRMED, BookingStatus.COMPLETED] },
             paymentStatus: PaymentStatus.PAID,
           },
+          _sum: { seats: true },
         }),
-        this.prisma.booking.count({
+        this.prisma.booking.aggregate({
           where: {
             slotId: slot.id,
             deletedAt: null,
@@ -419,16 +623,20 @@ export class SlotAvailabilityService {
             paymentStatus: PaymentStatus.PENDING,
             lockedUntil: { gt: new Date() },
           },
+          _sum: { seats: true },
         }),
       ]);
 
-      if (confirmed !== slot.confirmedCount || reserved !== slot.reservedCount) {
+      const confirmedCount = confirmed._sum.seats ?? 0;
+      const reservedCount = reserved._sum.seats ?? 0;
+
+      if (confirmedCount !== slot.confirmedCount || reservedCount !== slot.reservedCount) {
         this.logger.warn(
-          `Counter drift on slot ${slot.id}: reserved ${slot.reservedCount}->${reserved}, confirmed ${slot.confirmedCount}->${confirmed}`,
+          `Counter drift on slot ${slot.id}: reserved ${slot.reservedCount}->${reservedCount}, confirmed ${slot.confirmedCount}->${confirmedCount}`,
         );
         await this.prisma.courtSlot.update({
           where: { id: slot.id },
-          data: { reservedCount: reserved, confirmedCount: confirmed },
+          data: { reservedCount, confirmedCount },
         });
         repaired += 1;
       }
@@ -438,6 +646,7 @@ export class SlotAvailabilityService {
 
   private validateCourtAndSlot(slot: {
     isBlocked: boolean;
+    operationalState?: SlotOperationalState | string | null;
     startTime: Date;
     court: { deletedAt: Date | null; approvalStatus: CourtApprovalStatus; isActive: boolean };
   }) {
@@ -445,7 +654,15 @@ export class SlotAvailabilityService {
       throw new BadRequestException('Court is not available for booking');
     }
     if (!slot.court.isActive) throw new BadRequestException('Court is not active');
-    if (slot.isBlocked) throw new BadRequestException('Slot is blocked');
+    const status = computeAvailabilityStatus({
+      isBlocked: slot.isBlocked,
+      operationalState: slot.operationalState,
+      capacity: 1,
+      availableSeats: 1,
+    });
+    if (!isBookableStatus(status)) {
+      throw new BadRequestException(`Slot is not bookable (${status})`);
+    }
     if (slot.startTime <= new Date()) throw new BadRequestException('Cannot book a past slot');
   }
 

@@ -57,6 +57,8 @@ export interface CalendarDay {
   availableSlots: number;
   bookedSlots: number;
   blockedSlots: number;
+  maintenanceSlots?: number;
+  occupancyPercent?: number;
   hasClosure: boolean;
   closures: Array<{ id: string; title: string; reason: string; isFullDay: boolean }>;
   slots: Array<{
@@ -70,7 +72,16 @@ export interface CalendarDay {
     availableSeats?: number;
     reservedSeats?: number;
     confirmedSeats?: number;
-    availabilityStatus?: 'AVAILABLE' | 'FEW_SPOTS' | 'FULL' | 'BLOCKED' | 'MAINTENANCE' | 'HOLIDAY';
+    availabilityStatus?:
+      | 'AVAILABLE'
+      | 'FEW_SPOTS'
+      | 'FULL'
+      | 'BLOCKED'
+      | 'MAINTENANCE'
+      | 'TOURNAMENT'
+      | 'PRIVATE'
+      | 'CLOSED'
+      | 'HOLIDAY';
   }>;
 }
 

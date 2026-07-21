@@ -88,6 +88,29 @@ export class UpdateSlotDto {
   @Min(0)
   price?: number;
 
+  @ApiPropertyOptional({ example: 4 })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  capacity?: number;
+
+  @ApiPropertyOptional({ example: '2026-07-10T06:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  startTime?: string;
+
+  @ApiPropertyOptional({ example: '2026-07-10T07:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  endTime?: string;
+
+  @ApiPropertyOptional({
+    enum: ['AVAILABLE', 'BLOCKED', 'MAINTENANCE', 'TOURNAMENT', 'PRIVATE', 'CLOSED'],
+  })
+  @IsOptional()
+  @IsString()
+  operationalState?: 'AVAILABLE' | 'BLOCKED' | 'MAINTENANCE' | 'TOURNAMENT' | 'PRIVATE' | 'CLOSED';
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
@@ -98,6 +121,53 @@ export class UpdateSlotDto {
   @IsString()
   @MaxLength(500)
   notes?: string;
+
+  @ApiPropertyOptional({ description: 'Optimistic concurrency token' })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  expectedVersion?: number;
+}
+
+export class CreateSlotCanonicalDto extends CreateSlotDto {
+  @ApiProperty({ description: 'Court UUID' })
+  @IsString()
+  @IsNotEmpty()
+  courtId: string;
+
+  @ApiPropertyOptional({ example: 4 })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  capacity?: number;
+}
+
+export class SlotActionDto {
+  @ApiPropertyOptional({ description: 'Optimistic concurrency token' })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  expectedVersion?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  notes?: string;
+
+  @ApiPropertyOptional({
+    enum: ['BLOCKED', 'MAINTENANCE', 'TOURNAMENT', 'PRIVATE', 'CLOSED'],
+  })
+  @IsOptional()
+  @IsString()
+  reason?: 'BLOCKED' | 'MAINTENANCE' | 'TOURNAMENT' | 'PRIVATE' | 'CLOSED';
+}
+
+export class VenueAvailabilityQueryDto {
+  @ApiPropertyOptional({ example: '2026-07-21' })
+  @IsOptional()
+  @IsString()
+  date?: string;
 }
 
 export class CreateSlotScheduleDto {

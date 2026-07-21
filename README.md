@@ -22,6 +22,7 @@ Architecture and platform design docs:
 - `docs/enterprise/CI_CD_PIPELINE.md`
 - `docs/enterprise/ENVIRONMENT_CONFIGURATION.md`
 - `docs/enterprise/DEVELOPMENT_SCRIPTS.md`
+- `docs/enterprise/REALTIME_AVAILABILITY_ENGINE.md`
 
 ---
 

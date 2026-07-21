@@ -10,13 +10,12 @@ import { MembershipDuration } from '@prisma/client';
 
 describe('MembershipsService', () => {
   let service: MembershipsService;
-  let prisma: jest.Mocked<
-    Pick<PrismaService, 'membershipPlan' | 'membershipPurchase' | 'court' | 'booking' | 'coupon'>
-  >;
-  let couponsService: jest.Mocked<
-    Pick<CouponsService, 'resolveCoupon' | 'applyRedemption' | 'validateForUser'>
-  >;
-  let paymentsService: jest.Mocked<Pick<PaymentsService, 'createPaymentOrder'>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let couponsService: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let paymentsService: any;
 
   const ownerUser = { id: 'owner-1', email: 'o@f.com', roles: [UserRole.COURT_OWNER] };
 
@@ -100,7 +99,7 @@ describe('MembershipsService', () => {
         ownerUser,
       );
 
-      expect(result.name).toBe('Monthly');
+      expect((result as any).name).toBe('Monthly');
       expect(result.benefits?.bookingDiscountPercent).toBe(15);
     });
   });
@@ -213,7 +212,7 @@ describe('MembershipsService', () => {
 
       const plans = await service.getPlansByCourt('court-1');
       expect(plans).toHaveLength(1);
-      expect(plans[0].name).toBe('Monthly');
+      expect((plans[0] as any).name).toBe('Monthly');
     });
   });
 });

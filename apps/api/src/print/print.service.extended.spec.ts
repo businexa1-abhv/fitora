@@ -1,15 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
-import {
-  PaymentEntityType,
-  PaymentStatus,
-  PrintOrderStatus,
-  UserRole,
-} from '@prisma/client';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { PaymentEntityType, PaymentStatus, PrintOrderStatus, UserRole } from '@prisma/client';
 import { PrintService } from './print.service';
 import { PaymentsService } from '../payments/payments.service';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -30,12 +21,8 @@ const listing = {
 
 describe('PrintService (extended)', () => {
   let service: PrintService;
-  let prisma: jest.Mocked<
-    Pick<
-      PrismaService,
-      'printDesign' | 'printListing' | 'printOrder' | 'user'
-    >
-  >;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let prisma: any;
   let notifications: ReturnType<typeof mockNotificationsService>;
 
   beforeEach(async () => {
@@ -138,7 +125,7 @@ describe('PrintService (extended)', () => {
       service.createOrder('u1', 'listing-1', {
         designUrl: 'https://cdn.example/d.png',
         tshirtSize: 'XXS',
-      }),
+      } as any),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 
@@ -253,7 +240,11 @@ describe('PrintService (extended)', () => {
       createdAt: new Date(),
     } as never);
 
-    const design = await service.getDesign('d1', { id: 'u1', email: 'u@f.com', roles: [UserRole.PLAYER] });
+    const design = await service.getDesign('d1', {
+      id: 'u1',
+      email: 'u@f.com',
+      roles: [UserRole.PLAYER],
+    });
     expect(design.id).toBe('d1');
   });
 
