@@ -4,7 +4,7 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
-    "dev": "expo start --clear",
+    "dev": "EXPO_NO_DEPENDENCY_VALIDATION=1 expo start --clear",
     "android": "expo start --clear --android",
     "ios": "expo start --clear --ios",
     "web": "expo start --web",
