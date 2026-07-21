@@ -12,6 +12,7 @@ import {
   BadgeCheck,
   Bell,
   Layers,
+  Plug,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -62,6 +63,7 @@ export const ADMIN_NAV: NavGroup[] = [
     title: 'System',
     items: [
       { href: '/notifications', label: 'Notifications', icon: Bell },
+      { href: '/integrations', label: 'Integrations', icon: Plug },
       { href: '/queues', label: 'Job Queues', icon: Layers },
       { href: '/settings', label: 'Settings', icon: Settings },
     ],

@@ -12,6 +12,8 @@ import {
   BookingStatus,
   CourtApprovalStatus,
   PaymentStatus,
+  IntegrationDirection,
+  SlotLifecycleStatus,
   SlotOperationalState,
   TenantStatus,
   type Prisma,
@@ -43,6 +45,11 @@ export type ReserveSlotInput = {
   totalAmount: number;
   /** Optimistic concurrency token from the client snapshot. */
   expectedVersion?: number;
+  ttlMinutes?: number;
+  bypassActiveHoldQuota?: boolean;
+  integrationId?: string;
+  externalBookingId?: string;
+  externalIdempotencyKey?: string;
 };
 
 export const SLOT_AVAILABILITY_CONFLICT = 'SLOT_AVAILABILITY_CONFLICT';
@@ -97,6 +104,22 @@ export class SlotAvailabilityService {
       availableSeats,
       reservedSeats: slot.reservedCount,
     });
+    const lifecycleStatus =
+      slot.operationalState === 'MAINTENANCE'
+        ? 'MAINTENANCE'
+        : slot.operationalState === 'TOURNAMENT'
+          ? 'TOURNAMENT'
+          : slot.operationalState === 'PRIVATE'
+            ? 'OWNER_RESERVED'
+            : slot.isBlocked ||
+                slot.operationalState === 'BLOCKED' ||
+                slot.operationalState === 'CLOSED'
+              ? 'BLOCKED'
+              : slot.confirmedCount > 0
+                ? 'BOOKED'
+                : slot.reservedCount > 0
+                  ? 'HELD'
+                  : 'AVAILABLE';
     return {
       id: slot.id,
       courtId: slot.courtId,
@@ -109,6 +132,7 @@ export class SlotAvailabilityService {
       availableSeats,
       bookedPlayers: slot.confirmedCount,
       availabilityStatus: status,
+      lifecycleStatus,
       operationalState: slot.operationalState ?? (slot.isBlocked ? 'BLOCKED' : 'AVAILABLE'),
       isBookable: isBookableStatus(status),
       isBooked: availableSeats === 0 || !isBookableStatus(status),
@@ -160,7 +184,7 @@ export class SlotAvailabilityService {
     const seats = input.seats ?? 1;
     if (seats < 1) throw new BadRequestException('seats must be at least 1');
 
-    const ttlMinutes = this.getLockTtlMinutes();
+    const ttlMinutes = input.ttlMinutes ?? this.getLockTtlMinutes();
     const lockedUntil = new Date(Date.now() + ttlMinutes * 60_000);
     const holdToken = randomUUID();
     const pendingEnvelopes: RealtimeEventEnvelope<SlotSnapshot>[] = [];
@@ -207,15 +231,17 @@ export class SlotAvailabilityService {
         );
       }
 
-      const activeHolds = await tx.booking.count({
-        where: {
-          userId: input.userId,
-          status: BookingStatus.PENDING,
-          paymentStatus: PaymentStatus.PENDING,
-          deletedAt: null,
-          lockedUntil: { gt: new Date() },
-        },
-      });
+      const activeHolds = input.bypassActiveHoldQuota
+        ? 0
+        : await tx.booking.count({
+            where: {
+              userId: input.userId,
+              status: BookingStatus.PENDING,
+              paymentStatus: PaymentStatus.PENDING,
+              deletedAt: null,
+              lockedUntil: { gt: new Date() },
+            },
+          });
       if (activeHolds >= 3) {
         throw new BadRequestException({
           code: 'TOO_MANY_HOLDS',
@@ -232,6 +258,9 @@ export class SlotAvailabilityService {
           notes: input.notes,
           seats,
           source: input.source ?? BookingSource.PLAYER_APP,
+          integrationId: input.integrationId,
+          externalBookingId: input.externalBookingId,
+          externalIdempotencyKey: input.externalIdempotencyKey,
           holdToken,
           guestName: input.guestName,
           guestPhone: input.guestPhone,
@@ -270,6 +299,11 @@ export class SlotAvailabilityService {
         include: { court: { select: { tenantId: true } } },
       });
       const availability = this.formatAvailability(updatedSlot);
+      await this.recordLifecycleAndFanoutInTx(tx, availability, 'slot.held', {
+        bookingId: created.id,
+        integrationId: input.integrationId,
+        actorId: input.userId,
+      });
       pendingEnvelopes.push(
         await this.events.enqueueSlotLifecycleInTx(tx, 'slot.booked', availability),
       );
@@ -356,6 +390,11 @@ export class SlotAvailabilityService {
         include: { court: { select: { tenantId: true } } },
       });
       const availability = this.formatAvailability(updatedSlot);
+      await this.recordLifecycleAndFanoutInTx(tx, availability, 'slot.booked', {
+        bookingId: booking.id,
+        integrationId: booking.integrationId,
+        actorId: booking.userId,
+      });
       pendingEnvelopes.push(
         await this.events.enqueueSlotLifecycleInTx(tx, 'slot.updated', availability),
       );
@@ -374,7 +413,7 @@ export class SlotAvailabilityService {
       await this.holds.clearHold(result.slotId, result.holdToken, result.updated.userId);
     }
 
-    const availability = await this.getSlotAvailability(result.courtId, result.slotId);
+    await this.getSlotAvailability(result.courtId, result.slotId);
     await this.events.emitBookingConfirmed({
       bookingId: result.updated.id,
       userId: result.updated.userId,
@@ -419,6 +458,10 @@ export class SlotAvailabilityService {
         include: { court: { select: { tenantId: true } } },
       });
       const availability = this.formatAvailability(updatedSlot);
+      await this.recordLifecycleAndFanoutInTx(tx, availability, 'slot.released', {
+        integrationId: booking.integrationId,
+        actorId: booking.userId,
+      });
       pendingEnvelopes.push(
         await this.events.enqueueSlotLifecycleInTx(tx, 'slot.updated', availability),
       );
@@ -437,7 +480,7 @@ export class SlotAvailabilityService {
       await this.holds.clearHold(result.slotId, result.holdToken, result.userId);
     }
 
-    const availability = await this.getSlotAvailability(result.courtId, result.slotId);
+    await this.getSlotAvailability(result.courtId, result.slotId);
     await this.events.emitSlotReleased({
       slotId: result.slotId,
       courtId: result.courtId,
@@ -447,7 +490,7 @@ export class SlotAvailabilityService {
     return { released: true, bookingId: result.id };
   }
 
-  async releaseConfirmedSeats(bookingId: string) {
+  async releaseConfirmedSeats(bookingId: string, opts?: { cancelReason?: string }) {
     const result = await this.prisma.$transaction(async (tx) => {
       const booking = await tx.booking.findFirst({ where: { id: bookingId, deletedAt: null } });
       if (!booking) throw new NotFoundException('Booking not found');
@@ -461,7 +504,32 @@ export class SlotAvailabilityService {
           version: { increment: 1 },
         },
       });
-      return booking;
+      const updatedBooking = opts?.cancelReason
+        ? await tx.booking.update({
+            where: { id: booking.id },
+            data: {
+              status: BookingStatus.CANCELLED,
+              cancelledAt: new Date(),
+              cancelReason: opts.cancelReason,
+              lockedUntil: null,
+            },
+          })
+        : booking;
+      const updatedSlot = await tx.courtSlot.findUniqueOrThrow({
+        where: { id: booking.slotId },
+        include: { court: { select: { tenantId: true } } },
+      });
+      await this.recordLifecycleAndFanoutInTx(
+        tx,
+        this.formatAvailability(updatedSlot),
+        'slot.cancelled',
+        {
+          bookingId: booking.id,
+          integrationId: booking.integrationId,
+          actorId: booking.userId,
+        },
+      );
+      return updatedBooking;
     });
 
     const availability = await this.getSlotAvailability(result.courtId, result.slotId);
@@ -491,7 +559,7 @@ export class SlotAvailabilityService {
       }
 
       const legacy = syncLegacyBlockFields(state);
-      return tx.courtSlot.update({
+      const changed = await tx.courtSlot.update({
         where: { id: slotId },
         data: {
           operationalState: state,
@@ -502,6 +570,12 @@ export class SlotAvailabilityService {
         },
         include: { court: { select: { tenantId: true } } },
       });
+      await this.recordLifecycleAndFanoutInTx(
+        tx,
+        this.formatAvailability(changed),
+        'slot.operational-state.changed',
+      );
+      return changed;
     });
 
     const availability = this.formatAvailability(updated);
@@ -544,11 +618,17 @@ export class SlotAvailabilityService {
           message: 'Slot was modified by another update. Refresh and try again.',
         });
       }
-      return tx.courtSlot.update({
+      const changed = await tx.courtSlot.update({
         where: { id: slotId },
         data: { capacity, version: { increment: 1 } },
         include: { court: { select: { tenantId: true } } },
       });
+      await this.recordLifecycleAndFanoutInTx(
+        tx,
+        this.formatAvailability(changed),
+        'slot.capacity.changed',
+      );
+      return changed;
     });
 
     const availability = this.formatAvailability(updated);
@@ -835,5 +915,53 @@ export class SlotAvailabilityService {
         data: { reservedCount: { decrement: row.seats } },
       });
     }
+  }
+
+  private async recordLifecycleAndFanoutInTx(
+    tx: Prisma.TransactionClient,
+    availability: ReturnType<SlotAvailabilityService['formatAvailability']>,
+    eventType: string,
+    opts?: { bookingId?: string; integrationId?: string | null; actorId?: string },
+  ) {
+    if (!availability.tenantId) return;
+    await tx.slotLifecycleAudit.create({
+      data: {
+        tenantId: availability.tenantId,
+        slotId: availability.id,
+        bookingId: opts?.bookingId,
+        integrationId: opts?.integrationId,
+        direction: opts?.integrationId ? IntegrationDirection.INBOUND : undefined,
+        toStatus: availability.lifecycleStatus as SlotLifecycleStatus,
+        actorId: opts?.actorId,
+        metadata: {
+          eventType,
+          version: availability.version,
+          availableSeats: availability.availableSeats,
+          reservedSeats: availability.reservedSeats,
+          confirmedSeats: availability.confirmedSeats,
+        },
+      },
+    });
+    const mappings = await tx.slotChannelMapping.findMany({
+      where: { slotId: availability.id, isActive: true },
+      select: { integrationId: true, externalSlotId: true },
+    });
+    if (!mappings.length) return;
+    const payload = JSON.parse(JSON.stringify(availability)) as Prisma.InputJsonValue;
+    await tx.integrationSyncJob.createMany({
+      data: mappings.map((mapping) => ({
+        integrationId: mapping.integrationId,
+        slotId: availability.id,
+        bookingId: opts?.bookingId,
+        direction: IntegrationDirection.OUTBOUND,
+        eventType,
+        payload: {
+          ...(payload as Record<string, unknown>),
+          externalSlotId: mapping.externalSlotId,
+        } as Prisma.InputJsonValue,
+        idempotencyKey: `${eventType}:${mapping.integrationId}:${availability.id}:v${availability.version}`,
+      })),
+      skipDuplicates: true,
+    });
   }
 }

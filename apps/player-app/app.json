@@ -15,7 +15,24 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fitora.app"
+      "bundleIdentifier": "com.fitora.app",
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+          "tez",
+          "phonepe",
+          "paytmmp",
+          "credpay",
+          "mobikwik",
+          "in.fampay.app",
+          "bhim",
+          "amazonpay",
+          "navi",
+          "kiwi",
+          "payzapp",
+          "jupiter",
+          "whatsapp"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {

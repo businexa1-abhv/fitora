@@ -17,7 +17,22 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.fitora.owner",
       "infoPlist": {
-        "NSCameraUsageDescription": "FitOra uses the camera to scan booking QR codes for check-in."
+        "NSCameraUsageDescription": "FitOra uses the camera to scan booking QR codes for check-in.",
+        "LSApplicationQueriesSchemes": [
+          "tez",
+          "phonepe",
+          "paytmmp",
+          "credpay",
+          "mobikwik",
+          "in.fampay.app",
+          "bhim",
+          "amazonpay",
+          "navi",
+          "kiwi",
+          "payzapp",
+          "jupiter",
+          "whatsapp"
+        ]
       }
     },
     "android": {

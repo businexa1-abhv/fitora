@@ -10,6 +10,7 @@ import { WaitlistController } from './waitlist.controller';
 import { BookingsService } from './bookings.service';
 import { WaitlistService } from './waitlist.service';
 import { RecurringBookingService } from './recurring-booking.service';
+import { IntegrationsModule } from '../integrations/integrations.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { RecurringBookingService } from './recurring-booking.service';
     NotificationsModule,
     AvailabilityModule,
     RealtimeModule,
+    IntegrationsModule,
   ],
   controllers: [BookingsController, WaitlistController],
   providers: [BookingsService, WaitlistService, RecurringBookingService],

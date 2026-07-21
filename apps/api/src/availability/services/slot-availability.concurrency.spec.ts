@@ -85,6 +85,15 @@ function createSerializedPrisma(capacity: number) {
       findMany: jest.fn().mockResolvedValue([]),
       update: jest.fn(),
     },
+    slotLifecycleAudit: {
+      create: jest.fn().mockResolvedValue({}),
+    },
+    slotChannelMapping: {
+      findMany: jest.fn().mockResolvedValue([]),
+    },
+    integrationSyncJob: {
+      createMany: jest.fn().mockResolvedValue({ count: 0 }),
+    },
   };
 
   const prisma = {

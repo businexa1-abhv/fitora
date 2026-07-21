@@ -1,7 +1,8 @@
+import { useEffect, useRef } from 'react';
+import { Animated, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatCurrency } from '@fitora/shared';
 import { Button } from '@/components/ui/button';
@@ -10,17 +11,14 @@ import { useTheme } from '@/providers/theme-provider';
 import { getBookingQr } from '@/lib/courts';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
-const QR_CELLS = Array.from(
-  { length: 100 },
-  (_, index) => (index * 7 + Math.floor(index / 3)) % 5 < 2,
-);
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatDate(value?: string) {
   if (!value) return 'Today';
   return new Date(value).toLocaleDateString('en-IN', {
+    weekday: 'short',
     month: 'short',
     day: 'numeric',
-    year: 'numeric',
   });
 }
 
@@ -32,6 +30,82 @@ function formatTime(value?: string) {
     hour12: true,
   });
 }
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function DetailColumn({ label, value }: { label: string; value: string }) {
+  const { colors } = useTheme();
+  return (
+    <View style={dcStyles.col}>
+      <Text style={[dcStyles.label, { color: colors.muted }]}>{label}</Text>
+      <Text style={[dcStyles.value, { color: colors.foreground }]}>{value}</Text>
+    </View>
+  );
+}
+
+const dcStyles = StyleSheet.create({
+  col: { alignItems: 'center', flex: 1 },
+  label: { fontSize: FontSize.xs, fontWeight: '700', marginBottom: 2 },
+  value: { fontSize: FontSize.sm, fontWeight: '900', textAlign: 'center' },
+});
+
+function ActionCard({
+  icon,
+  title,
+  subtitle,
+  tint,
+  onPress,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  title: string;
+  subtitle: string;
+  tint: string;
+  onPress?: () => void;
+}) {
+  const { colors } = useTheme();
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        acStyles.card,
+        { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.82 : 1 },
+      ]}
+    >
+      <View style={[acStyles.iconWrap, { backgroundColor: `${tint}18` }]}>
+        <Ionicons name={icon} size={22} color={tint} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={[acStyles.title, { color: colors.foreground }]}>{title}</Text>
+        <Text style={[acStyles.subtitle, { color: colors.muted }]} numberOfLines={1}>
+          {subtitle}
+        </Text>
+      </View>
+      <Ionicons name="chevron-forward" size={16} color={colors.muted} />
+    </Pressable>
+  );
+}
+
+const acStyles = StyleSheet.create({
+  card: {
+    alignItems: 'center',
+    borderRadius: Radius.xl,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: Spacing.md,
+    padding: Spacing.md,
+  },
+  iconWrap: {
+    alignItems: 'center',
+    borderRadius: Radius.md,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  title: { fontSize: FontSize.sm, fontWeight: '800' },
+  subtitle: { fontSize: FontSize.xs, fontWeight: '600', marginTop: 1 },
+});
+
+// ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function BookingSuccessScreen() {
   const { colors } = useTheme();
@@ -48,16 +122,47 @@ export default function BookingSuccessScreen() {
     checkInCode?: string;
   }>();
 
-  // Fetch the check-in code from the API when it wasn't passed via params.
+  // ── Entrance animations ───────────────────────────────────────────────────────
+  const checkScale = useRef(new Animated.Value(0)).current;
+  const contentFade = useRef(new Animated.Value(0)).current;
+  const pulseScale = useRef(new Animated.Value(0.8)).current;
+
+  useEffect(() => {
+    // 1. Pulse ring grows
+    Animated.spring(pulseScale, { toValue: 1, useNativeDriver: true, bounciness: 8 }).start();
+
+    // 2. Check circle pops in
+    Animated.sequence([
+      Animated.delay(150),
+      Animated.spring(checkScale, { toValue: 1, useNativeDriver: true, bounciness: 14 }),
+    ]).start();
+
+    // 3. Content fades up
+    Animated.sequence([
+      Animated.delay(350),
+      Animated.timing(contentFade, { toValue: 1, duration: 300, useNativeDriver: true }),
+    ]).start();
+
+    // 4. Ongoing subtle pulse on the ring
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseScale, { toValue: 1.05, duration: 1200, useNativeDriver: true }),
+        Animated.timing(pulseScale, { toValue: 1, duration: 1200, useNativeDriver: true }),
+      ]),
+    ).start();
+  }, [checkScale, contentFade, pulseScale]);
+
+  // ── QR code ────────────────────────────────────────────────────────────────────
   const qrQuery = useQuery({
     queryKey: ['booking-qr', params.bookingId],
     queryFn: () => getBookingQr(token!, params.bookingId!),
-    enabled: !!token && !!params.bookingId && !params.checkInCode,
+    enabled: !!token && !!params.bookingId,
     retry: 1,
   });
 
   const checkInCode = params.checkInCode ?? qrQuery.data?.checkInCode;
-  const bookingId = params.bookingId
+  const qrDataUrl = qrQuery.data?.qrCodeDataUrl;
+  const bookingIdStr = params.bookingId
     ? `#${params.bookingId.slice(0, 8).toUpperCase()}`
     : '#FO987654';
   const amount = Number(params.amount ?? 0);
@@ -67,50 +172,79 @@ export default function BookingSuccessScreen() {
       <ScrollView
         contentContainerStyle={[
           styles.content,
-          { paddingTop: insets.top + Spacing.xxxl, paddingBottom: insets.bottom + Spacing.xxxl },
+          { paddingTop: insets.top + Spacing.xl, paddingBottom: insets.bottom + Spacing.xxxl },
         ]}
         showsVerticalScrollIndicator={false}
       >
+        {/* ── Animated success indicator ── */}
         <View style={styles.successBlock}>
-          <View style={[styles.pulse, { backgroundColor: `${colors.accent}18` }]} />
-          <View style={[styles.checkCircle, { backgroundColor: colors.accent }]}>
-            <Ionicons name="checkmark" size={56} color="#fff" />
-          </View>
-          <Text style={[styles.title, { color: colors.foreground }]}>Booking Confirmed!</Text>
-          <Text style={[styles.bookingId, { color: colors.muted }]}>
-            Booking ID: <Text style={{ color: colors.accent }}>{bookingId}</Text>
+          <Animated.View
+            style={[
+              styles.pulse,
+              { backgroundColor: `${colors.accent}18`, transform: [{ scale: pulseScale }] },
+            ]}
+          />
+          <Animated.View
+            style={[
+              styles.checkCircle,
+              { backgroundColor: colors.accent, transform: [{ scale: checkScale }] },
+            ]}
+          >
+            <Ionicons name="checkmark" size={52} color="#fff" />
+          </Animated.View>
+          <Text style={[styles.title, { color: colors.foreground }]}>Booking Confirmed! 🎉</Text>
+          <Text style={[styles.bookingIdText, { color: colors.muted }]}>
+            Booking ID:{' '}
+            <Text style={{ color: colors.accent, fontWeight: '900' }}>{bookingIdStr}</Text>
           </Text>
         </View>
 
-        <View style={styles.receiptGrid}>
+        {/* ── Animated content ── */}
+        <Animated.View style={{ opacity: contentFade }}>
+          {/* ── Check-in pass card ── */}
           <View
-            style={[styles.qrCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+            style={[styles.passCard, { backgroundColor: colors.card, borderColor: colors.border }]}
           >
-            <Text style={[styles.kicker, { color: colors.muted }]}>Check-in Pass</Text>
-            <Text style={[styles.courtName, { color: colors.foreground }]}>
+            <Text style={[styles.passKicker, { color: colors.muted }]}>CHECK-IN PASS</Text>
+            <Text style={[styles.passCourtName, { color: colors.foreground }]}>
               {params.courtName ?? 'Premium Court'}
             </Text>
-            <View style={[styles.qrShell, { backgroundColor: colors.mutedBg }]}>
-              <View style={styles.qrGrid}>
-                {QR_CELLS.map((filled, index) => (
-                  <View
-                    key={index}
-                    style={[styles.qrCell, { backgroundColor: filled ? '#171A26' : 'transparent' }]}
-                  />
-                ))}
+
+            {/* QR code — real base64 if available, placeholder grid otherwise */}
+            {qrDataUrl ? (
+              <Image source={{ uri: qrDataUrl }} style={styles.qrImage} resizeMode="contain" />
+            ) : (
+              <View style={[styles.qrShell, { backgroundColor: colors.mutedBg }]}>
+                <View style={styles.qrGrid}>
+                  {Array.from({ length: 100 }, (_, i) => (i * 7 + Math.floor(i / 3)) % 5 < 2).map(
+                    (filled, i) => (
+                      <View
+                        key={i}
+                        style={[
+                          styles.qrCell,
+                          { backgroundColor: filled ? '#171A26' : 'transparent' },
+                        ]}
+                      />
+                    ),
+                  )}
+                </View>
               </View>
-            </View>
+            )}
+
+            {/* Check-in code */}
             {checkInCode && (
-              <View style={styles.codeRow}>
+              <View style={[styles.codeRow, { backgroundColor: `${colors.accent}12` }]}>
                 <Text style={[styles.codeLabel, { color: colors.muted }]}>Check-in code</Text>
                 <Text style={[styles.codeValue, { color: colors.accent }]}>{checkInCode}</Text>
               </View>
             )}
+
+            {/* Pass metadata */}
             <View style={[styles.passMeta, { borderTopColor: colors.border }]}>
               <DetailColumn label="Date" value={formatDate(params.startTime)} />
               <DetailColumn
                 label="Time"
-                value={`${formatTime(params.startTime)} - ${formatTime(params.endTime)}`}
+                value={`${formatTime(params.startTime)} – ${formatTime(params.endTime)}`}
               />
               <DetailColumn
                 label="Paid"
@@ -119,6 +253,7 @@ export default function BookingSuccessScreen() {
             </View>
           </View>
 
+          {/* ── Action cards ── */}
           <View style={styles.actionStack}>
             <ActionCard
               icon="location"
@@ -135,15 +270,35 @@ export default function BookingSuccessScreen() {
             <ActionCard
               icon="download-outline"
               title="Download Invoice"
-              subtitle="Receipt will be available in bookings"
+              subtitle="Receipt available in My Bookings"
               tint={colors.muted}
             />
-            <View style={styles.nextCard}>
-              <Text style={styles.nextTitle}>Create Community Match?</Text>
-              <Text style={styles.nextText}>
-                Invite players from your groups to fill this court slot.
-              </Text>
-              <View style={styles.matchActions}>
+            <ActionCard
+              icon="share-outline"
+              title="Share Booking"
+              subtitle="Share details with co-players"
+              tint="#7c3aed"
+            />
+
+            {/* Create community match CTA */}
+            <View
+              style={[
+                styles.matchCard,
+                { backgroundColor: `${colors.accent}12`, borderColor: `${colors.accent}40` },
+              ]}
+            >
+              <View style={styles.matchTop}>
+                <Text style={styles.matchEmoji}>👥</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.matchTitle, { color: colors.foreground }]}>
+                    Create a Community Match?
+                  </Text>
+                  <Text style={[styles.matchSub, { color: colors.muted }]}>
+                    Invite players from your groups to fill this court.
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.matchBtns}>
                 <Pressable
                   onPress={() =>
                     router.push({
@@ -156,188 +311,217 @@ export default function BookingSuccessScreen() {
                       },
                     })
                   }
-                  style={({ pressed }) => [styles.matchYes, pressed && styles.pressed]}
+                  style={({ pressed }) => [
+                    styles.matchYes,
+                    { backgroundColor: colors.accent, opacity: pressed ? 0.82 : 1 },
+                  ]}
                 >
-                  <Text style={styles.matchYesText}>YES</Text>
+                  <Text style={styles.matchYesText}>Create Match</Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => router.replace('/bookings')}
-                  style={({ pressed }) => [styles.matchNo, pressed && styles.pressed]}
+                  onPress={() => router.replace('/(tabs)/bookings')}
+                  style={({ pressed }) => [styles.matchNo, { opacity: pressed ? 0.7 : 1 }]}
                 >
-                  <Text style={styles.matchNoText}>Not now</Text>
+                  <Text style={[styles.matchNoText, { color: colors.muted }]}>Not now</Text>
                 </Pressable>
               </View>
             </View>
+
+            {/* Next step */}
             <View
               style={[
-                styles.nextCardMuted,
+                styles.nextCard,
                 { backgroundColor: colors.card, borderColor: colors.border },
               ]}
             >
-              <Text style={[styles.nextTitleMuted, { color: colors.foreground }]}>Next Step</Text>
-              <Text style={[styles.nextTextMuted, { color: colors.muted }]}>
+              <Ionicons name="information-circle-outline" size={18} color={colors.muted} />
+              <Text style={[styles.nextText, { color: colors.muted }]}>
                 Show this check-in pass at the venue reception before your slot starts.
               </Text>
             </View>
           </View>
-        </View>
 
-        <View style={styles.buttons}>
-          <Button label="View My Bookings" fullWidth onPress={() => router.replace('/bookings')} />
-          <Pressable
-            onPress={() => router.replace('/(tabs)')}
-            style={({ pressed }) => [styles.homeLink, pressed && styles.pressed]}
-          >
-            <Text style={[styles.homeLinkText, { color: colors.primary }]}>Back to Home</Text>
-          </Pressable>
-        </View>
+          {/* ── Footer buttons ── */}
+          <View style={styles.buttons}>
+            <Button
+              label="View My Bookings"
+              fullWidth
+              onPress={() => router.replace('/(tabs)/bookings')}
+            />
+            <Pressable
+              onPress={() => router.replace('/(tabs)')}
+              style={({ pressed }) => [styles.homeLink, { opacity: pressed ? 0.7 : 1 }]}
+            >
+              <Text style={[styles.homeLinkText, { color: colors.primary }]}>Back to Home</Text>
+            </Pressable>
+          </View>
+        </Animated.View>
       </ScrollView>
     </View>
   );
 }
 
-function DetailColumn({ label, value }: { label: string; value: string }) {
-  const { colors } = useTheme();
-  return (
-    <View style={styles.detailColumn}>
-      <Text style={[styles.detailLabel, { color: colors.muted }]}>{label}</Text>
-      <Text style={[styles.detailValue, { color: colors.foreground }]} numberOfLines={2}>
-        {value}
-      </Text>
-    </View>
-  );
-}
-
-function ActionCard({
-  icon,
-  title,
-  subtitle,
-  tint,
-}: {
-  icon: keyof typeof Ionicons.glyphMap;
-  title: string;
-  subtitle: string;
-  tint: string;
-}) {
-  const { colors } = useTheme();
-  return (
-    <Pressable
-      style={({ pressed }) => [
-        styles.actionCard,
-        { backgroundColor: colors.card },
-        pressed && styles.pressed,
-      ]}
-    >
-      <View style={[styles.actionIcon, { backgroundColor: colors.mutedBg }]}>
-        <Ionicons name={icon} size={22} color={tint} />
-      </View>
-      <View style={styles.actionCopy}>
-        <Text style={[styles.actionTitle, { color: colors.foreground }]}>{title}</Text>
-        <Text style={[styles.actionSubtitle, { color: colors.muted }]} numberOfLines={1}>
-          {subtitle}
-        </Text>
-      </View>
-    </Pressable>
-  );
-}
+// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  content: { paddingHorizontal: Spacing.xl },
-  successBlock: { alignItems: 'center', marginBottom: Spacing.xxxl },
-  pulse: { borderRadius: Radius.full, height: 118, position: 'absolute', top: -10, width: 118 },
+  content: { paddingHorizontal: Spacing.lg },
+
+  // Success block
+  successBlock: {
+    alignItems: 'center',
+    gap: Spacing.md,
+    marginBottom: Spacing.xl,
+    paddingTop: Spacing.xl,
+    position: 'relative',
+  },
+  pulse: {
+    borderRadius: Radius.full,
+    height: 160,
+    position: 'absolute',
+    top: Spacing.xl - 20,
+    width: 160,
+  },
   checkCircle: {
     alignItems: 'center',
     borderRadius: Radius.full,
-    height: 96,
+    height: 100,
     justifyContent: 'center',
-    marginBottom: Spacing.xl,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.16,
-    shadowRadius: 18,
-    width: 96,
+    width: 100,
   },
-  title: { fontSize: 30, fontWeight: '900', textAlign: 'center' },
-  bookingId: { fontSize: FontSize.md, fontWeight: '700', marginTop: Spacing.sm },
-  receiptGrid: { gap: Spacing.lg },
-  qrCard: { alignItems: 'center', borderRadius: 24, borderWidth: 1, padding: Spacing.xl },
-  kicker: {
-    fontSize: FontSize.xs,
+  title: {
+    fontSize: FontSize.xxl,
     fontWeight: '900',
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-  },
-  courtName: {
-    fontSize: FontSize.xl,
-    fontWeight: '900',
-    marginTop: Spacing.xs,
     textAlign: 'center',
   },
-  qrShell: { borderRadius: Radius.lg, marginVertical: Spacing.xl, padding: Spacing.lg },
-  codeRow: { alignItems: 'center', gap: 2, marginBottom: Spacing.lg, marginTop: -Spacing.sm },
-  codeLabel: {
-    fontSize: FontSize.xs,
-    fontWeight: '800',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
+  bookingIdText: {
+    fontSize: FontSize.sm,
+    fontWeight: '600',
   },
-  codeValue: { fontSize: FontSize.xl, fontWeight: '900', letterSpacing: 4 },
-  qrGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 3, height: 190, width: 190 },
-  qrCell: { borderRadius: 2, height: 16.3, width: 16.3 },
-  passMeta: { borderTopWidth: 1, flexDirection: 'row', paddingTop: Spacing.lg, width: '100%' },
-  detailColumn: { alignItems: 'center', flex: 1, gap: 3 },
-  detailLabel: { fontSize: FontSize.xs, fontWeight: '800' },
-  detailValue: { fontSize: FontSize.sm, fontWeight: '900', textAlign: 'center' },
-  actionStack: { gap: Spacing.md },
-  actionCard: {
+
+  // Check-in pass card
+  passCard: {
     alignItems: 'center',
     borderRadius: Radius.xl,
+    borderWidth: 1,
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
+    overflow: 'hidden',
+    padding: Spacing.lg,
+  },
+  passKicker: {
+    fontSize: FontSize.xs,
+    fontWeight: '800',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+  passCourtName: {
+    fontSize: FontSize.xl,
+    fontWeight: '900',
+    textAlign: 'center',
+  },
+  qrImage: {
+    height: 192,
+    width: 192,
+    borderRadius: Radius.md,
+  },
+  qrShell: {
+    borderRadius: Radius.md,
+    padding: Spacing.md,
+  },
+  qrGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    height: 160,
+    width: 160,
+  },
+  qrCell: {
+    height: 16,
+    width: 16,
+  },
+  codeRow: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+  },
+  codeLabel: { fontSize: FontSize.xs, fontWeight: '700' },
+  codeValue: {
+    fontFamily: 'Courier',
+    fontSize: FontSize.xl,
+    fontWeight: '900',
+    letterSpacing: 4,
+  },
+  passMeta: {
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    paddingTop: Spacing.md,
+    width: '100%',
+  },
+
+  // Action stack
+  actionStack: { gap: Spacing.sm, marginBottom: Spacing.xl },
+
+  // Match card
+  matchCard: {
+    borderRadius: Radius.xl,
+    borderWidth: 1,
+    gap: Spacing.md,
+    padding: Spacing.lg,
+  },
+  matchTop: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  matchEmoji: { fontSize: 28 },
+  matchTitle: { fontSize: FontSize.md, fontWeight: '900' },
+  matchSub: { fontSize: FontSize.xs, fontWeight: '600', marginTop: 2 },
+  matchBtns: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  matchYes: {
+    borderRadius: Radius.full,
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    alignItems: 'center',
+  },
+  matchYesText: {
+    color: '#fff',
+    fontSize: FontSize.sm,
+    fontWeight: '900',
+  },
+  matchNo: {
+    alignItems: 'center',
+    borderRadius: Radius.full,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+  },
+  matchNoText: { fontSize: FontSize.sm, fontWeight: '700' },
+
+  // Next step card
+  nextCard: {
+    alignItems: 'center',
+    borderRadius: Radius.xl,
+    borderWidth: 1,
     flexDirection: 'row',
     gap: Spacing.md,
     padding: Spacing.md,
   },
-  actionIcon: {
+  nextText: { flex: 1, fontSize: FontSize.xs, fontWeight: '600' },
+
+  // Buttons
+  buttons: {
     alignItems: 'center',
-    borderRadius: Radius.full,
-    height: 48,
-    justifyContent: 'center',
-    width: 48,
+    gap: Spacing.md,
   },
-  actionCopy: { flex: 1 },
-  actionTitle: { fontSize: FontSize.md, fontWeight: '900' },
-  actionSubtitle: { fontSize: FontSize.xs, fontWeight: '600', marginTop: 2 },
-  nextCard: { backgroundColor: '#ff6b00', borderRadius: Radius.xl, padding: Spacing.xl },
-  nextTitle: { color: '#fff', fontSize: FontSize.lg, fontWeight: '900' },
-  nextText: {
-    color: 'rgba(255,255,255,0.82)',
+  homeLink: {
+    paddingVertical: Spacing.sm,
+  },
+  homeLinkText: {
     fontSize: FontSize.sm,
-    lineHeight: 20,
-    marginTop: Spacing.xs,
+    fontWeight: '700',
   },
-  matchActions: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.lg },
-  matchYes: {
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: Radius.full,
-    flex: 1,
-    paddingVertical: Spacing.md,
-  },
-  matchYesText: { color: '#ff6b00', fontSize: FontSize.md, fontWeight: '900' },
-  matchNo: {
-    alignItems: 'center',
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderRadius: Radius.full,
-    borderWidth: 1.5,
-    flex: 1,
-    paddingVertical: Spacing.md,
-  },
-  matchNoText: { color: '#fff', fontSize: FontSize.md, fontWeight: '800' },
-  nextCardMuted: { borderRadius: Radius.xl, borderWidth: 1, padding: Spacing.xl },
-  nextTitleMuted: { fontSize: FontSize.lg, fontWeight: '900' },
-  nextTextMuted: { fontSize: FontSize.sm, lineHeight: 20, marginTop: Spacing.xs },
-  buttons: { gap: Spacing.md, marginTop: Spacing.xxxl },
-  homeLink: { alignItems: 'center', paddingVertical: Spacing.md },
-  homeLinkText: { fontSize: FontSize.md, fontWeight: '900' },
-  pressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
 });

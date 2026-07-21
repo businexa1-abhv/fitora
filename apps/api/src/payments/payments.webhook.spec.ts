@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
 import { createHmac } from 'crypto';
+import { PaymentEntityType } from '@prisma/client';
 import { PaymentsService } from './payments.service';
 import { BookingsService } from '../bookings/bookings.service';
 import { TrainingService } from '../training/training.service';
@@ -14,6 +15,7 @@ import { WalletService } from '../wallet/wallet.service';
 import { TenantsService } from '../tenants/tenants.service';
 import { SlotEventsService } from '../realtime/slot-events.service';
 import { RevenueOrchestrator } from '../finance/revenue.orchestrator';
+import { SlotAvailabilityService } from '../availability/services/slot-availability.service';
 
 const revenueOrchestratorMock = {
   onPaymentCompleted: jest.fn(),
@@ -21,6 +23,10 @@ const revenueOrchestratorMock = {
   recordWebhookEvent: jest.fn().mockResolvedValue({ duplicate: false, id: 'wh-1' }),
   markWebhookProcessed: jest.fn(),
   isEnabled: jest.fn().mockReturnValue(true),
+};
+
+const availabilityMock = {
+  releaseReservation: jest.fn().mockResolvedValue({ released: true }),
 };
 
 describe('PaymentsService webhook', () => {
@@ -63,6 +69,10 @@ describe('PaymentsService webhook', () => {
           useValue: { emitPaymentUpdated: jest.fn(), emitMembershipUpdated: jest.fn() },
         },
         { provide: RevenueOrchestrator, useValue: revenueOrchestratorMock },
+        {
+          provide: SlotAvailabilityService,
+          useValue: availabilityMock,
+        },
       ],
     }).compile();
 
@@ -108,5 +118,36 @@ describe('PaymentsService webhook', () => {
 
     const result = await service.handleWebhook(undefined, body);
     expect(result).toEqual({ received: true });
+  });
+
+  it('releases a booking hold when Razorpay reports payment failure', async () => {
+    const secret = 'whsec_test';
+    process.env.RAZORPAY_WEBHOOK_SECRET = secret;
+    (prisma.payment.findFirst as jest.Mock).mockResolvedValue({
+      id: 'payment-1',
+      userId: 'user-1',
+      amount: 500 as never,
+      entityType: PaymentEntityType.BOOKING,
+      entityId: 'booking-1',
+    } as never);
+
+    const body = JSON.stringify({
+      event: 'payment.failed',
+      payload: {
+        payment: {
+          entity: {
+            order_id: 'order-1',
+            error_description: 'Declined',
+          },
+        },
+      },
+    });
+    const signature = createHmac('sha256', secret).update(body).digest('hex');
+
+    await service.handleWebhook(signature, body);
+
+    expect(availabilityMock.releaseReservation).toHaveBeenCalledWith('booking-1', {
+      reason: 'abandoned',
+    });
   });
 });

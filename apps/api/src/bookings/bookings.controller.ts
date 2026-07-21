@@ -1,19 +1,38 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserRole, BookingStatus } from '@prisma/client';
 import { Permission } from '@fitora/types';
-import { Roles, RequirePermissions } from '../common/decorators';
+import { Public, Roles, RequirePermissions } from '../common/decorators';
 import { AdminListQueryDto } from '../common/dto/admin-list-query.dto';
 import { CurrentUser, AuthUserPayload } from '../common/decorators/current-user.decorator';
 import { BookingsService } from './bookings.service';
 import { RecurringBookingService } from './recurring-booking.service';
+import { ChannelAvailabilityService } from '../integrations/channel-availability.service';
+import {
+  IntegrationOrJwtGuard,
+  type IntegrationRequest,
+} from '../integrations/guards/integration-api-key.guard';
+import {
+  type ChannelCreateBookingDto,
+  UnifiedCreateBookingDto,
+} from '../integrations/dto/integration.dto';
 import {
   BookingConfirmationDto,
   BookingHistoryQueryDto,
   BookingResponseDto,
   CancelBookingDto,
   CheckInDto,
-  CreateBookingDto,
   CreateRecurringBookingDto,
   QrCodeResponseDto,
   RefundPreviewDto,
@@ -27,9 +46,12 @@ export class BookingsController {
   constructor(
     private bookingsService: BookingsService,
     private recurringBookingService: RecurringBookingService,
+    private channelAvailability: ChannelAvailabilityService,
   ) {}
 
   @Post('bookings')
+  @Public()
+  @UseGuards(IntegrationOrJwtGuard)
   @RequirePermissions(Permission.BOOKINGS_WRITE)
   @ApiOperation({
     summary: 'Create booking — locks slot and initiates payment',
@@ -37,7 +59,22 @@ export class BookingsController {
       'Player selects court + slot. Slot is locked for 15 minutes while payment completes.',
   })
   @ApiResponse({ status: 201, type: BookingConfirmationDto })
-  create(@Body() dto: CreateBookingDto, @CurrentUser() user: AuthUserPayload) {
+  create(
+    @Body() dto: UnifiedCreateBookingDto,
+    @CurrentUser() user: AuthUserPayload,
+    @Req() request: IntegrationRequest,
+  ) {
+    if (request.integration) {
+      if (!dto.idempotencyKey || !dto.externalBookingId) {
+        throw new BadRequestException(
+          'idempotencyKey and externalBookingId are required for channel bookings',
+        );
+      }
+      return this.channelAvailability.createBooking(
+        request.integration,
+        dto as ChannelCreateBookingDto,
+      );
+    }
     return this.bookingsService.createBooking(dto, user.id);
   }
 

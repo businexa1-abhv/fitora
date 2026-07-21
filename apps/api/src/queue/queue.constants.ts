@@ -5,6 +5,7 @@ export const QUEUES = {
   SCHEDULED: 'fitora-scheduled',
   REFUND: 'fitora-refund',
   PAYMENT_RETRY: 'fitora-payment-retry',
+  INTEGRATION_SYNC: 'fitora-integration-sync',
   DEAD_LETTER: 'fitora-dead-letter',
 } as const;
 
@@ -72,6 +73,7 @@ export const ALL_WORKER_QUEUES = [
   QUEUES.SCHEDULED,
   QUEUES.REFUND,
   QUEUES.PAYMENT_RETRY,
+  QUEUES.INTEGRATION_SYNC,
 ] as const;
 
 export const QUEUE_LABELS: Record<string, string> = {
@@ -81,5 +83,6 @@ export const QUEUE_LABELS: Record<string, string> = {
   [QUEUES.SCHEDULED]: 'Scheduled jobs',
   [QUEUES.REFUND]: 'Refund processing',
   [QUEUES.PAYMENT_RETRY]: 'Payment retry',
+  [QUEUES.INTEGRATION_SYNC]: 'Integration sync',
   [QUEUES.DEAD_LETTER]: 'Dead letter queue',
 };

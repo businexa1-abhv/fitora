@@ -76,6 +76,7 @@ export const envSchema = z
       .default('false')
       .transform((v) => v === 'true'),
     BOOKING_LOCK_TTL_MINUTES: z.coerce.number().int().positive().optional(),
+    INTEGRATION_ENCRYPTION_KEY: z.string().optional(),
 
     RUN_MIGRATIONS: z
       .enum(['true', 'false'])
@@ -126,6 +127,13 @@ export const envSchema = z
           code: 'custom',
           path: ['REDIS_URL'],
           message: 'REDIS_URL is required in production',
+        });
+      }
+      if (!env.INTEGRATION_ENCRYPTION_KEY) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['INTEGRATION_ENCRYPTION_KEY'],
+          message: 'INTEGRATION_ENCRYPTION_KEY is required in production',
         });
       }
     }

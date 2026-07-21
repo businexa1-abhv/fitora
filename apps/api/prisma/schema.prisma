@@ -392,6 +392,60 @@ enum BookingSource {
   OWNER_WALK_IN
   OWNER_MANUAL
   ADMIN
+  PLAYO
+  PLAYARENA
+  EXTERNAL_CHANNEL
+}
+
+enum IntegrationProvider {
+  PLAYO
+  PLAYARENA
+  GENERIC
+}
+
+enum IntegrationStatus {
+  ACTIVE
+  PAUSED
+  DISCONNECTED
+  ERROR
+}
+
+enum IntegrationDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum IntegrationSyncJobStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  RETRYING
+  DEAD_LETTER
+}
+
+enum IntegrationConflictType {
+  DUPLICATE_BOOKING
+  CAPACITY_MISMATCH
+  SLOT_MAPPING_MISSING
+  EXTERNAL_STATE_MISMATCH
+  WEBHOOK_REJECTED
+}
+
+enum IntegrationConflictStatus {
+  OPEN
+  RESOLVED
+  IGNORED
+}
+
+enum SlotLifecycleStatus {
+  AVAILABLE
+  HELD
+  BOOKED
+  BLOCKED
+  MAINTENANCE
+  TOURNAMENT
+  OWNER_RESERVED
 }
 
 enum SettingScope {
@@ -451,19 +505,19 @@ model Tenant {
   createdAt             DateTime     @default(now()) @map("created_at")
   updatedAt             DateTime     @updatedAt @map("updated_at")
 
-  owner             User              @relation("TenantOwner", fields: [ownerId], references: [id], onDelete: Restrict)
-  members           TenantMember[]
-  trainers          TenantTrainer[]
-  courts            Court[]
-  membershipPlans   MembershipPlan[]
-  trainingPrograms  TrainingProgram[]
-  productCategories ProductCategory[]
-  products          Product[]
-  coupons           Coupon[]
-  payments          Payment[]
-  serviceListings   ServiceListing[]
-  printListings     PrintListing[]
-  auditLogs         AuditLog[]
+  owner               User                 @relation("TenantOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  members             TenantMember[]
+  trainers            TenantTrainer[]
+  courts              Court[]
+  membershipPlans     MembershipPlan[]
+  trainingPrograms    TrainingProgram[]
+  productCategories   ProductCategory[]
+  products            Product[]
+  coupons             Coupon[]
+  payments            Payment[]
+  serviceListings     ServiceListing[]
+  printListings       PrintListing[]
+  auditLogs           AuditLog[]
   partnerApplications PartnerApplication[]
   expenses            Expense[]
   slotTypes           SlotTypeConfig[]
@@ -487,28 +541,28 @@ model Tenant {
 }
 
 model PartnerApplication {
-  id              String                    @id @default(uuid()) @db.Uuid
-  status          PartnerApplicationStatus  @default(DRAFT)
-  currentStep     String                    @default("business") @map("current_step") @db.VarChar(40)
-  ownerName       String?                   @map("owner_name") @db.VarChar(200)
-  businessName    String?                   @map("business_name") @db.VarChar(200)
-  phone           String?                   @db.VarChar(20)
-  phoneVerified   Boolean                   @default(false) @map("phone_verified")
-  email           String?                   @db.VarChar(255)
-  city            String?                   @db.VarChar(100)
-  venueAddress    String?                   @map("venue_address") @db.VarChar(500)
-  state           String?                   @db.VarChar(100)
-  pincode         String?                   @db.VarChar(10)
-  venue           Json?
-  sportsConfig    Json?                     @map("sports_config")
-  trainers        Json?
-  legal           Json?
-  visuals         Json?
-  userId          String?                   @map("user_id") @db.Uuid
-  tenantId        String?                   @map("tenant_id") @db.Uuid
-  submittedAt     DateTime?                 @map("submitted_at")
-  createdAt       DateTime                  @default(now()) @map("created_at")
-  updatedAt       DateTime                  @updatedAt @map("updated_at")
+  id            String                   @id @default(uuid()) @db.Uuid
+  status        PartnerApplicationStatus @default(DRAFT)
+  currentStep   String                   @default("business") @map("current_step") @db.VarChar(40)
+  ownerName     String?                  @map("owner_name") @db.VarChar(200)
+  businessName  String?                  @map("business_name") @db.VarChar(200)
+  phone         String?                  @db.VarChar(20)
+  phoneVerified Boolean                  @default(false) @map("phone_verified")
+  email         String?                  @db.VarChar(255)
+  city          String?                  @db.VarChar(100)
+  venueAddress  String?                  @map("venue_address") @db.VarChar(500)
+  state         String?                  @db.VarChar(100)
+  pincode       String?                  @db.VarChar(10)
+  venue         Json?
+  sportsConfig  Json?                    @map("sports_config")
+  trainers      Json?
+  legal         Json?
+  visuals       Json?
+  userId        String?                  @map("user_id") @db.Uuid
+  tenantId      String?                  @map("tenant_id") @db.Uuid
+  submittedAt   DateTime?                @map("submitted_at")
+  createdAt     DateTime                 @default(now()) @map("created_at")
+  updatedAt     DateTime                 @updatedAt @map("updated_at")
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
@@ -578,79 +632,79 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  roles                 UserRoleAssignment[]
-  refreshTokens         RefreshToken[]
-  userSessions          UserSession[]
-  passwordResetTokens   PasswordResetToken[]
-  parentProfile         ParentProfile?
-  trainerProfile        TrainerProfile?
-  wallet                Wallet?
-  courts                Court[]              @relation("CourtOwner")
-  bookings              Booking[]
-  waitlistEntries       SlotWaitlistEntry[]
-  recurringBookings     RecurringBooking[]
-  membershipPurchases   MembershipPurchase[]
-  payments              Payment[]
-  paymentInvoices       PaymentInvoice[]
-  kidProfiles           KidProfile[]         @relation("ParentKids")
-  trainerBatches        TrainingBatch[]      @relation("BatchTrainer")
-  progressReports       ProgressReport[]     @relation("ReportAuthor")
-  cart                  Cart?
-  wishlist              Wishlist?
-  shopOrders            ShopOrder[]
-  serviceListings       ServiceListing[]     @relation("ServiceListings")
-  printListings         PrintListing[]       @relation("PrintListings")
-  serviceOrders         ServiceOrder[]       @relation("ServiceCustomers")
-  providedServiceOrders ServiceOrder[]       @relation("ServiceProviders")
-  printOrders           PrintOrder[]         @relation("PrintCustomers")
-  fulfilledPrintOrders  PrintOrder[]         @relation("PrintProviders")
-  printDesigns          PrintDesign[]
-  notifications         Notification[]
-  notificationPreference NotificationPreference?
-  scheduledNotifications ScheduledNotification[] @relation("ScheduledNotificationCreator")
-  couponRedemptions     CouponRedemption[]
-  createdCoupons        Coupon[]             @relation("CouponCreator")
-  reviews               Review[]
-  auditLogs             AuditLog[]           @relation("AuditActor")
-  deviceTokens          DeviceToken[]
-  trainingNotesAuthored TrainingNote[]     @relation("TrainerNotes")
-  leaveRequests         LeaveRequest[]     @relation("TrainerLeaveRequests")
-  reviewedLeaveRequests LeaveRequest[]     @relation("LeaveRequestReviewer")
-  ownedTenants          Tenant[]           @relation("TenantOwner")
-  tenantMemberships     TenantMember[]
-  tenantTrainerLinks    TenantTrainer[]    @relation("TenantTrainerUser")
-  partnerApplications   PartnerApplication[]
-  expensesCreated       Expense[]            @relation("ExpenseCreator")
-  staffShifts           StaffShift[]         @relation("StaffShiftUser")
-  payrollLines          PayrollLine[]        @relation("PayrollTrainer")
-  playerNotesAuthored   PlayerNote[]         @relation("PlayerNoteAuthor")
-  playerNotesAbout      PlayerNote[]         @relation("PlayerNoteSubject")
-  playerCrmProfiles     PlayerCrmProfile[]
-  assignedSupportTickets SupportTicket[] @relation("SupportTicketAssignee")
-  createdSupportTickets  SupportTicket[] @relation("SupportTicketCreator")
-  ownerSubscriptions     OwnerSubscription[] @relation("SubscriptionOwner")
-  merchantWallets        MerchantWallet[]
-  settlements            Settlement[]        @relation("SettlementBeneficiary")
-  financeInvoices        FinanceInvoice[]    @relation("FinanceInvoiceParty")
-  commissionsBenefited   Commission[]        @relation("CommissionBeneficiary")
-  ownedCommunityGroups   CommunityGroup[]    @relation("CommunityGroupOwner")
-  communityMemberships   CommunityGroupMember[]
-  communityJoinRequests  CommunityJoinRequest[] @relation("CommunityJoinRequester")
-  reviewedJoinRequests   CommunityJoinRequest[] @relation("CommunityJoinReviewer")
-  communityMatchesCreated CommunityMatch[]   @relation("CommunityMatchCreator")
-  communityMatchPlayers  CommunityMatchPlayer[]
-  communityMessages      CommunityMessage[]  @relation("CommunityMessageAuthor")
-  communityReactions     CommunityMessageReaction[]
-  communityAnnouncements CommunityAnnouncement[] @relation("CommunityAnnouncementAuthor")
-  communityPollVotes     CommunityPollVote[]
-  friendshipsSent        CommunityFriendship[] @relation("FriendshipRequester")
-  friendshipsReceived    CommunityFriendship[] @relation("FriendshipAddressee")
-  communityBlocksInitiated CommunityBlock[]  @relation("Blocker")
-  communityBlocksReceived  CommunityBlock[]  @relation("Blocked")
-  communityReportsFiled  CommunityReport[]   @relation("Reporter")
-  communityFeedItems     CommunityFeedItem[] @relation("FeedAuthor")
-  communityAchievements  CommunityAchievement[]
-  communityAttendance    CommunityMatchAttendance[]
+  roles                    UserRoleAssignment[]
+  refreshTokens            RefreshToken[]
+  userSessions             UserSession[]
+  passwordResetTokens      PasswordResetToken[]
+  parentProfile            ParentProfile?
+  trainerProfile           TrainerProfile?
+  wallet                   Wallet?
+  courts                   Court[]                    @relation("CourtOwner")
+  bookings                 Booking[]
+  waitlistEntries          SlotWaitlistEntry[]
+  recurringBookings        RecurringBooking[]
+  membershipPurchases      MembershipPurchase[]
+  payments                 Payment[]
+  paymentInvoices          PaymentInvoice[]
+  kidProfiles              KidProfile[]               @relation("ParentKids")
+  trainerBatches           TrainingBatch[]            @relation("BatchTrainer")
+  progressReports          ProgressReport[]           @relation("ReportAuthor")
+  cart                     Cart?
+  wishlist                 Wishlist?
+  shopOrders               ShopOrder[]
+  serviceListings          ServiceListing[]           @relation("ServiceListings")
+  printListings            PrintListing[]             @relation("PrintListings")
+  serviceOrders            ServiceOrder[]             @relation("ServiceCustomers")
+  providedServiceOrders    ServiceOrder[]             @relation("ServiceProviders")
+  printOrders              PrintOrder[]               @relation("PrintCustomers")
+  fulfilledPrintOrders     PrintOrder[]               @relation("PrintProviders")
+  printDesigns             PrintDesign[]
+  notifications            Notification[]
+  notificationPreference   NotificationPreference?
+  scheduledNotifications   ScheduledNotification[]    @relation("ScheduledNotificationCreator")
+  couponRedemptions        CouponRedemption[]
+  createdCoupons           Coupon[]                   @relation("CouponCreator")
+  reviews                  Review[]
+  auditLogs                AuditLog[]                 @relation("AuditActor")
+  deviceTokens             DeviceToken[]
+  trainingNotesAuthored    TrainingNote[]             @relation("TrainerNotes")
+  leaveRequests            LeaveRequest[]             @relation("TrainerLeaveRequests")
+  reviewedLeaveRequests    LeaveRequest[]             @relation("LeaveRequestReviewer")
+  ownedTenants             Tenant[]                   @relation("TenantOwner")
+  tenantMemberships        TenantMember[]
+  tenantTrainerLinks       TenantTrainer[]            @relation("TenantTrainerUser")
+  partnerApplications      PartnerApplication[]
+  expensesCreated          Expense[]                  @relation("ExpenseCreator")
+  staffShifts              StaffShift[]               @relation("StaffShiftUser")
+  payrollLines             PayrollLine[]              @relation("PayrollTrainer")
+  playerNotesAuthored      PlayerNote[]               @relation("PlayerNoteAuthor")
+  playerNotesAbout         PlayerNote[]               @relation("PlayerNoteSubject")
+  playerCrmProfiles        PlayerCrmProfile[]
+  assignedSupportTickets   SupportTicket[]            @relation("SupportTicketAssignee")
+  createdSupportTickets    SupportTicket[]            @relation("SupportTicketCreator")
+  ownerSubscriptions       OwnerSubscription[]        @relation("SubscriptionOwner")
+  merchantWallets          MerchantWallet[]
+  settlements              Settlement[]               @relation("SettlementBeneficiary")
+  financeInvoices          FinanceInvoice[]           @relation("FinanceInvoiceParty")
+  commissionsBenefited     Commission[]               @relation("CommissionBeneficiary")
+  ownedCommunityGroups     CommunityGroup[]           @relation("CommunityGroupOwner")
+  communityMemberships     CommunityGroupMember[]
+  communityJoinRequests    CommunityJoinRequest[]     @relation("CommunityJoinRequester")
+  reviewedJoinRequests     CommunityJoinRequest[]     @relation("CommunityJoinReviewer")
+  communityMatchesCreated  CommunityMatch[]           @relation("CommunityMatchCreator")
+  communityMatchPlayers    CommunityMatchPlayer[]
+  communityMessages        CommunityMessage[]         @relation("CommunityMessageAuthor")
+  communityReactions       CommunityMessageReaction[]
+  communityAnnouncements   CommunityAnnouncement[]    @relation("CommunityAnnouncementAuthor")
+  communityPollVotes       CommunityPollVote[]
+  friendshipsSent          CommunityFriendship[]      @relation("FriendshipRequester")
+  friendshipsReceived      CommunityFriendship[]      @relation("FriendshipAddressee")
+  communityBlocksInitiated CommunityBlock[]           @relation("Blocker")
+  communityBlocksReceived  CommunityBlock[]           @relation("Blocked")
+  communityReportsFiled    CommunityReport[]          @relation("Reporter")
+  communityFeedItems       CommunityFeedItem[]        @relation("FeedAuthor")
+  communityAchievements    CommunityAchievement[]
+  communityAttendance      CommunityMatchAttendance[]
 
   @@index([email])
   @@index([phone])
@@ -701,24 +755,24 @@ model RefreshToken {
 }
 
 model UserSession {
-  id                  String    @id @default(uuid()) @db.Uuid
-  userId              String    @map("user_id") @db.Uuid
-  deviceId            String    @map("device_id") @db.VarChar(128)
-  deviceName          String?   @map("device_name") @db.VarChar(200)
-  platform            String    @db.VarChar(50)
-  os                  String?   @db.VarChar(100)
-  appVersion          String?   @map("app_version") @db.VarChar(50)
-  ipAddress           String?   @map("ip_address") @db.VarChar(64)
-  userAgent           String?   @map("user_agent") @db.VarChar(500)
-  refreshTokenHash    String?   @map("refresh_token_hash") @db.VarChar(512)
-  accessTokenVersion  Int       @default(1) @map("access_token_version")
-  lastLogin           DateTime  @default(now()) @map("last_login")
-  lastActive          DateTime  @default(now()) @map("last_active")
-  expiresAt           DateTime  @map("expires_at")
-  isActive            Boolean   @default(true) @map("is_active")
-  revokedAt           DateTime? @map("revoked_at")
-  createdAt           DateTime  @default(now()) @map("created_at")
-  updatedAt           DateTime  @updatedAt @map("updated_at")
+  id                 String    @id @default(uuid()) @db.Uuid
+  userId             String    @map("user_id") @db.Uuid
+  deviceId           String    @map("device_id") @db.VarChar(128)
+  deviceName         String?   @map("device_name") @db.VarChar(200)
+  platform           String    @db.VarChar(50)
+  os                 String?   @db.VarChar(100)
+  appVersion         String?   @map("app_version") @db.VarChar(50)
+  ipAddress          String?   @map("ip_address") @db.VarChar(64)
+  userAgent          String?   @map("user_agent") @db.VarChar(500)
+  refreshTokenHash   String?   @map("refresh_token_hash") @db.VarChar(512)
+  accessTokenVersion Int       @default(1) @map("access_token_version")
+  lastLogin          DateTime  @default(now()) @map("last_login")
+  lastActive         DateTime  @default(now()) @map("last_active")
+  expiresAt          DateTime  @map("expires_at")
+  isActive           Boolean   @default(true) @map("is_active")
+  revokedAt          DateTime? @map("revoked_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
 
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   refreshTokens RefreshToken[]
@@ -888,49 +942,49 @@ model Sport {
 // ─── Courts & Booking ────────────────────────────────────────────────────────
 
 model Court {
-  id            String    @id @default(uuid()) @db.Uuid
-  tenantId      String    @map("tenant_id") @db.Uuid
-  ownerId       String    @map("owner_id") @db.Uuid
-  sportId       String    @map("sport_id") @db.Uuid
-  name          String    @db.VarChar(200)
-  slug          String    @db.VarChar(220)
-  description   String?   @db.Text
-  address       String    @db.VarChar(500)
-  city          String    @db.VarChar(100)
-  state         String?   @db.VarChar(100)
-  pincode       String?   @db.VarChar(10)
-  latitude      Decimal?  @db.Decimal(10, 7)
-  longitude     Decimal?  @db.Decimal(10, 7)
-  amenities         String[]            @default([])
-  rules             String?             @db.Text
-  defaultSlotPrice     Decimal?            @map("default_slot_price") @db.Decimal(12, 2)
-  defaultSlotCapacity  Int?                @map("default_slot_capacity")
-  approvalStatus       CourtApprovalStatus @default(PENDING) @map("approval_status")
-  rejectionReason   String?             @map("rejection_reason") @db.VarChar(500)
-  approvedAt        DateTime?           @map("approved_at")
-  rejectedAt        DateTime?           @map("rejected_at")
-  isApproved        Boolean             @default(false) @map("is_approved")
-  isActive      Boolean   @default(true) @map("is_active")
-  averageRating Decimal?  @map("average_rating") @db.Decimal(3, 2)
-  deletedAt     DateTime? @map("deleted_at")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id                  String              @id @default(uuid()) @db.Uuid
+  tenantId            String              @map("tenant_id") @db.Uuid
+  ownerId             String              @map("owner_id") @db.Uuid
+  sportId             String              @map("sport_id") @db.Uuid
+  name                String              @db.VarChar(200)
+  slug                String              @db.VarChar(220)
+  description         String?             @db.Text
+  address             String              @db.VarChar(500)
+  city                String              @db.VarChar(100)
+  state               String?             @db.VarChar(100)
+  pincode             String?             @db.VarChar(10)
+  latitude            Decimal?            @db.Decimal(10, 7)
+  longitude           Decimal?            @db.Decimal(10, 7)
+  amenities           String[]            @default([])
+  rules               String?             @db.Text
+  defaultSlotPrice    Decimal?            @map("default_slot_price") @db.Decimal(12, 2)
+  defaultSlotCapacity Int?                @map("default_slot_capacity")
+  approvalStatus      CourtApprovalStatus @default(PENDING) @map("approval_status")
+  rejectionReason     String?             @map("rejection_reason") @db.VarChar(500)
+  approvedAt          DateTime?           @map("approved_at")
+  rejectedAt          DateTime?           @map("rejected_at")
+  isApproved          Boolean             @default(false) @map("is_approved")
+  isActive            Boolean             @default(true) @map("is_active")
+  averageRating       Decimal?            @map("average_rating") @db.Decimal(3, 2)
+  deletedAt           DateTime?           @map("deleted_at")
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
 
-  owner    User              @relation("CourtOwner", fields: [ownerId], references: [id], onDelete: Restrict)
-  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  sport    Sport             @relation(fields: [sportId], references: [id], onDelete: Restrict)
-  images   CourtImage[]
-  slots         CourtSlot[]
-  schedules     SlotSchedule[]
-  pricingRules  SlotPricingRule[]
-  closures      CourtClosure[]
-  plans         MembershipPlan[]
-  coupons       Coupon[]
+  owner             User                @relation("CourtOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  tenant            Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  sport             Sport               @relation(fields: [sportId], references: [id], onDelete: Restrict)
+  images            CourtImage[]
+  slots             CourtSlot[]
+  schedules         SlotSchedule[]
+  pricingRules      SlotPricingRule[]
+  closures          CourtClosure[]
+  plans             MembershipPlan[]
+  coupons           Coupon[]
   bookings          Booking[]
   waitlistEntries   SlotWaitlistEntry[]
   recurringBookings RecurringBooking[]
   programs          TrainingProgram[]
-  communityGroups   CommunityGroup[]  @relation("CommunityHomeCourt")
+  communityGroups   CommunityGroup[]    @relation("CommunityHomeCourt")
   communityMatches  CommunityMatch[]
 
   @@unique([tenantId, slug])
@@ -962,28 +1016,28 @@ model CourtImage {
 }
 
 model CourtSlot {
-  id                String                @id @default(uuid()) @db.Uuid
-  courtId           String                @map("court_id") @db.Uuid
-  scheduleId        String?               @map("schedule_id") @db.Uuid
-  startTime         DateTime              @map("start_time")
-  endTime           DateTime              @map("end_time")
-  price             Decimal               @db.Decimal(12, 2)
-  capacity          Int                   @default(1)
-  reservedCount     Int                   @default(0) @map("reserved_count")
-  confirmedCount    Int                   @default(0) @map("confirmed_count")
-  bookingMode       SlotBookingMode       @default(EXCLUSIVE) @map("booking_mode")
-  version           Int                   @default(0)
+  id               String               @id @default(uuid()) @db.Uuid
+  courtId          String               @map("court_id") @db.Uuid
+  scheduleId       String?              @map("schedule_id") @db.Uuid
+  startTime        DateTime             @map("start_time")
+  endTime          DateTime             @map("end_time")
+  price            Decimal              @db.Decimal(12, 2)
+  capacity         Int                  @default(1)
+  reservedCount    Int                  @default(0) @map("reserved_count")
+  confirmedCount   Int                  @default(0) @map("confirmed_count")
+  bookingMode      SlotBookingMode      @default(EXCLUSIVE) @map("booking_mode")
+  version          Int                  @default(0)
   /// Owner operational override. FULL is derived from counters, not stored.
-  operationalState  SlotOperationalState  @default(AVAILABLE) @map("operational_state")
-  isBlocked         Boolean               @default(false) @map("is_blocked")
-  blockReason       ClosureReason?        @map("block_reason")
-  notes             String?               @db.VarChar(500)
-  deletedAt         DateTime?             @map("deleted_at")
-  createdAt         DateTime              @default(now()) @map("created_at")
-  updatedAt         DateTime              @updatedAt @map("updated_at")
+  operationalState SlotOperationalState @default(AVAILABLE) @map("operational_state")
+  isBlocked        Boolean              @default(false) @map("is_blocked")
+  blockReason      ClosureReason?       @map("block_reason")
+  notes            String?              @db.VarChar(500)
+  deletedAt        DateTime?            @map("deleted_at")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
 
-  court    Court         @relation(fields: [courtId], references: [id], onDelete: Cascade)
-  schedule        SlotSchedule?      @relation(fields: [scheduleId], references: [id], onDelete: SetNull)
+  court           Court               @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  schedule        SlotSchedule?       @relation(fields: [scheduleId], references: [id], onDelete: SetNull)
   bookings        Booking[]
   waitlistEntries SlotWaitlistEntry[]
 
@@ -994,6 +1048,128 @@ model CourtSlot {
   @@index([operationalState])
   @@index([deletedAt])
   @@map("court_slots")
+}
+
+model IntegrationConnection {
+  id                     String              @id @default(uuid()) @db.Uuid
+  tenantId               String              @map("tenant_id") @db.Uuid
+  provider               IntegrationProvider
+  name                   String              @db.VarChar(120)
+  status                 IntegrationStatus   @default(ACTIVE)
+  apiKeyHash             String              @unique @map("api_key_hash") @db.VarChar(64)
+  credentialsEncrypted   String?             @map("credentials_encrypted") @db.Text
+  webhookSecretEncrypted String              @map("webhook_secret_encrypted") @db.Text
+  outboundEndpoint       String?             @map("outbound_endpoint") @db.VarChar(1000)
+  config                 Json?
+  lastSyncAt             DateTime?           @map("last_sync_at")
+  lastSuccessAt          DateTime?           @map("last_success_at")
+  lastFailureAt          DateTime?           @map("last_failure_at")
+  failedWebhookCount     Int                 @default(0) @map("failed_webhook_count")
+  createdAt              DateTime            @default(now()) @map("created_at")
+  updatedAt              DateTime            @updatedAt @map("updated_at")
+
+  @@unique([tenantId, provider])
+  @@index([tenantId, status])
+  @@map("integration_connections")
+}
+
+model SlotChannelMapping {
+  id             String    @id @default(uuid()) @db.Uuid
+  integrationId  String    @map("integration_id") @db.Uuid
+  slotId         String    @map("slot_id") @db.Uuid
+  externalSlotId String    @map("external_slot_id") @db.VarChar(255)
+  isActive       Boolean   @default(true) @map("is_active")
+  lastSyncedAt   DateTime? @map("last_synced_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@unique([integrationId, slotId])
+  @@unique([integrationId, externalSlotId])
+  @@index([slotId, isActive])
+  @@map("slot_channel_mappings")
+}
+
+model IntegrationSyncJob {
+  id             String                   @id @default(uuid()) @db.Uuid
+  integrationId  String                   @map("integration_id") @db.Uuid
+  slotId         String?                  @map("slot_id") @db.Uuid
+  bookingId      String?                  @map("booking_id") @db.Uuid
+  direction      IntegrationDirection
+  eventType      String                   @map("event_type") @db.VarChar(100)
+  payload        Json
+  idempotencyKey String                   @unique @map("idempotency_key") @db.VarChar(255)
+  status         IntegrationSyncJobStatus @default(PENDING)
+  attempts       Int                      @default(0)
+  maxAttempts    Int                      @default(8) @map("max_attempts")
+  nextAttemptAt  DateTime                 @default(now()) @map("next_attempt_at")
+  lockedAt       DateTime?                @map("locked_at")
+  completedAt    DateTime?                @map("completed_at")
+  latencyMs      Int?                     @map("latency_ms")
+  lastError      String?                  @map("last_error") @db.Text
+  createdAt      DateTime                 @default(now()) @map("created_at")
+  updatedAt      DateTime                 @updatedAt @map("updated_at")
+
+  @@index([status, nextAttemptAt])
+  @@index([integrationId, createdAt(sort: Desc)])
+  @@index([slotId])
+  @@map("integration_sync_jobs")
+}
+
+model SlotLifecycleAudit {
+  id            String                @id @default(uuid()) @db.Uuid
+  tenantId      String                @map("tenant_id") @db.Uuid
+  slotId        String                @map("slot_id") @db.Uuid
+  bookingId     String?               @map("booking_id") @db.Uuid
+  integrationId String?               @map("integration_id") @db.Uuid
+  direction     IntegrationDirection?
+  fromStatus    SlotLifecycleStatus?  @map("from_status")
+  toStatus      SlotLifecycleStatus   @map("to_status")
+  actorId       String?               @map("actor_id") @db.Uuid
+  reason        String?               @db.VarChar(255)
+  metadata      Json?
+  createdAt     DateTime              @default(now()) @map("created_at")
+
+  @@index([slotId, createdAt(sort: Desc)])
+  @@index([tenantId, createdAt(sort: Desc)])
+  @@index([bookingId])
+  @@map("slot_lifecycle_audits")
+}
+
+model IntegrationConflict {
+  id             String                    @id @default(uuid()) @db.Uuid
+  tenantId       String                    @map("tenant_id") @db.Uuid
+  integrationId  String                    @map("integration_id") @db.Uuid
+  slotId         String?                   @map("slot_id") @db.Uuid
+  bookingId      String?                   @map("booking_id") @db.Uuid
+  externalRef    String?                   @map("external_ref") @db.VarChar(255)
+  type           IntegrationConflictType
+  status         IntegrationConflictStatus @default(OPEN)
+  details        Json
+  resolvedAt     DateTime?                 @map("resolved_at")
+  resolutionNote String?                   @map("resolution_note") @db.Text
+  createdAt      DateTime                  @default(now()) @map("created_at")
+  updatedAt      DateTime                  @updatedAt @map("updated_at")
+
+  @@index([tenantId, status, createdAt(sort: Desc)])
+  @@index([integrationId, status])
+  @@index([externalRef])
+  @@map("integration_conflicts")
+}
+
+model IntegrationWebhookEvent {
+  id              String              @id @default(uuid()) @db.Uuid
+  integrationId   String              @map("integration_id") @db.Uuid
+  provider        IntegrationProvider
+  externalEventId String              @map("external_event_id") @db.VarChar(255)
+  eventType       String              @map("event_type") @db.VarChar(100)
+  payloadHash     String              @map("payload_hash") @db.VarChar(64)
+  processedAt     DateTime?           @map("processed_at")
+  error           String?             @db.Text
+  createdAt       DateTime            @default(now()) @map("created_at")
+
+  @@unique([integrationId, externalEventId])
+  @@index([provider, createdAt(sort: Desc)])
+  @@map("integration_webhook_events")
 }
 
 model SlotSchedule {
@@ -1069,37 +1245,42 @@ model CourtClosure {
 }
 
 model Booking {
-  id             String        @id @default(uuid()) @db.Uuid
-  userId         String        @map("user_id") @db.Uuid
-  courtId        String        @map("court_id") @db.Uuid
-  slotId         String        @map("slot_id") @db.Uuid
-  couponId       String?       @map("coupon_id") @db.Uuid
-  seats          Int           @default(1)
-  source         BookingSource @default(PLAYER_APP)
-  holdToken      String?       @unique @map("hold_token") @db.Uuid
-  guestName      String?       @map("guest_name") @db.VarChar(200)
-  guestPhone     String?       @map("guest_phone") @db.VarChar(20)
-  status         BookingStatus @default(PENDING)
-  paymentStatus  PaymentStatus @default(PENDING) @map("payment_status")
-  subtotalAmount Decimal       @map("subtotal_amount") @db.Decimal(12, 2)
-  discountAmount Decimal       @default(0) @map("discount_amount") @db.Decimal(12, 2)
-  totalAmount    Decimal       @map("total_amount") @db.Decimal(12, 2)
-  checkInCode    String?       @unique @map("check_in_code") @db.VarChar(20)
-  lockedUntil    DateTime?     @map("locked_until")
-  checkedInAt    DateTime?     @map("checked_in_at")
-  cancelledAt    DateTime?     @map("cancelled_at")
-  cancelReason   String?       @map("cancel_reason") @db.VarChar(500)
-  notes          String?       @db.Text
-  deletedAt      DateTime?     @map("deleted_at")
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
+  id                     String        @id @default(uuid()) @db.Uuid
+  userId                 String        @map("user_id") @db.Uuid
+  courtId                String        @map("court_id") @db.Uuid
+  slotId                 String        @map("slot_id") @db.Uuid
+  couponId               String?       @map("coupon_id") @db.Uuid
+  seats                  Int           @default(1)
+  source                 BookingSource @default(PLAYER_APP)
+  integrationId          String?       @map("integration_id") @db.Uuid
+  externalBookingId      String?       @map("external_booking_id") @db.VarChar(255)
+  externalIdempotencyKey String?       @map("external_idempotency_key") @db.VarChar(255)
+  holdToken              String?       @unique @map("hold_token") @db.Uuid
+  guestName              String?       @map("guest_name") @db.VarChar(200)
+  guestPhone             String?       @map("guest_phone") @db.VarChar(20)
+  status                 BookingStatus @default(PENDING)
+  paymentStatus          PaymentStatus @default(PENDING) @map("payment_status")
+  subtotalAmount         Decimal       @map("subtotal_amount") @db.Decimal(12, 2)
+  discountAmount         Decimal       @default(0) @map("discount_amount") @db.Decimal(12, 2)
+  totalAmount            Decimal       @map("total_amount") @db.Decimal(12, 2)
+  checkInCode            String?       @unique @map("check_in_code") @db.VarChar(20)
+  lockedUntil            DateTime?     @map("locked_until")
+  checkedInAt            DateTime?     @map("checked_in_at")
+  cancelledAt            DateTime?     @map("cancelled_at")
+  cancelReason           String?       @map("cancel_reason") @db.VarChar(500)
+  notes                  String?       @db.Text
+  deletedAt              DateTime?     @map("deleted_at")
+  createdAt              DateTime      @default(now()) @map("created_at")
+  updatedAt              DateTime      @updatedAt @map("updated_at")
 
-  user   User      @relation(fields: [userId], references: [id], onDelete: Restrict)
-  court  Court     @relation(fields: [courtId], references: [id], onDelete: Restrict)
-  slot   CourtSlot @relation(fields: [slotId], references: [id], onDelete: Restrict)
-  coupon Coupon?   @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  court          Court           @relation(fields: [courtId], references: [id], onDelete: Restrict)
+  slot           CourtSlot       @relation(fields: [slotId], references: [id], onDelete: Restrict)
+  coupon         Coupon?         @relation(fields: [couponId], references: [id], onDelete: SetNull)
   communityMatch CommunityMatch?
 
+  @@unique([integrationId, externalBookingId])
+  @@unique([integrationId, externalIdempotencyKey])
   @@index([userId])
   @@index([courtId])
   @@index([slotId])
@@ -1110,6 +1291,7 @@ model Booking {
   @@index([userId, status, createdAt(sort: Desc)])
   @@index([courtId, status, createdAt(sort: Desc)])
   @@index([deletedAt])
+  @@index([integrationId])
   @@map("bookings")
 }
 
@@ -1210,10 +1392,10 @@ model MembershipPurchase {
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt @map("updated_at")
 
-  user        User                @relation(fields: [userId], references: [id], onDelete: Restrict)
-  plan        MembershipPlan      @relation(fields: [planId], references: [id], onDelete: Restrict)
-  coupon      Coupon?             @relation(fields: [couponId], references: [id], onDelete: SetNull)
-  renewedFrom MembershipPurchase? @relation("MembershipRenewal", fields: [renewedFromId], references: [id], onDelete: SetNull)
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Restrict)
+  plan        MembershipPlan       @relation(fields: [planId], references: [id], onDelete: Restrict)
+  coupon      Coupon?              @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  renewedFrom MembershipPurchase?  @relation("MembershipRenewal", fields: [renewedFromId], references: [id], onDelete: SetNull)
   renewals    MembershipPurchase[] @relation("MembershipRenewal")
 
   @@index([userId, isActive])
@@ -1291,10 +1473,10 @@ model TrainingBatch {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  program     TrainingProgram      @relation(fields: [programId], references: [id], onDelete: Cascade)
-  trainer     User                 @relation("BatchTrainer", fields: [trainerId], references: [id], onDelete: Restrict)
-  enrollments   TrainingEnrollment[]
-  trainingNotes TrainingNote[]
+  program        TrainingProgram      @relation(fields: [programId], references: [id], onDelete: Cascade)
+  trainer        User                 @relation("BatchTrainer", fields: [trainerId], references: [id], onDelete: Restrict)
+  enrollments    TrainingEnrollment[]
+  trainingNotes  TrainingNote[]
   communityGroup CommunityGroup?
 
   @@index([programId])
@@ -1421,14 +1603,14 @@ model Product {
   createdAt         DateTime  @default(now()) @map("created_at")
   updatedAt         DateTime  @updatedAt @map("updated_at")
 
-  category   ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  tenant     Tenant          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  sport      Sport?          @relation(fields: [sportId], references: [id], onDelete: SetNull)
-  images     ProductImage[]
-  variants   ProductVariant[]
-  cartItems  CartItem[]
-  orderItems ShopOrderItem[]
-  wishlistItems WishlistItem[]
+  category           ProductCategory     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  sport              Sport?              @relation(fields: [sportId], references: [id], onDelete: SetNull)
+  images             ProductImage[]
+  variants           ProductVariant[]
+  cartItems          CartItem[]
+  orderItems         ShopOrderItem[]
+  wishlistItems      WishlistItem[]
   inventoryMovements InventoryMovement[]
 
   @@unique([tenantId, slug])
@@ -1538,9 +1720,9 @@ model ShopOrder {
   createdAt       DateTime        @default(now()) @map("created_at")
   updatedAt       DateTime        @updatedAt @map("updated_at")
 
-  user   User            @relation(fields: [userId], references: [id], onDelete: Restrict)
-  coupon Coupon?         @relation(fields: [couponId], references: [id], onDelete: SetNull)
-  items  ShopOrderItem[]
+  user    User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  coupon  Coupon?         @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  items   ShopOrderItem[]
   invoice ShopInvoice?
 
   @@index([userId, status])
@@ -1674,30 +1856,30 @@ model ServiceListing {
 }
 
 model ServiceOrder {
-  id               String             @id @default(uuid()) @db.Uuid
-  orderNumber      String             @unique @map("order_number") @db.VarChar(30)
-  userId           String             @map("user_id") @db.Uuid
-  listingId        String             @map("listing_id") @db.Uuid
-  providerId       String             @map("provider_id") @db.Uuid
-  couponId         String?            @map("coupon_id") @db.Uuid
-  status           ServiceOrderStatus @default(PENDING)
-  paymentStatus    PaymentStatus      @default(PENDING) @map("payment_status")
-  subtotalAmount   Decimal            @map("subtotal_amount") @db.Decimal(12, 2)
-  discountAmount   Decimal            @default(0) @map("discount_amount") @db.Decimal(12, 2)
-  totalAmount      Decimal            @map("total_amount") @db.Decimal(12, 2)
-  customerNotes    String?            @map("customer_notes") @db.Text
-  equipmentDetails String?            @map("equipment_details") @db.Text
-  pickupAddress    String             @map("pickup_address") @db.VarChar(500)
-  pickupPhone      String             @map("pickup_phone") @db.VarChar(20)
-  pickupCity       String             @map("pickup_city") @db.VarChar(100)
-  providerNotes    String?            @map("provider_notes") @db.Text
-  trackingReference String?           @map("tracking_reference") @db.VarChar(100)
-  rentalStartDate  DateTime?          @map("rental_start_date")
-  rentalEndDate    DateTime?            @map("rental_end_date")
-  completedAt      DateTime?          @map("completed_at")
-  deletedAt        DateTime?          @map("deleted_at")
-  createdAt        DateTime           @default(now()) @map("created_at")
-  updatedAt        DateTime           @updatedAt @map("updated_at")
+  id                String             @id @default(uuid()) @db.Uuid
+  orderNumber       String             @unique @map("order_number") @db.VarChar(30)
+  userId            String             @map("user_id") @db.Uuid
+  listingId         String             @map("listing_id") @db.Uuid
+  providerId        String             @map("provider_id") @db.Uuid
+  couponId          String?            @map("coupon_id") @db.Uuid
+  status            ServiceOrderStatus @default(PENDING)
+  paymentStatus     PaymentStatus      @default(PENDING) @map("payment_status")
+  subtotalAmount    Decimal            @map("subtotal_amount") @db.Decimal(12, 2)
+  discountAmount    Decimal            @default(0) @map("discount_amount") @db.Decimal(12, 2)
+  totalAmount       Decimal            @map("total_amount") @db.Decimal(12, 2)
+  customerNotes     String?            @map("customer_notes") @db.Text
+  equipmentDetails  String?            @map("equipment_details") @db.Text
+  pickupAddress     String             @map("pickup_address") @db.VarChar(500)
+  pickupPhone       String             @map("pickup_phone") @db.VarChar(20)
+  pickupCity        String             @map("pickup_city") @db.VarChar(100)
+  providerNotes     String?            @map("provider_notes") @db.Text
+  trackingReference String?            @map("tracking_reference") @db.VarChar(100)
+  rentalStartDate   DateTime?          @map("rental_start_date")
+  rentalEndDate     DateTime?          @map("rental_end_date")
+  completedAt       DateTime?          @map("completed_at")
+  deletedAt         DateTime?          @map("deleted_at")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
 
   user     User           @relation("ServiceCustomers", fields: [userId], references: [id], onDelete: Restrict)
   listing  ServiceListing @relation(fields: [listingId], references: [id], onDelete: Restrict)
@@ -2010,15 +2192,15 @@ model Notification {
 }
 
 model NotificationPreference {
-  id           String   @id @default(uuid()) @db.Uuid
-  userId       String   @unique @map("user_id") @db.Uuid
-  emailEnabled Boolean  @default(true) @map("email_enabled")
-  smsEnabled   Boolean  @default(true) @map("sms_enabled")
-  pushEnabled  Boolean  @default(true) @map("push_enabled")
-  inAppEnabled Boolean  @default(true) @map("in_app_enabled")
-  typeOverrides Json?   @map("type_overrides") @db.JsonB
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @unique @map("user_id") @db.Uuid
+  emailEnabled  Boolean  @default(true) @map("email_enabled")
+  smsEnabled    Boolean  @default(true) @map("sms_enabled")
+  pushEnabled   Boolean  @default(true) @map("push_enabled")
+  inAppEnabled  Boolean  @default(true) @map("in_app_enabled")
+  typeOverrides Json?    @map("type_overrides") @db.JsonB
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -2133,20 +2315,20 @@ enum PayrollLineStatus {
 }
 
 model Expense {
-  id            String                 @id @default(uuid()) @db.Uuid
-  tenantId      String                 @map("tenant_id") @db.Uuid
-  courtId       String?                @map("court_id") @db.Uuid
-  createdById   String                 @map("created_by_id") @db.Uuid
-  title         String                 @db.VarChar(200)
-  category      String                 @db.VarChar(100)
-  amount        Decimal                @db.Decimal(12, 2)
-  date          DateTime               @db.Date
-  notes         String?                @db.Text
-  paymentMethod ExpensePaymentMethod?  @map("payment_method")
-  receiptUrl    String?                @map("receipt_url") @db.VarChar(500)
-  deletedAt     DateTime?              @map("deleted_at")
-  createdAt     DateTime               @default(now()) @map("created_at")
-  updatedAt     DateTime               @updatedAt @map("updated_at")
+  id            String                @id @default(uuid()) @db.Uuid
+  tenantId      String                @map("tenant_id") @db.Uuid
+  courtId       String?               @map("court_id") @db.Uuid
+  createdById   String                @map("created_by_id") @db.Uuid
+  title         String                @db.VarChar(200)
+  category      String                @db.VarChar(100)
+  amount        Decimal               @db.Decimal(12, 2)
+  date          DateTime              @db.Date
+  notes         String?               @db.Text
+  paymentMethod ExpensePaymentMethod? @map("payment_method")
+  receiptUrl    String?               @map("receipt_url") @db.VarChar(500)
+  deletedAt     DateTime?             @map("deleted_at")
+  createdAt     DateTime              @default(now()) @map("created_at")
+  updatedAt     DateTime              @updatedAt @map("updated_at")
 
   tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   createdBy User   @relation("ExpenseCreator", fields: [createdById], references: [id], onDelete: Restrict)
@@ -2158,18 +2340,18 @@ model Expense {
 }
 
 model SlotTypeConfig {
-  id           String    @id @default(uuid()) @db.Uuid
-  tenantId     String    @map("tenant_id") @db.Uuid
-  name         String    @db.VarChar(100)
-  description  String    @db.Text
-  durationMin  Int       @map("duration_min")
-  multiplier   Decimal   @db.Decimal(6, 2)
-  color        String    @db.VarChar(40)
-  sortOrder    Int       @default(0) @map("sort_order")
-  isActive     Boolean   @default(true) @map("is_active")
-  deletedAt    DateTime? @map("deleted_at")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  name        String    @db.VarChar(100)
+  description String    @db.Text
+  durationMin Int       @map("duration_min")
+  multiplier  Decimal   @db.Decimal(6, 2)
+  color       String    @db.VarChar(40)
+  sortOrder   Int       @default(0) @map("sort_order")
+  isActive    Boolean   @default(true) @map("is_active")
+  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
@@ -2203,14 +2385,14 @@ model StaffShift {
 }
 
 model PayrollPeriod {
-  id        String               @id @default(uuid()) @db.Uuid
-  tenantId  String               @map("tenant_id") @db.Uuid
-  startDate DateTime             @map("start_date") @db.Date
-  endDate   DateTime             @map("end_date") @db.Date
-  status    PayrollPeriodStatus  @default(OPEN)
-  deletedAt DateTime?            @map("deleted_at")
-  createdAt DateTime             @default(now()) @map("created_at")
-  updatedAt DateTime             @updatedAt @map("updated_at")
+  id        String              @id @default(uuid()) @db.Uuid
+  tenantId  String              @map("tenant_id") @db.Uuid
+  startDate DateTime            @map("start_date") @db.Date
+  endDate   DateTime            @map("end_date") @db.Date
+  status    PayrollPeriodStatus @default(OPEN)
+  deletedAt DateTime?           @map("deleted_at")
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
 
   tenant Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   lines  PayrollLine[]
@@ -2282,18 +2464,18 @@ model PlayerCrmProfile {
 }
 
 model SupportTicket {
-  id              String               @id @default(uuid()) @db.Uuid
-  subject         String               @db.VarChar(300)
-  body            String               @db.Text
-  status          SupportTicketStatus  @default(OPEN)
-  requesterEmail  String               @map("requester_email") @db.VarChar(255)
-  requesterName   String               @map("requester_name") @db.VarChar(200)
-  assignedToId    String?              @map("assigned_to_id") @db.Uuid
-  tenantId        String?              @map("tenant_id") @db.Uuid
-  createdById     String?              @map("created_by_id") @db.Uuid
-  deletedAt       DateTime?            @map("deleted_at")
-  createdAt       DateTime             @default(now()) @map("created_at")
-  updatedAt       DateTime             @updatedAt @map("updated_at")
+  id             String              @id @default(uuid()) @db.Uuid
+  subject        String              @db.VarChar(300)
+  body           String              @db.Text
+  status         SupportTicketStatus @default(OPEN)
+  requesterEmail String              @map("requester_email") @db.VarChar(255)
+  requesterName  String              @map("requester_name") @db.VarChar(200)
+  assignedToId   String?             @map("assigned_to_id") @db.Uuid
+  tenantId       String?             @map("tenant_id") @db.Uuid
+  createdById    String?             @map("created_by_id") @db.Uuid
+  deletedAt      DateTime?           @map("deleted_at")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
 
   assignedTo User?   @relation("SupportTicketAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   createdBy  User?   @relation("SupportTicketCreator", fields: [createdById], references: [id], onDelete: SetNull)
@@ -2344,10 +2526,10 @@ model OwnerSubscription {
   createdAt   DateTime                @default(now()) @map("created_at")
   updatedAt   DateTime                @updatedAt @map("updated_at")
 
-  owner   User              @relation("SubscriptionOwner", fields: [ownerId], references: [id], onDelete: Restrict)
-  tenant  Tenant            @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  plan    SubscriptionPlan  @relation(fields: [planId], references: [id], onDelete: Restrict)
-  invoice FinanceInvoice?   @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  owner   User             @relation("SubscriptionOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  tenant  Tenant           @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  plan    SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
+  invoice FinanceInvoice?  @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
 
   @@index([ownerId, status])
   @@index([tenantId, status])
@@ -2356,16 +2538,16 @@ model OwnerSubscription {
 }
 
 model CommissionRule {
-  id          String                @id @default(uuid()) @db.Uuid
-  serviceType CommissionServiceType @map("service_type")
-  ratePercent Decimal               @map("rate_percent") @db.Decimal(5, 2)
-  flatFee     Decimal?              @map("flat_fee") @db.Decimal(12, 2)
-  tenantId    String?               @map("tenant_id") @db.Uuid
-  effectiveFrom DateTime            @default(now()) @map("effective_from")
-  effectiveTo   DateTime?           @map("effective_to")
-  isActive    Boolean               @default(true) @map("is_active")
-  createdAt   DateTime              @default(now()) @map("created_at")
-  updatedAt   DateTime              @updatedAt @map("updated_at")
+  id            String                @id @default(uuid()) @db.Uuid
+  serviceType   CommissionServiceType @map("service_type")
+  ratePercent   Decimal               @map("rate_percent") @db.Decimal(5, 2)
+  flatFee       Decimal?              @map("flat_fee") @db.Decimal(12, 2)
+  tenantId      String?               @map("tenant_id") @db.Uuid
+  effectiveFrom DateTime              @default(now()) @map("effective_from")
+  effectiveTo   DateTime?             @map("effective_to")
+  isActive      Boolean               @default(true) @map("is_active")
+  createdAt     DateTime              @default(now()) @map("created_at")
+  updatedAt     DateTime              @updatedAt @map("updated_at")
 
   @@index([serviceType, isActive])
   @@index([tenantId])
@@ -2373,22 +2555,22 @@ model CommissionRule {
 }
 
 model Commission {
-  id               String                @id @default(uuid()) @db.Uuid
-  paymentId        String                @unique @map("payment_id") @db.Uuid
-  serviceType      CommissionServiceType @map("service_type")
-  grossAmount      Decimal               @map("gross_amount") @db.Decimal(12, 2)
-  ratePercent      Decimal               @map("rate_percent") @db.Decimal(5, 2)
-  commissionAmount Decimal               @map("commission_amount") @db.Decimal(12, 2)
-  netAmount        Decimal               @map("net_amount") @db.Decimal(12, 2)
-  tenantId         String?               @map("tenant_id") @db.Uuid
-  beneficiaryUserId String?              @map("beneficiary_user_id") @db.Uuid
-  isReceivable     Boolean               @default(false) @map("is_receivable")
-  status           String                @default("POSTED") @db.VarChar(30)
-  createdAt        DateTime              @default(now()) @map("created_at")
-  updatedAt        DateTime              @updatedAt @map("updated_at")
+  id                String                @id @default(uuid()) @db.Uuid
+  paymentId         String                @unique @map("payment_id") @db.Uuid
+  serviceType       CommissionServiceType @map("service_type")
+  grossAmount       Decimal               @map("gross_amount") @db.Decimal(12, 2)
+  ratePercent       Decimal               @map("rate_percent") @db.Decimal(5, 2)
+  commissionAmount  Decimal               @map("commission_amount") @db.Decimal(12, 2)
+  netAmount         Decimal               @map("net_amount") @db.Decimal(12, 2)
+  tenantId          String?               @map("tenant_id") @db.Uuid
+  beneficiaryUserId String?               @map("beneficiary_user_id") @db.Uuid
+  isReceivable      Boolean               @default(false) @map("is_receivable")
+  status            String                @default("POSTED") @db.VarChar(30)
+  createdAt         DateTime              @default(now()) @map("created_at")
+  updatedAt         DateTime              @updatedAt @map("updated_at")
 
-  tenant      Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  beneficiary User?   @relation("CommissionBeneficiary", fields: [beneficiaryUserId], references: [id], onDelete: SetNull)
+  tenant          Tenant?          @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  beneficiary     User?            @relation("CommissionBeneficiary", fields: [beneficiaryUserId], references: [id], onDelete: SetNull)
   settlementLines SettlementLine[]
 
   @@index([tenantId, createdAt(sort: Desc)])
@@ -2398,20 +2580,20 @@ model Commission {
 }
 
 model MerchantWallet {
-  id             String             @id @default(uuid()) @db.Uuid
-  ownerUserId    String             @map("owner_user_id") @db.Uuid
-  tenantId       String?            @map("tenant_id") @db.Uuid
-  role           MerchantWalletRole
-  available      Decimal            @default(0) @db.Decimal(12, 2)
-  pending        Decimal            @default(0) @db.Decimal(12, 2)
-  lifetimeEarned Decimal            @default(0) @map("lifetime_earned") @db.Decimal(12, 2)
-  lifetimePaidOut Decimal           @default(0) @map("lifetime_paid_out") @db.Decimal(12, 2)
-  currency       String             @default("INR") @db.VarChar(3)
-  createdAt      DateTime           @default(now()) @map("created_at")
-  updatedAt      DateTime           @updatedAt @map("updated_at")
+  id              String             @id @default(uuid()) @db.Uuid
+  ownerUserId     String             @map("owner_user_id") @db.Uuid
+  tenantId        String?            @map("tenant_id") @db.Uuid
+  role            MerchantWalletRole
+  available       Decimal            @default(0) @db.Decimal(12, 2)
+  pending         Decimal            @default(0) @db.Decimal(12, 2)
+  lifetimeEarned  Decimal            @default(0) @map("lifetime_earned") @db.Decimal(12, 2)
+  lifetimePaidOut Decimal            @default(0) @map("lifetime_paid_out") @db.Decimal(12, 2)
+  currency        String             @default("INR") @db.VarChar(3)
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
 
-  owner  User    @relation(fields: [ownerUserId], references: [id], onDelete: Restrict)
-  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  owner         User          @relation(fields: [ownerUserId], references: [id], onDelete: Restrict)
+  tenant        Tenant?       @relation(fields: [tenantId], references: [id], onDelete: SetNull)
   ledgerEntries LedgerEntry[]
 
   @@unique([ownerUserId, role])
@@ -2533,19 +2715,19 @@ model Payout {
 }
 
 model FinanceInvoice {
-  id             String             @id @default(uuid()) @db.Uuid
-  type           FinanceInvoiceType
-  invoiceNumber  String             @unique @map("invoice_number") @db.VarChar(40)
-  partyUserId    String             @map("party_user_id") @db.Uuid
-  tenantId       String?            @map("tenant_id") @db.Uuid
-  subtotal       Decimal            @db.Decimal(12, 2)
-  gst            Decimal            @default(0) @db.Decimal(12, 2)
-  total          Decimal            @db.Decimal(12, 2)
-  lineItems      Json               @map("line_items")
-  pdfUrl         String?            @map("pdf_url") @db.VarChar(500)
-  settlementId   String?            @unique @map("settlement_id") @db.Uuid
-  paymentId      String?            @map("payment_id") @db.Uuid
-  createdAt      DateTime           @default(now()) @map("created_at")
+  id            String             @id @default(uuid()) @db.Uuid
+  type          FinanceInvoiceType
+  invoiceNumber String             @unique @map("invoice_number") @db.VarChar(40)
+  partyUserId   String             @map("party_user_id") @db.Uuid
+  tenantId      String?            @map("tenant_id") @db.Uuid
+  subtotal      Decimal            @db.Decimal(12, 2)
+  gst           Decimal            @default(0) @db.Decimal(12, 2)
+  total         Decimal            @db.Decimal(12, 2)
+  lineItems     Json               @map("line_items")
+  pdfUrl        String?            @map("pdf_url") @db.VarChar(500)
+  settlementId  String?            @unique @map("settlement_id") @db.Uuid
+  paymentId     String?            @map("payment_id") @db.Uuid
+  createdAt     DateTime           @default(now()) @map("created_at")
 
   party        User               @relation("FinanceInvoiceParty", fields: [partyUserId], references: [id], onDelete: Restrict)
   tenant       Tenant?            @relation(fields: [tenantId], references: [id], onDelete: SetNull)
@@ -2758,42 +2940,42 @@ enum CommunityPollStatus {
 }
 
 model CommunityGroup {
-  id              String                 @id @default(uuid()) @db.Uuid
-  tenantId        String?                @map("tenant_id") @db.Uuid
-  ownerId         String                 @map("owner_id") @db.Uuid
-  sportId         String?                @map("sport_id") @db.Uuid
-  homeCourtId     String?                @map("home_court_id") @db.Uuid
-  trainingBatchId String?                @unique @map("training_batch_id") @db.Uuid
-  name            String                 @db.VarChar(160)
-  slug            String                 @db.VarChar(180)
-  description     String?                @db.Text
-  rules           String?                @db.Text
-  coverPhotoUrl   String?                @map("cover_photo_url") @db.VarChar(500)
-  emoji           String?                @db.VarChar(16)
-  groupType       CommunityGroupType     @map("group_type")
-  privacy         CommunityPrivacy       @default(PUBLIC)
-  skillLevel      CommunitySkillLevel    @default(INTERMEDIATE) @map("skill_level")
-  maxPlayers      Int                    @default(20) @map("max_players")
-  locationLabel   String?                @map("location_label") @db.VarChar(200)
-  city            String?                @db.VarChar(100)
-  latitude        Decimal?               @db.Decimal(10, 7)
-  longitude       Decimal?               @db.Decimal(10, 7)
-  playingDays     String[]               @default([]) @map("playing_days")
+  id              String                   @id @default(uuid()) @db.Uuid
+  tenantId        String?                  @map("tenant_id") @db.Uuid
+  ownerId         String                   @map("owner_id") @db.Uuid
+  sportId         String?                  @map("sport_id") @db.Uuid
+  homeCourtId     String?                  @map("home_court_id") @db.Uuid
+  trainingBatchId String?                  @unique @map("training_batch_id") @db.Uuid
+  name            String                   @db.VarChar(160)
+  slug            String                   @db.VarChar(180)
+  description     String?                  @db.Text
+  rules           String?                  @db.Text
+  coverPhotoUrl   String?                  @map("cover_photo_url") @db.VarChar(500)
+  emoji           String?                  @db.VarChar(16)
+  groupType       CommunityGroupType       @map("group_type")
+  privacy         CommunityPrivacy         @default(PUBLIC)
+  skillLevel      CommunitySkillLevel      @default(INTERMEDIATE) @map("skill_level")
+  maxPlayers      Int                      @default(20) @map("max_players")
+  locationLabel   String?                  @map("location_label") @db.VarChar(200)
+  city            String?                  @db.VarChar(100)
+  latitude        Decimal?                 @db.Decimal(10, 7)
+  longitude       Decimal?                 @db.Decimal(10, 7)
+  playingDays     String[]                 @default([]) @map("playing_days")
   playingWindows  CommunityPlayingWindow[] @default([]) @map("playing_windows")
-  ratingAvg       Decimal                @default(0) @map("rating_avg") @db.Decimal(3, 2)
-  ratingCount     Int                    @default(0) @map("rating_count")
-  memberCount     Int                    @default(1) @map("member_count")
-  isTrending      Boolean                @default(false) @map("is_trending")
-  lastActivityAt  DateTime               @default(now()) @map("last_activity_at")
-  deletedAt       DateTime?              @map("deleted_at")
-  createdAt       DateTime               @default(now()) @map("created_at")
-  updatedAt       DateTime               @updatedAt @map("updated_at")
+  ratingAvg       Decimal                  @default(0) @map("rating_avg") @db.Decimal(3, 2)
+  ratingCount     Int                      @default(0) @map("rating_count")
+  memberCount     Int                      @default(1) @map("member_count")
+  isTrending      Boolean                  @default(false) @map("is_trending")
+  lastActivityAt  DateTime                 @default(now()) @map("last_activity_at")
+  deletedAt       DateTime?                @map("deleted_at")
+  createdAt       DateTime                 @default(now()) @map("created_at")
+  updatedAt       DateTime                 @updatedAt @map("updated_at")
 
-  tenant         Tenant?                 @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  owner          User                    @relation("CommunityGroupOwner", fields: [ownerId], references: [id], onDelete: Restrict)
-  sport          Sport?                  @relation(fields: [sportId], references: [id], onDelete: SetNull)
-  homeCourt      Court?                  @relation("CommunityHomeCourt", fields: [homeCourtId], references: [id], onDelete: SetNull)
-  trainingBatch  TrainingBatch?          @relation(fields: [trainingBatchId], references: [id], onDelete: SetNull)
+  tenant         Tenant?                     @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  owner          User                        @relation("CommunityGroupOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  sport          Sport?                      @relation(fields: [sportId], references: [id], onDelete: SetNull)
+  homeCourt      Court?                      @relation("CommunityHomeCourt", fields: [homeCourtId], references: [id], onDelete: SetNull)
+  trainingBatch  TrainingBatch?              @relation(fields: [trainingBatchId], references: [id], onDelete: SetNull)
   members        CommunityGroupMember[]
   joinRequests   CommunityJoinRequest[]
   matches        CommunityMatch[]
@@ -2860,43 +3042,43 @@ model CommunityJoinRequest {
 }
 
 model CommunityMatch {
-  id               String               @id @default(uuid()) @db.Uuid
-  groupId          String               @map("group_id") @db.Uuid
-  createdById      String               @map("created_by_id") @db.Uuid
-  courtId          String?              @map("court_id") @db.Uuid
-  bookingId        String?              @unique @map("booking_id") @db.Uuid
-  title            String               @db.VarChar(200)
-  venueLabel       String?              @map("venue_label") @db.VarChar(200)
-  startsAt         DateTime             @map("starts_at")
-  endsAt           DateTime?            @map("ends_at")
-  requiredPlayers  Int                  @default(4) @map("required_players")
-  confirmedCount   Int                  @default(0) @map("confirmed_count")
-  skillLevel       CommunitySkillLevel  @default(INTERMEDIATE) @map("skill_level")
-  entryFee         Decimal              @default(0) @map("entry_fee") @db.Decimal(12, 2)
-  shuttleIncluded  Boolean              @default(false) @map("shuttle_included")
-  ballIncluded     Boolean              @default(false) @map("ball_included")
-  matchType        CommunityMatchType   @default(FRIENDLY) @map("match_type")
-  status           CommunityMatchStatus @default(WAITING_PLAYERS)
-  needsPlayers     Boolean              @default(true) @map("needs_players")
-  scoreHome        Int?                 @map("score_home")
-  scoreAway        Int?                 @map("score_away")
-  winnerLabel      String?              @map("winner_label") @db.VarChar(120)
-  liveStartedAt    DateTime?            @map("live_started_at")
-  completedAt      DateTime?            @map("completed_at")
-  cancelledAt      DateTime?            @map("cancelled_at")
-  cancelReason     String?              @map("cancel_reason") @db.VarChar(500)
-  deletedAt        DateTime?            @map("deleted_at")
-  createdAt        DateTime             @default(now()) @map("created_at")
-  updatedAt        DateTime             @updatedAt @map("updated_at")
+  id              String               @id @default(uuid()) @db.Uuid
+  groupId         String               @map("group_id") @db.Uuid
+  createdById     String               @map("created_by_id") @db.Uuid
+  courtId         String?              @map("court_id") @db.Uuid
+  bookingId       String?              @unique @map("booking_id") @db.Uuid
+  title           String               @db.VarChar(200)
+  venueLabel      String?              @map("venue_label") @db.VarChar(200)
+  startsAt        DateTime             @map("starts_at")
+  endsAt          DateTime?            @map("ends_at")
+  requiredPlayers Int                  @default(4) @map("required_players")
+  confirmedCount  Int                  @default(0) @map("confirmed_count")
+  skillLevel      CommunitySkillLevel  @default(INTERMEDIATE) @map("skill_level")
+  entryFee        Decimal              @default(0) @map("entry_fee") @db.Decimal(12, 2)
+  shuttleIncluded Boolean              @default(false) @map("shuttle_included")
+  ballIncluded    Boolean              @default(false) @map("ball_included")
+  matchType       CommunityMatchType   @default(FRIENDLY) @map("match_type")
+  status          CommunityMatchStatus @default(WAITING_PLAYERS)
+  needsPlayers    Boolean              @default(true) @map("needs_players")
+  scoreHome       Int?                 @map("score_home")
+  scoreAway       Int?                 @map("score_away")
+  winnerLabel     String?              @map("winner_label") @db.VarChar(120)
+  liveStartedAt   DateTime?            @map("live_started_at")
+  completedAt     DateTime?            @map("completed_at")
+  cancelledAt     DateTime?            @map("cancelled_at")
+  cancelReason    String?              @map("cancel_reason") @db.VarChar(500)
+  deletedAt       DateTime?            @map("deleted_at")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
 
-  group       CommunityGroup              @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  createdBy   User                        @relation("CommunityMatchCreator", fields: [createdById], references: [id], onDelete: Restrict)
-  court       Court?                      @relation(fields: [courtId], references: [id], onDelete: SetNull)
-  booking     Booking?                    @relation(fields: [bookingId], references: [id], onDelete: SetNull)
-  players     CommunityMatchPlayer[]
-  attendance  CommunityMatchAttendance[]
-  media       CommunityMedia[]
-  reminders   CommunityMatchReminder[]
+  group      CommunityGroup             @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdBy  User                       @relation("CommunityMatchCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  court      Court?                     @relation(fields: [courtId], references: [id], onDelete: SetNull)
+  booking    Booking?                   @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  players    CommunityMatchPlayer[]
+  attendance CommunityMatchAttendance[]
+  media      CommunityMedia[]
+  reminders  CommunityMatchReminder[]
 
   @@index([groupId, startsAt])
   @@index([status, startsAt])
@@ -2907,15 +3089,15 @@ model CommunityMatch {
 }
 
 model CommunityMatchPlayer {
-  id        String              @id @default(uuid()) @db.Uuid
-  matchId   String              @map("match_id") @db.Uuid
-  userId    String              @map("user_id") @db.Uuid
-  rsvp      CommunityRsvpStatus @default(COMING)
-  note      String?             @db.VarChar(300)
-  isHost    Boolean             @default(false) @map("is_host")
-  checkedInAt DateTime?         @map("checked_in_at")
-  createdAt DateTime            @default(now()) @map("created_at")
-  updatedAt DateTime            @updatedAt @map("updated_at")
+  id          String              @id @default(uuid()) @db.Uuid
+  matchId     String              @map("match_id") @db.Uuid
+  userId      String              @map("user_id") @db.Uuid
+  rsvp        CommunityRsvpStatus @default(COMING)
+  note        String?             @db.VarChar(300)
+  isHost      Boolean             @default(false) @map("is_host")
+  checkedInAt DateTime?           @map("checked_in_at")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
 
   match CommunityMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
   user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -2927,12 +3109,12 @@ model CommunityMatchPlayer {
 }
 
 model CommunityMatchReminder {
-  id          String   @id @default(uuid()) @db.Uuid
-  matchId     String   @map("match_id") @db.Uuid
-  offsetMinutes Int    @map("offset_minutes")
-  scheduledFor DateTime @map("scheduled_for")
-  sentAt      DateTime? @map("sent_at")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id            String    @id @default(uuid()) @db.Uuid
+  matchId       String    @map("match_id") @db.Uuid
+  offsetMinutes Int       @map("offset_minutes")
+  scheduledFor  DateTime  @map("scheduled_for")
+  sentAt        DateTime? @map("sent_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
 
   match CommunityMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
 
@@ -2942,14 +3124,14 @@ model CommunityMatchReminder {
 }
 
 model CommunityMatchAttendance {
-  id          String                    @id @default(uuid()) @db.Uuid
-  matchId     String                    @map("match_id") @db.Uuid
-  userId      String                    @map("user_id") @db.Uuid
-  status      CommunityAttendanceStatus @default(CHECKED_IN)
-  checkInMethod String                  @default("MANUAL") @map("check_in_method") @db.VarChar(20)
-  qrPayload   String?                   @map("qr_payload") @db.VarChar(120)
-  checkedInAt DateTime                  @default(now()) @map("checked_in_at")
-  createdAt   DateTime                  @default(now()) @map("created_at")
+  id            String                    @id @default(uuid()) @db.Uuid
+  matchId       String                    @map("match_id") @db.Uuid
+  userId        String                    @map("user_id") @db.Uuid
+  status        CommunityAttendanceStatus @default(CHECKED_IN)
+  checkInMethod String                    @default("MANUAL") @map("check_in_method") @db.VarChar(20)
+  qrPayload     String?                   @map("qr_payload") @db.VarChar(120)
+  checkedInAt   DateTime                  @default(now()) @map("checked_in_at")
+  createdAt     DateTime                  @default(now()) @map("created_at")
 
   match CommunityMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
   user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -2960,24 +3142,24 @@ model CommunityMatchAttendance {
 }
 
 model CommunityMessage {
-  id              String               @id @default(uuid()) @db.Uuid
-  groupId         String               @map("group_id") @db.Uuid
-  authorId        String               @map("author_id") @db.Uuid
-  type            CommunityMessageType @default(TEXT)
-  body            String?              @db.Text
-  mediaUrl        String?              @map("media_url") @db.VarChar(500)
-  mediaMimeType   String?              @map("media_mime_type") @db.VarChar(100)
-  replyToId       String?              @map("reply_to_id") @db.Uuid
-  mentionUserIds  String[]             @default([]) @map("mention_user_ids") @db.Uuid
-  isPinned        Boolean              @default(false) @map("is_pinned")
-  deletedAt       DateTime?            @map("deleted_at")
-  createdAt       DateTime             @default(now()) @map("created_at")
-  updatedAt       DateTime             @updatedAt @map("updated_at")
+  id             String               @id @default(uuid()) @db.Uuid
+  groupId        String               @map("group_id") @db.Uuid
+  authorId       String               @map("author_id") @db.Uuid
+  type           CommunityMessageType @default(TEXT)
+  body           String?              @db.Text
+  mediaUrl       String?              @map("media_url") @db.VarChar(500)
+  mediaMimeType  String?              @map("media_mime_type") @db.VarChar(100)
+  replyToId      String?              @map("reply_to_id") @db.Uuid
+  mentionUserIds String[]             @default([]) @map("mention_user_ids") @db.Uuid
+  isPinned       Boolean              @default(false) @map("is_pinned")
+  deletedAt      DateTime?            @map("deleted_at")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
 
-  group     CommunityGroup               @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  author    User                         @relation("CommunityMessageAuthor", fields: [authorId], references: [id], onDelete: Restrict)
-  replyTo   CommunityMessage?            @relation("CommunityMessageThread", fields: [replyToId], references: [id], onDelete: SetNull)
-  replies   CommunityMessage[]           @relation("CommunityMessageThread")
+  group     CommunityGroup             @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author    User                       @relation("CommunityMessageAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  replyTo   CommunityMessage?          @relation("CommunityMessageThread", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   CommunityMessage[]         @relation("CommunityMessageThread")
   reactions CommunityMessageReaction[]
   pins      CommunityPinnedMessage[]
   receipts  CommunityMessageReceipt[]
@@ -3072,10 +3254,10 @@ model CommunityPoll {
 }
 
 model CommunityPollOption {
-  id     String @id @default(uuid()) @db.Uuid
-  pollId String @map("poll_id") @db.Uuid
-  label  String @db.VarChar(200)
-  sortOrder Int @default(0) @map("sort_order")
+  id        String @id @default(uuid()) @db.Uuid
+  pollId    String @map("poll_id") @db.Uuid
+  label     String @db.VarChar(200)
+  sortOrder Int    @default(0) @map("sort_order")
 
   poll  CommunityPoll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
   votes CommunityPollVote[]
@@ -3101,15 +3283,15 @@ model CommunityPollVote {
 }
 
 model CommunityMedia {
-  id        String   @id @default(uuid()) @db.Uuid
-  groupId   String   @map("group_id") @db.Uuid
-  matchId   String?  @map("match_id") @db.Uuid
-  uploadedById String @map("uploaded_by_id") @db.Uuid
-  url       String   @db.VarChar(500)
-  mimeType  String   @map("mime_type") @db.VarChar(100)
-  kind      String   @default("IMAGE") @db.VarChar(20)
-  caption   String?  @db.VarChar(300)
-  createdAt DateTime @default(now()) @map("created_at")
+  id           String   @id @default(uuid()) @db.Uuid
+  groupId      String   @map("group_id") @db.Uuid
+  matchId      String?  @map("match_id") @db.Uuid
+  uploadedById String   @map("uploaded_by_id") @db.Uuid
+  url          String   @db.VarChar(500)
+  mimeType     String   @map("mime_type") @db.VarChar(100)
+  kind         String   @default("IMAGE") @db.VarChar(20)
+  caption      String?  @db.VarChar(300)
+  createdAt    DateTime @default(now()) @map("created_at")
 
   group CommunityGroup  @relation(fields: [groupId], references: [id], onDelete: Cascade)
   match CommunityMatch? @relation(fields: [matchId], references: [id], onDelete: SetNull)
@@ -3171,15 +3353,15 @@ model CommunityReport {
 }
 
 model CommunityFeedItem {
-  id        String               @id @default(uuid()) @db.Uuid
-  groupId   String?              @map("group_id") @db.Uuid
-  authorId  String?              @map("author_id") @db.Uuid
+  id        String                @id @default(uuid()) @db.Uuid
+  groupId   String?               @map("group_id") @db.Uuid
+  authorId  String?               @map("author_id") @db.Uuid
   type      CommunityFeedItemType
-  title     String               @db.VarChar(200)
-  body      String?              @db.Text
-  imageUrl  String?              @map("image_url") @db.VarChar(500)
+  title     String                @db.VarChar(200)
+  body      String?               @db.Text
+  imageUrl  String?               @map("image_url") @db.VarChar(500)
   payload   Json?
-  createdAt DateTime             @default(now()) @map("created_at")
+  createdAt DateTime              @default(now()) @map("created_at")
 
   group  CommunityGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
   author User?           @relation("FeedAuthor", fields: [authorId], references: [id], onDelete: SetNull)
@@ -3191,14 +3373,14 @@ model CommunityFeedItem {
 }
 
 model CommunityAchievement {
-  id        String   @id @default(uuid()) @db.Uuid
-  groupId   String?  @map("group_id") @db.Uuid
-  userId    String   @map("user_id") @db.Uuid
-  code      String   @db.VarChar(80)
-  title     String   @db.VarChar(160)
-  description String? @db.VarChar(300)
-  iconEmoji String?  @map("icon_emoji") @db.VarChar(16)
-  awardedAt DateTime @default(now()) @map("awarded_at")
+  id          String   @id @default(uuid()) @db.Uuid
+  groupId     String?  @map("group_id") @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  code        String   @db.VarChar(80)
+  title       String   @db.VarChar(160)
+  description String?  @db.VarChar(300)
+  iconEmoji   String?  @map("icon_emoji") @db.VarChar(16)
+  awardedAt   DateTime @default(now()) @map("awarded_at")
 
   group CommunityGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
   user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -3209,14 +3391,14 @@ model CommunityAchievement {
 }
 
 model CommunityLeaderboardEntry {
-  id        String   @id @default(uuid()) @db.Uuid
-  groupId   String   @map("group_id") @db.Uuid
-  userId    String   @map("user_id") @db.Uuid
-  points    Int      @default(0)
-  matchesPlayed Int  @default(0) @map("matches_played")
-  wins      Int      @default(0)
-  participationPct Decimal @default(0) @map("participation_pct") @db.Decimal(5, 2)
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id               String   @id @default(uuid()) @db.Uuid
+  groupId          String   @map("group_id") @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  points           Int      @default(0)
+  matchesPlayed    Int      @default(0) @map("matches_played")
+  wins             Int      @default(0)
+  participationPct Decimal  @default(0) @map("participation_pct") @db.Decimal(5, 2)
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
   group CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
 

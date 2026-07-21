@@ -29,6 +29,7 @@ import { VenueOpsModule } from './venue-ops/venue-ops.module';
 import { SupportModule } from './support/support.module';
 import { FinanceModule } from './finance/finance.module';
 import { CommunityModule } from './community/community.module';
+import { IntegrationsModule } from './integrations/integrations.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { CommunityModule } from './community/community.module';
     }),
     CoreModule,
     QueueModule,
+    IntegrationsModule,
     PrismaModule,
     TenantsModule,
     PartnerOnboardingModule,

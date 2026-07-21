@@ -1,4 +1,10 @@
-import type { Court, NotificationItem, PaginatedResponse, SportSummary } from '@fitora/shared';
+import type {
+  Court,
+  NotificationItem,
+  PaginatedResponse,
+  PaymentOrder,
+  SportSummary,
+} from '@fitora/shared';
 import { apiFetch } from './api';
 
 export interface OwnerDashboard {
@@ -1128,6 +1134,7 @@ export interface SubscriptionPlan {
 
 export interface OwnerSubscription {
   id: string;
+  tenantId: string;
   status: string;
   startDate: string | null;
   endDate: string | null;
@@ -1149,8 +1156,8 @@ export function purchaseSubscription(
   planId: string,
   tenantId: string,
   autoRenew = false,
-) {
-  return apiFetch(
+): Promise<{ subscription: OwnerSubscription; payment: PaymentOrder }> {
+  return apiFetch<{ subscription: OwnerSubscription; payment: PaymentOrder }>(
     '/subscriptions/purchase',
     { method: 'POST', body: JSON.stringify({ planId, tenantId, autoRenew }) },
     token,

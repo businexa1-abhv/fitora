@@ -27,6 +27,7 @@ interface AuthContextValue {
   appMode: AppMode;
   /** True when the session should show the coach Stitch shell. */
   isCoachMode: boolean;
+  refreshSubscription: () => Promise<void>;
   signIn: (response: AuthResponse, mode?: AppMode) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -110,6 +111,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAppMode('owner');
   }, []);
 
+  const refreshSubscription = useCallback(async () => {
+    if (!token) return;
+    const sub = await getMySubscription(token);
+    setIsSubscriptionExpired(Boolean(sub && sub.status !== 'ACTIVE' && sub.status !== 'GRACE'));
+  }, [token]);
+
   const roles = user?.roles ?? [];
   const isOwner = roles.includes(UserRole.COURT_OWNER) || roles.includes(UserRole.ADMIN);
   const isTrainer = roles.includes(UserRole.TRAINER);
@@ -126,6 +133,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isSubscriptionExpired,
       appMode,
       isCoachMode,
+      refreshSubscription,
       signIn,
       signOut,
     }),
@@ -138,6 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isSubscriptionExpired,
       appMode,
       isCoachMode,
+      refreshSubscription,
       signIn,
       signOut,
     ],

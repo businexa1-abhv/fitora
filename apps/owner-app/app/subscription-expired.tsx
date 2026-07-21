@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Linking,
   Pressable,
   ScrollView,
@@ -9,18 +9,22 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatCurrency } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 import {
+  getTenantMe,
   getMySubscription,
   getSubscriptionPlans,
+  purchaseSubscription,
   type OwnerSubscription,
   type SubscriptionPlan,
 } from '@/lib/owner-api';
+import { completeOwnerPayment } from '@/lib/payments';
 
 function formatExpiry(dateStr: string | null | undefined) {
   if (!dateStr) return 'Unknown';
@@ -33,8 +37,10 @@ function formatExpiry(dateStr: string | null | undefined) {
 
 export default function SubscriptionExpiredScreen() {
   const { colors } = useTheme();
-  const { token, signOut } = useAuth();
+  const { token, user, signOut, refreshSubscription } = useAuth();
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const subscriptionQuery = useQuery({
     queryKey: ['subscription', 'my'],
@@ -48,13 +54,43 @@ export default function SubscriptionExpiredScreen() {
     enabled: !!token,
   });
 
+  const tenantQuery = useQuery({
+    queryKey: ['tenant', 'me'],
+    queryFn: () => getTenantMe(token!),
+    enabled: !!token,
+  });
+
   const subscription = subscriptionQuery.data as OwnerSubscription | null | undefined;
   const plans = plansQuery.data ?? [];
 
-  function openRenewalLink() {
-    const renewUrl = `${process.env.EXPO_PUBLIC_WEB_URL ?? 'http://localhost:3000'}/owner/settings`;
-    Linking.openURL(renewUrl).catch(() => {});
-  }
+  const purchaseMutation = useMutation({
+    mutationFn: async (plan: SubscriptionPlan) => {
+      if (!token) throw new Error('Sign in again to continue');
+      const tenantId = subscription?.tenantId ?? tenantQuery.data?.id;
+      if (!tenantId) throw new Error('Could not resolve your venue');
+
+      const checkout = await purchaseSubscription(token, plan.id, tenantId);
+      await completeOwnerPayment(
+        token,
+        checkout.payment,
+        user?.email ?? '',
+        user ? `${user.firstName} ${user.lastName}` : 'Venue Owner',
+        `FitOra — ${plan.name}`,
+      );
+      return plan;
+    },
+    onSuccess: async (plan) => {
+      await queryClient.invalidateQueries({ queryKey: ['subscription', 'my'] });
+      await refreshSubscription();
+      Alert.alert('Subscription activated', `${plan.name} is now active.`);
+      router.replace('/(tabs)');
+    },
+    onError: (error: Error) => {
+      if (error.message !== 'Payment cancelled') {
+        Alert.alert('Payment failed', error.message);
+      }
+    },
+  });
 
   return (
     <ScrollView
@@ -105,8 +141,10 @@ export default function SubscriptionExpiredScreen() {
         <View style={{ gap: Spacing.sm, marginTop: Spacing.md }}>
           <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Available plans</Text>
           {plans.map((plan: SubscriptionPlan) => (
-            <View
+            <Pressable
               key={plan.id}
+              disabled={purchaseMutation.isPending}
+              onPress={() => purchaseMutation.mutate(plan)}
               style={[
                 styles.planCard,
                 { backgroundColor: colors.card, borderColor: colors.border },
@@ -125,20 +163,16 @@ export default function SubscriptionExpiredScreen() {
                 <Text style={[styles.planGst, { color: colors.muted }]}>
                   incl. {Math.round((plan.gstRate ?? 0.18) * 100)}% GST
                 </Text>
+                <Text style={[styles.buyLabel, { color: colors.primary }]}>
+                  {purchaseMutation.isPending && purchaseMutation.variables?.id === plan.id
+                    ? 'Opening checkout…'
+                    : 'Select & pay'}
+                </Text>
               </View>
-            </View>
+            </Pressable>
           ))}
         </View>
       ) : null}
-
-      {/* Renew CTA */}
-      <Pressable
-        onPress={openRenewalLink}
-        style={[styles.renewBtn, { backgroundColor: colors.primary }]}
-      >
-        <Ionicons name="refresh-circle-outline" size={20} color="#fff" />
-        <Text style={styles.renewText}>Renew Subscription</Text>
-      </Pressable>
 
       {/* Invoice history hint */}
       <View style={[styles.infoRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -213,6 +247,7 @@ const styles = StyleSheet.create({
   planDuration: { fontSize: FontSize.sm, marginTop: 2 },
   planPrice: { fontSize: FontSize.xl, fontWeight: '800' },
   planGst: { fontSize: FontSize.xs, marginTop: 2 },
+  buyLabel: { fontSize: FontSize.xs, fontWeight: '800', marginTop: Spacing.sm },
   renewBtn: {
     flexDirection: 'row',
     alignItems: 'center',

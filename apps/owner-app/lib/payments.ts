@@ -1,16 +1,12 @@
 import type { PaymentOrder } from '@fitora/shared';
 import { apiFetch } from './api';
 
-export function getPaymentConfig() {
-  return apiFetch<{ mockMode: boolean; provider: string; keyId?: string }>('/payments/config');
-}
-
-export async function completePayment(
+export async function completeOwnerPayment(
   token: string,
   payment: PaymentOrder,
   userEmail: string,
   userName: string,
-  description = 'FitOra payment',
+  description: string,
 ): Promise<unknown> {
   if (payment.isMock || payment.mockMode) {
     return apiFetch(
@@ -54,9 +50,7 @@ export async function completePayment(
     });
   } catch (error) {
     const paymentError = error as { code?: number | string; description?: string };
-    if (String(paymentError.code) === '0') {
-      throw new Error('Payment cancelled');
-    }
+    if (String(paymentError.code) === '0') throw new Error('Payment cancelled');
     if (
       error instanceof Error &&
       /native module|RNRazorpay|TurboModule|RazorpayEventEmitter/i.test(error.message)
@@ -79,8 +73,4 @@ export async function completePayment(
     },
     token,
   );
-}
-
-export function getMyPayments(token: string, page = 1) {
-  return apiFetch(`/payments/my?page=${page}`, {}, token);
 }

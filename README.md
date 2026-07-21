@@ -206,6 +206,18 @@ See [`.env.example`](.env.example) for the full reference.
 | Player App | `apps/player-app/.env`  | `EXPO_PUBLIC_API_URL`                                   |
 
 **Payments:** Set `PAYMENT_MODE=mock` in `apps/api/.env` for local dev without Razorpay keys.
+For Razorpay test/live checkout, configure all three `RAZORPAY_*` server variables and build
+the Expo apps with native modules:
+
+```bash
+pnpm --filter @fitora/player-app exec expo prebuild
+pnpm --filter @fitora/player-app exec expo run:ios # or run:android
+pnpm --filter @fitora/owner-app exec expo prebuild
+pnpm --filter @fitora/owner-app exec expo run:ios # or run:android
+```
+
+Razorpay native checkout is unavailable in Expo Go. Never put `RAZORPAY_KEY_SECRET` or the
+webhook secret in `EXPO_PUBLIC_*` variables.
 
 ---
 
