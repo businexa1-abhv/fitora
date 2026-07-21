@@ -16,6 +16,12 @@ type Link = {
 
 const OPS_LINKS: Link[] = [
   {
+    title: 'Community Hub',
+    subtitle: 'Venue groups, announcements, tournaments',
+    href: '/manage/community',
+    icon: 'people-circle-outline',
+  },
+  {
     title: 'Games & Services',
     subtitle: 'Sports overview and enrollments',
     href: '/ops/games',

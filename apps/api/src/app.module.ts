@@ -28,6 +28,7 @@ import { RealtimeModule } from './realtime/realtime.module';
 import { VenueOpsModule } from './venue-ops/venue-ops.module';
 import { SupportModule } from './support/support.module';
 import { FinanceModule } from './finance/finance.module';
+import { CommunityModule } from './community/community.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { FinanceModule } from './finance/finance.module';
     WalletModule,
     AiModule,
     FinanceModule,
+    CommunityModule,
   ],
 })
 export class AppModule {}

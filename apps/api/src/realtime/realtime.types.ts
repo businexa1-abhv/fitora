@@ -19,7 +19,14 @@ export type RealtimeEventType =
   | 'booking.cancelled'
   | 'booking.confirmed'
   | 'attendance.updated'
-  | 'waitlist.promoted';
+  | 'waitlist.promoted'
+  | 'community.message'
+  | 'community.typing'
+  | 'community.presence'
+  | 'community.match.updated'
+  | 'community.join_request'
+  | 'community.announcement'
+  | 'community.reaction';
 
 /** Canonical slot snapshot broadcast to clients. */
 export type SlotSnapshot = {

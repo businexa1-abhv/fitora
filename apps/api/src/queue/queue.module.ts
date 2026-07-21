@@ -5,6 +5,7 @@ import { AvailabilityModule } from '../availability/availability.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { FinanceModule } from '../finance/finance.module';
+import { CommunityModule } from '../community/community.module';
 import { SlotsModule } from '../slots/slots.module';
 import { BookingsModule } from '../bookings/bookings.module';
 import { EmailProvider } from '../notifications/providers/email.provider';
@@ -25,6 +26,7 @@ import { QueueManagerService } from './queue-manager.service';
     forwardRef(() => NotificationsModule),
     forwardRef(() => PaymentsModule),
     forwardRef(() => FinanceModule),
+    forwardRef(() => CommunityModule),
   ],
   controllers: [QueueController],
   providers: [

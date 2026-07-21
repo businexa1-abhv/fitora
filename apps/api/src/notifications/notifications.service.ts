@@ -246,6 +246,21 @@ export class NotificationsService {
       case NotificationType.PAYMENT_FAILED:
       case NotificationType.WALLET_CREDIT:
         return 'wallet';
+      case NotificationType.COMMUNITY_JOIN_REQUEST:
+      case NotificationType.COMMUNITY_JOIN_APPROVED:
+      case NotificationType.COMMUNITY_JOIN_REJECTED:
+      case NotificationType.COMMUNITY_NEW_MATCH:
+      case NotificationType.COMMUNITY_MATCH_REMINDER:
+      case NotificationType.COMMUNITY_MENTION:
+      case NotificationType.COMMUNITY_REPLY:
+      case NotificationType.COMMUNITY_REACTION:
+      case NotificationType.COMMUNITY_ANNOUNCEMENT:
+      case NotificationType.COMMUNITY_VENUE_CHANGED:
+      case NotificationType.COMMUNITY_COURT_CHANGED:
+      case NotificationType.COMMUNITY_PLAYER_NEEDED:
+      case NotificationType.COMMUNITY_FRIEND_REQUEST:
+      case NotificationType.COMMUNITY_MATCH_STARTED:
+        return typeof data?.path === 'string' ? data.path : 'community';
       default:
         return data?.path && typeof data.path === 'string' ? data.path : 'notifications';
     }

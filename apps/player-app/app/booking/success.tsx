@@ -119,8 +119,43 @@ export default function BookingSuccessScreen() {
               tint={colors.muted}
             />
             <View style={styles.nextCard}>
-              <Text style={styles.nextTitle}>Next Step</Text>
+              <Text style={styles.nextTitle}>Create Community Match?</Text>
               <Text style={styles.nextText}>
+                Invite players from your groups to fill this court slot.
+              </Text>
+              <View style={styles.matchActions}>
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: '/community/match/create',
+                      params: {
+                        bookingId: params.bookingId,
+                        courtName: params.courtName,
+                        startTime: params.startTime,
+                        endTime: params.endTime,
+                      },
+                    })
+                  }
+                  style={({ pressed }) => [styles.matchYes, pressed && styles.pressed]}
+                >
+                  <Text style={styles.matchYesText}>YES</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => router.replace('/bookings')}
+                  style={({ pressed }) => [styles.matchNo, pressed && styles.pressed]}
+                >
+                  <Text style={styles.matchNoText}>Not now</Text>
+                </Pressable>
+              </View>
+            </View>
+            <View
+              style={[
+                styles.nextCardMuted,
+                { backgroundColor: colors.card, borderColor: colors.border },
+              ]}
+            >
+              <Text style={[styles.nextTitleMuted, { color: colors.foreground }]}>Next Step</Text>
+              <Text style={[styles.nextTextMuted, { color: colors.muted }]}>
                 Show this check-in pass at the venue reception before your slot starts.
               </Text>
             </View>
@@ -252,6 +287,27 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginTop: Spacing.xs,
   },
+  matchActions: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.lg },
+  matchYes: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: Radius.full,
+    flex: 1,
+    paddingVertical: Spacing.md,
+  },
+  matchYesText: { color: '#ff6b00', fontSize: FontSize.md, fontWeight: '900' },
+  matchNo: {
+    alignItems: 'center',
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderRadius: Radius.full,
+    borderWidth: 1.5,
+    flex: 1,
+    paddingVertical: Spacing.md,
+  },
+  matchNoText: { color: '#fff', fontSize: FontSize.md, fontWeight: '800' },
+  nextCardMuted: { borderRadius: Radius.xl, borderWidth: 1, padding: Spacing.xl },
+  nextTitleMuted: { fontSize: FontSize.lg, fontWeight: '900' },
+  nextTextMuted: { fontSize: FontSize.sm, lineHeight: 20, marginTop: Spacing.xs },
   buttons: { gap: Spacing.md, marginTop: Spacing.xxxl },
   homeLink: { alignItems: 'center', paddingVertical: Spacing.md },
   homeLinkText: { fontSize: FontSize.md, fontWeight: '900' },

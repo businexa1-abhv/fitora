@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { EnrollmentStatus } from '@fitora/shared';
 import { useAuth } from '@/providers/auth-provider';
 import { QueryState } from '@/components/ui';
-import { getTrainerBatches } from '@/lib/trainer-api';
+import { createCoachBatchCommunityGroup, getTrainerBatches } from '@/lib/trainer-api';
 import { CoachColors } from '@/constants/coach-theme';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -16,6 +16,7 @@ export default function TrainingBatchDetailScreen() {
   const { token } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const [communityReady, setCommunityReady] = useState(false);
 
   const batchesQuery = useQuery({
     queryKey: ['trainer', 'batches'],
@@ -27,6 +28,21 @@ export default function TrainingBatchDetailScreen() {
     () => (batchesQuery.data ?? []).find((b) => b.id === batchId),
     [batchesQuery.data, batchId],
   );
+
+  const createCommunity = useMutation({
+    mutationFn: () =>
+      createCoachBatchCommunityGroup(token!, {
+        trainingBatchId: batchId!,
+        name: `${batch?.name ?? 'Batch'} Community`,
+        emoji: '🎓',
+        description: 'Academy batch group for attendance, homework, and training chat',
+      }),
+    onSuccess: () => {
+      setCommunityReady(true);
+      Alert.alert('Community ready', 'Batch community group created for students and parents.');
+    },
+    onError: (e: Error) => Alert.alert('Could not create community', e.message),
+  });
 
   const active = batch?.enrollments?.filter((e) => e.status === EnrollmentStatus.ACTIVE) ?? [];
   const capacity = batch?.maxCapacity ?? Math.max(active.length, 1);
@@ -129,6 +145,21 @@ export default function TrainingBatchDetailScreen() {
                   <Text style={styles.attText}>Attendance</Text>
                 </Pressable>
               </View>
+
+              <Pressable
+                style={[styles.communityBtn, communityReady && { opacity: 0.7 }]}
+                disabled={createCommunity.isPending || communityReady}
+                onPress={() => createCommunity.mutate()}
+              >
+                <Ionicons name="people-circle-outline" size={18} color={CoachColors.primary} />
+                <Text style={styles.communityText}>
+                  {communityReady
+                    ? 'Batch community created'
+                    : createCommunity.isPending
+                      ? 'Creating community…'
+                      : 'Create Batch Community'}
+                </Text>
+              </Pressable>
 
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>STUDENT ROSTER</Text>
@@ -269,6 +300,19 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
   },
   attText: { color: CoachColors.primary, fontWeight: '800' },
+  communityBtn: {
+    alignItems: 'center',
+    backgroundColor: CoachColors.card,
+    borderColor: CoachColors.primary,
+    borderRadius: Radius.lg,
+    borderWidth: 1.5,
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'center',
+    marginTop: Spacing.sm,
+    paddingVertical: Spacing.md,
+  },
+  communityText: { color: CoachColors.primary, fontWeight: '800' },
   sectionHeader: {
     alignItems: 'center',
     flexDirection: 'row',

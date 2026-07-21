@@ -23,6 +23,7 @@ export const SCHEDULED_JOBS = {
   RELEASE_EXPIRED_LOCKS: 'release-expired-locks',
   WEEKLY_SETTLEMENT: 'weekly-settlement',
   SUBSCRIPTION_EXPIRY: 'subscription-expiry',
+  COMMUNITY_MATCH_REMINDER: 'community-match-reminder',
 } as const;
 
 export type ScheduledJobName = (typeof SCHEDULED_JOBS)[keyof typeof SCHEDULED_JOBS];
@@ -40,6 +41,7 @@ export const CRON_PATTERNS: Record<ScheduledJobName, string> = {
   [SCHEDULED_JOBS.RELEASE_EXPIRED_LOCKS]: '*/5 * * * *',
   [SCHEDULED_JOBS.WEEKLY_SETTLEMENT]: '0 3 * * 1',
   [SCHEDULED_JOBS.SUBSCRIPTION_EXPIRY]: '0 10 * * *',
+  [SCHEDULED_JOBS.COMMUNITY_MATCH_REMINDER]: '*/5 * * * *',
 };
 
 export const DEFAULT_JOB_OPTIONS = {

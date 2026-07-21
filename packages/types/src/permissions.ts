@@ -65,6 +65,12 @@ export enum Permission {
   // AI
   AI_USE = 'ai:use',
   AI_INSIGHTS = 'ai:insights',
+
+  // Community Hub
+  COMMUNITY_READ = 'community:read',
+  COMMUNITY_WRITE = 'community:write',
+  COMMUNITY_MODERATE = 'community:moderate',
+  COMMUNITY_MANAGE = 'community:manage',
 }
 
 export const ALL_PERMISSIONS = Object.values(Permission);
@@ -99,6 +105,10 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.SHOP_MANAGE,
     Permission.AI_USE,
     Permission.AI_INSIGHTS,
+    Permission.COMMUNITY_READ,
+    Permission.COMMUNITY_WRITE,
+    Permission.COMMUNITY_MODERATE,
+    Permission.COMMUNITY_MANAGE,
   ],
 
   [UserRole.TRAINER]: [
@@ -110,6 +120,9 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.NOTIFICATIONS_READ,
     Permission.AI_USE,
     Permission.AI_INSIGHTS,
+    Permission.COMMUNITY_READ,
+    Permission.COMMUNITY_WRITE,
+    Permission.COMMUNITY_MODERATE,
   ],
 
   [UserRole.PLAYER]: [
@@ -126,6 +139,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.PAYMENTS_READ,
     Permission.NOTIFICATIONS_READ,
     Permission.AI_USE,
+    Permission.COMMUNITY_READ,
+    Permission.COMMUNITY_WRITE,
   ],
 
   [UserRole.SERVICE_PROVIDER]: [

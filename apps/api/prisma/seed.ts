@@ -323,6 +323,112 @@ async function main() {
   await seedSampleCourt(owner.id, ownerTenant.id);
   await seedShopCatalog(platformTenant.id);
   await seedFinanceDefaults();
+  await seedCommunityHub(owner.id, ownerTenant.id);
+}
+
+async function seedCommunityHub(ownerId: string, tenantId: string) {
+  const player = await prisma.user.findUnique({ where: { email: 'player@fitora.com' } });
+  if (!player) return;
+
+  const existing = await prisma.communityGroup.findUnique({
+    where: { slug: 'hyderabad-smashers' },
+  });
+  if (existing) {
+    console.log('Community hub already seeded');
+    return;
+  }
+
+  const sport = await prisma.sport.findFirst({ where: { slug: 'badminton' } });
+  const court = await prisma.court.findFirst({
+    where: { ownerId, deletedAt: null },
+    select: { id: true, city: true, name: true },
+  });
+
+  const group = await prisma.communityGroup.create({
+    data: {
+      tenantId,
+      ownerId,
+      sportId: sport?.id,
+      homeCourtId: court?.id,
+      name: 'Hyderabad Smashers',
+      slug: 'hyderabad-smashers',
+      description:
+        'Evening badminton community for intermediate players. All skill levels welcome on weekends.',
+      rules: 'Be on time. Bring your own racquet. Share shuttles. Respect the court.',
+      emoji: '🏸',
+      groupType: 'BADMINTON',
+      privacy: 'PUBLIC',
+      skillLevel: 'INTERMEDIATE',
+      maxPlayers: 24,
+      locationLabel: court?.name ?? 'City courts',
+      city: court?.city ?? 'Hyderabad',
+      playingDays: ['Mon', 'Wed', 'Fri', 'Sat'],
+      playingWindows: ['EVENING', 'WEEKEND'],
+      isTrending: true,
+      memberCount: 2,
+      members: {
+        create: [
+          { userId: ownerId, role: 'OWNER', status: 'ACTIVE' },
+          { userId: player.id, role: 'MEMBER', status: 'ACTIVE' },
+        ],
+      },
+      feedItems: {
+        create: {
+          type: 'NEW_GROUP',
+          title: 'Hyderabad Smashers is live',
+          body: 'Join evening games and weekend open matches.',
+          authorId: ownerId,
+        },
+      },
+      announcements: {
+        create: {
+          authorId: ownerId,
+          type: 'CUSTOM',
+          title: 'Welcome smashers!',
+          body: 'First open match this weekend. Need 2 more players for doubles.',
+        },
+      },
+    },
+  });
+
+  const startsAt = new Date();
+  startsAt.setDate(startsAt.getDate() + 1);
+  startsAt.setHours(19, 0, 0, 0);
+  const endsAt = new Date(startsAt);
+  endsAt.setHours(21, 0, 0, 0);
+
+  await prisma.communityMatch.create({
+    data: {
+      groupId: group.id,
+      createdById: ownerId,
+      courtId: court?.id,
+      title: 'Friday Doubles Open Match',
+      venueLabel: court?.name ?? 'Community court',
+      startsAt,
+      endsAt,
+      requiredPlayers: 4,
+      confirmedCount: 1,
+      skillLevel: 'INTERMEDIATE',
+      entryFee: 150,
+      shuttleIncluded: true,
+      matchType: 'OPEN_MATCH',
+      status: 'WAITING_PLAYERS',
+      needsPlayers: true,
+      players: {
+        create: { userId: ownerId, rsvp: 'COMING', isHost: true },
+      },
+      reminders: {
+        create: [
+          { offsetMinutes: 1440, scheduledFor: new Date(startsAt.getTime() - 1440 * 60_000) },
+          { offsetMinutes: 120, scheduledFor: new Date(startsAt.getTime() - 120 * 60_000) },
+          { offsetMinutes: 30, scheduledFor: new Date(startsAt.getTime() - 30 * 60_000) },
+          { offsetMinutes: 15, scheduledFor: new Date(startsAt.getTime() - 15 * 60_000) },
+        ],
+      },
+    },
+  });
+
+  console.log('Seeded Community Hub sample group: Hyderabad Smashers');
 }
 
 async function seedFinanceDefaults() {

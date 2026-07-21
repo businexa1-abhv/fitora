@@ -172,3 +172,26 @@ export function createTrainingNote(
     token,
   );
 }
+
+export function createCoachBatchCommunityGroup(
+  token: string,
+  payload: {
+    trainingBatchId: string;
+    name: string;
+    description?: string;
+    emoji?: string;
+  },
+) {
+  return apiFetch(
+    '/community/coach/batch-groups',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payload,
+        groupType: 'ACADEMY_BATCH',
+        privacy: 'PRIVATE',
+      }),
+    },
+    token,
+  );
+}

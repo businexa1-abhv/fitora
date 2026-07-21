@@ -71,6 +71,7 @@ const PLAYER_SAFE_PATHS = [
   'training/',
   'wallet',
   'print/',
+  'community',
 ];
 
 export function isSafeDeepLinkPath(path: string): boolean {

@@ -268,6 +268,20 @@ enum NotificationType {
   REVIEW_REQUEST
   ADMIN_BROADCAST
   SYSTEM
+  COMMUNITY_JOIN_REQUEST
+  COMMUNITY_JOIN_APPROVED
+  COMMUNITY_JOIN_REJECTED
+  COMMUNITY_NEW_MATCH
+  COMMUNITY_MATCH_REMINDER
+  COMMUNITY_MENTION
+  COMMUNITY_REPLY
+  COMMUNITY_REACTION
+  COMMUNITY_ANNOUNCEMENT
+  COMMUNITY_VENUE_CHANGED
+  COMMUNITY_COURT_CHANGED
+  COMMUNITY_PLAYER_NEEDED
+  COMMUNITY_FRIEND_REQUEST
+  COMMUNITY_MATCH_STARTED
 }
 
 enum NotificationDeliveryStatus {
@@ -463,6 +477,7 @@ model Tenant {
   merchantWallets     MerchantWallet[]
   settlements         Settlement[]
   financeInvoices     FinanceInvoice[]
+  communityGroups     CommunityGroup[]
 
   @@index([ownerId])
   @@index([slug])
@@ -618,6 +633,24 @@ model User {
   settlements            Settlement[]        @relation("SettlementBeneficiary")
   financeInvoices        FinanceInvoice[]    @relation("FinanceInvoiceParty")
   commissionsBenefited   Commission[]        @relation("CommissionBeneficiary")
+  ownedCommunityGroups   CommunityGroup[]    @relation("CommunityGroupOwner")
+  communityMemberships   CommunityGroupMember[]
+  communityJoinRequests  CommunityJoinRequest[] @relation("CommunityJoinRequester")
+  reviewedJoinRequests   CommunityJoinRequest[] @relation("CommunityJoinReviewer")
+  communityMatchesCreated CommunityMatch[]   @relation("CommunityMatchCreator")
+  communityMatchPlayers  CommunityMatchPlayer[]
+  communityMessages      CommunityMessage[]  @relation("CommunityMessageAuthor")
+  communityReactions     CommunityMessageReaction[]
+  communityAnnouncements CommunityAnnouncement[] @relation("CommunityAnnouncementAuthor")
+  communityPollVotes     CommunityPollVote[]
+  friendshipsSent        CommunityFriendship[] @relation("FriendshipRequester")
+  friendshipsReceived    CommunityFriendship[] @relation("FriendshipAddressee")
+  communityBlocksInitiated CommunityBlock[]  @relation("Blocker")
+  communityBlocksReceived  CommunityBlock[]  @relation("Blocked")
+  communityReportsFiled  CommunityReport[]   @relation("Reporter")
+  communityFeedItems     CommunityFeedItem[] @relation("FeedAuthor")
+  communityAchievements  CommunityAchievement[]
+  communityAttendance    CommunityMatchAttendance[]
 
   @@index([email])
   @@index([phone])
@@ -845,6 +878,7 @@ model Sport {
   trainingPrograms TrainingProgram[]
   products         Product[]
   serviceListings  ServiceListing[]
+  communityGroups  CommunityGroup[]
 
   @@index([slug])
   @@index([isActive, deletedAt])
@@ -896,6 +930,8 @@ model Court {
   waitlistEntries   SlotWaitlistEntry[]
   recurringBookings RecurringBooking[]
   programs          TrainingProgram[]
+  communityGroups   CommunityGroup[]  @relation("CommunityHomeCourt")
+  communityMatches  CommunityMatch[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -1062,6 +1098,7 @@ model Booking {
   court  Court     @relation(fields: [courtId], references: [id], onDelete: Restrict)
   slot   CourtSlot @relation(fields: [slotId], references: [id], onDelete: Restrict)
   coupon Coupon?   @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  communityMatch CommunityMatch?
 
   @@index([userId])
   @@index([courtId])
@@ -1258,6 +1295,7 @@ model TrainingBatch {
   trainer     User                 @relation("BatchTrainer", fields: [trainerId], references: [id], onDelete: Restrict)
   enrollments   TrainingEnrollment[]
   trainingNotes TrainingNote[]
+  communityGroup CommunityGroup?
 
   @@index([programId])
   @@index([trainerId])
@@ -2552,6 +2590,639 @@ model RealtimeOutbox {
   @@index([status, availableAt])
   @@index([eventType, createdAt(sort: Desc)])
   @@map("realtime_outbox")
+}
+
+// ─── Community Hub ───────────────────────────────────────────────────────────
+
+enum CommunityGroupType {
+  BADMINTON
+  CRICKET
+  FOOTBALL
+  PICKLEBALL
+  TENNIS
+  VOLLEYBALL
+  BASKETBALL
+  TABLE_TENNIS
+  RUNNING_CLUB
+  CYCLING_CLUB
+  FITNESS_GROUP
+  CORPORATE
+  PRIVATE
+  PUBLIC
+  ACADEMY_BATCH
+}
+
+enum CommunityPrivacy {
+  PUBLIC
+  PRIVATE
+  INVITE_ONLY
+}
+
+enum CommunitySkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  PROFESSIONAL
+}
+
+enum CommunityPlayingWindow {
+  MORNING
+  EVENING
+  WEEKEND
+}
+
+enum CommunityMemberRole {
+  OWNER
+  ADMIN
+  CO_ADMIN
+  MODERATOR
+  MEMBER
+}
+
+enum CommunityMemberStatus {
+  ACTIVE
+  PENDING
+  REJECTED
+  WAITLISTED
+  MUTED
+  BANNED
+  LEFT
+}
+
+enum CommunityJoinRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  WAITLISTED
+  CANCELLED
+}
+
+enum CommunityMatchType {
+  FRIENDLY
+  PRACTICE
+  TOURNAMENT
+  TRAINING
+  OPEN_MATCH
+}
+
+enum CommunityMatchStatus {
+  WAITING_PLAYERS
+  CONFIRMED
+  FULL
+  CANCELLED
+  COMPLETED
+  LIVE
+}
+
+enum CommunityRsvpStatus {
+  COMING
+  MAYBE
+  NOT_COMING
+  LATE
+  NEED_PICKUP
+  NEED_PARTNER
+  BRING_SHUTTLE
+  BRING_BALL
+  NEED_RACQUET
+}
+
+enum CommunityMessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  VOICE
+  DOCUMENT
+  GIF
+  STICKER
+  SYSTEM
+  ANNOUNCEMENT
+  POLL
+  MATCH_CARD
+}
+
+enum CommunityAnnouncementType {
+  PRACTICE_CANCELLED
+  COURT_CHANGED
+  TOURNAMENT
+  HOLIDAY
+  MEMBERSHIP_RENEWAL
+  TRAINING
+  FEES_DUE
+  MAINTENANCE
+  WEATHER_ALERT
+  CUSTOM
+}
+
+enum CommunityFriendshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  BLOCKED
+}
+
+enum CommunityReportTarget {
+  USER
+  MESSAGE
+  GROUP
+  MATCH
+}
+
+enum CommunityReportStatus {
+  OPEN
+  REVIEWING
+  RESOLVED
+  DISMISSED
+}
+
+enum CommunityAttendanceStatus {
+  PRESENT
+  LATE
+  ABSENT
+  CHECKED_IN
+}
+
+enum CommunityFeedItemType {
+  MATCH
+  PHOTO
+  ACHIEVEMENT
+  TOURNAMENT_WINNER
+  PLAYER_OF_WEEK
+  NEW_GROUP
+  COACH_POST
+  OWNER_ANNOUNCEMENT
+}
+
+enum CommunityPollStatus {
+  OPEN
+  CLOSED
+}
+
+model CommunityGroup {
+  id              String                 @id @default(uuid()) @db.Uuid
+  tenantId        String?                @map("tenant_id") @db.Uuid
+  ownerId         String                 @map("owner_id") @db.Uuid
+  sportId         String?                @map("sport_id") @db.Uuid
+  homeCourtId     String?                @map("home_court_id") @db.Uuid
+  trainingBatchId String?                @unique @map("training_batch_id") @db.Uuid
+  name            String                 @db.VarChar(160)
+  slug            String                 @db.VarChar(180)
+  description     String?                @db.Text
+  rules           String?                @db.Text
+  coverPhotoUrl   String?                @map("cover_photo_url") @db.VarChar(500)
+  emoji           String?                @db.VarChar(16)
+  groupType       CommunityGroupType     @map("group_type")
+  privacy         CommunityPrivacy       @default(PUBLIC)
+  skillLevel      CommunitySkillLevel    @default(INTERMEDIATE) @map("skill_level")
+  maxPlayers      Int                    @default(20) @map("max_players")
+  locationLabel   String?                @map("location_label") @db.VarChar(200)
+  city            String?                @db.VarChar(100)
+  latitude        Decimal?               @db.Decimal(10, 7)
+  longitude       Decimal?               @db.Decimal(10, 7)
+  playingDays     String[]               @default([]) @map("playing_days")
+  playingWindows  CommunityPlayingWindow[] @default([]) @map("playing_windows")
+  ratingAvg       Decimal                @default(0) @map("rating_avg") @db.Decimal(3, 2)
+  ratingCount     Int                    @default(0) @map("rating_count")
+  memberCount     Int                    @default(1) @map("member_count")
+  isTrending      Boolean                @default(false) @map("is_trending")
+  lastActivityAt  DateTime               @default(now()) @map("last_activity_at")
+  deletedAt       DateTime?              @map("deleted_at")
+  createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       DateTime               @updatedAt @map("updated_at")
+
+  tenant         Tenant?                 @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  owner          User                    @relation("CommunityGroupOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  sport          Sport?                  @relation(fields: [sportId], references: [id], onDelete: SetNull)
+  homeCourt      Court?                  @relation("CommunityHomeCourt", fields: [homeCourtId], references: [id], onDelete: SetNull)
+  trainingBatch  TrainingBatch?          @relation(fields: [trainingBatchId], references: [id], onDelete: SetNull)
+  members        CommunityGroupMember[]
+  joinRequests   CommunityJoinRequest[]
+  matches        CommunityMatch[]
+  messages       CommunityMessage[]
+  pinnedMessages CommunityPinnedMessage[]
+  announcements  CommunityAnnouncement[]
+  polls          CommunityPoll[]
+  media          CommunityMedia[]
+  feedItems      CommunityFeedItem[]
+  achievements   CommunityAchievement[]
+  leaderboard    CommunityLeaderboardEntry[]
+  reports        CommunityReport[]
+
+  @@unique([slug])
+  @@index([ownerId])
+  @@index([tenantId, deletedAt])
+  @@index([sportId, city, deletedAt])
+  @@index([groupType, privacy, deletedAt])
+  @@index([isTrending, lastActivityAt(sort: Desc)])
+  @@index([city, lastActivityAt(sort: Desc)])
+  @@map("community_groups")
+}
+
+model CommunityGroupMember {
+  id         String                @id @default(uuid()) @db.Uuid
+  groupId    String                @map("group_id") @db.Uuid
+  userId     String                @map("user_id") @db.Uuid
+  role       CommunityMemberRole   @default(MEMBER)
+  status     CommunityMemberStatus @default(ACTIVE)
+  mutedUntil DateTime?             @map("muted_until")
+  joinedAt   DateTime              @default(now()) @map("joined_at")
+  leftAt     DateTime?             @map("left_at")
+  createdAt  DateTime              @default(now()) @map("created_at")
+  updatedAt  DateTime              @updatedAt @map("updated_at")
+
+  group CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@index([userId, status])
+  @@index([groupId, role, status])
+  @@map("community_group_members")
+}
+
+model CommunityJoinRequest {
+  id           String                     @id @default(uuid()) @db.Uuid
+  groupId      String                     @map("group_id") @db.Uuid
+  userId       String                     @map("user_id") @db.Uuid
+  message      String?                    @db.VarChar(500)
+  status       CommunityJoinRequestStatus @default(PENDING)
+  reviewedById String?                    @map("reviewed_by_id") @db.Uuid
+  reviewedAt   DateTime?                  @map("reviewed_at")
+  createdAt    DateTime                   @default(now()) @map("created_at")
+  updatedAt    DateTime                   @updatedAt @map("updated_at")
+
+  group      CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user       User           @relation("CommunityJoinRequester", fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User?          @relation("CommunityJoinReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@unique([groupId, userId])
+  @@index([groupId, status, createdAt(sort: Desc)])
+  @@index([userId, status])
+  @@map("community_join_requests")
+}
+
+model CommunityMatch {
+  id               String               @id @default(uuid()) @db.Uuid
+  groupId          String               @map("group_id") @db.Uuid
+  createdById      String               @map("created_by_id") @db.Uuid
+  courtId          String?              @map("court_id") @db.Uuid
+  bookingId        String?              @unique @map("booking_id") @db.Uuid
+  title            String               @db.VarChar(200)
+  venueLabel       String?              @map("venue_label") @db.VarChar(200)
+  startsAt         DateTime             @map("starts_at")
+  endsAt           DateTime?            @map("ends_at")
+  requiredPlayers  Int                  @default(4) @map("required_players")
+  confirmedCount   Int                  @default(0) @map("confirmed_count")
+  skillLevel       CommunitySkillLevel  @default(INTERMEDIATE) @map("skill_level")
+  entryFee         Decimal              @default(0) @map("entry_fee") @db.Decimal(12, 2)
+  shuttleIncluded  Boolean              @default(false) @map("shuttle_included")
+  ballIncluded     Boolean              @default(false) @map("ball_included")
+  matchType        CommunityMatchType   @default(FRIENDLY) @map("match_type")
+  status           CommunityMatchStatus @default(WAITING_PLAYERS)
+  needsPlayers     Boolean              @default(true) @map("needs_players")
+  scoreHome        Int?                 @map("score_home")
+  scoreAway        Int?                 @map("score_away")
+  winnerLabel      String?              @map("winner_label") @db.VarChar(120)
+  liveStartedAt    DateTime?            @map("live_started_at")
+  completedAt      DateTime?            @map("completed_at")
+  cancelledAt      DateTime?            @map("cancelled_at")
+  cancelReason     String?              @map("cancel_reason") @db.VarChar(500)
+  deletedAt        DateTime?            @map("deleted_at")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
+
+  group       CommunityGroup              @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdBy   User                        @relation("CommunityMatchCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  court       Court?                      @relation(fields: [courtId], references: [id], onDelete: SetNull)
+  booking     Booking?                    @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  players     CommunityMatchPlayer[]
+  attendance  CommunityMatchAttendance[]
+  media       CommunityMedia[]
+  reminders   CommunityMatchReminder[]
+
+  @@index([groupId, startsAt])
+  @@index([status, startsAt])
+  @@index([needsPlayers, startsAt])
+  @@index([courtId, startsAt])
+  @@index([createdById])
+  @@map("community_matches")
+}
+
+model CommunityMatchPlayer {
+  id        String              @id @default(uuid()) @db.Uuid
+  matchId   String              @map("match_id") @db.Uuid
+  userId    String              @map("user_id") @db.Uuid
+  rsvp      CommunityRsvpStatus @default(COMING)
+  note      String?             @db.VarChar(300)
+  isHost    Boolean             @default(false) @map("is_host")
+  checkedInAt DateTime?         @map("checked_in_at")
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
+
+  match CommunityMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, userId])
+  @@index([userId, rsvp])
+  @@index([matchId, rsvp])
+  @@map("community_match_players")
+}
+
+model CommunityMatchReminder {
+  id          String   @id @default(uuid()) @db.Uuid
+  matchId     String   @map("match_id") @db.Uuid
+  offsetMinutes Int    @map("offset_minutes")
+  scheduledFor DateTime @map("scheduled_for")
+  sentAt      DateTime? @map("sent_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  match CommunityMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, offsetMinutes])
+  @@index([scheduledFor, sentAt])
+  @@map("community_match_reminders")
+}
+
+model CommunityMatchAttendance {
+  id          String                    @id @default(uuid()) @db.Uuid
+  matchId     String                    @map("match_id") @db.Uuid
+  userId      String                    @map("user_id") @db.Uuid
+  status      CommunityAttendanceStatus @default(CHECKED_IN)
+  checkInMethod String                  @default("MANUAL") @map("check_in_method") @db.VarChar(20)
+  qrPayload   String?                   @map("qr_payload") @db.VarChar(120)
+  checkedInAt DateTime                  @default(now()) @map("checked_in_at")
+  createdAt   DateTime                  @default(now()) @map("created_at")
+
+  match CommunityMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, userId])
+  @@index([userId, checkedInAt(sort: Desc)])
+  @@map("community_match_attendance")
+}
+
+model CommunityMessage {
+  id              String               @id @default(uuid()) @db.Uuid
+  groupId         String               @map("group_id") @db.Uuid
+  authorId        String               @map("author_id") @db.Uuid
+  type            CommunityMessageType @default(TEXT)
+  body            String?              @db.Text
+  mediaUrl        String?              @map("media_url") @db.VarChar(500)
+  mediaMimeType   String?              @map("media_mime_type") @db.VarChar(100)
+  replyToId       String?              @map("reply_to_id") @db.Uuid
+  mentionUserIds  String[]             @default([]) @map("mention_user_ids") @db.Uuid
+  isPinned        Boolean              @default(false) @map("is_pinned")
+  deletedAt       DateTime?            @map("deleted_at")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+
+  group     CommunityGroup               @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author    User                         @relation("CommunityMessageAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  replyTo   CommunityMessage?            @relation("CommunityMessageThread", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   CommunityMessage[]           @relation("CommunityMessageThread")
+  reactions CommunityMessageReaction[]
+  pins      CommunityPinnedMessage[]
+  receipts  CommunityMessageReceipt[]
+
+  @@index([groupId, createdAt(sort: Desc)])
+  @@index([authorId, createdAt(sort: Desc)])
+  @@index([replyToId])
+  @@map("community_messages")
+}
+
+model CommunityMessageReaction {
+  id        String   @id @default(uuid()) @db.Uuid
+  messageId String   @map("message_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  emoji     String   @db.VarChar(32)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  message CommunityMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
+  @@map("community_message_reactions")
+}
+
+model CommunityMessageReceipt {
+  id          String    @id @default(uuid()) @db.Uuid
+  messageId   String    @map("message_id") @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  deliveredAt DateTime? @map("delivered_at")
+  readAt      DateTime? @map("read_at")
+
+  message CommunityMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+  @@index([userId, readAt])
+  @@map("community_message_receipts")
+}
+
+model CommunityPinnedMessage {
+  id         String   @id @default(uuid()) @db.Uuid
+  groupId    String   @map("group_id") @db.Uuid
+  messageId  String   @map("message_id") @db.Uuid
+  pinnedById String   @map("pinned_by_id") @db.Uuid
+  pinnedAt   DateTime @default(now()) @map("pinned_at")
+
+  group   CommunityGroup   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  message CommunityMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, messageId])
+  @@index([groupId, pinnedAt(sort: Desc)])
+  @@map("community_pinned_messages")
+}
+
+model CommunityAnnouncement {
+  id        String                    @id @default(uuid()) @db.Uuid
+  groupId   String                    @map("group_id") @db.Uuid
+  authorId  String                    @map("author_id") @db.Uuid
+  type      CommunityAnnouncementType @default(CUSTOM)
+  title     String                    @db.VarChar(200)
+  body      String                    @db.Text
+  pinned    Boolean                   @default(true)
+  expiresAt DateTime?                 @map("expires_at")
+  deletedAt DateTime?                 @map("deleted_at")
+  createdAt DateTime                  @default(now()) @map("created_at")
+  updatedAt DateTime                  @updatedAt @map("updated_at")
+
+  group  CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author User           @relation("CommunityAnnouncementAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([groupId, createdAt(sort: Desc)])
+  @@index([authorId])
+  @@map("community_announcements")
+}
+
+model CommunityPoll {
+  id        String              @id @default(uuid()) @db.Uuid
+  groupId   String              @map("group_id") @db.Uuid
+  messageId String?             @unique @map("message_id") @db.Uuid
+  question  String              @db.VarChar(300)
+  status    CommunityPollStatus @default(OPEN)
+  closesAt  DateTime?           @map("closes_at")
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
+
+  group   CommunityGroup        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  options CommunityPollOption[]
+  votes   CommunityPollVote[]
+
+  @@index([groupId, status])
+  @@map("community_polls")
+}
+
+model CommunityPollOption {
+  id     String @id @default(uuid()) @db.Uuid
+  pollId String @map("poll_id") @db.Uuid
+  label  String @db.VarChar(200)
+  sortOrder Int @default(0) @map("sort_order")
+
+  poll  CommunityPoll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes CommunityPollVote[]
+
+  @@index([pollId, sortOrder])
+  @@map("community_poll_options")
+}
+
+model CommunityPollVote {
+  id        String   @id @default(uuid()) @db.Uuid
+  pollId    String   @map("poll_id") @db.Uuid
+  optionId  String   @map("option_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  poll   CommunityPoll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  option CommunityPollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  user   User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([pollId, userId])
+  @@index([optionId])
+  @@map("community_poll_votes")
+}
+
+model CommunityMedia {
+  id        String   @id @default(uuid()) @db.Uuid
+  groupId   String   @map("group_id") @db.Uuid
+  matchId   String?  @map("match_id") @db.Uuid
+  uploadedById String @map("uploaded_by_id") @db.Uuid
+  url       String   @db.VarChar(500)
+  mimeType  String   @map("mime_type") @db.VarChar(100)
+  kind      String   @default("IMAGE") @db.VarChar(20)
+  caption   String?  @db.VarChar(300)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  group CommunityGroup  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  match CommunityMatch? @relation(fields: [matchId], references: [id], onDelete: SetNull)
+
+  @@index([groupId, createdAt(sort: Desc)])
+  @@index([matchId])
+  @@map("community_media")
+}
+
+model CommunityFriendship {
+  id          String                    @id @default(uuid()) @db.Uuid
+  requesterId String                    @map("requester_id") @db.Uuid
+  addresseeId String                    @map("addressee_id") @db.Uuid
+  status      CommunityFriendshipStatus @default(PENDING)
+  createdAt   DateTime                  @default(now()) @map("created_at")
+  updatedAt   DateTime                  @updatedAt @map("updated_at")
+
+  requester User @relation("FriendshipRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("FriendshipAddressee", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId])
+  @@index([addresseeId, status])
+  @@index([requesterId, status])
+  @@map("community_friendships")
+}
+
+model CommunityBlock {
+  id        String   @id @default(uuid()) @db.Uuid
+  blockerId String   @map("blocker_id") @db.Uuid
+  blockedId String   @map("blocked_id") @db.Uuid
+  reason    String?  @db.VarChar(300)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  blocker User @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedId])
+  @@map("community_blocks")
+}
+
+model CommunityReport {
+  id         String                @id @default(uuid()) @db.Uuid
+  reporterId String                @map("reporter_id") @db.Uuid
+  groupId    String?               @map("group_id") @db.Uuid
+  targetType CommunityReportTarget @map("target_type")
+  targetId   String                @map("target_id") @db.Uuid
+  reason     String                @db.VarChar(500)
+  status     CommunityReportStatus @default(OPEN)
+  createdAt  DateTime              @default(now()) @map("created_at")
+  updatedAt  DateTime              @updatedAt @map("updated_at")
+
+  reporter User            @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  group    CommunityGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([targetType, targetId])
+  @@map("community_reports")
+}
+
+model CommunityFeedItem {
+  id        String               @id @default(uuid()) @db.Uuid
+  groupId   String?              @map("group_id") @db.Uuid
+  authorId  String?              @map("author_id") @db.Uuid
+  type      CommunityFeedItemType
+  title     String               @db.VarChar(200)
+  body      String?              @db.Text
+  imageUrl  String?              @map("image_url") @db.VarChar(500)
+  payload   Json?
+  createdAt DateTime             @default(now()) @map("created_at")
+
+  group  CommunityGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  author User?           @relation("FeedAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt(sort: Desc)])
+  @@index([groupId, createdAt(sort: Desc)])
+  @@index([type, createdAt(sort: Desc)])
+  @@map("community_feed_items")
+}
+
+model CommunityAchievement {
+  id        String   @id @default(uuid()) @db.Uuid
+  groupId   String?  @map("group_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  code      String   @db.VarChar(80)
+  title     String   @db.VarChar(160)
+  description String? @db.VarChar(300)
+  iconEmoji String?  @map("icon_emoji") @db.VarChar(16)
+  awardedAt DateTime @default(now()) @map("awarded_at")
+
+  group CommunityGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, awardedAt(sort: Desc)])
+  @@index([groupId, awardedAt(sort: Desc)])
+  @@map("community_achievements")
+}
+
+model CommunityLeaderboardEntry {
+  id        String   @id @default(uuid()) @db.Uuid
+  groupId   String   @map("group_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  points    Int      @default(0)
+  matchesPlayed Int  @default(0) @map("matches_played")
+  wins      Int      @default(0)
+  participationPct Decimal @default(0) @map("participation_pct") @db.Decimal(5, 2)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  group CommunityGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@index([groupId, points(sort: Desc)])
+  @@map("community_leaderboard_entries")
 }
 
 // ─── Legacy compatibility views (API migration aliases) ───────────────────────

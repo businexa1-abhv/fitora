@@ -14,6 +14,7 @@ import { SlotsService } from '../slots/slots.service';
 import { WaitlistService } from '../bookings/waitlist.service';
 import { SettlementService } from '../finance/settlement/settlement.service';
 import { SubscriptionService } from '../finance/subscription/subscription.service';
+import { CommunityMatchesService } from '../community/community-matches.service';
 import {
   CHANNEL_JOB_OPTIONS,
   QUEUES,
@@ -64,6 +65,8 @@ export class QueueJobsService implements OnModuleInit {
     private settlementService: SettlementService,
     @Inject(forwardRef(() => SubscriptionService))
     private subscriptionService: SubscriptionService,
+    @Inject(forwardRef(() => CommunityMatchesService))
+    private communityMatchesService: CommunityMatchesService,
   ) {}
 
   onModuleInit() {
@@ -173,6 +176,8 @@ export class QueueJobsService implements OnModuleInit {
         return this.settlementService.processDueSettlements();
       case SCHEDULED_JOBS.SUBSCRIPTION_EXPIRY:
         return this.subscriptionService.processExpiries();
+      case SCHEDULED_JOBS.COMMUNITY_MATCH_REMINDER:
+        return this.communityMatchesService.dispatchDueReminders();
       default:
         this.logger.warn(`Unknown scheduled job: ${jobName}`);
     }

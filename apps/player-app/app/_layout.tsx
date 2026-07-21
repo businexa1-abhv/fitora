@@ -97,6 +97,22 @@ function AppNavigator() {
         <Stack.Screen name="training/[programId]" />
         <Stack.Screen name="training/enroll/[batchId]" />
         <Stack.Screen name="wallet" />
+        <Stack.Screen name="community/create-group" />
+        <Stack.Screen name="community/search" />
+        <Stack.Screen name="community/group/[groupId]" />
+        <Stack.Screen name="community/group/[groupId]/chat" />
+        <Stack.Screen name="community/group/[groupId]/members" />
+        <Stack.Screen name="community/group/[groupId]/admin" />
+        <Stack.Screen name="community/group/[groupId]/announcements" />
+        <Stack.Screen name="community/group/[groupId]/media" />
+        <Stack.Screen name="community/group/[groupId]/polls" />
+        <Stack.Screen name="community/group/[groupId]/leaderboard" />
+        <Stack.Screen name="community/match/create" />
+        <Stack.Screen name="community/match/[matchId]" />
+        <Stack.Screen name="community/match/[matchId]/live" />
+        <Stack.Screen name="community/friends/index" />
+        <Stack.Screen name="community/friends/find" />
+        <Stack.Screen name="community/feed" />
       </Stack>
     </>
   );

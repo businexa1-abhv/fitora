@@ -1036,3 +1036,53 @@ export function purchaseSubscription(
     token,
   );
 }
+
+// ─── Community Hub (owner) ───────────────────────────────────────────────────
+
+export interface OwnerCommunityGroup {
+  id: string;
+  name: string;
+  emoji: string | null;
+  groupType: string;
+  privacy: string;
+  memberCount: number;
+  city: string | null;
+  lastActivityAt: string;
+}
+
+export function getOwnerCommunityGroups(token: string) {
+  return apiFetch<OwnerCommunityGroup[]>('/community/groups/mine', {}, token);
+}
+
+export function createOwnerCommunityGroup(
+  token: string,
+  payload: {
+    name: string;
+    groupType: string;
+    privacy?: string;
+    skillLevel?: string;
+    city?: string;
+    description?: string;
+    emoji?: string;
+    tenantId?: string;
+    maxPlayers?: number;
+  },
+) {
+  return apiFetch<OwnerCommunityGroup>(
+    '/community/owner/groups',
+    { method: 'POST', body: JSON.stringify(payload) },
+    token,
+  );
+}
+
+export function broadcastCommunityAnnouncement(
+  token: string,
+  groupId: string,
+  payload: { type?: string; title: string; body: string },
+) {
+  return apiFetch(
+    `/community/groups/${groupId}/announcements`,
+    { method: 'POST', body: JSON.stringify(payload) },
+    token,
+  );
+}
