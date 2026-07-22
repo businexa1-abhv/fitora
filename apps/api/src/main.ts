@@ -118,6 +118,9 @@ async function bootstrap() {
         { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
         'access-token',
       )
+      // Apply bearer auth to every operation so Swagger UI actually sends the
+      // token after Authorize (most controllers lack @ApiBearerAuth).
+      .addSecurityRequirements('access-token')
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

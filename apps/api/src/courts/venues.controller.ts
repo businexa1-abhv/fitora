@@ -1,6 +1,8 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { OptionalAuth } from '../common/decorators';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserRole } from '@prisma/client';
+import { Permission } from '@fitora/types';
+import { OptionalAuth, RequirePermissions, Roles } from '../common/decorators';
 import { VenueQueryDto } from './dto/venue-query.dto';
 import { VenuesService } from './venues.service';
 
@@ -15,6 +17,24 @@ export class VenuesController {
   @ApiResponse({ status: 200, description: 'Paginated venues' })
   findAll(@Query() query: VenueQueryDto) {
     return this.venuesService.findAll(query);
+  }
+
+  @Get('admin/list')
+  @Roles(UserRole.ADMIN)
+  @RequirePermissions(Permission.COURTS_READ)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'List all venues with nested courts (admin)' })
+  @ApiResponse({ status: 200, description: 'Paginated venues with all courts' })
+  findAllAdmin(
+    @Query('search') search?: string,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+  ) {
+    return this.venuesService.findAllAdmin({
+      search,
+      page: page ? Number(page) : 1,
+      pageSize: pageSize ? Number(pageSize) : 20,
+    });
   }
 
   @OptionalAuth()

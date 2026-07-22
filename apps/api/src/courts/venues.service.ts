@@ -94,6 +94,82 @@ export class VenuesService {
     });
   }
 
+  /** Admin view: every venue (any tenant status) with all its courts nested. */
+  async findAllAdmin(query: { search?: string; page?: number; pageSize?: number }) {
+    const page = query.page ?? 1;
+    const pageSize = query.pageSize ?? 20;
+
+    const where: Prisma.TenantWhereInput = {
+      deletedAt: null,
+      courts: { some: { deletedAt: null } },
+      ...(query.search && {
+        OR: [
+          { name: { contains: query.search, mode: 'insensitive' } },
+          { brandName: { contains: query.search, mode: 'insensitive' } },
+          { courts: { some: { city: { contains: query.search, mode: 'insensitive' } } } },
+        ],
+      }),
+    };
+
+    const [tenants, total] = await Promise.all([
+      this.prisma.tenant.findMany({
+        where,
+        select: {
+          id: true,
+          name: true,
+          brandName: true,
+          slug: true,
+          logoUrl: true,
+          status: true,
+          isActive: true,
+          owner: { select: { id: true, firstName: true, lastName: true, email: true } },
+          courts: {
+            where: { deletedAt: null },
+            include: COURT_INCLUDE,
+            orderBy: { name: 'asc' },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.tenant.count({ where }),
+    ]);
+
+    const items = tenants.map((tenant) => {
+      const courts = tenant.courts;
+      const approved = courts.filter((c) => c.approvalStatus === CourtApprovalStatus.APPROVED);
+      return {
+        id: tenant.id,
+        name: tenant.brandName || tenant.name,
+        brandName: tenant.brandName,
+        slug: tenant.slug,
+        logoUrl: tenant.logoUrl,
+        status: tenant.status,
+        isActive: tenant.isActive,
+        owner: tenant.owner,
+        city: courts[0]?.city ?? null,
+        courtCount: courts.length,
+        approvedCourtCount: approved.length,
+        pendingCourtCount: courts.filter((c) => c.approvalStatus === CourtApprovalStatus.PENDING)
+          .length,
+        courts: courts.map((court) => ({
+          id: court.id,
+          name: court.name,
+          city: court.city,
+          sport: court.sport,
+          approvalStatus: court.approvalStatus,
+          isActive: court.isActive,
+          defaultSlotPrice: court.defaultSlotPrice?.toString() ?? null,
+          defaultSlotCapacity: court.defaultSlotCapacity,
+          owner: court.owner,
+        })),
+      };
+    });
+
+    return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
+  }
+
   async findOne(id: string, sportSlug?: string) {
     const tenant = await this.prisma.tenant.findFirst({
       where: {
