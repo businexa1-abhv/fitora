@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/providers/auth-provider';
 import { QueryState } from '@/components/ui';
-import { createTrainingNote, listTrainingNotes } from '@/lib/trainer-api';
+import { createTrainingNote, deleteTrainingNote, listTrainingNotes } from '@/lib/trainer-api';
 import { CoachColors } from '@/constants/coach-theme';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
@@ -55,6 +55,28 @@ export default function TrainingNotesScreen() {
     },
     onError: (err) => Alert.alert('Error', err instanceof Error ? err.message : 'Failed'),
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: (noteId: string) => {
+      if (!token) throw new Error('Not authenticated');
+      return deleteTrainingNote(token, noteId);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['trainer', 'notes'] });
+    },
+    onError: (err) => Alert.alert('Error', err instanceof Error ? err.message : 'Failed to delete'),
+  });
+
+  function confirmDelete(noteId: string) {
+    Alert.alert('Delete Note', 'Are you sure you want to delete this note?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => deleteMutation.mutate(noteId),
+      },
+    ]);
+  }
 
   return (
     <View style={[styles.root, { paddingTop: insets.top + Spacing.md }]}>
@@ -199,16 +221,13 @@ export default function TrainingNotesScreen() {
                     {note.content}
                   </Text>
                   <View style={styles.actions}>
-                    <Pressable style={styles.action}>
-                      <Ionicons name="share-outline" size={14} color={CoachColors.brand} />
-                      <Text style={styles.actionText}>Share</Text>
-                    </Pressable>
-                    <Pressable style={styles.action}>
-                      <Ionicons name="pencil" size={14} color={CoachColors.brand} />
-                      <Text style={styles.actionText}>Edit</Text>
-                    </Pressable>
-                    <Pressable>
+                    <Pressable
+                      style={styles.action}
+                      onPress={() => confirmDelete(note.id)}
+                      disabled={deleteMutation.isPending}
+                    >
                       <Ionicons name="trash-outline" size={16} color={CoachColors.danger} />
+                      <Text style={[styles.actionText, { color: CoachColors.danger }]}>Delete</Text>
                     </Pressable>
                   </View>
                 </View>

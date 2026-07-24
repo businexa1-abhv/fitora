@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
 import { Card, QueryState } from '@/components/ui';
 import { ManageHeader } from '@/components/manage-header';
-import { getAuthMe } from '@/lib/owner-api';
+import { getAuthMe, updateOwnerProfile } from '@/lib/owner-api';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 export default function OwnerProfileScreen() {
@@ -15,6 +15,7 @@ export default function OwnerProfileScreen() {
   const { token, user } = useAuth();
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
@@ -32,6 +33,29 @@ export default function OwnerProfileScreen() {
     setLastName(me.lastName ?? user?.lastName ?? '');
     setPhone(me.phone ?? '');
   }, [meQuery.data, user]);
+
+  const saveMutation = useMutation({
+    mutationFn: () =>
+      updateOwnerProfile(token!, {
+        firstName: firstName.trim() || undefined,
+        lastName: lastName.trim() || undefined,
+        phone: phone.trim() || undefined,
+      }),
+    onSuccess: async (updated) => {
+      await queryClient.invalidateQueries({ queryKey: ['owner', 'auth-me'] });
+      router.push({
+        pathname: '/manage/profile-success',
+        params: {
+          name:
+            `${updated.firstName ?? firstName} ${updated.lastName ?? lastName}`.trim() ||
+            updated.email,
+          email: updated.email,
+          phone: updated.phone ?? phone,
+        },
+      });
+    },
+    onError: (err) => Alert.alert('Error', err instanceof Error ? err.message : 'Failed to save'),
+  });
 
   return (
     <ScrollView
@@ -97,19 +121,16 @@ export default function OwnerProfileScreen() {
             ]}
           />
           <Pressable
-            style={[styles.btn, { backgroundColor: colors.primary }]}
-            onPress={() =>
-              router.push({
-                pathname: '/manage/profile-success',
-                params: {
-                  name: `${firstName} ${lastName}`.trim() || meQuery.data?.email || 'Owner',
-                  email: meQuery.data?.email ?? user?.email ?? '',
-                  phone,
-                },
-              })
-            }
+            style={[
+              styles.btn,
+              { backgroundColor: colors.primary, opacity: saveMutation.isPending ? 0.6 : 1 },
+            ]}
+            onPress={() => saveMutation.mutate()}
+            disabled={saveMutation.isPending}
           >
-            <Text style={styles.btnText}>Save Profile</Text>
+            <Text style={styles.btnText}>
+              {saveMutation.isPending ? 'Saving…' : 'Save Profile'}
+            </Text>
           </Pressable>
         </Card>
       </QueryState>

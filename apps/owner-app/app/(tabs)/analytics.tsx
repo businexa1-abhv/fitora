@@ -7,7 +7,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { useTheme } from '@/providers/theme-provider';
 import { CoachEarningsScreen } from '@/components/coach-earnings';
 import { Card, QueryState } from '@/components/ui';
-import { getMyCourts, getOwnerDashboard } from '@/lib/owner-api';
+import { getMyCourts, getOwnerDashboard, getTenantMe, listTenantTrainers } from '@/lib/owner-api';
 import { FontSize, Radius, Spacing } from '@/constants/theme';
 
 function sportUtilFromCourts(names: string[]) {
@@ -62,6 +62,18 @@ function OwnerAnalyticsScreen() {
     enabled: !!token,
   });
 
+  const tenantQuery = useQuery({
+    queryKey: ['owner', 'tenant'],
+    queryFn: () => getTenantMe(token!),
+    enabled: !!token,
+  });
+
+  const trainersQuery = useQuery({
+    queryKey: ['owner', 'trainers', tenantQuery.data?.id],
+    queryFn: () => listTenantTrainers(token!, tenantQuery.data!.id),
+    enabled: !!token && !!tenantQuery.data?.id,
+  });
+
   const stats = dashboardQuery.data?.stats;
   const trend = dashboardQuery.data?.monthlyTrend ?? [];
   const maxTrend = Math.max(...trend.map((t) => t.amount), 1);
@@ -80,26 +92,15 @@ function OwnerAnalyticsScreen() {
     amount: 0,
   });
 
-  const coaches = [
-    {
-      initials: 'MA',
-      name: 'Mark Anthony',
-      sport: 'TENNIS',
-      students: Math.max(12, Math.round(members * 0.12)),
-    },
-    {
-      initials: 'SL',
-      name: 'Sarah Lee',
-      sport: 'BADMINTON',
-      students: Math.max(10, Math.round(members * 0.1)),
-    },
-    {
-      initials: 'JD',
-      name: 'John Doe',
-      sport: 'FOOTBALL',
-      students: Math.max(8, Math.round(members * 0.08)),
-    },
-  ];
+  const coaches = (trainersQuery.data ?? []).map((t) => {
+    const name = `${t.firstName ?? ''} ${t.lastName ?? ''}`.trim() || t.email;
+    const spec = t.trainerProfile?.specializations?.[0]?.toUpperCase() ?? 'COACHING';
+    return {
+      initials: `${(t.firstName?.[0] ?? t.email[0]).toUpperCase()}${(t.lastName?.[0] ?? '').toUpperCase()}`,
+      name,
+      sport: spec,
+    };
+  });
 
   return (
     <ScrollView
@@ -248,12 +249,14 @@ function OwnerAnalyticsScreen() {
               </View>
             ))}
           </View>
-          <View style={[styles.coachLoad, { backgroundColor: colors.mutedBg }]}>
-            <Ionicons name="people" size={18} color={colors.primary} />
-            <Text style={{ color: colors.foreground, fontWeight: '800' }}>
-              Avg. {(members / Math.max(coaches.length, 1)).toFixed(1)} Students/Coach
-            </Text>
-          </View>
+          {coaches.length > 0 ? (
+            <View style={[styles.coachLoad, { backgroundColor: colors.mutedBg }]}>
+              <Ionicons name="people" size={18} color={colors.primary} />
+              <Text style={{ color: colors.foreground, fontWeight: '800' }}>
+                {coaches.length} Active Coach{coaches.length !== 1 ? 'es' : ''} · {members} Members
+              </Text>
+            </View>
+          ) : null}
         </Card>
 
         <Card style={{ marginTop: Spacing.lg }}>
@@ -273,8 +276,7 @@ function OwnerAnalyticsScreen() {
 
           <View style={[styles.tableHead, { borderBottomColor: colors.border }]}>
             <Text style={[styles.th, { flex: 1.4 }]}>COACH</Text>
-            <Text style={[styles.th, { flex: 1 }]}>SPORT</Text>
-            <Text style={[styles.th, { width: 70, textAlign: 'right' }]}>STUDENTS</Text>
+            <Text style={[styles.th, { flex: 1 }]}>SPECIALIZATION</Text>
           </View>
           {coaches.map((coach) => (
             <View key={coach.name} style={styles.tableRow}>
@@ -293,16 +295,6 @@ function OwnerAnalyticsScreen() {
                   </Text>
                 </View>
               </View>
-              <Text
-                style={{
-                  color: colors.foreground,
-                  fontWeight: '800',
-                  textAlign: 'right',
-                  width: 70,
-                }}
-              >
-                {coach.students}
-              </Text>
             </View>
           ))}
         </Card>

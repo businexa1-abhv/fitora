@@ -100,6 +100,20 @@ export function CoachDashboardScreen() {
             <Ionicons name="clipboard-outline" size={18} color="#fff" />
             <Text style={styles.actionText}>Log Training</Text>
           </Pressable>
+          <Pressable
+            style={styles.actionBtn}
+            onPress={() => router.push('/coach/performance' as never)}
+          >
+            <Ionicons name="bar-chart-outline" size={18} color="#fff" />
+            <Text style={styles.actionText}>My Performance</Text>
+          </Pressable>
+          <Pressable
+            style={styles.actionBtn}
+            onPress={() => router.push('/coach/edit-profile' as never)}
+          >
+            <Ionicons name="person-outline" size={18} color="#fff" />
+            <Text style={styles.actionText}>Edit Profile</Text>
+          </Pressable>
         </View>
 
         <QueryState
@@ -306,12 +320,13 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
   },
   subhead: { color: CoachColors.muted, fontSize: FontSize.sm, marginTop: 4 },
-  actionRow: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.lg },
+  actionRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm, marginTop: Spacing.lg },
   actionBtn: {
     alignItems: 'center',
     backgroundColor: '#2e3132',
     borderRadius: Radius.lg,
-    flex: 1,
+    flexBasis: '46%',
+    flexGrow: 1,
     flexDirection: 'row',
     gap: 8,
     justifyContent: 'center',

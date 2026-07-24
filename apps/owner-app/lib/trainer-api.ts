@@ -155,6 +155,22 @@ export function listTrainingNotes(
   return apiFetch<TrainingNote[]>(`/trainers/me/notes${query ? `?${query}` : ''}`, {}, token);
 }
 
+export function updateTrainingNote(
+  token: string,
+  noteId: string,
+  data: { content?: string; title?: string; isPrivate?: boolean },
+) {
+  return apiFetch<TrainingNote>(
+    `/trainers/me/notes/${noteId}`,
+    { method: 'PUT', body: JSON.stringify(data) },
+    token,
+  );
+}
+
+export function deleteTrainingNote(token: string, noteId: string) {
+  return apiFetch<void>(`/trainers/me/notes/${noteId}`, { method: 'DELETE' }, token);
+}
+
 export function createTrainingNote(
   token: string,
   data: {

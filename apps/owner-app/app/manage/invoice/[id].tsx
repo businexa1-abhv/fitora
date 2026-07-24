@@ -20,8 +20,10 @@ export default function InvoiceDetailViewScreen() {
     time?: string;
   }>();
 
+  /** Standard India GST rate applied to court bookings */
+  const GST_RATE = 0.18;
   const amount = Number(params.amount ?? 0);
-  const tax = Math.round(amount * 0.18);
+  const tax = Math.round(amount * GST_RATE);
   const subtotal = Math.max(0, amount - tax);
 
   return (
@@ -56,7 +58,11 @@ export default function InvoiceDetailViewScreen() {
 
       <Card style={{ gap: Spacing.sm, marginTop: Spacing.md }}>
         <Row label="Subtotal" value={formatCurrency(subtotal)} colors={colors} />
-        <Row label="Tax (est. 18%)" value={formatCurrency(tax)} colors={colors} />
+        <Row
+          label={`GST (${Math.round(GST_RATE * 100)}%)`}
+          value={formatCurrency(tax)}
+          colors={colors}
+        />
         <View style={[styles.total, { borderTopColor: colors.border }]}>
           <Text style={{ color: colors.foreground, fontWeight: '800', fontSize: FontSize.lg }}>
             Total

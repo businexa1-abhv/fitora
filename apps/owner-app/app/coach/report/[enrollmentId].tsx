@@ -101,12 +101,8 @@ export default function PerformanceReportScreen() {
 
   const latest = reportsQuery.data?.[0];
   const latestNote = notesQuery.data?.[0];
-  const skills = (latest?.skills as { skill: string; rating: number }[] | null | undefined) ?? [
-    { skill: 'Footwork', rating: 4 },
-    { skill: 'Serve', rating: 4 },
-    { skill: 'Backhand', rating: 3 },
-  ];
-  const overall = latest?.rating ?? 4.2;
+  const skills = (latest?.skills as { skill: string; rating: number }[] | null | undefined) ?? [];
+  const overall = latest?.rating ?? null;
   const name = match?.kid ? `${match.kid.firstName} ${match.kid.lastName}`.trim() : 'Student';
   const initials = name
     .split(' ')
@@ -148,8 +144,8 @@ export default function PerformanceReportScreen() {
         summary:
           latestNote?.content ||
           `${name} is progressing well. Focus next block on consistency and recovery.`,
-        skills,
-        rating: Math.round(Number(overall)) || 4,
+        skills: skills.length > 0 ? skills : undefined,
+        rating: overall != null ? Math.round(Number(overall)) || 4 : 4,
         publish: true,
       });
     },
@@ -165,9 +161,11 @@ export default function PerformanceReportScreen() {
   async function shareReport() {
     const body = [
       `FitOra Performance Report — ${name}`,
-      `Overall: ${overall}/5`,
+      overall != null ? `Overall: ${Number(overall).toFixed(1)}/5` : null,
       latest?.summary ?? latestNote?.content ?? 'No summary yet.',
-    ].join('\n\n');
+    ]
+      .filter(Boolean)
+      .join('\n\n');
     await Share.share({ message: body });
   }
 
@@ -209,11 +207,21 @@ export default function PerformanceReportScreen() {
           </View>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.meta}>{match?.batch.name ?? 'Training'} · Intermediate Tier</Text>
-          <View style={styles.activeBadge}>
-            <Text style={styles.activeBadgeText}>ACTIVE REPORT</Text>
-          </View>
-          <Text style={styles.score}>{Number(overall).toFixed(1)} / 5</Text>
-          <Text style={styles.scoreLabel}>Current Performance</Text>
+          {overall != null ? (
+            <>
+              <View style={styles.activeBadge}>
+                <Text style={styles.activeBadgeText}>ACTIVE REPORT</Text>
+              </View>
+              <Text style={styles.score}>{Number(overall).toFixed(1)} / 5</Text>
+              <Text style={styles.scoreLabel}>Current Performance</Text>
+            </>
+          ) : (
+            <View style={[styles.activeBadge, { backgroundColor: CoachColors.mutedBg }]}>
+              <Text style={[styles.activeBadgeText, { color: CoachColors.muted }]}>
+                NO REPORT YET
+              </Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.sectionHeader}>
@@ -223,17 +231,25 @@ export default function PerformanceReportScreen() {
           </View>
           <Text style={styles.link}>Detailed History</Text>
         </View>
-        <View style={styles.card}>
-          {skills.map((skill) => (
-            <View key={skill.skill} style={styles.skillRow}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.skillName}>{skill.skill}</Text>
-                <Text style={styles.meta}>Skill rating</Text>
+        {skills.length > 0 ? (
+          <View style={styles.card}>
+            {skills.map((skill) => (
+              <View key={skill.skill} style={styles.skillRow}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.skillName}>{skill.skill}</Text>
+                  <Text style={styles.meta}>Skill rating</Text>
+                </View>
+                <Stars value={skill.rating} />
               </View>
-              <Stars value={skill.rating} />
-            </View>
-          ))}
-        </View>
+            ))}
+          </View>
+        ) : (
+          <View style={[styles.card, { alignItems: 'center', paddingVertical: Spacing.xl }]}>
+            <Text style={{ color: CoachColors.muted }}>
+              No skill ratings yet. Publish a report to add them.
+            </Text>
+          </View>
+        )}
 
         <Text style={[styles.sectionTitle, { marginTop: Spacing.xl }]}>MONTHLY PROGRESS</Text>
         <View style={styles.card}>

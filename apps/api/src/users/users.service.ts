@@ -3,6 +3,12 @@ import { PrismaService } from '../prisma/prisma.module';
 import { SlotEventsService } from '../realtime/slot-events.service';
 import { type CompletePlayerOnboardingDto } from './dto/complete-player-onboarding.dto';
 
+export interface UpdateProfileDto {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+}
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -81,6 +87,25 @@ export class UsersService {
     await this.events.emitPlayerUpdated({
       userId: id,
       action: 'onboarding_completed',
+    });
+
+    return {
+      ...user,
+      roles: user.roles.map((r) => r.role),
+    };
+  }
+
+  async updateProfile(id: string, dto: UpdateProfileDto) {
+    const data: Record<string, string> = {};
+    if (dto.firstName !== undefined) data.firstName = dto.firstName.trim();
+    if (dto.lastName !== undefined) data.lastName = dto.lastName.trim();
+    if (dto.phone !== undefined) data.phone = dto.phone.trim();
+
+    const user = await this.prisma.user.update({
+      where: { id },
+      data,
+      include: { roles: true },
+      omit: { passwordHash: true },
     });
 
     return {

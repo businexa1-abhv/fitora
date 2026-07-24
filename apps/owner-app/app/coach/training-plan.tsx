@@ -47,9 +47,17 @@ export default function TrainingPlanBuilderScreen() {
   }
 
   function publish() {
-    Alert.alert('Plan published', `"${planName}" is ready for your next session.`, [
-      { text: 'OK', onPress: () => router.back() },
-    ]);
+    Alert.alert(
+      'Save Training Plan',
+      `"${planName}" will be saved as a local draft on this device. Training plan sync with your backend is coming soon.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Save Draft',
+          onPress: () => void saveDraft().then(() => router.back()),
+        },
+      ],
+    );
   }
 
   function addDrill() {

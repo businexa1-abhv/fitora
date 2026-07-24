@@ -106,6 +106,18 @@ const FINANCE_LINKS: Link[] = [
     icon: 'receipt-outline',
   },
   {
+    title: 'Invoices',
+    subtitle: 'Detailed booking invoices with GST breakdown',
+    href: '/manage/invoices',
+    icon: 'document-text-outline',
+  },
+  {
+    title: 'Reports & Exports',
+    subtitle: 'Download CSV reports for bookings, revenue, and more',
+    href: '/manage/reports',
+    icon: 'bar-chart-outline',
+  },
+  {
     title: 'Financial Settings',
     subtitle: 'Razorpay and payouts',
     href: '/manage/financial',

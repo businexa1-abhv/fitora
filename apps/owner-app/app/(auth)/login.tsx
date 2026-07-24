@@ -25,11 +25,6 @@ const PARTNER_URL = process.env.EXPO_PUBLIC_PARTNER_WEB_URL ?? 'http://localhost
 
 type RoleTab = 'owner' | 'coach';
 
-const DEMO_CREDENTIALS: Record<RoleTab, { email: string; password: string }> = {
-  owner: { email: 'businexa1@gmail.com', password: 'OwnerPass123!' },
-  coach: { email: 'trainer@fitora.com', password: 'TrainerPass123!' },
-};
-
 export default function LoginScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -37,23 +32,15 @@ export default function LoginScreen() {
   const { signIn } = useAuth();
 
   const [role, setRole] = useState<RoleTab>('owner');
-  const [email, setEmail] = useState(DEMO_CREDENTIALS.owner.email);
-  const [password, setPassword] = useState(DEMO_CREDENTIALS.owner.password);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [keepLoggedIn, setKeepLoggedIn] = useState(true);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
   function selectRole(next: RoleTab) {
     setRole(next);
     setError('');
-    const demo = DEMO_CREDENTIALS[next];
-    // Swap demo credentials when switching roles if fields still match the other role's demo.
-    const other = DEMO_CREDENTIALS[next === 'owner' ? 'coach' : 'owner'];
-    if (email === other.email || password === other.password) {
-      setEmail(demo.email);
-      setPassword(demo.password);
-    }
   }
 
   async function handleLogin() {
@@ -77,7 +64,6 @@ export default function LoginScreen() {
       }
 
       await signIn(response, role);
-      void keepLoggedIn;
       router.replace('/(tabs)');
     } catch (err) {
       const message =
@@ -193,23 +179,6 @@ export default function LoginScreen() {
             </Pressable>
           </View>
 
-          <Pressable onPress={() => setKeepLoggedIn((v) => !v)} style={styles.keepRow}>
-            <View
-              style={[
-                styles.checkbox,
-                {
-                  borderColor: colors.primary,
-                  backgroundColor: keepLoggedIn ? colors.primary : 'transparent',
-                },
-              ]}
-            >
-              {keepLoggedIn ? <Ionicons name="checkmark" size={12} color="#fff" /> : null}
-            </View>
-            <Text style={{ color: colors.muted, fontSize: FontSize.sm, flex: 1 }}>
-              Keep me logged in on this workstation.
-            </Text>
-          </Pressable>
-
           {error ? (
             <Text style={{ color: colors.danger, marginBottom: Spacing.sm, fontSize: FontSize.sm }}>
               {error}
@@ -307,27 +276,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: Spacing.lg,
   },
-  keepRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    marginBottom: Spacing.lg,
-    marginTop: Spacing.lg,
-  },
-  checkbox: {
-    alignItems: 'center',
-    borderRadius: 4,
-    borderWidth: 1.5,
-    height: 18,
-    justifyContent: 'center',
-    width: 18,
-  },
   loginBtn: {
     alignItems: 'center',
     borderRadius: Radius.xl,
     flexDirection: 'row',
     gap: Spacing.sm,
     justifyContent: 'center',
+    marginTop: Spacing.lg,
     paddingVertical: Spacing.md,
   },
   loginBtnText: { color: '#fff', fontSize: FontSize.md, fontWeight: '800' },

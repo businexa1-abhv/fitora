@@ -137,6 +137,20 @@ export interface CreateClosurePayload {
   endHour?: number;
 }
 
+export async function exportOwnerReport(
+  token: string,
+  metric: string,
+  period = 'monthly',
+): Promise<string> {
+  const qs = new URLSearchParams({ metric, period });
+  const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api/v1';
+  const response = await fetch(`${API_URL}/analytics/owner/export?${qs.toString()}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error('Export failed');
+  return response.text();
+}
+
 export function getOwnerDashboard(
   token: string,
   period: 'daily' | 'monthly' | 'yearly' = 'monthly',
@@ -811,6 +825,19 @@ export function getAuthMe(token: string) {
     roles?: string[];
     permissions?: string[];
   }>('/auth/me', {}, token);
+}
+
+export function updateOwnerProfile(
+  token: string,
+  payload: { firstName?: string; lastName?: string; phone?: string },
+) {
+  return apiFetch<{
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string | null;
+  }>('/users/me', { method: 'PATCH', body: JSON.stringify(payload) }, token);
 }
 
 export function changePassword(token: string, currentPassword: string, newPassword: string) {

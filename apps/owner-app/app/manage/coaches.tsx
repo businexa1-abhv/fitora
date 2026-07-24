@@ -39,7 +39,16 @@ export default function CoachDirectoryScreen() {
     );
   }, [trainersQuery.data, search]);
 
-  const onDuty = Math.max(1, Math.round(coaches.length * 0.65));
+  const avgRating = useMemo(() => {
+    const ratings = (trainersQuery.data ?? [])
+      .map((t) => {
+        const r = t.trainerProfile?.averageRating;
+        return r != null ? Number(r) : null;
+      })
+      .filter((r): r is number => r != null && r > 0);
+    if (!ratings.length) return '—';
+    return (ratings.reduce((s, r) => s + r, 0) / ratings.length).toFixed(1);
+  }, [trainersQuery.data]);
 
   return (
     <ScrollView
@@ -58,8 +67,7 @@ export default function CoachDirectoryScreen() {
 
       <View style={styles.stats}>
         <Stat label="Total Coaches" value={String(coaches.length)} colors={colors} />
-        <Stat label="On Duty" value={String(Math.min(onDuty, coaches.length))} colors={colors} />
-        <Stat label="Avg Rating" value="4.8" colors={colors} />
+        <Stat label="Avg Rating" value={`★ ${avgRating}`} colors={colors} />
       </View>
 
       <View style={[styles.search, { borderColor: colors.border, backgroundColor: colors.card }]}>
@@ -81,7 +89,7 @@ export default function CoachDirectoryScreen() {
         empty={coaches.length === 0}
       >
         <View style={{ gap: Spacing.sm, marginTop: Spacing.lg }}>
-          {coaches.map((coach, i) => {
+          {coaches.map((coach) => {
             const name = `${coach.firstName ?? ''} ${coach.lastName ?? ''}`.trim() || coach.email;
             const spec = coach.trainerProfile?.specializations?.[0] ?? 'Coach';
             const rating = coach.trainerProfile?.averageRating
@@ -97,22 +105,6 @@ export default function CoachDirectoryScreen() {
                     <Text style={{ color: colors.foreground, fontWeight: '800' }}>{name}</Text>
                     <Text style={{ color: colors.muted, fontSize: FontSize.sm }}>
                       {spec} · ★ {rating}
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.badge,
-                      { backgroundColor: i % 3 === 2 ? colors.mutedBg : '#d1fae5' },
-                    ]}
-                  >
-                    <Text
-                      style={{
-                        color: i % 3 === 2 ? colors.muted : colors.secondary,
-                        fontSize: 10,
-                        fontWeight: '800',
-                      }}
-                    >
-                      {i % 3 === 2 ? 'OFF DUTY' : 'ON DUTY'}
                     </Text>
                   </View>
                 </Card>
@@ -166,5 +158,4 @@ const styles = StyleSheet.create({
     width: 44,
   },
   avatarText: { color: '#fff', fontWeight: '800' },
-  badge: { borderRadius: Radius.sm, paddingHorizontal: Spacing.sm, paddingVertical: 4 },
 });
